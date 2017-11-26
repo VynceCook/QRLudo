@@ -1,6 +1,7 @@
 package angers.univ.ctalarmain.qrludo.activities;
 
 import android.Manifest;
+import android.accounts.AccountManager;
 import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
@@ -15,15 +16,20 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
@@ -45,20 +51,46 @@ import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
+import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpResponse;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.ExponentialBackOff;
+import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.DriveScopes;
+import com.google.api.services.drive.model.FileList;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 import angers.univ.ctalarmain.qrludo.R;
-import angers.univ.ctalarmain.qrludo.utils.BasicImageDownloader;
 import angers.univ.ctalarmain.qrludo.utils.OnSwipeTouchListener;
 import angers.univ.ctalarmain.qrludo.utils.QDCResponse;
 import angers.univ.ctalarmain.qrludo.utils.QuestionDelayCounter;
+
+import pub.devrel.*;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+
 
 import static java.lang.String.valueOf;
 
@@ -66,7 +98,7 @@ import static java.lang.String.valueOf;
  * @author Corentin Talarmain
  * MainActivity is the main activity of the application, this is where the user will be able to detect QRCodes and hear the question / answer.
  */
-public class MainActivity extends AppCompatActivity implements SensorEventListener, QDCResponse {
+public class MainActivity extends AppCompatActivity implements SensorEventListener, QDCResponse, EasyPermissions.PermissionCallbacks  {
     /**
      * The name of the file containing the user's settings.
      */
@@ -410,6 +442,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private int multiple_detection_time;
 
+    static final int REQUEST_ACCOUNT_PICKER = 1000;
+    static final int REQUEST_AUTHORIZATION = 1001;
+    static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
+    static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
+    private static final String[] SCOPES = { DriveScopes.DRIVE_METADATA_READONLY };
+
+    private GoogleAccountCredential mCredential;
+    private static final String PREF_ACCOUNT_NAME = "accountName";
+
+    private String mOutputText;
+
+    private com.google.api.services.drive.Drive mService = null;
 
     /**
      * The OnCreate event of the main activity, called at the creation.
@@ -450,12 +494,290 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         initializeListeners();
 
-
         checkPermissions();
+
+        // Initialize credentials and service object.
+        mCredential = GoogleAccountCredential.usingOAuth2(
+                getApplicationContext(), Arrays.asList(SCOPES))
+                .setBackOff(new ExponentialBackOff());
+
+
+
+        getResultsFromApi();
+
 
 
     }
 
+
+    /**
+     * Attempt to call the API, after verifying that all the preconditions are
+     * satisfied. The preconditions are: Google Play Services installed, an
+     * account was selected and the device currently has online access. If any
+     * of the preconditions are not satisfied, the app will prompt the user as
+     * appropriate.
+     */
+    private void getResultsFromApi() {
+        if (! isGooglePlayServicesAvailable()) {
+            acquireGooglePlayServices();
+        } else if (mCredential.getSelectedAccountName() == null) {
+            chooseAccount();
+        } else if (! isDeviceOnline()) {
+            mOutputText="No network connection available.";
+        } else {
+            new MakeRequestTask(mCredential, "1_mqivR4MnKZQMypkpdvvlegyUotvrDmD").execute();
+        }
+    }
+
+    /**
+     * Attempts to set the account used with the API credentials. If an account
+     * name was previously saved it will use that one; otherwise an account
+     * picker dialog will be shown to the user. Note that the setting the
+     * account to use with the credentials object requires the app to have the
+     * GET_ACCOUNTS permission, which is requested here if it is not already
+     * present. The AfterPermissionGranted annotation indicates that this
+     * function will be rerun automatically whenever the GET_ACCOUNTS permission
+     * is granted.
+     */
+    @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
+    private void chooseAccount() {
+
+        if (EasyPermissions.hasPermissions(
+                this, Manifest.permission.GET_ACCOUNTS)) {
+            String accountName = getPreferences(Context.MODE_PRIVATE)
+                    .getString(PREF_ACCOUNT_NAME, null);
+            if (accountName != null) {
+                mCredential.setSelectedAccountName(accountName);
+                getResultsFromApi();
+            } else {
+                // Start a dialog from which the user can choose an account
+                startActivityForResult(
+                        mCredential.newChooseAccountIntent(),
+                        REQUEST_ACCOUNT_PICKER);
+            }
+        } else {
+            // Request the GET_ACCOUNTS permission via a user dialog
+            EasyPermissions.requestPermissions(
+                    this,
+                    "This app needs to access your Google account (via Contacts).",
+                    REQUEST_PERMISSION_GET_ACCOUNTS,
+                    Manifest.permission.GET_ACCOUNTS);
+        }
+    }
+
+    /**
+     * Respond to requests for permissions at runtime for API 23 and above.
+     * @param requestCode The request code passed in
+     *     requestPermissions(android.app.Activity, String, int, String[])
+     * @param permissions The requested permissions. Never null.
+     * @param grantResults The grant results for the corresponding permissions
+     *     which is either PERMISSION_GRANTED or PERMISSION_DENIED. Never null.
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(
+                requestCode, permissions, grantResults, this);
+    }
+
+    /**
+     * Callback for when a permission is granted using the EasyPermissions
+     * library.
+     * @param requestCode The request code associated with the requested
+     *         permission
+     * @param list The requested permission list. Never null.
+     */
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> list) {
+        // Do nothing.
+    }
+
+    /**
+     * Callback for when a permission is denied using the EasyPermissions
+     * library.
+     * @param requestCode The request code associated with the requested
+     *         permission
+     * @param list The requested permission list. Never null.
+     */
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> list) {
+        // Do nothing.
+    }
+
+    /**
+     * Checks whether the device currently has a network connection.
+     * @return true if the device has a network connection, false otherwise.
+     */
+    private boolean isDeviceOnline() {
+        ConnectivityManager connMgr =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
+    }
+
+    /**
+     * Check that Google Play services APK is installed and up to date.
+     * @return true if Google Play Services is available and up to
+     *     date on this device; false otherwise.
+     */
+    private boolean isGooglePlayServicesAvailable() {
+        GoogleApiAvailability apiAvailability =
+                GoogleApiAvailability.getInstance();
+        final int connectionStatusCode =
+                apiAvailability.isGooglePlayServicesAvailable(this);
+        return connectionStatusCode == ConnectionResult.SUCCESS;
+    }
+
+    /**
+     * Attempt to resolve a missing, out-of-date, invalid or disabled Google
+     * Play Services installation via a user dialog, if possible.
+     */
+    private void acquireGooglePlayServices() {
+        GoogleApiAvailability apiAvailability =
+                GoogleApiAvailability.getInstance();
+        final int connectionStatusCode =
+                apiAvailability.isGooglePlayServicesAvailable(this);
+        if (apiAvailability.isUserResolvableError(connectionStatusCode)) {
+            showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode);
+        }
+    }
+
+
+
+
+    /**
+     * Display an error dialog showing that Google Play Services is missing
+     * or out of date.
+     * @param connectionStatusCode code describing the presence (or lack of)
+     *     Google Play Services on this device.
+     */
+    void showGooglePlayServicesAvailabilityErrorDialog(
+            final int connectionStatusCode) {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        Dialog dialog = apiAvailability.getErrorDialog(
+                MainActivity.this,
+                connectionStatusCode,
+                REQUEST_GOOGLE_PLAY_SERVICES);
+        dialog.show();
+    }
+
+    /**
+     * An asynchronous task that handles the Drive API call.
+     * Placing the API calls in their own task ensures the UI stays responsive.
+     */
+    private class MakeRequestTask extends AsyncTask<Void, Void, List<String>> {
+        private com.google.api.services.drive.Drive mService = null;
+        private Exception mLastError = null;
+        private String mIdFile;
+        private ByteArrayOutputStream mByteArrayOutputStream = new ByteArrayOutputStream();
+
+        MakeRequestTask(GoogleAccountCredential credential, String idFile) {
+            HttpTransport transport = AndroidHttp.newCompatibleTransport();
+            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+            mIdFile = idFile;
+            mService = new com.google.api.services.drive.Drive.Builder(
+                    transport, jsonFactory, credential)
+                    .setApplicationName("Drive API Android Quickstart")
+                    .build();
+        }
+
+        /**
+         * Background task to call Drive API.
+         * @param params no parameters needed for this task.
+         */
+        @Override
+        protected List<String> doInBackground(Void... params) {
+            try {
+                getDataFromApi();
+                return null;
+            } catch (Exception e) {
+                mLastError = e;
+                cancel(true);
+                return null;
+            }
+        }
+
+        /**
+         * Fetch a list of up to 10 file names and IDs.
+         * @return List of Strings describing files, or an empty list if no files
+         *         found.
+         * @throws IOException
+         */
+        private void getDataFromApi() throws IOException {
+
+            Log.v("coucou", "avant téléchargement");
+            //On télécharge le fichier dans un OutputStream
+            Log.v("coucou", mService.files().get(mIdFile).execute().getName());
+            mService.files().get(mIdFile).executeAndDownloadTo(mByteArrayOutputStream);
+            Log.v("coucou", "après appel téléchargement");
+
+            Log.v("coucou","taille fichier téléchargé "+String.valueOf(mByteArrayOutputStream.size()));
+
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+            mOutputText="";
+        }
+
+        @Override
+        protected void onPostExecute(List<String> output) {
+
+            File fichier =new File(Environment.getExternalStorageDirectory(), "qr/"+mIdFile);
+
+            if (fichier.exists()) {
+                fichier.delete();
+            }
+
+            FileOutputStream fos= null;
+            try {
+                fos = new FileOutputStream(Environment.getExternalStorageDirectory()+"qr/"+mIdFile);
+                Log.v("coucou", "passe ici");
+
+                byte[] byteArray = mByteArrayOutputStream.toByteArray();
+
+                Log.v("coucou","taille byte "+String.valueOf(byteArray.length));
+
+                fos.write(byteArray, 0, byteArray.length);
+
+
+                fos.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            Log.v("coucou", String.valueOf(fichier.length()));
+
+            Log.v("coucou", "fichier supposément enregistré");
+        }
+
+
+
+        @Override
+        protected void onCancelled() {
+            if (mLastError != null) {
+                if (mLastError instanceof GooglePlayServicesAvailabilityIOException) {
+                    showGooglePlayServicesAvailabilityErrorDialog(
+                            ((GooglePlayServicesAvailabilityIOException) mLastError)
+                                    .getConnectionStatusCode());
+                } else if (mLastError instanceof UserRecoverableAuthIOException) {
+                    startActivityForResult(
+                            ((UserRecoverableAuthIOException) mLastError).getIntent(),
+                            MainActivity.REQUEST_AUTHORIZATION);
+                } else {
+                    mOutputText="The following error occurred:\n"
+                            + mLastError.getMessage();
+                }
+            } else {
+                mOutputText="Request cancelled.";
+            }
+        }
+    }
     /**
      * Method defined from the QDCResponse interface.
      * Called when the QuestionDelayCounter AsyncTask is over
@@ -1129,6 +1451,38 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check which request we're responding to
+        switch(requestCode) {
+            case REQUEST_GOOGLE_PLAY_SERVICES:
+                if (resultCode != RESULT_OK) {
+                    mOutputText=
+                            "This app requires Google Play Services. Please install " +
+                                    "Google Play Services on your device and relaunch this app.";
+                } else {
+                    getResultsFromApi();
+                }
+                break;
+            case REQUEST_ACCOUNT_PICKER:
+                if (resultCode == RESULT_OK && data != null &&
+                        data.getExtras() != null) {
+                    String accountName =
+                            data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                    if (accountName != null) {
+                        SharedPreferences settings =
+                                getPreferences(Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = settings.edit();
+                        editor.putString(PREF_ACCOUNT_NAME, accountName);
+                        editor.apply();
+                        mCredential.setSelectedAccountName(accountName);
+                        getResultsFromApi();
+                    }
+                }
+                break;
+            case REQUEST_AUTHORIZATION:
+                if (resultCode == RESULT_OK) {
+                    getResultsFromApi();
+                }
+                break;
+        }
         if (requestCode == OPTION_REQUEST) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
@@ -1151,19 +1505,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 multiple_detection_time = settings.getInt("MDTime",DEFAULT_MULTIPLE_DETECTION_TIME);
                 // Do something with the contact here (bigger example below)
             }
-        }/*
-        if (requestCode == MY_DATA_CHECK_CODE) {
-            if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
-                // success, create the TTS instance
-
-            } else {
-                // missing data, install it
-                Intent installIntent = new Intent();
-                installIntent.setAction(
-                        TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-                startActivity(installIntent);
-            }
-        }*/
+        }
     }
 
     private void saveState() {
@@ -1327,60 +1669,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     }
 
-    private void downloadPicture(String image_name, String url) {
-        final String i_name = image_name;
-        final BasicImageDownloader downloader = new BasicImageDownloader(new BasicImageDownloader.OnImageLoaderListener() {
-            @Override
-            public void onError(BasicImageDownloader.ImageError error) {
-                Toast.makeText(MainActivity.this, "Error code " + error.getErrorCode() + ": " +
-                        error.getMessage(), Toast.LENGTH_LONG).show();
-                error.printStackTrace();
-                //image_space.setImageResource(RES_ERROR);
-            }
-
-            @Override
-            public void onProgressChange(int percent) {
-
-            }
-
-            @Override
-            public void onComplete(Bitmap result) {
-                        /* save the image - I'm gonna use JPEG */
-                final Bitmap.CompressFormat mFormat = Bitmap.CompressFormat.JPEG;
-                        /* don't forget to include the extension into the file name */
-                final File myImageFile = new File(getApplicationContext().getFilesDir().getAbsolutePath() +
-                        File.separator + "images" + File.separator +  i_name + "." + mFormat.name().toLowerCase());
-                Log.d("FILE", myImageFile.getAbsolutePath());
-                BasicImageDownloader.writeToDisk(myImageFile, result, new BasicImageDownloader.OnBitmapSaveListener() {
-                    @Override
-                    public void onBitmapSaved() {
-                        Toast.makeText(MainActivity.this, "Image saved as: " + myImageFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
-                        printQuestion();
-                    }
-
-                    @Override
-                    public void onBitmapSaveError(BasicImageDownloader.ImageError error) {
-                        Toast.makeText(MainActivity.this, "Error code " + error.getErrorCode() + ": " +
-                                error.getMessage(), Toast.LENGTH_LONG).show();
-                        error.printStackTrace();
-                    }
-
-
-                }, mFormat, false);
-
-            }
-        });
-        downloader.download(url, true);
-
-    }
-
-    private void printPicture(String image_name, String url, boolean b) {
-    }
-
+    /*
     @TargetApi(Build.VERSION_CODES.M)
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         Log.d("PERMISSION_RESULT","---------START----------");
         switch (requestCode) {
             case CAMERA_REQUEST: {
@@ -1418,7 +1710,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     Toast.makeText(MainActivity.this, "Permission denied to use internet", Toast.LENGTH_SHORT).show();
                 }
                 break;
-            }*/
+            }
             case VIBRATE_REQUEST: {
                 Log.d("PERMISSION_RESULT", "---------INTERNET_REQUEST----------");
 
@@ -1440,7 +1732,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             // other 'case' lines to check for other
             // permissions this app might request
         }
-    }
+    }*/
 
     private void printToast(final String str) {
         final AppCompatActivity activity = this;
