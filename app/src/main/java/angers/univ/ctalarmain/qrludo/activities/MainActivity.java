@@ -446,7 +446,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
-    private static final String[] SCOPES = { DriveScopes.DRIVE_METADATA_READONLY };
+    private static final String[] SCOPES = {DriveScopes.DRIVE_READONLY};
 
     private GoogleAccountCredential mCredential;
     private static final String PREF_ACCOUNT_NAME = "accountName";
@@ -525,7 +525,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         } else if (! isDeviceOnline()) {
             mOutputText="No network connection available.";
         } else {
-            new MakeRequestTask(mCredential, "1_mqivR4MnKZQMypkpdvvlegyUotvrDmD").execute();
+            new MakeRequestTask(mCredential, "1k-zOVO9KaL46U5DBr9_XlH4RBXmye4Ds").execute();
         }
     }
 
@@ -707,14 +707,26 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
          */
         private void getDataFromApi() throws IOException {
 
+            File fichier = new File(getApplicationContext().getFilesDir(), mIdFile);
+            FileOutputStream fop = new FileOutputStream(fichier);
+
             Log.v("coucou", "avant téléchargement");
             //On télécharge le fichier dans un OutputStream
-            Log.v("coucou", mService.files().get(mIdFile).execute().getName());
-            mService.files().get(mIdFile).executeAndDownloadTo(mByteArrayOutputStream);
+            Log.v("coucou",mService.files().get(mIdFile).execute().getName());
+            mService.files().get(mIdFile).executeMediaAndDownloadTo(mByteArrayOutputStream);
+            //mService.files().list().execute().getFiles().get(0).getId(), "text/plain").executeMediaAndDownloadTo(fop);
             Log.v("coucou", "après appel téléchargement");
 
-            Log.v("coucou","taille fichier téléchargé "+String.valueOf(mByteArrayOutputStream.size()));
 
+
+            mByteArrayOutputStream.writeTo(fop);
+            mByteArrayOutputStream.flush();
+            fop.close();
+
+            Log.v("coucou","taille fichier téléchargé "+String.valueOf(fichier.length()));
+
+
+            Log.v("coucou", "fichier supposément enregistré");
         }
 
 
@@ -725,38 +737,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         @Override
         protected void onPostExecute(List<String> output) {
+            Log.v("coucou", "fin exécution");
 
-            File fichier =new File(Environment.getExternalStorageDirectory(), "qr/"+mIdFile);
-
-            if (fichier.exists()) {
-                fichier.delete();
-            }
-
-            FileOutputStream fos= null;
-            try {
-                fos = new FileOutputStream(Environment.getExternalStorageDirectory()+"qr/"+mIdFile);
-                Log.v("coucou", "passe ici");
-
-                byte[] byteArray = mByteArrayOutputStream.toByteArray();
-
-                Log.v("coucou","taille byte "+String.valueOf(byteArray.length));
-
-                fos.write(byteArray, 0, byteArray.length);
-
-
-                fos.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            Log.v("coucou", String.valueOf(fichier.length()));
-
-            Log.v("coucou", "fichier supposément enregistré");
         }
-
-
 
         @Override
         protected void onCancelled() {
