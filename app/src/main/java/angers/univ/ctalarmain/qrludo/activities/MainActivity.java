@@ -82,6 +82,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import angers.univ.ctalarmain.qrludo.ConnexionInternetIndisponibleException;
+import angers.univ.ctalarmain.qrludo.FichierDejaExistantException;
+import angers.univ.ctalarmain.qrludo.FichierInexistantException;
 import angers.univ.ctalarmain.qrludo.R;
 import angers.univ.ctalarmain.qrludo.utils.OnSwipeTouchListener;
 import angers.univ.ctalarmain.qrludo.utils.QDCResponse;
@@ -451,7 +454,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private GoogleAccountCredential mCredential;
     private static final String PREF_ACCOUNT_NAME = "accountName";
 
-    private String mOutputText;
 
     private com.google.api.services.drive.Drive mService = null;
 
@@ -465,6 +467,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         gga = GoogleApiAvailability.getInstance();
         int status = gga.isGooglePlayServicesAvailable(getApplicationContext());
@@ -501,31 +504,164 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
 
+        //On demande les identifiants d'accès GoogleDrive s'ils n'ont pas déjà été donnés
+        if (mCredential.getSelectedAccountName() == null) {
+            chooseAccount();
+        }
+
+    }
+
+    /**
+     * Renvoie vrai si le fichier dont l'id est passé en paramètre est déjà présent sur la mémoire du téléphone
+     *
+     * @param idFichier
+     * @return
+     */
+    private boolean isFichierDejaTelecharge(String idFichier){
+
+        return (new File(getApplicationContext().getFilesDir().getPath()+idFichier).exists());
+    }
 
 
-        getResultsFromApi();
+    private File getFichierSurTelephone(String idFichier) throws FichierInexistantException {
 
+        File fichier= new File(getApplicationContext().getFilesDir().getPath()+idFichier);
 
+        if (fichier.exists()){
+            return fichier;
+        }
+        else{
+            throw new FichierInexistantException();
+        }
 
+    }
+
+    /**
+     * Fonction qui lance le téléchargement du fichier dont l'id est passé en paramètres
+     * Si le fichier existe déjà, on renvoie une FichierDejaExistantException
+     * Si il n'y a pas de connexion à internet, renvoie une ConnexionInternetIndisponibleException
+     * Si la connexion au drive n'est pas établie, demande les identifiants puis télécharge le fichier
+     */
+    private void telechargerFichier(String idFichier) throws ConnexionInternetIndisponibleException, FichierDejaExistantException {
+
+        //On télécharge le fichier seulement s'il n'existe pas déjà
+        if (!(new File(getApplicationContext().getFilesDir().getPath()+idFichier).exists())) {
+
+            if (!isGooglePlayServicesAvailable()) { //Cas où les GooglePlayServices ne sont pas disponibles
+                acquireGooglePlayServices();
+            } else if (mCredential.getSelectedAccountName() == null) { //Cas où le compte drive n'est pas défini
+                chooseAccount();
+                telechargerFichier(idFichier);
+            } else if (!isDeviceOnline()) {
+                throw new ConnexionInternetIndisponibleException();
+            } else {
+                new MakeRequestTask(mCredential, idFichier).execute();
+            }
+        }
+        else{
+            throw new FichierDejaExistantException();
+        }
     }
 
 
     /**
-     * Attempt to call the API, after verifying that all the preconditions are
-     * satisfied. The preconditions are: Google Play Services installed, an
-     * account was selected and the device currently has online access. If any
-     * of the preconditions are not satisfied, the app will prompt the user as
-     * appropriate.
+     * Tâche de fond qui télécharge un fichier sur le drive dont l'ID est passé en paramètre
+     * Modifier onPostExecute() pour gérer le callback après le téléchargement
+     *
      */
-    private void getResultsFromApi() {
-        if (! isGooglePlayServicesAvailable()) {
-            acquireGooglePlayServices();
-        } else if (mCredential.getSelectedAccountName() == null) {
-            chooseAccount();
-        } else if (! isDeviceOnline()) {
-            mOutputText="No network connection available.";
-        } else {
-            new MakeRequestTask(mCredential, "1k-zOVO9KaL46U5DBr9_XlH4RBXmye4Ds").execute();
+    private class MakeRequestTask extends AsyncTask<Void, Void, List<String>> {
+        private com.google.api.services.drive.Drive mService = null;
+        private Exception mLastError = null;
+        private String mIdFile;
+        private ByteArrayOutputStream mByteArrayOutputStream = new ByteArrayOutputStream();
+
+        MakeRequestTask(GoogleAccountCredential credential, String idFile) {
+            HttpTransport transport = AndroidHttp.newCompatibleTransport();
+            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+            mIdFile = idFile;
+            mService = new com.google.api.services.drive.Drive.Builder(
+                    transport, jsonFactory, credential)
+                    .setApplicationName("Drive API Android Quickstart")
+                    .build();
+        }
+
+        /**
+         * Background task to call Drive API.
+         * @param params no parameters needed for this task.
+         */
+        @Override
+        protected List<String> doInBackground(Void... params) {
+            try {
+                getDataFromApi();
+                return null;
+            } catch (Exception e) {
+                mLastError = e;
+                cancel(true);
+                return null;
+            }
+        }
+
+        /**
+         * Télécharge le fichier
+         **/
+        private void getDataFromApi() throws IOException {
+
+            //On crée un fichier dans la mémoire réservée de l'application
+            File fichier = new File(getApplicationContext().getFilesDir(), mIdFile);
+
+            FileOutputStream fop = new FileOutputStream(fichier);
+
+            //On télécharge le fichier dans un OutputStream
+            mService.files().get(mIdFile).executeMediaAndDownloadTo(mByteArrayOutputStream);
+
+            //On écrit l'OutputStream dans le fichier
+            mByteArrayOutputStream.writeTo(fop);
+            mByteArrayOutputStream.flush();
+            fop.close();
+
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+
+        /***
+         *
+         * FONCTION A ÉCRIRE
+         *
+         *
+         * @param output
+         */
+        @Override
+        protected void onPostExecute(List<String> output) {
+
+            //TODO
+            //Code à exécuter une fois le téléchargement fini (dépend de l'implementation du code de David)
+            //Permettra de faire un callback après le téléchargement
+
+        }
+
+        @Override
+        protected void onCancelled() {
+            if (mLastError != null) {
+                if (mLastError instanceof GooglePlayServicesAvailabilityIOException) {
+                    showGooglePlayServicesAvailabilityErrorDialog(
+                            ((GooglePlayServicesAvailabilityIOException) mLastError)
+                                    .getConnectionStatusCode());
+                } else if (mLastError instanceof UserRecoverableAuthIOException) {
+                    startActivityForResult(
+                            ((UserRecoverableAuthIOException) mLastError).getIntent(),
+                            MainActivity.REQUEST_AUTHORIZATION);
+                } else {
+                    Log.v("","The following error occurred:\n"
+                            + mLastError.getMessage());
+                }
+            } else {
+               Log.v("","Request cancelled.");
+            }
         }
     }
 
@@ -548,7 +684,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     .getString(PREF_ACCOUNT_NAME, null);
             if (accountName != null) {
                 mCredential.setSelectedAccountName(accountName);
-                getResultsFromApi();
             } else {
                 // Start a dialog from which the user can choose an account
                 startActivityForResult(
@@ -663,104 +798,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         dialog.show();
     }
 
-    /**
-     * An asynchronous task that handles the Drive API call.
-     * Placing the API calls in their own task ensures the UI stays responsive.
-     */
-    private class MakeRequestTask extends AsyncTask<Void, Void, List<String>> {
-        private com.google.api.services.drive.Drive mService = null;
-        private Exception mLastError = null;
-        private String mIdFile;
-        private ByteArrayOutputStream mByteArrayOutputStream = new ByteArrayOutputStream();
-
-        MakeRequestTask(GoogleAccountCredential credential, String idFile) {
-            HttpTransport transport = AndroidHttp.newCompatibleTransport();
-            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-            mIdFile = idFile;
-            mService = new com.google.api.services.drive.Drive.Builder(
-                    transport, jsonFactory, credential)
-                    .setApplicationName("Drive API Android Quickstart")
-                    .build();
-        }
-
-        /**
-         * Background task to call Drive API.
-         * @param params no parameters needed for this task.
-         */
-        @Override
-        protected List<String> doInBackground(Void... params) {
-            try {
-                getDataFromApi();
-                return null;
-            } catch (Exception e) {
-                mLastError = e;
-                cancel(true);
-                return null;
-            }
-        }
-
-        /**
-         * Fetch a list of up to 10 file names and IDs.
-         * @return List of Strings describing files, or an empty list if no files
-         *         found.
-         * @throws IOException
-         */
-        private void getDataFromApi() throws IOException {
-
-            File fichier = new File(getApplicationContext().getFilesDir(), mIdFile);
-            FileOutputStream fop = new FileOutputStream(fichier);
-
-            Log.v("coucou", "avant téléchargement");
-            //On télécharge le fichier dans un OutputStream
-            Log.v("coucou",mService.files().get(mIdFile).execute().getName());
-            mService.files().get(mIdFile).executeMediaAndDownloadTo(mByteArrayOutputStream);
-            //mService.files().list().execute().getFiles().get(0).getId(), "text/plain").executeMediaAndDownloadTo(fop);
-            Log.v("coucou", "après appel téléchargement");
-
-
-
-            mByteArrayOutputStream.writeTo(fop);
-            mByteArrayOutputStream.flush();
-            fop.close();
-
-            Log.v("coucou","taille fichier téléchargé "+String.valueOf(fichier.length()));
-
-
-            Log.v("coucou", "fichier supposément enregistré");
-        }
-
-
-        @Override
-        protected void onPreExecute() {
-            mOutputText="";
-        }
-
-        @Override
-        protected void onPostExecute(List<String> output) {
-            Log.v("coucou", "fin exécution");
-
-        }
-
-        @Override
-        protected void onCancelled() {
-            if (mLastError != null) {
-                if (mLastError instanceof GooglePlayServicesAvailabilityIOException) {
-                    showGooglePlayServicesAvailabilityErrorDialog(
-                            ((GooglePlayServicesAvailabilityIOException) mLastError)
-                                    .getConnectionStatusCode());
-                } else if (mLastError instanceof UserRecoverableAuthIOException) {
-                    startActivityForResult(
-                            ((UserRecoverableAuthIOException) mLastError).getIntent(),
-                            MainActivity.REQUEST_AUTHORIZATION);
-                } else {
-                    mOutputText="The following error occurred:\n"
-                            + mLastError.getMessage();
-                }
-            } else {
-                mOutputText="Request cancelled.";
-            }
-        }
-    }
     /**
      * Method defined from the QDCResponse interface.
      * Called when the QuestionDelayCounter AsyncTask is over
@@ -1437,11 +1474,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         switch(requestCode) {
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode != RESULT_OK) {
-                    mOutputText=
+                    Log.v("",
                             "This app requires Google Play Services. Please install " +
-                                    "Google Play Services on your device and relaunch this app.";
+                                    "Google Play Services on your device and relaunch this app.");
                 } else {
-                    getResultsFromApi();
+
                 }
                 break;
             case REQUEST_ACCOUNT_PICKER:
@@ -1456,13 +1493,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         editor.putString(PREF_ACCOUNT_NAME, accountName);
                         editor.apply();
                         mCredential.setSelectedAccountName(accountName);
-                        getResultsFromApi();
                     }
                 }
                 break;
             case REQUEST_AUTHORIZATION:
                 if (resultCode == RESULT_OK) {
-                    getResultsFromApi();
+
                 }
                 break;
         }
