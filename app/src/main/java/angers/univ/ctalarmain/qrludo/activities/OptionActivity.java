@@ -41,12 +41,14 @@ public class OptionActivity extends AppCompatActivity {
     TextView tv_SSValue;
     EditText et_SRValue;
     EditText et_MDTValue;
+    Button b_deconnexion;
     Button b_valider;
     SharedPreferences settings;
     List<String> languages;
     ArrayList<String> langs;
     ArrayList<String> countries;
     LinearLayout OptionLayout;
+    boolean demandeDeconnexion = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,7 +156,6 @@ public class OptionActivity extends AppCompatActivity {
 
         int mode = settings.getInt("speechMode",MainActivity.DEFAULT_MODE);
 
-
         if((mode == TextToSpeech.QUEUE_ADD && !sw_mode.isChecked()) || (mode == TextToSpeech.QUEUE_FLUSH && sw_mode.isChecked())){
             sw_mode.toggle();
         }
@@ -163,6 +164,15 @@ public class OptionActivity extends AppCompatActivity {
         et_SRValue.setText(valueOf(settings.getInt("resetTime",MainActivity.DEFAULT_QUESTION_RESET_TIME)));
 
         et_MDTValue.setText(valueOf(settings.getInt("MDTime",MainActivity.DEFAULT_MULTIPLE_DETECTION_TIME)));
+
+        b_deconnexion = (Button) findViewById(R.id.b_deconnexion);
+        b_deconnexion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.v("test", "demande déconnexion");
+                demandeDeconnexion = true;
+            }
+        });
 
         b_valider = (Button) findViewById(R.id.b_valider);
         b_valider.setOnClickListener(new View.OnClickListener() {
@@ -184,6 +194,9 @@ public class OptionActivity extends AppCompatActivity {
 
                     edit.putInt("resetTime", Integer.parseInt(et_SRValue.getText().toString()));
                     edit.putInt("MDTime", Integer.parseInt(et_MDTValue.getText().toString()));
+
+                    edit.putBoolean("deconnexion", demandeDeconnexion);
+
                     edit.apply();
                     Intent intent = new Intent();
                     if (getParent() == null) {

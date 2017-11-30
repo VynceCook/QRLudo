@@ -38,6 +38,7 @@ import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -90,10 +91,6 @@ import angers.univ.ctalarmain.qrludo.utils.OnSwipeTouchListener;
 import angers.univ.ctalarmain.qrludo.utils.QDCResponse;
 import angers.univ.ctalarmain.qrludo.utils.QuestionDelayCounter;
 
-import pub.devrel.*;
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
-
 
 import static java.lang.String.valueOf;
 
@@ -101,7 +98,7 @@ import static java.lang.String.valueOf;
  * @author Corentin Talarmain
  * MainActivity is the main activity of the application, this is where the user will be able to detect QRCodes and hear the question / answer.
  */
-public class MainActivity extends AppCompatActivity implements SensorEventListener, QDCResponse, EasyPermissions.PermissionCallbacks  {
+public class MainActivity extends AppCompatActivity implements SensorEventListener, QDCResponse{
     /**
      * The name of the file containing the user's settings.
      */
@@ -147,6 +144,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      * The integer corresponding to the request for the internet access authorization
      */
     private static final int INTERNET_REQUEST = 20;
+
+    /**
+     * The integer corresponding to the request for the get account authorization
+     */
+    private static final int REQUEST_GET_ACCOUNTS = 24;
 
     private static final int MULTIPLE_QUESTIONS_DETECTED = 100;
 
@@ -443,16 +445,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private final int GOOGLE_SERVICES_REQUEST = 500;
 
+    private final int REQUEST_ACCOUNT_PICKER = 200;
+
     private int multiple_detection_time;
 
-    static final int REQUEST_ACCOUNT_PICKER = 1000;
-    static final int REQUEST_AUTHORIZATION = 1001;
-    static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
-    static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
     private static final String[] SCOPES = {DriveScopes.DRIVE_READONLY};
 
     private GoogleAccountCredential mCredential;
     private static final String PREF_ACCOUNT_NAME = "accountName";
+
+    private static boolean PROCEDURE_CONNEXION_GOOGLE_EN_COURS = false;
 
 
     private com.google.api.services.drive.Drive mService = null;
@@ -499,16 +501,46 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         checkPermissions();
 
+
         // Initialize credentials and service object.
         mCredential = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
 
-        //On demande les identifiants d'accès GoogleDrive s'ils n'ont pas déjà été donnés
+
+        final Button boutonDrive = (Button) findViewById(R.id.connexionDrive);
+
         if (mCredential.getSelectedAccountName() == null) {
-            chooseAccount();
+            boutonDrive.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    boutonDrive.setVisibility(View.VISIBLE);
+                    //Si on a déjà l'autorisation de compte google, on choisit le compte
+                    if (isGoogleAccountPermissionGranted()){
+                        chooseAccount();
+                    }
+                    //Sinon on lance une procédure de demande d'autorisation puis de connexion au compte
+                    else {
+                        PROCEDURE_CONNEXION_GOOGLE_EN_COURS = true;
+                        checkPermissions_google_account();
+                    }
+                }
+            });
+        }
+        else{
+            boutonDrive.setVisibility(View.GONE);
         }
 
+
+
+    /*
+        try {
+            telechargerFichier("1vI39_nk0EajRcLpjisT9iJjIWvSx-shG");
+        } catch (ConnexionInternetIndisponibleException e) {
+            e.printStackTrace();
+        } catch (FichierDejaExistantException e) {
+            e.printStackTrace();
+        }*/
     }
 
     /**
@@ -519,13 +551,19 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      */
     private boolean isFichierDejaTelecharge(String idFichier){
 
-        return (new File(getApplicationContext().getFilesDir().getPath()+idFichier).exists());
+        return (new File(getApplicationContext().getFilesDir().getPath()+"/"+idFichier).exists());
     }
 
-
+    /**
+     * Renvoie le fichier ayant l'id en paramètre stocké dans la mémoire du téléphone
+     *
+     * @param idFichier
+     * @return
+     * @throws FichierInexistantException
+     */
     private File getFichierSurTelephone(String idFichier) throws FichierInexistantException {
 
-        File fichier= new File(getApplicationContext().getFilesDir().getPath()+idFichier);
+        File fichier= new File(getApplicationContext().getFilesDir().getPath()+"/"+idFichier);
 
         if (fichier.exists()){
             return fichier;
@@ -545,16 +583,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private void telechargerFichier(String idFichier) throws ConnexionInternetIndisponibleException, FichierDejaExistantException {
 
         //On télécharge le fichier seulement s'il n'existe pas déjà
-        if (!(new File(getApplicationContext().getFilesDir().getPath()+idFichier).exists())) {
+        if (!(new File(getApplicationContext().getFilesDir().getPath()+"/"+idFichier).exists())) {
 
-            if (!isGooglePlayServicesAvailable()) { //Cas où les GooglePlayServices ne sont pas disponibles
-                acquireGooglePlayServices();
-            } else if (mCredential.getSelectedAccountName() == null) { //Cas où le compte drive n'est pas défini
-                chooseAccount();
-                telechargerFichier(idFichier);
+
+            if (mCredential.getSelectedAccountName() == null) { //Cas où le compte drive n'est pas défini
+                //TODO throw exception
+                Log.v("test", "on essaye de télécharger un fichier mais le compte google n'a pas été enregistré");
             } else if (!isDeviceOnline()) {
                 throw new ConnexionInternetIndisponibleException();
             } else {
+                Log.v("test", "lancement tâche téléchargement");
                 new MakeRequestTask(mCredential, idFichier).execute();
             }
         }
@@ -611,13 +649,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
             FileOutputStream fop = new FileOutputStream(fichier);
 
+            Log.v("test", "avant téléchargement");
             //On télécharge le fichier dans un OutputStream
             mService.files().get(mIdFile).executeMediaAndDownloadTo(mByteArrayOutputStream);
+            Log.v("test", "aprèss téléchargement");
 
             //On écrit l'OutputStream dans le fichier
             mByteArrayOutputStream.writeTo(fop);
             mByteArrayOutputStream.flush();
             fop.close();
+
+            Log.v("test" ,"taille fichier enregistré : "+fichier.length());
 
         }
 
@@ -643,103 +685,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             //Permettra de faire un callback après le téléchargement
 
         }
-
-        @Override
-        protected void onCancelled() {
-            if (mLastError != null) {
-                if (mLastError instanceof GooglePlayServicesAvailabilityIOException) {
-                    showGooglePlayServicesAvailabilityErrorDialog(
-                            ((GooglePlayServicesAvailabilityIOException) mLastError)
-                                    .getConnectionStatusCode());
-                } else if (mLastError instanceof UserRecoverableAuthIOException) {
-                    startActivityForResult(
-                            ((UserRecoverableAuthIOException) mLastError).getIntent(),
-                            MainActivity.REQUEST_AUTHORIZATION);
-                } else {
-                    Log.v("","The following error occurred:\n"
-                            + mLastError.getMessage());
-                }
-            } else {
-               Log.v("","Request cancelled.");
-            }
-        }
     }
 
-    /**
-     * Attempts to set the account used with the API credentials. If an account
-     * name was previously saved it will use that one; otherwise an account
-     * picker dialog will be shown to the user. Note that the setting the
-     * account to use with the credentials object requires the app to have the
-     * GET_ACCOUNTS permission, which is requested here if it is not already
-     * present. The AfterPermissionGranted annotation indicates that this
-     * function will be rerun automatically whenever the GET_ACCOUNTS permission
-     * is granted.
-     */
-    @AfterPermissionGranted(REQUEST_PERMISSION_GET_ACCOUNTS)
-    private void chooseAccount() {
 
-        if (EasyPermissions.hasPermissions(
-                this, Manifest.permission.GET_ACCOUNTS)) {
-            String accountName = getPreferences(Context.MODE_PRIVATE)
-                    .getString(PREF_ACCOUNT_NAME, null);
-            if (accountName != null) {
-                mCredential.setSelectedAccountName(accountName);
-            } else {
-                // Start a dialog from which the user can choose an account
-                startActivityForResult(
-                        mCredential.newChooseAccountIntent(),
-                        REQUEST_ACCOUNT_PICKER);
-            }
-        } else {
-            // Request the GET_ACCOUNTS permission via a user dialog
-            EasyPermissions.requestPermissions(
-                    this,
-                    "This app needs to access your Google account (via Contacts).",
-                    REQUEST_PERMISSION_GET_ACCOUNTS,
-                    Manifest.permission.GET_ACCOUNTS);
-        }
-    }
-
-    /**
-     * Respond to requests for permissions at runtime for API 23 and above.
-     * @param requestCode The request code passed in
-     *     requestPermissions(android.app.Activity, String, int, String[])
-     * @param permissions The requested permissions. Never null.
-     * @param grantResults The grant results for the corresponding permissions
-     *     which is either PERMISSION_GRANTED or PERMISSION_DENIED. Never null.
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        EasyPermissions.onRequestPermissionsResult(
-                requestCode, permissions, grantResults, this);
-    }
-
-    /**
-     * Callback for when a permission is granted using the EasyPermissions
-     * library.
-     * @param requestCode The request code associated with the requested
-     *         permission
-     * @param list The requested permission list. Never null.
-     */
-    @Override
-    public void onPermissionsGranted(int requestCode, List<String> list) {
-        // Do nothing.
-    }
-
-    /**
-     * Callback for when a permission is denied using the EasyPermissions
-     * library.
-     * @param requestCode The request code associated with the requested
-     *         permission
-     * @param list The requested permission list. Never null.
-     */
-    @Override
-    public void onPermissionsDenied(int requestCode, List<String> list) {
-        // Do nothing.
-    }
 
     /**
      * Checks whether the device currently has a network connection.
@@ -765,38 +713,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         return connectionStatusCode == ConnectionResult.SUCCESS;
     }
 
-    /**
-     * Attempt to resolve a missing, out-of-date, invalid or disabled Google
-     * Play Services installation via a user dialog, if possible.
-     */
-    private void acquireGooglePlayServices() {
-        GoogleApiAvailability apiAvailability =
-                GoogleApiAvailability.getInstance();
-        final int connectionStatusCode =
-                apiAvailability.isGooglePlayServicesAvailable(this);
-        if (apiAvailability.isUserResolvableError(connectionStatusCode)) {
-            showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode);
-        }
-    }
 
 
-
-
-    /**
-     * Display an error dialog showing that Google Play Services is missing
-     * or out of date.
-     * @param connectionStatusCode code describing the presence (or lack of)
-     *     Google Play Services on this device.
-     */
-    void showGooglePlayServicesAvailabilityErrorDialog(
-            final int connectionStatusCode) {
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        Dialog dialog = apiAvailability.getErrorDialog(
-                MainActivity.this,
-                connectionStatusCode,
-                REQUEST_GOOGLE_PLAY_SERVICES);
-        dialog.show();
-    }
 
     /**
      * Method defined from the QDCResponse interface.
@@ -929,6 +847,35 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      */
     @Override
     protected void onResume() {
+        Log.v("test", "activity resume");
+
+        //Si on est connecté au drive, on n'affiche pas le bouton de connexion
+        String accountName = getPreferences(Context.MODE_PRIVATE)
+                .getString(PREF_ACCOUNT_NAME, null);
+        if (accountName != null) {
+            Log.v("test", "accountName not null");
+            mCredential.setSelectedAccountName(accountName);
+            Button boutonConnexion = (Button) findViewById(R.id.connexionDrive);
+            boutonConnexion.setVisibility(View.GONE);
+        }
+        else{
+            Log.v("test", "accountName null");
+        }
+
+        try {
+            telechargerFichier("1vI39_nk0EajRcLpjisT9iJjIWvSx-shG");
+        } catch (ConnexionInternetIndisponibleException e) {
+            e.printStackTrace();
+        } catch (FichierDejaExistantException e) {
+            e.printStackTrace();
+        }
+
+        //Si on vient de faire la demande d'autorisation compte google, on choisit le compte drive
+        if (PROCEDURE_CONNEXION_GOOGLE_EN_COURS){
+            chooseAccount();
+            PROCEDURE_CONNEXION_GOOGLE_EN_COURS=false;
+        }
+
         /* Ce qu'en dit Google&#160;dans le cas de l'accéléromètre :
          * «&#160; Ce n'est pas nécessaire d'avoir les évènements des capteurs à un rythme trop rapide.
          * En utilisant un rythme moins rapide (SENSOR_DELAY_UI), nous obtenons un filtre
@@ -1345,15 +1292,85 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     }
 
+    private boolean isGoogleAccountPermissionGranted(){
+        return (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.GET_ACCOUNTS)
+                == PackageManager.PERMISSION_GRANTED);
+    }
+
+    /**
+     * Attempts to set the account used with the API credentials. If an account
+     * name was previously saved it will use that one; otherwise an account
+     * picker dialog will be shown to the user. Note that the setting the
+     * account to use with the credentials object requires the app to have the
+     * GET_ACCOUNTS permission, which is requested here if it is not already
+     * present. The AfterPermissionGranted annotation indicates that this
+     * function will be rerun automatically whenever the GET_ACCOUNTS permission
+     * is granted.
+     */
+    @TargetApi(Build.VERSION_CODES.M)
+    private void checkPermissions_google_account() {
+        if (marshmallow) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.GET_ACCOUNTS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                Log.d("PERMISSION_CHECK","---------CheckPermission----------");
+                Log.v("test", "L'autorisation google n'est pas allouée");
+                // Should we show an explanation?
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        Manifest.permission.GET_ACCOUNTS)) {
+                    Log.d("PERMISSION_CHECK","---------Explanation----------");
+                    // Show an explanation to the user *asynchronously* -- don't block
+                    // this thread waiting for the user's response! After the user
+                    // sees the explanation, try again to request the permission.
+                } else {
+                    Log.d("PERMISSION_CHECK","---------NoExplanation----------");
+                    // No explanation needed, we can request the permission.
+
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.GET_ACCOUNTS},
+                            REQUEST_GET_ACCOUNTS);
+
+                    // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                    // app-defined int constant. The callback method gets the
+                    // result of the request.
+                }
+            }
+            else{
+                Log.v("test", "l'autorisation google est allouée");
+            }
+        }
+        Log.v("test", "l'autorisation google a été statiquement allouée");
+    }
+
+    private void chooseAccount() {
+            String accountName = getPreferences(Context.MODE_PRIVATE)
+                    .getString(PREF_ACCOUNT_NAME, null);
+            if (accountName != null) {
+                mCredential.setSelectedAccountName(accountName);
+            } else {
+                // Start a dialog from which the user can choose an account
+                startActivityForResult(
+                        mCredential.newChooseAccountIntent(),
+                        REQUEST_ACCOUNT_PICKER);
+
+            }
+    }
+
+
+
     @TargetApi(Build.VERSION_CODES.M)
     private void checkPermissions() {
         if (marshmallow) {
+            Log.v("test", "marshmallow");
+
             Log.d("PERMISSION_CHECK","---------Marshallow----------");
 
             // Here, thisActivity is the current activity
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.CAMERA)
                     != PackageManager.PERMISSION_GRANTED) {
+                Log.v("test", "camera ok");
                 Log.d("PERMISSION_CHECK","---------CheckPermission----------");
                 // Should we show an explanation?
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this,
@@ -1366,11 +1383,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 } else {
                     Log.d("PERMISSION_CHECK","---------NoExplanation----------");
                     // No explanation needed, we can request the permission.
-
+                    Log.v("test", "requête caméra");
                     ActivityCompat.requestPermissions(this,
                             new String[]{Manifest.permission.CAMERA},
                             CAMERA_REQUEST);
 
+                    return;
                     // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
                     // app-defined int constant. The callback method gets the
                     // result of the request.
@@ -1378,7 +1396,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }else{
                 camera = true;
             }
-            /*if (ContextCompat.checkSelfPermission(this,
+            if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.INTERNET)
                     != PackageManager.PERMISSION_GRANTED)
             {
@@ -1399,12 +1417,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                             new String[]{Manifest.permission.INTERNET},
                             INTERNET_REQUEST);
 
+                    return;
+
                     // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
                     // app-defined int constant. The callback method gets the
                     // result of the request.
                 }
             }else
-                internet = true;*/
+                internet = true;
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.VIBRATE)
                     != PackageManager.PERMISSION_GRANTED) {
@@ -1422,9 +1442,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     // No explanation needed, we can request the permission.
 
                     ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.CAMERA},
-                            CAMERA_REQUEST);
+                            new String[]{Manifest.permission.VIBRATE},
+                            VIBRATE_REQUEST);
 
+                    return;
                     // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
                     // app-defined int constant. The callback method gets the
                     // result of the request.
@@ -1468,40 +1489,49 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         return super.onOptionsItemSelected(item);
     }
 
+    private boolean allCompulsoryAuthorizationsGranted(){
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED){
+            Log.v("test", "pas le droit caméra");
+            return false;
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.INTERNET)
+                != PackageManager.PERMISSION_GRANTED){
+            Log.v("test", "pas le droit internet");
+            return false;
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.VIBRATE)
+                != PackageManager.PERMISSION_GRANTED){
+            Log.v("test", "pas le droit de vibrer");
+            return false;
+        }
+
+        Log.v("test", "Toutes les permissions sont allouées");
+
+        return true;
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check which request we're responding to
-        switch(requestCode) {
-            case REQUEST_GOOGLE_PLAY_SERVICES:
-                if (resultCode != RESULT_OK) {
-                    Log.v("",
-                            "This app requires Google Play Services. Please install " +
-                                    "Google Play Services on your device and relaunch this app.");
-                } else {
 
-                }
-                break;
-            case REQUEST_ACCOUNT_PICKER:
-                if (resultCode == RESULT_OK && data != null &&
-                        data.getExtras() != null) {
-                    String accountName =
-                            data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-                    if (accountName != null) {
-                        SharedPreferences settings =
-                                getPreferences(Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = settings.edit();
-                        editor.putString(PREF_ACCOUNT_NAME, accountName);
-                        editor.apply();
-                        mCredential.setSelectedAccountName(accountName);
-                    }
-                }
-                break;
-            case REQUEST_AUTHORIZATION:
-                if (resultCode == RESULT_OK) {
+        Log.v("test", "activity result");
 
-                }
-                break;
+
+        /**
+         * On demande les permissions obligatoires si elles ne sont pas toutes autorisées
+         */
+        if (!allCompulsoryAuthorizationsGranted()){
+            Log.v("test", "on result : pas toutes les autorisations, on lance checkPermissions()");
+            checkPermissions();
         }
+
+
         if (requestCode == OPTION_REQUEST) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
@@ -1523,6 +1553,37 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                 multiple_detection_time = settings.getInt("MDTime",DEFAULT_MULTIPLE_DETECTION_TIME);
                 // Do something with the contact here (bigger example below)
+
+                //On déconnecte le drive
+                if (settings.getBoolean("deconnexion", false)){
+                    
+                    Button connexionDrive = (Button) findViewById(R.id.connexionDrive);
+                    connexionDrive.setVisibility(View.VISIBLE);
+
+                    mCredential.setSelectedAccount(null);
+
+                    SharedPreferences settingsGoogle =
+                            getPreferences(Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = settingsGoogle.edit();
+                    editor.remove(PREF_ACCOUNT_NAME);
+                    editor.apply();
+
+                }
+            }
+        }
+        else if (requestCode== REQUEST_ACCOUNT_PICKER) {
+            if (resultCode == RESULT_OK && data != null &&
+                    data.getExtras() != null) {
+                String accountName =
+                        data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                if (accountName != null) {
+                    SharedPreferences settings =
+                            getPreferences(Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString(PREF_ACCOUNT_NAME, accountName);
+                    editor.apply();
+                    mCredential.setSelectedAccountName(accountName);
+                }
             }
         }
     }
