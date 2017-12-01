@@ -193,7 +193,7 @@
             android:id="@+id/b_deconnexion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Déconnexion drive" />
+            android:text="Activer connexion drive" />
 
     </LinearLayout>
 

@@ -531,16 +531,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             boutonDrive.setVisibility(View.GONE);
         }
 
-
-
-    /*
-        try {
-            telechargerFichier("1vI39_nk0EajRcLpjisT9iJjIWvSx-shG");
-        } catch (ConnexionInternetIndisponibleException e) {
-            e.printStackTrace();
-        } catch (FichierDejaExistantException e) {
-            e.printStackTrace();
-        }*/
     }
 
     /**
@@ -1323,6 +1313,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     // Show an explanation to the user *asynchronously* -- don't block
                     // this thread waiting for the user's response! After the user
                     // sees the explanation, try again to request the permission.
+
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.GET_ACCOUNTS},
+                            REQUEST_GET_ACCOUNTS);
                 } else {
                     Log.d("PERMISSION_CHECK","---------NoExplanation----------");
                     // No explanation needed, we can request the permission.
@@ -1340,7 +1334,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 Log.v("test", "l'autorisation google est allouée");
             }
         }
-        Log.v("test", "l'autorisation google a été statiquement allouée");
+        else {
+            Log.v("test", "l'autorisation google a été statiquement allouée");
+        }
     }
 
     private void chooseAccount() {

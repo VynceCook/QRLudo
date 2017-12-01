@@ -6,13 +6,22 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="coucou" />
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="test" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2439f6a3-8d70-4cfb-ae69-deffb6144e6c" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/fileHashes.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/fileSnapshots.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/taskArtifacts.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/taskArtifacts.lock" afterPath="$PROJECT_DIR$/.gradle/3.3/taskArtifacts/taskArtifacts.lock" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin" afterPath="$PROJECT_DIR$/.gradle/3.3/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.bin" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" afterPath="$PROJECT_DIR$/.gradle/3.3/tasks/_app_compileDebugJavaWithJavac/localClassSetAnalysis/localClassSetAnalysis.lock" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.3/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" afterPath="$PROJECT_DIR$/.gradle/3.3/tasks/_app_compileDebugJavaWithJavac/localJarClasspathSnapshot/localJarClasspathSnapshot.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout-v21/activity_option.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout-v21/activity_option.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_option.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_option.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/classes/" />
@@ -69,27 +78,55 @@
       <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1628">
-              <caret line="553" column="75" lean-forward="false" selection-start-line="553" selection-start-column="75" selection-end-line="553" selection-end-column="75" />
+            <state relative-caret-position="671">
+              <caret line="1338" column="9" lean-forward="false" selection-start-line="1338" selection-start-column="9" selection-end-line="1338" selection-end-column="9" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#27729#27957#0" expanded="true" />
-                <element signature="e#27956#27957#0" expanded="true" />
-                <element signature="e#28385#28783#0" expanded="true" />
-                <element signature="e#28782#28783#0" expanded="true" />
-                <element signature="e#50663#50695#0" expanded="true" />
-                <element signature="e#54468#55578#0" expanded="true" />
-                <element signature="e#55577#55578#0" expanded="true" />
-                <element signature="e#55702#56110#0" expanded="true" />
-                <element signature="e#56109#56110#0" expanded="true" />
-                <element signature="e#56237#56490#0" expanded="true" />
-                <element signature="e#56489#56490#0" expanded="true" />
-                <element signature="e#56616#57073#0" expanded="true" />
-                <element signature="e#57072#57073#0" expanded="true" />
-                <element signature="e#63675#63676#0" expanded="false" />
-                <element signature="e#63763#63764#0" expanded="false" />
+                <element signature="e#15105#15795#0" expanded="true" />
+                <element signature="e#15794#15795#0" expanded="true" />
+                <element signature="e#23147#23375#0" expanded="true" />
+                <element signature="e#23374#23375#0" expanded="true" />
+                <element signature="e#23803#24201#0" expanded="true" />
+                <element signature="e#24200#24201#0" expanded="true" />
+                <element signature="e#50729#50761#0" expanded="true" />
+                <element signature="e#55811#56921#0" expanded="true" />
+                <element signature="e#56920#56921#0" expanded="true" />
+                <element signature="e#57045#57453#0" expanded="true" />
+                <element signature="e#57452#57453#0" expanded="true" />
+                <element signature="e#57580#57833#0" expanded="true" />
+                <element signature="e#57832#57833#0" expanded="true" />
+                <element signature="e#57959#58416#0" expanded="true" />
+                <element signature="e#58415#58416#0" expanded="true" />
+                <element signature="e#65018#65019#0" expanded="false" />
+                <element signature="e#65106#65107#0" expanded="false" />
               </folding>
             </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="activity_option.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_option.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="152">
+              <caret line="193" column="12" lean-forward="false" selection-start-line="193" selection-start-column="12" selection-end-line="193" selection-end-column="53" />
+              <folding />
+            </state>
+          </provider>
+          <provider editor-type-id="android-designer2">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="activity_option.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout-v21/activity_option.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="272">
+              <caret line="195" column="53" lean-forward="false" selection-start-line="195" selection-start-column="53" selection-end-line="195" selection-end-column="53" />
+              <folding />
+            </state>
+          </provider>
+          <provider editor-type-id="android-designer2">
+            <state />
           </provider>
         </entry>
       </file>
@@ -98,12 +135,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="220">
               <caret line="14" column="54" lean-forward="false" selection-start-line="14" selection-start-column="54" selection-end-line="14" selection-end-column="54" />
-              <folding>
-                <element signature="e#185#186#0" expanded="true" />
-                <element signature="e#208#209#0" expanded="true" />
-                <element signature="e#256#257#0" expanded="true" />
-                <element signature="e#317#318#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -113,12 +145,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="220">
               <caret line="14" column="50" lean-forward="false" selection-start-line="14" selection-start-column="50" selection-end-line="14" selection-end-column="50" />
-              <folding>
-                <element signature="e#189#190#0" expanded="true" />
-                <element signature="e#212#213#0" expanded="true" />
-                <element signature="e#260#261#0" expanded="true" />
-                <element signature="e#317#318#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -128,26 +155,21 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="160">
               <caret line="9" column="16" lean-forward="false" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
-              <folding>
-                <element signature="e#209#210#0" expanded="true" />
-                <element signature="e#232#233#0" expanded="true" />
-                <element signature="e#280#281#0" expanded="true" />
-                <element signature="e#338#339#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="AndroidManifest.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-          <provider editor-type-id="android-manifest">
-            <state />
-          </provider>
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="780">
               <caret line="39" column="0" lean-forward="false" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
               <folding />
             </state>
+          </provider>
+          <provider editor-type-id="android-manifest">
+            <state />
           </provider>
         </entry>
       </file>
@@ -192,6 +214,8 @@
       <find>scopes</find>
       <find>contex</find>
       <find>moutputT</find>
+      <find>onCreate</find>
+      <find>checkPermissions_</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -2137,6 +2161,8 @@
         <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/ConnexionInternetIndisponibleException.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/FichierDejaExistantException.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/FichierInexistantException.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_option.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout-v21/activity_option.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java" />
       </list>
     </option>
@@ -2161,7 +2187,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
+      <pane id="ProjectPane" />
       <pane id="AndroidView">
         <subPane>
           <PATH>
@@ -2170,8 +2196,62 @@
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="Gradle Scripts" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidBuildScriptsGroupNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="QRLudo" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="QRLudo" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="layout" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidResFolderTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="QRLudo" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="layout" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidResFolderTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="activity_option.xml" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidResGroupNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -2228,16 +2308,30 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="QRLudo" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="manifests" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidManifestsGroupNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="ProjectPane" />
+      <pane id="PackagesPane" />
       <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="sync.plugin.last.upgrade.timestamp" value="1511705209370" />
+    <property name="sync.plugin.last.upgrade.timestamp" value="1512122862861" />
     <property name="android.project.structure.last.selected" value="app" />
     <property name="android.project.structure.proportion" value="0.15" />
     <property name="device.picker.selection" value="Nexus_5X_API_27" />
@@ -2331,7 +2425,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1511806337743" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1512124127598" />
       </method>
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests">
@@ -2379,7 +2473,7 @@
       </Profilers>
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1511806337743" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1512124127598" />
       </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -2541,7 +2635,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1511806337745" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1512124127599" />
       </method>
     </configuration>
     <list size="1">
@@ -2581,6 +2675,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Android Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930845" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -2590,10 +2685,11 @@
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32959402" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930845" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930845" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930845" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3358946" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33809" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -2656,67 +2752,11 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#27729#27957#0" expanded="true" />
-            <element signature="e#27956#27957#0" expanded="true" />
-            <element signature="e#28385#28783#0" expanded="true" />
-            <element signature="e#28782#28783#0" expanded="true" />
-            <element signature="e#50663#50695#0" expanded="true" />
-            <element signature="e#54468#55578#0" expanded="true" />
-            <element signature="e#55577#55578#0" expanded="true" />
-            <element signature="e#55702#56110#0" expanded="true" />
-            <element signature="e#56109#56110#0" expanded="true" />
-            <element signature="e#56237#56490#0" expanded="true" />
-            <element signature="e#56489#56490#0" expanded="true" />
-            <element signature="e#56616#57073#0" expanded="true" />
-            <element signature="e#57072#57073#0" expanded="true" />
-            <element signature="e#63675#63676#0" expanded="false" />
-            <element signature="e#63763#63764#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/FichierInexistantException.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="14" column="54" lean-forward="false" selection-start-line="14" selection-start-column="54" selection-end-line="14" selection-end-column="54" />
-          <folding>
-            <element signature="e#185#186#0" expanded="true" />
-            <element signature="e#208#209#0" expanded="true" />
-            <element signature="e#256#257#0" expanded="true" />
-            <element signature="e#317#318#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/FichierDejaExistantException.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="14" column="50" lean-forward="false" selection-start-line="14" selection-start-column="50" selection-end-line="14" selection-end-column="50" />
-          <folding>
-            <element signature="e#189#190#0" expanded="true" />
-            <element signature="e#212#213#0" expanded="true" />
-            <element signature="e#260#261#0" expanded="true" />
-            <element signature="e#317#318#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/ConnexionInternetIndisponibleException.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="160">
           <caret line="9" column="16" lean-forward="false" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
-          <folding>
-            <element signature="e#209#210#0" expanded="true" />
-            <element signature="e#232#233#0" expanded="true" />
-            <element signature="e#280#281#0" expanded="true" />
-            <element signature="e#338#339#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2750,21 +2790,23 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#27729#27957#0" expanded="true" />
-            <element signature="e#27956#27957#0" expanded="true" />
-            <element signature="e#28385#28783#0" expanded="true" />
-            <element signature="e#28782#28783#0" expanded="true" />
-            <element signature="e#50663#50695#0" expanded="true" />
-            <element signature="e#54468#55578#0" expanded="true" />
-            <element signature="e#55577#55578#0" expanded="true" />
-            <element signature="e#55702#56110#0" expanded="true" />
-            <element signature="e#56109#56110#0" expanded="true" />
-            <element signature="e#56237#56490#0" expanded="true" />
-            <element signature="e#56489#56490#0" expanded="true" />
-            <element signature="e#56616#57073#0" expanded="true" />
-            <element signature="e#57072#57073#0" expanded="true" />
-            <element signature="e#63675#63676#0" expanded="false" />
-            <element signature="e#63763#63764#0" expanded="false" />
+            <element signature="e#15105#15795#0" expanded="true" />
+            <element signature="e#15794#15795#0" expanded="true" />
+            <element signature="e#23147#23375#0" expanded="true" />
+            <element signature="e#23374#23375#0" expanded="true" />
+            <element signature="e#23803#24201#0" expanded="true" />
+            <element signature="e#24200#24201#0" expanded="true" />
+            <element signature="e#50729#50761#0" expanded="true" />
+            <element signature="e#55811#56921#0" expanded="true" />
+            <element signature="e#56920#56921#0" expanded="true" />
+            <element signature="e#57045#57453#0" expanded="true" />
+            <element signature="e#57452#57453#0" expanded="true" />
+            <element signature="e#57580#57833#0" expanded="true" />
+            <element signature="e#57832#57833#0" expanded="true" />
+            <element signature="e#57959#58416#0" expanded="true" />
+            <element signature="e#58415#58416#0" expanded="true" />
+            <element signature="e#65018#65019#0" expanded="false" />
+            <element signature="e#65106#65107#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2773,12 +2815,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="220">
           <caret line="14" column="54" lean-forward="false" selection-start-line="14" selection-start-column="54" selection-end-line="14" selection-end-column="54" />
-          <folding>
-            <element signature="e#185#186#0" expanded="true" />
-            <element signature="e#208#209#0" expanded="true" />
-            <element signature="e#256#257#0" expanded="true" />
-            <element signature="e#317#318#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2786,12 +2823,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="220">
           <caret line="14" column="50" lean-forward="false" selection-start-line="14" selection-start-column="50" selection-end-line="14" selection-end-column="50" />
-          <folding>
-            <element signature="e#189#190#0" expanded="true" />
-            <element signature="e#212#213#0" expanded="true" />
-            <element signature="e#260#261#0" expanded="true" />
-            <element signature="e#317#318#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2799,12 +2831,157 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="160">
           <caret line="9" column="16" lean-forward="false" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="780">
+          <caret line="39" column="0" lean-forward="false" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="720">
+          <caret line="36" column="35" lean-forward="false" selection-start-line="36" selection-start-column="35" selection-end-line="36" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="18" column="5" lean-forward="false" selection-start-line="18" selection-start-column="5" selection-end-line="18" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#209#210#0" expanded="true" />
-            <element signature="e#232#233#0" expanded="true" />
-            <element signature="e#280#281#0" expanded="true" />
-            <element signature="e#338#339#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#15105#15795#0" expanded="true" />
+            <element signature="e#15794#15795#0" expanded="true" />
+            <element signature="e#23147#23375#0" expanded="true" />
+            <element signature="e#23374#23375#0" expanded="true" />
+            <element signature="e#23803#24201#0" expanded="true" />
+            <element signature="e#24200#24201#0" expanded="true" />
+            <element signature="e#50729#50761#0" expanded="true" />
+            <element signature="e#55811#56921#0" expanded="true" />
+            <element signature="e#56920#56921#0" expanded="true" />
+            <element signature="e#57045#57453#0" expanded="true" />
+            <element signature="e#57452#57453#0" expanded="true" />
+            <element signature="e#57580#57833#0" expanded="true" />
+            <element signature="e#57832#57833#0" expanded="true" />
+            <element signature="e#57959#58416#0" expanded="true" />
+            <element signature="e#58415#58416#0" expanded="true" />
+            <element signature="e#65018#65019#0" expanded="false" />
+            <element signature="e#65106#65107#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/FichierInexistantException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="14" column="54" lean-forward="false" selection-start-line="14" selection-start-column="54" selection-end-line="14" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/FichierDejaExistantException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="14" column="50" lean-forward="false" selection-start-line="14" selection-start-column="50" selection-end-line="14" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/ConnexionInternetIndisponibleException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="9" column="16" lean-forward="false" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="780">
+          <caret line="39" column="0" lean-forward="false" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="720">
+          <caret line="36" column="35" lean-forward="false" selection-start-line="36" selection-start-column="35" selection-end-line="36" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="18" column="5" lean-forward="false" selection-start-line="18" selection-start-column="5" selection-end-line="18" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#15105#15795#0" expanded="true" />
+            <element signature="e#15794#15795#0" expanded="true" />
+            <element signature="e#23147#23375#0" expanded="true" />
+            <element signature="e#23374#23375#0" expanded="true" />
+            <element signature="e#23803#24201#0" expanded="true" />
+            <element signature="e#24200#24201#0" expanded="true" />
+            <element signature="e#50729#50761#0" expanded="true" />
+            <element signature="e#55811#56921#0" expanded="true" />
+            <element signature="e#56920#56921#0" expanded="true" />
+            <element signature="e#57045#57453#0" expanded="true" />
+            <element signature="e#57452#57453#0" expanded="true" />
+            <element signature="e#57580#57833#0" expanded="true" />
+            <element signature="e#57832#57833#0" expanded="true" />
+            <element signature="e#57959#58416#0" expanded="true" />
+            <element signature="e#58415#58416#0" expanded="true" />
+            <element signature="e#65018#65019#0" expanded="false" />
+            <element signature="e#65106#65107#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/FichierInexistantException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="14" column="54" lean-forward="false" selection-start-line="14" selection-start-column="54" selection-end-line="14" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/FichierDejaExistantException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="14" column="50" lean-forward="false" selection-start-line="14" selection-start-column="50" selection-end-line="14" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/ConnexionInternetIndisponibleException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="9" column="16" lean-forward="false" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2838,21 +3015,23 @@
           <caret line="100" column="13" lean-forward="false" selection-start-line="448" selection-start-column="56" selection-end-line="448" selection-end-column="70" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#27729#27957#0" expanded="true" />
-            <element signature="e#27956#27957#0" expanded="true" />
-            <element signature="e#28385#28783#0" expanded="true" />
-            <element signature="e#28782#28783#0" expanded="true" />
-            <element signature="e#50663#50695#0" expanded="true" />
-            <element signature="e#54468#55578#0" expanded="true" />
-            <element signature="e#55577#55578#0" expanded="true" />
-            <element signature="e#55702#56110#0" expanded="true" />
-            <element signature="e#56109#56110#0" expanded="true" />
-            <element signature="e#56237#56490#0" expanded="true" />
-            <element signature="e#56489#56490#0" expanded="true" />
-            <element signature="e#56616#57073#0" expanded="true" />
-            <element signature="e#57072#57073#0" expanded="true" />
-            <element signature="e#63675#63676#0" expanded="false" />
-            <element signature="e#63763#63764#0" expanded="false" />
+            <element signature="e#15105#15795#0" expanded="true" />
+            <element signature="e#15794#15795#0" expanded="true" />
+            <element signature="e#23147#23375#0" expanded="true" />
+            <element signature="e#23374#23375#0" expanded="true" />
+            <element signature="e#23803#24201#0" expanded="true" />
+            <element signature="e#24200#24201#0" expanded="true" />
+            <element signature="e#50729#50761#0" expanded="true" />
+            <element signature="e#55811#56921#0" expanded="true" />
+            <element signature="e#56920#56921#0" expanded="true" />
+            <element signature="e#57045#57453#0" expanded="true" />
+            <element signature="e#57452#57453#0" expanded="true" />
+            <element signature="e#57580#57833#0" expanded="true" />
+            <element signature="e#57832#57833#0" expanded="true" />
+            <element signature="e#57959#58416#0" expanded="true" />
+            <element signature="e#58415#58416#0" expanded="true" />
+            <element signature="e#65018#65019#0" expanded="false" />
+            <element signature="e#65106#65107#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2887,21 +3066,23 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#27729#27957#0" expanded="true" />
-            <element signature="e#27956#27957#0" expanded="true" />
-            <element signature="e#28385#28783#0" expanded="true" />
-            <element signature="e#28782#28783#0" expanded="true" />
-            <element signature="e#50663#50695#0" expanded="true" />
-            <element signature="e#54468#55578#0" expanded="true" />
-            <element signature="e#55577#55578#0" expanded="true" />
-            <element signature="e#55702#56110#0" expanded="true" />
-            <element signature="e#56109#56110#0" expanded="true" />
-            <element signature="e#56237#56490#0" expanded="true" />
-            <element signature="e#56489#56490#0" expanded="true" />
-            <element signature="e#56616#57073#0" expanded="true" />
-            <element signature="e#57072#57073#0" expanded="true" />
-            <element signature="e#63675#63676#0" expanded="false" />
-            <element signature="e#63763#63764#0" expanded="false" />
+            <element signature="e#15105#15795#0" expanded="true" />
+            <element signature="e#15794#15795#0" expanded="true" />
+            <element signature="e#23147#23375#0" expanded="true" />
+            <element signature="e#23374#23375#0" expanded="true" />
+            <element signature="e#23803#24201#0" expanded="true" />
+            <element signature="e#24200#24201#0" expanded="true" />
+            <element signature="e#50729#50761#0" expanded="true" />
+            <element signature="e#55811#56921#0" expanded="true" />
+            <element signature="e#56920#56921#0" expanded="true" />
+            <element signature="e#57045#57453#0" expanded="true" />
+            <element signature="e#57452#57453#0" expanded="true" />
+            <element signature="e#57580#57833#0" expanded="true" />
+            <element signature="e#57832#57833#0" expanded="true" />
+            <element signature="e#57959#58416#0" expanded="true" />
+            <element signature="e#58415#58416#0" expanded="true" />
+            <element signature="e#65018#65019#0" expanded="false" />
+            <element signature="e#65106#65107#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2928,21 +3109,23 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#27729#27957#0" expanded="true" />
-            <element signature="e#27956#27957#0" expanded="true" />
-            <element signature="e#28385#28783#0" expanded="true" />
-            <element signature="e#28782#28783#0" expanded="true" />
-            <element signature="e#50663#50695#0" expanded="true" />
-            <element signature="e#54468#55578#0" expanded="true" />
-            <element signature="e#55577#55578#0" expanded="true" />
-            <element signature="e#55702#56110#0" expanded="true" />
-            <element signature="e#56109#56110#0" expanded="true" />
-            <element signature="e#56237#56490#0" expanded="true" />
-            <element signature="e#56489#56490#0" expanded="true" />
-            <element signature="e#56616#57073#0" expanded="true" />
-            <element signature="e#57072#57073#0" expanded="true" />
-            <element signature="e#63675#63676#0" expanded="false" />
-            <element signature="e#63763#63764#0" expanded="false" />
+            <element signature="e#15105#15795#0" expanded="true" />
+            <element signature="e#15794#15795#0" expanded="true" />
+            <element signature="e#23147#23375#0" expanded="true" />
+            <element signature="e#23374#23375#0" expanded="true" />
+            <element signature="e#23803#24201#0" expanded="true" />
+            <element signature="e#24200#24201#0" expanded="true" />
+            <element signature="e#50729#50761#0" expanded="true" />
+            <element signature="e#55811#56921#0" expanded="true" />
+            <element signature="e#56920#56921#0" expanded="true" />
+            <element signature="e#57045#57453#0" expanded="true" />
+            <element signature="e#57452#57453#0" expanded="true" />
+            <element signature="e#57580#57833#0" expanded="true" />
+            <element signature="e#57832#57833#0" expanded="true" />
+            <element signature="e#57959#58416#0" expanded="true" />
+            <element signature="e#58415#58416#0" expanded="true" />
+            <element signature="e#65018#65019#0" expanded="false" />
+            <element signature="e#65106#65107#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2977,21 +3160,23 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#27729#27957#0" expanded="true" />
-            <element signature="e#27956#27957#0" expanded="true" />
-            <element signature="e#28385#28783#0" expanded="true" />
-            <element signature="e#28782#28783#0" expanded="true" />
-            <element signature="e#50663#50695#0" expanded="true" />
-            <element signature="e#54468#55578#0" expanded="true" />
-            <element signature="e#55577#55578#0" expanded="true" />
-            <element signature="e#55702#56110#0" expanded="true" />
-            <element signature="e#56109#56110#0" expanded="true" />
-            <element signature="e#56237#56490#0" expanded="true" />
-            <element signature="e#56489#56490#0" expanded="true" />
-            <element signature="e#56616#57073#0" expanded="true" />
-            <element signature="e#57072#57073#0" expanded="true" />
-            <element signature="e#63675#63676#0" expanded="false" />
-            <element signature="e#63763#63764#0" expanded="false" />
+            <element signature="e#15105#15795#0" expanded="true" />
+            <element signature="e#15794#15795#0" expanded="true" />
+            <element signature="e#23147#23375#0" expanded="true" />
+            <element signature="e#23374#23375#0" expanded="true" />
+            <element signature="e#23803#24201#0" expanded="true" />
+            <element signature="e#24200#24201#0" expanded="true" />
+            <element signature="e#50729#50761#0" expanded="true" />
+            <element signature="e#55811#56921#0" expanded="true" />
+            <element signature="e#56920#56921#0" expanded="true" />
+            <element signature="e#57045#57453#0" expanded="true" />
+            <element signature="e#57452#57453#0" expanded="true" />
+            <element signature="e#57580#57833#0" expanded="true" />
+            <element signature="e#57832#57833#0" expanded="true" />
+            <element signature="e#57959#58416#0" expanded="true" />
+            <element signature="e#58415#58416#0" expanded="true" />
+            <element signature="e#65018#65019#0" expanded="false" />
+            <element signature="e#65106#65107#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -3028,14 +3213,14 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-      <provider editor-type-id="android-manifest">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="780">
           <caret line="39" column="0" lean-forward="false" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
           <folding />
         </state>
+      </provider>
+      <provider editor-type-id="android-manifest">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/build.gradle">
@@ -3058,12 +3243,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="160">
           <caret line="9" column="16" lean-forward="false" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
-          <folding>
-            <element signature="e#209#210#0" expanded="true" />
-            <element signature="e#232#233#0" expanded="true" />
-            <element signature="e#280#281#0" expanded="true" />
-            <element signature="e#338#339#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -3071,12 +3251,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="220">
           <caret line="14" column="50" lean-forward="false" selection-start-line="14" selection-start-column="50" selection-end-line="14" selection-end-column="50" />
-          <folding>
-            <element signature="e#189#190#0" expanded="true" />
-            <element signature="e#212#213#0" expanded="true" />
-            <element signature="e#260#261#0" expanded="true" />
-            <element signature="e#317#318#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -3084,36 +3259,66 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="220">
           <caret line="14" column="54" lean-forward="false" selection-start-line="14" selection-start-column="54" selection-end-line="14" selection-end-column="54" />
-          <folding>
-            <element signature="e#185#186#0" expanded="true" />
-            <element signature="e#208#209#0" expanded="true" />
-            <element signature="e#256#257#0" expanded="true" />
-            <element signature="e#317#318#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_option.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="193" column="12" lean-forward="false" selection-start-line="193" selection-start-column="12" selection-end-line="193" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout-v21/activity_option.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="195" column="53" lean-forward="false" selection-start-line="195" selection-start-column="53" selection-end-line="195" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1628">
-          <caret line="553" column="75" lean-forward="false" selection-start-line="553" selection-start-column="75" selection-end-line="553" selection-end-column="75" />
+        <state relative-caret-position="671">
+          <caret line="1338" column="9" lean-forward="false" selection-start-line="1338" selection-start-column="9" selection-end-line="1338" selection-end-column="9" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#27729#27957#0" expanded="true" />
-            <element signature="e#27956#27957#0" expanded="true" />
-            <element signature="e#28385#28783#0" expanded="true" />
-            <element signature="e#28782#28783#0" expanded="true" />
-            <element signature="e#50663#50695#0" expanded="true" />
-            <element signature="e#54468#55578#0" expanded="true" />
-            <element signature="e#55577#55578#0" expanded="true" />
-            <element signature="e#55702#56110#0" expanded="true" />
-            <element signature="e#56109#56110#0" expanded="true" />
-            <element signature="e#56237#56490#0" expanded="true" />
-            <element signature="e#56489#56490#0" expanded="true" />
-            <element signature="e#56616#57073#0" expanded="true" />
-            <element signature="e#57072#57073#0" expanded="true" />
-            <element signature="e#63675#63676#0" expanded="false" />
-            <element signature="e#63763#63764#0" expanded="false" />
+            <element signature="e#15105#15795#0" expanded="true" />
+            <element signature="e#15794#15795#0" expanded="true" />
+            <element signature="e#23147#23375#0" expanded="true" />
+            <element signature="e#23374#23375#0" expanded="true" />
+            <element signature="e#23803#24201#0" expanded="true" />
+            <element signature="e#24200#24201#0" expanded="true" />
+            <element signature="e#50729#50761#0" expanded="true" />
+            <element signature="e#55811#56921#0" expanded="true" />
+            <element signature="e#56920#56921#0" expanded="true" />
+            <element signature="e#57045#57453#0" expanded="true" />
+            <element signature="e#57452#57453#0" expanded="true" />
+            <element signature="e#57580#57833#0" expanded="true" />
+            <element signature="e#57832#57833#0" expanded="true" />
+            <element signature="e#57959#58416#0" expanded="true" />
+            <element signature="e#58415#58416#0" expanded="true" />
+            <element signature="e#65018#65019#0" expanded="false" />
+            <element signature="e#65106#65107#0" expanded="false" />
           </folding>
         </state>
       </provider>
