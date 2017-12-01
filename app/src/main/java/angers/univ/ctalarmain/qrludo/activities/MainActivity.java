@@ -98,6 +98,7 @@ import angers.univ.ctalarmain.qrludo.FichierDejaExistantException;
 import angers.univ.ctalarmain.qrludo.FichierInexistantException;
 import angers.univ.ctalarmain.qrludo.Qr.QrcodeAtomique;
 import angers.univ.ctalarmain.qrludo.R;
+import angers.univ.ctalarmain.qrludo.utils.DecompressionXml;
 import angers.univ.ctalarmain.qrludo.utils.OnSwipeTouchListener;
 import angers.univ.ctalarmain.qrludo.utils.QDCResponse;
 import angers.univ.ctalarmain.qrludo.utils.QuestionDelayCounter;
@@ -1066,7 +1067,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                                 multiple_detecting = true;
                                 mdt = new MultipleDetectionTimer();
                                 mdt.execute(multiple_detection_time * 1000);
-                                parseurXML(barcodes.valueAt(0).rawValue);
+                                parseurXML(DecompressionXml.decompresser(barcodes.valueAt(0).rawValue));
                                 currQuest = 0;
                                 toneGen.startTone(ToneGenerator.TONE_CDMA_SOFT_ERROR_LITE, 150);
                                 questionState = QUESTION_PRINTED_STATE;
