@@ -68,6 +68,10 @@ import com.google.api.services.drive.model.FileList;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -77,15 +81,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import angers.univ.ctalarmain.qrludo.ConnexionInternetIndisponibleException;
 import angers.univ.ctalarmain.qrludo.FichierDejaExistantException;
 import angers.univ.ctalarmain.qrludo.FichierInexistantException;
+import angers.univ.ctalarmain.qrludo.Qr.QrcodeAtomique;
 import angers.univ.ctalarmain.qrludo.R;
 import angers.univ.ctalarmain.qrludo.utils.OnSwipeTouchListener;
 import angers.univ.ctalarmain.qrludo.utils.QDCResponse;
@@ -1047,28 +1058,28 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
                 if (barcodes.size() != 0) {
-                        for(int i = 0 ; i < barcodes.size(); i ++) {
-                            if (!m_barcodes.contains(barcodes.valueAt(i).rawValue)) {
-                                m_barcodes.add(barcodes.valueAt(i).rawValue);
-                                m_nbrCodes++;
-                                if (!multiple_detecting) {
-                                    multiple_detecting = true;
-                                    mdt = new MultipleDetectionTimer();
-                                    mdt.execute(multiple_detection_time * 1000);
-                                    parseJSON(barcodes.valueAt(0).rawValue);
-                                    currQuest = 0;
-                                    toneGen.startTone(ToneGenerator.TONE_CDMA_SOFT_ERROR_LITE, 150);
-                                    questionState = QUESTION_PRINTED_STATE;
-                                } else if (questionState != MULTIPLE_QUESTIONS_DETECTED) {
-                                    questionState = MULTIPLE_QUESTIONS_DETECTED;
-                                }
-                                if (multiple_detecting) {
-                                    toneGen.startTone(ToneGenerator.TONE_PROP_BEEP, 150);
-                                }
-
-
+                    for(int i = 0 ; i < barcodes.size(); i ++) {
+                        if (!m_barcodes.contains(barcodes.valueAt(i).rawValue)) {
+                            m_barcodes.add(barcodes.valueAt(i).rawValue);
+                            m_nbrCodes++;
+                            if (!multiple_detecting) {
+                                multiple_detecting = true;
+                                mdt = new MultipleDetectionTimer();
+                                mdt.execute(multiple_detection_time * 1000);
+                                parseurXML(barcodes.valueAt(0).rawValue);
+                                currQuest = 0;
+                                toneGen.startTone(ToneGenerator.TONE_CDMA_SOFT_ERROR_LITE, 150);
+                                questionState = QUESTION_PRINTED_STATE;
+                            } else if (questionState != MULTIPLE_QUESTIONS_DETECTED) {
+                                questionState = MULTIPLE_QUESTIONS_DETECTED;
                             }
+                            if (multiple_detecting) {
+                                toneGen.startTone(ToneGenerator.TONE_PROP_BEEP, 150);
+                            }
+
+
                         }
+                    }
                     lastBarcodesSize = barcodes.size();
                     //state = CODE_DETECTED_STATE;
                     //stopDetection();
@@ -1128,6 +1139,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         detector.setProcessor(detector_processor);
     }
+
 
 
     /**
@@ -1376,6 +1388,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     // this thread waiting for the user's response! After the user
                     // sees the explanation, try again to request the permission.
 
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.CAMERA},
+                            CAMERA_REQUEST);
+
                 } else {
                     Log.d("PERMISSION_CHECK","---------NoExplanation----------");
                     // No explanation needed, we can request the permission.
@@ -1405,6 +1421,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     // this thread waiting for the user's response! After the user
                     // sees the explanation, try again to request the permission.
 
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.INTERNET},
+                            INTERNET_REQUEST);
+
                 } else {
                     Log.d("PERMISSION_CHECK","---------NoExplanation----------");
                     // No explanation needed, we can request the permission.
@@ -1432,6 +1452,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     // Show an explanation to the user *asynchronously* -- don't block
                     // this thread waiting for the user's response! After the user
                     // sees the explanation, try again to request the permission.
+
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.VIBRATE},
+                            VIBRATE_REQUEST);
 
                 } else {
                     Log.d("PERMISSION_CHECK","---------NoExplanation----------");
@@ -1728,9 +1752,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 }
 
             }*/
-            if(musique)
-            {
-                toSpeech("Il y a une musique.",TextToSpeech.QUEUE_ADD);
+            if (musique) {
+                toSpeech("Il y a une musique.", TextToSpeech.QUEUE_ADD);
             }
 
         } catch (JSONException e) {
@@ -1742,9 +1765,69 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
 
 
-
     }
 
+
+
+    //---------------------------------------DAVID DEBUT ----------------------------------------------
+
+    /**
+     * fonction permettant de parser un fichier XML
+     *
+     */
+    private void parseurXML(String rawValue){
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        QrcodeAtomique qr;
+        // DLManager download;
+
+        try{
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.parse(new InputSource(new StringReader(rawValue)));
+            Element racine = document.getDocumentElement();
+            if(racine.getAttribute("type").equals("atomique")){
+                qr = new QrcodeAtomique(rawValue);
+                for( String q : qr.getTexte()){
+                    question = q;
+                    printQuestion();
+                    TimeUnit.SECONDS.sleep(1);
+                }
+                //download = new DLManager();
+                //download.useDownloadManager(qr.getFichier().getUrl(),qr.getFichier().getNom(), this.getApplicationContext());
+                // download.useDownloadManager(qr.getFichier().getUrl(),"testSon", this.getApplicationContext());
+                Log.v("test", "appel téléchargement");
+                telechargerFichier("1vI39_nk0EajRcLpjisT9iJjIWvSx-shG");
+
+            }
+        }catch (ParserConfigurationException e){
+            e.printStackTrace();
+            question = "Test un";
+            printQuestion();
+
+        }
+        catch (SAXException e){
+            e.printStackTrace();
+
+            question = "Test deux";
+            printQuestion();
+
+        }
+        catch (IOException e){
+            e.printStackTrace();
+
+            question = "Test trois";
+            printQuestion();
+        }catch(InterruptedException ex)
+        {
+            Thread.currentThread().interrupt();
+        }
+        catch (ConnexionInternetIndisponibleException e) {
+            e.printStackTrace();
+        }
+        catch (FichierDejaExistantException e) {
+            e.printStackTrace();
+        }
+    }
+//---------------------DAVID FIN ----------------------------------------------
     /*
     @TargetApi(Build.VERSION_CODES.M)
     @Override
@@ -1978,6 +2061,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
+
 
   /*  private void toFile(String str){
         if(lollipop)
