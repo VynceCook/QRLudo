@@ -98,7 +98,6 @@ import angers.univ.ctalarmain.qrludo.FichierDejaExistantException;
 import angers.univ.ctalarmain.qrludo.FichierInexistantException;
 import angers.univ.ctalarmain.qrludo.Qr.QrcodeAtomique;
 import angers.univ.ctalarmain.qrludo.R;
-import angers.univ.ctalarmain.qrludo.utils.DecompressionXml;
 import angers.univ.ctalarmain.qrludo.utils.OnSwipeTouchListener;
 import angers.univ.ctalarmain.qrludo.utils.QDCResponse;
 import angers.univ.ctalarmain.qrludo.utils.QuestionDelayCounter;
@@ -361,6 +360,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private ArrayList<String> m_barcodes;
 
+    /*
+    cet variable me permet de recuperer tout les champs texte contenu dans un Qrcode
+     */
+    private ArrayList<String> m_question;
+    private int questionLu;
+
+    private boolean printQuestionReady;
+
+
     private int m_nbrCodes;
 
     private int currQuest;
@@ -384,7 +392,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      * The boolean indicating the presence of a sound in the code, for a later purpose
      */
     private boolean musique;
-
 
     /**
      * This object is used to manage the different sensors used
@@ -543,6 +550,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             boutonDrive.setVisibility(View.GONE);
         }
 
+
+
+    /*
+        try {
+            telechargerFichier("1vI39_nk0EajRcLpjisT9iJjIWvSx-shG");
+        } catch (ConnexionInternetIndisponibleException e) {
+            e.printStackTrace();
+        } catch (FichierDejaExistantException e) {
+            e.printStackTrace();
+        }*/
     }
 
     /**
@@ -592,6 +609,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 //TODO throw exception
                 Log.v("test", "on essaye de télécharger un fichier mais le compte google n'a pas été enregistré");
             } else if (!isDeviceOnline()) {
+                Log.v("test","je suis dans le cas dun exception");
                 throw new ConnexionInternetIndisponibleException();
             } else {
                 Log.v("test", "lancement tâche téléchargement");
@@ -616,6 +634,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         private ByteArrayOutputStream mByteArrayOutputStream = new ByteArrayOutputStream();
 
         MakeRequestTask(GoogleAccountCredential credential, String idFile) {
+            Log.v("test","nous sommes dans le CONSTRUCTEUR de la fonction doInbackground");
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
             mIdFile = idFile;
@@ -632,9 +651,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         @Override
         protected List<String> doInBackground(Void... params) {
             try {
+                Log.v("test","nous sommes dans le try de la fonction doInbackground");
                 getDataFromApi();
                 return null;
             } catch (Exception e) {
+                Log.v("test"," EXCEPTION nous sommes dans le try de la fonction doInbackground");
                 mLastError = e;
                 cancel(true);
                 return null;
@@ -645,7 +666,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
          * Télécharge le fichier
          **/
         private void getDataFromApi() throws IOException {
-
+            Log.v("test", "debut de la fonction getDataFromApi");
             //On crée un fichier dans la mémoire réservée de l'application
             File fichier = new File(getApplicationContext().getFilesDir(), mIdFile);
 
@@ -716,8 +737,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
 
-
-
     /**
      * Method defined from the QDCResponse interface.
      * Called when the QuestionDelayCounter AsyncTask is over
@@ -728,7 +747,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void processFinish(Boolean output) {
         if(output){
-           resetQuestion();
+            resetQuestion();
             lastBarcode = "";
         }
     }
@@ -817,15 +836,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         Locale[] locales = Locale.getAvailableLocales();
 
 
-            for (Locale l : locales) {
-                try {
-                    if (ttobj.isLanguageAvailable(l) >= TextToSpeech.LANG_COUNTRY_AVAILABLE) {
-                        locals.putString(l.getCountry(), l.getLanguage());
-                    }
-                }
-                catch(IllegalArgumentException e){
+        for (Locale l : locales) {
+            try {
+                if (ttobj.isLanguageAvailable(l) >= TextToSpeech.LANG_COUNTRY_AVAILABLE) {
+                    locals.putString(l.getCountry(), l.getLanguage());
                 }
             }
+            catch(IllegalArgumentException e){
+            }
+        }
 
     }
 
@@ -837,9 +856,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onPause() {
         // unregister the sensor (désenregistrer le capteur)
         if(hasAccelerometer)
-        sensorManager.unregisterListener(this, accelerometer);
+            sensorManager.unregisterListener(this, accelerometer);
         if(hasProximity)
-        sensorManager.unregisterListener(this, proximity);
+            sensorManager.unregisterListener(this, proximity);
         super.onPause();
     }
 
@@ -863,6 +882,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         else{
             Log.v("test", "accountName null");
         }
+/*
 
         try {
             telechargerFichier("1vI39_nk0EajRcLpjisT9iJjIWvSx-shG");
@@ -870,7 +890,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             e.printStackTrace();
         } catch (FichierDejaExistantException e) {
             e.printStackTrace();
+            toSpeech("Ce fichier existe déja", TextToSpeech.QUEUE_FLUSH);
         }
+*/
 
         //Si on vient de faire la demande d'autorisation compte google, on choisit le compte drive
         if (PROCEDURE_CONNEXION_GOOGLE_EN_COURS){
@@ -885,9 +907,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
          * Un autre bénéfice étant que l'on utilise moins d'énergie et de CPU.&#160;»
          */
         if(hasAccelerometer)
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
+            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
         if(hasProximity)
-        sensorManager.registerListener(this, proximity,SensorManager.SENSOR_DELAY_UI);
+            sensorManager.registerListener(this, proximity,SensorManager.SENSOR_DELAY_UI);
         super.onResume();
     }
 
@@ -951,10 +973,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         // Instancier l'accéléromètre
         if(hasAccelerometer)
-         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         if(hasProximity)
-         proximity = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+            proximity = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
 
         magnetic = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
@@ -971,6 +993,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         cameraState = START_STATE;
 
         questionState = NO_QUESTION_PRINTED_STATE;
+
+        questionLu =-1;
 
 
         lastBarcode = "";
@@ -1067,8 +1091,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                                 multiple_detecting = true;
                                 mdt = new MultipleDetectionTimer();
                                 mdt.execute(multiple_detection_time * 1000);
-                                parseurXML(DecompressionXml.decompresser(barcodes.valueAt(0).rawValue));
+                                parseurXML(barcodes.valueAt(0).rawValue);
                                 currQuest = 0;
+                                printQuestionReady=false; // DD
                                 toneGen.startTone(ToneGenerator.TONE_CDMA_SOFT_ERROR_LITE, 150);
                                 questionState = QUESTION_PRINTED_STATE;
                             } else if (questionState != MULTIPLE_QUESTIONS_DETECTED) {
@@ -1142,7 +1167,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
 
-
     /**
      * The AsyncTask used to detect when the Text To Speech engine talk for the first time
      */
@@ -1156,17 +1180,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
          */
         @Override
         protected Boolean doInBackground(Integer... params) {
-                try {
-                    Thread.sleep(params[0]);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if(questionState == MULTIPLE_QUESTIONS_DETECTED) {
-                    stopDetection();
-                }else if(questionState == QUESTION_PRINTED_STATE){
-                    m_barcodes.clear();
-                    m_nbrCodes = 0;
-                }
+            try {
+                Thread.sleep(params[0]);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if(questionState == MULTIPLE_QUESTIONS_DETECTED) {
+                stopDetection();
+            }else if(questionState == QUESTION_PRINTED_STATE){
+                m_barcodes.clear();
+                m_nbrCodes = 0;
+            }
             multiple_detecting = false;
             return true;
         }
@@ -1228,18 +1252,29 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 /*if(questionState == REPONSE_PRINTED_STATE && question != "") {
                     printQuestion();
                 }*/
-                if(questionState == MULTIPLE_QUESTIONS_DETECTED && !multiple_detecting)
+                if(questionState == MULTIPLE_QUESTIONS_DETECTED && !multiple_detecting && printQuestionReady)
                 {
                     if(currQuest > 0)
                     {
                         currQuest--;
-                        question = m_barcodes.get(currQuest);
-                        printQuestion();
+                        //question = m_barcodes.get(currQuest);
+                        parseurXML(m_barcodes.get(currQuest));
+                        //printQuestion();
                         if(currQuest == 0)
                         {
                             toneGen.startTone(ToneGenerator.TONE_CDMA_HIGH_PBX_SLS, 25);
                         }
                     }
+                }else if(questionState == QUESTION_PRINTED_STATE || !printQuestionReady){
+                    if((questionLu+1) > 0){
+                        question = m_question.get(--questionLu);
+                        printQuestion();
+                    }else{
+                        question =m_question.get(0) ;
+                        printQuestion();
+                        printQuestionReady=true;
+                    }
+
                 }
             }
             public void onSwipeLeft() {
@@ -1247,19 +1282,29 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 /*if(questionState == QUESTION_PRINTED_STATE && reponse != "") {
                     printReponse();
                 }*/
-                if(questionState == MULTIPLE_QUESTIONS_DETECTED)
+                if (questionLu==-1)
+                    questionLu=0;
+                if(questionState == MULTIPLE_QUESTIONS_DETECTED && printQuestionReady)
                 {
                     Log.d("ah","ah");
-                    if(multiple_detecting )
+                    /*
+                        DD --- cet fonction limite le nbre de detection à 2 qrcode et au 2ieme elle stop la detecton de qr code.
+                        c'est pour cela que j'ai decidé de l'enlever afin de pouvoir scanner autant de qr code que je veux
+                        */
+
+                    /*if(multiple_detecting )
                     {
                         multiple_detecting = false;
                         mdt.cancel(true);
                         stopDetection();
-                    }
+                    }*/
+
                     if(currQuest+1 < m_nbrCodes)
                     {
+                        printQuestionReady=false;
                         currQuest++;
-                        question = m_barcodes.get(currQuest);
+                        //question = m_barcodes.get(currQuest); -- DD
+                        parseurXML(m_barcodes.get(currQuest));
                         if(currQuest+1 == m_nbrCodes) {
                             toneGen.startTone(ToneGenerator.TONE_CDMA_HIGH_PBX_SLS, 25);
                             try {
@@ -1269,24 +1314,34 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                             }
                             toneGen.startTone(ToneGenerator.TONE_CDMA_HIGH_PBX_SLS, 25);
                         }
-                        printQuestion();
+                        //printQuestion(); -- DD
                     }
-                    else if(currQuest+1 == m_nbrCodes)
+                    else if((currQuest+1 == m_nbrCodes)&& (m_question.size()==questionLu+1))
                     {
+                        toSpeech("L'écriture terminer. Retour à la détéction",TextToSpeech.QUEUE_ADD);
                         questionState = NO_QUESTION_PRINTED_STATE;
                         m_barcodes.clear();
+                        question=""; //--DD
                         m_nbrCodes = 0;
                         currQuest = 0;
                         startDetection();
+                    }
+                }else if(questionState == QUESTION_PRINTED_STATE || !printQuestionReady){
+
+                    if((questionLu+1) < m_question.size()){
+                        question = m_question.get(++questionLu);
+                        printQuestion();
+                    }else{
+                        printQuestionReady=true;
                     }
                 }
             }
             public void onSwipeBottom() {
 
-                    if(ttobj.isSpeaking())
-                    {
-                        ttobj.stop();
-                    }
+                if(ttobj.isSpeaking())
+                {
+                    ttobj.stop();
+                }
 
             }
 
@@ -1326,10 +1381,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     // Show an explanation to the user *asynchronously* -- don't block
                     // this thread waiting for the user's response! After the user
                     // sees the explanation, try again to request the permission.
-
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.GET_ACCOUNTS},
-                            REQUEST_GET_ACCOUNTS);
                 } else {
                     Log.d("PERMISSION_CHECK","---------NoExplanation----------");
                     // No explanation needed, we can request the permission.
@@ -1347,23 +1398,21 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 Log.v("test", "l'autorisation google est allouée");
             }
         }
-        else {
-            Log.v("test", "l'autorisation google a été statiquement allouée");
-        }
+        Log.v("test", "l'autorisation google a été statiquement allouée");
     }
 
     private void chooseAccount() {
-            String accountName = getPreferences(Context.MODE_PRIVATE)
-                    .getString(PREF_ACCOUNT_NAME, null);
-            if (accountName != null) {
-                mCredential.setSelectedAccountName(accountName);
-            } else {
-                // Start a dialog from which the user can choose an account
-                startActivityForResult(
-                        mCredential.newChooseAccountIntent(),
-                        REQUEST_ACCOUNT_PICKER);
+        String accountName = getPreferences(Context.MODE_PRIVATE)
+                .getString(PREF_ACCOUNT_NAME, null);
+        if (accountName != null) {
+            mCredential.setSelectedAccountName(accountName);
+        } else {
+            // Start a dialog from which the user can choose an account
+            startActivityForResult(
+                    mCredential.newChooseAccountIntent(),
+                    REQUEST_ACCOUNT_PICKER);
 
-            }
+        }
     }
 
 
@@ -1388,10 +1437,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     // Show an explanation to the user *asynchronously* -- don't block
                     // this thread waiting for the user's response! After the user
                     // sees the explanation, try again to request the permission.
-
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.CAMERA},
-                            CAMERA_REQUEST);
 
                 } else {
                     Log.d("PERMISSION_CHECK","---------NoExplanation----------");
@@ -1422,10 +1467,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     // this thread waiting for the user's response! After the user
                     // sees the explanation, try again to request the permission.
 
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.INTERNET},
-                            INTERNET_REQUEST);
-
                 } else {
                     Log.d("PERMISSION_CHECK","---------NoExplanation----------");
                     // No explanation needed, we can request the permission.
@@ -1453,10 +1494,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     // Show an explanation to the user *asynchronously* -- don't block
                     // this thread waiting for the user's response! After the user
                     // sees the explanation, try again to request the permission.
-
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.VIBRATE},
-                            VIBRATE_REQUEST);
 
                 } else {
                     Log.d("PERMISSION_CHECK","---------NoExplanation----------");
@@ -1577,7 +1614,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                 //On déconnecte le drive
                 if (settings.getBoolean("deconnexion", false)){
-                    
+
                     Button connexionDrive = (Button) findViewById(R.id.connexionDrive);
                     connexionDrive.setVisibility(View.VISIBLE);
 
@@ -1753,8 +1790,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 }
 
             }*/
-            if (musique) {
-                toSpeech("Il y a une musique.", TextToSpeech.QUEUE_ADD);
+            if(musique)
+            {
+                toSpeech("Il y a une musique.",TextToSpeech.QUEUE_ADD);
             }
 
         } catch (JSONException e) {
@@ -1766,9 +1804,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
 
 
+
     }
-
-
 
     //---------------------------------------DAVID DEBUT ----------------------------------------------
 
@@ -1787,13 +1824,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             Element racine = document.getDocumentElement();
             if(racine.getAttribute("type").equals("atomique")){
                 qr = new QrcodeAtomique(rawValue);
-                for( String q : qr.getTexte()){
-                    question = q;
+
+                m_question = qr.getTexte();
+                if(currQuest==0) {
+                    questionLu = 0;
+                    question = m_question.get(questionLu);
                     printQuestion();
-                    TimeUnit.SECONDS.sleep(1);
                 }
+                Log.v("test", "la question est deja lu");
+                //questionLu++;
+
                 //download = new DLManager();
-                //download.useDownloadManager(qr.getFichier().getUrl(),qr.getFichier().getNom(), this.getApplicationContext());
+                //download.useDownloadManager(qr.getFi          chier().getUrl(),qr.getFichier().getNom(), this.getApplicationContext());
                 // download.useDownloadManager(qr.getFichier().getUrl(),"testSon", this.getApplicationContext());
                 Log.v("test", "appel téléchargement");
                 telechargerFichier("1vI39_nk0EajRcLpjisT9iJjIWvSx-shG");
@@ -1812,23 +1854,24 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             printQuestion();
 
         }
-        catch (IOException e){
+        catch (IOException e) {
             e.printStackTrace();
 
             question = "Test trois";
             printQuestion();
-        }catch(InterruptedException ex)
-        {
-            Thread.currentThread().interrupt();
         }
         catch (ConnexionInternetIndisponibleException e) {
             e.printStackTrace();
         }
         catch (FichierDejaExistantException e) {
             e.printStackTrace();
+            //toSpeech("Ce fichier existe déja", TextToSpeech.QUEUE_FLUSH);
+            //question= getApplicationContext().getDataDir().getAbsolutePath();
+            //printQuestion();
         }
     }
 //---------------------DAVID FIN ----------------------------------------------
+
     /*
     @TargetApi(Build.VERSION_CODES.M)
     @Override
@@ -2063,8 +2106,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     }
 
-
-
   /*  private void toFile(String str){
         if(lollipop)
         {
@@ -2089,5 +2130,4 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 */
 }
-
 
