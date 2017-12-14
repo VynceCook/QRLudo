@@ -1,5 +1,7 @@
 package angers.univ.ctalarmain.qrludo.Qr;
 
+import android.util.Log;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -28,6 +30,8 @@ public class QrcodeAtomique extends Qrcode {
      * Contenu je recupére le noeud contenu qui est le pére de tous des noeuds textes
      */
     String contenu;
+    String url;
+    int ordreFamille=-1;
 
     /**
      * texte contient tous les contenus des champs texte.
@@ -40,6 +44,13 @@ public class QrcodeAtomique extends Qrcode {
         parseXML();
     }
 
+    public void setRang(int rang){
+        this.ordreFamille = rang;
+    }
+
+    public int getRang(){
+        return this.ordreFamille;
+    }
 
     public void setTexte(ArrayList<String> value) {
         texte = value;
@@ -63,9 +74,10 @@ public class QrcodeAtomique extends Qrcode {
                     texte.add(childOfContenu.item(i).getTextContent());
                 else if (childOfContenu.item(i).getNodeName().equals("fichier")) {
                     NamedNodeMap attrFichier = childOfContenu.item(i).getAttributes();
-                    String nom = attrFichier.item(0).getTextContent();
-                    String url = attrFichier.item(1).getTextContent();
-                    Fichier fichier = new Fichier(nom, url);
+                    if (attrFichier.item(0).getNodeName().equals("url"))
+                        url = attrFichier.item(0).getNodeValue();
+                    texte.add("fichier=".concat(url));
+                    Log.v("tele","je suis un fichier");
                 }
 
             }

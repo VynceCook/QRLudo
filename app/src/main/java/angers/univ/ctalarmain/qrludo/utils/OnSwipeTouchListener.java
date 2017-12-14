@@ -9,6 +9,8 @@ import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View.OnTouchListener;
 
+import java.io.IOException;
+
 public class OnSwipeTouchListener implements OnTouchListener {
 
     private final GestureDetector gestureDetector;
@@ -72,10 +74,10 @@ public class OnSwipeTouchListener implements OnTouchListener {
     public void onLongClick() {
     }
 
-    public void onSwipeRight() {
+    public void onSwipeRight() throws IOException {
     }
 
-    public void onSwipeLeft() {
+    public void onSwipeLeft() throws IOException {
     }
 
     public void onSwipeTop() {

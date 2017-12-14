@@ -2,19 +2,20 @@ package angers.univ.ctalarmain.qrludo.activities;
 
 import android.Manifest;
 import android.accounts.AccountManager;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Rect;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.ToneGenerator;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -22,17 +23,15 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
-import android.util.SparseIntArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
@@ -54,40 +53,27 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
-import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
-import com.google.api.services.drive.model.FileList;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -97,7 +83,9 @@ import angers.univ.ctalarmain.qrludo.ConnexionInternetIndisponibleException;
 import angers.univ.ctalarmain.qrludo.FichierDejaExistantException;
 import angers.univ.ctalarmain.qrludo.FichierInexistantException;
 import angers.univ.ctalarmain.qrludo.Qr.QrcodeAtomique;
+import angers.univ.ctalarmain.qrludo.Qr.QrcodeFamille;
 import angers.univ.ctalarmain.qrludo.R;
+import angers.univ.ctalarmain.qrludo.utils.DLManager;
 import angers.univ.ctalarmain.qrludo.utils.DecompressionXml;
 import angers.univ.ctalarmain.qrludo.utils.OnSwipeTouchListener;
 import angers.univ.ctalarmain.qrludo.utils.QDCResponse;
@@ -359,15 +347,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      */
     private String reponse;
 
+    private ArrayList<String> m_textes;
+
+
     private ArrayList<String> m_barcodes;
 
-    /*
-    cet variable me permet de recuperer tout les champs texte contenu dans un Qrcode
-     */
-    private ArrayList<String> m_question;
+    private ArrayList<QrcodeFamille> lesFamille;
+
     private int questionLu;
 
-    private boolean printQuestionReady;
+    private boolean swipeRight;
+    private boolean paslabonneApproche;
+
 
 
     private int m_nbrCodes;
@@ -436,7 +427,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private float[] resultMatrix = new float[9];
 
 
-    MultipleDetectionTimer mdt;
+
+    final Handler mHandler = new Handler();
 
     /**
      * Float used for the proximity sensor
@@ -455,6 +447,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      * The boolean used to indicate if the phone vibrating permission has been granted
      */
     private boolean vibrate;
+
 
     /**
      * The object used to make the phone vibrate
@@ -478,6 +471,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
     private com.google.api.services.drive.Drive mService = null;
+
+    // Storage Permissions
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
+    //Download Manager
+    private DLManager download;
+    private MediaPlayer sound;
+    private boolean soundPlay;
 
     /**
      * The OnCreate event of the main activity, called at the creation.
@@ -552,7 +557,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
 
 
-
+        verifyStoragePermissions(this);
     /*
         try {
             telechargerFichier("1vI39_nk0EajRcLpjisT9iJjIWvSx-shG");
@@ -564,14 +569,35 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     /**
+     * Checks if the app has permission to write to device storage
+     *
+     * If the app does not has permission then the user will be prompted to grant permissions
+     *
+     * @param activity
+     */
+    public static void verifyStoragePermissions(Activity activity) {
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
+    }
+
+    /**
      * Renvoie vrai si le fichier dont l'id est passé en paramètre est déjà présent sur la mémoire du téléphone
      *
-     * @param idFichier
+     * @param id
      * @return
      */
-    private boolean isFichierDejaTelecharge(String idFichier){
+    private boolean isFichierDejaTelecharge(String id){
 
-        return (new File(getApplicationContext().getFilesDir().getPath()+"/"+idFichier).exists());
+        return (new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Download/"+id+".mp3").exists());
     }
 
     /**
@@ -608,12 +634,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
             if (mCredential.getSelectedAccountName() == null) { //Cas où le compte drive n'est pas défini
                 //TODO throw exception
-                Log.v("test", "on essaye de télécharger un fichier mais le compte google n'a pas été enregistré");
             } else if (!isDeviceOnline()) {
-                Log.v("test","je suis dans le cas dun exception");
                 throw new ConnexionInternetIndisponibleException();
             } else {
-                Log.v("test", "lancement tâche téléchargement");
                 new MakeRequestTask(mCredential, idFichier).execute();
             }
         }
@@ -635,7 +658,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         private ByteArrayOutputStream mByteArrayOutputStream = new ByteArrayOutputStream();
 
         MakeRequestTask(GoogleAccountCredential credential, String idFile) {
-            Log.v("test","nous sommes dans le CONSTRUCTEUR de la fonction doInbackground");
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
             mIdFile = idFile;
@@ -652,11 +674,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         @Override
         protected List<String> doInBackground(Void... params) {
             try {
-                Log.v("test","nous sommes dans le try de la fonction doInbackground");
                 getDataFromApi();
                 return null;
             } catch (Exception e) {
-                Log.v("test"," EXCEPTION nous sommes dans le try de la fonction doInbackground");
+
                 mLastError = e;
                 cancel(true);
                 return null;
@@ -667,23 +688,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
          * Télécharge le fichier
          **/
         private void getDataFromApi() throws IOException {
-            Log.v("test", "debut de la fonction getDataFromApi");
             //On crée un fichier dans la mémoire réservée de l'application
             File fichier = new File(getApplicationContext().getFilesDir(), mIdFile);
 
             FileOutputStream fop = new FileOutputStream(fichier);
 
-            Log.v("test", "avant téléchargement");
             //On télécharge le fichier dans un OutputStream
             mService.files().get(mIdFile).executeMediaAndDownloadTo(mByteArrayOutputStream);
-            Log.v("test", "aprèss téléchargement");
 
             //On écrit l'OutputStream dans le fichier
             mByteArrayOutputStream.writeTo(fop);
             mByteArrayOutputStream.flush();
             fop.close();
-
-            Log.v("test" ,"taille fichier enregistré : "+fichier.length());
 
         }
 
@@ -703,7 +719,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
          */
         @Override
         protected void onPostExecute(List<String> output) {
-
             //TODO
             //Code à exécuter une fois le téléchargement fini (dépend de l'implementation du code de David)
             //Permettra de faire un callback après le téléchargement
@@ -747,10 +762,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      */
     @Override
     public void processFinish(Boolean output) {
-        if(output){
-            resetQuestion();
-            lastBarcode = "";
-        }
+        resetQuestion();
+        lastBarcode = "";
+
+
     }
 
     /**
@@ -860,6 +875,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             sensorManager.unregisterListener(this, accelerometer);
         if(hasProximity)
             sensorManager.unregisterListener(this, proximity);
+        if(ttobj.isSpeaking())
+            ttobj.stop();
         super.onPause();
     }
 
@@ -869,19 +886,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      */
     @Override
     protected void onResume() {
-        Log.v("test", "activity resume");
 
         //Si on est connecté au drive, on n'affiche pas le bouton de connexion
         String accountName = getPreferences(Context.MODE_PRIVATE)
                 .getString(PREF_ACCOUNT_NAME, null);
         if (accountName != null) {
-            Log.v("test", "accountName not null");
             mCredential.setSelectedAccountName(accountName);
             Button boutonConnexion = (Button) findViewById(R.id.connexionDrive);
             boutonConnexion.setVisibility(View.GONE);
         }
         else{
-            Log.v("test", "accountName null");
         }
 /*
 
@@ -982,7 +996,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         magnetic = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
 
+        m_textes = new ArrayList<>();
+
         m_barcodes = new ArrayList<>();
+
+        lesFamille = new ArrayList<QrcodeFamille>();
 
         lastUpdate = System.currentTimeMillis();
         //Main Layout
@@ -996,6 +1014,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         questionState = NO_QUESTION_PRINTED_STATE;
 
         questionLu =-1;
+
+        swipeRight = false;
+
+        soundPlay = false;
+
+        paslabonneApproche = false;
 
 
         lastBarcode = "";
@@ -1075,6 +1099,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         detector_processor = new Detector.Processor<Barcode>() {
             int lastBarcodesSize;
+            String lastCode = "";
 
             @Override
             public void release() {
@@ -1085,26 +1110,49 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
                 if (barcodes.size() != 0) {
                     for(int i = 0 ; i < barcodes.size(); i ++) {
-                        if (!m_barcodes.contains(barcodes.valueAt(i).rawValue)) {
-                            m_barcodes.add(barcodes.valueAt(i).rawValue);
-                            m_nbrCodes++;
-                            if (!multiple_detecting) {
-                                multiple_detecting = true;
-                                mdt = new MultipleDetectionTimer();
-                                mdt.execute(multiple_detection_time * 1000);
+                        if(multiple_detection_time > 0) {
+                            if (!m_barcodes.contains(barcodes.valueAt(i).rawValue)) {
+                                m_barcodes.add(barcodes.valueAt(i).rawValue);
                                 parseurXML(DecompressionXml.decompresser(barcodes.valueAt(0).rawValue));
-                                currQuest = 0;
-                                printQuestionReady=false; // DD
+                                if (!multiple_detecting) {
+                                    toSpeech("Détection multiple en cours.",TextToSpeech.QUEUE_FLUSH);
+                                    Log.v("element","Code barre bien recu");
+                                    multiple_detecting = true;
+                                    mHandler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if(questionState == MULTIPLE_QUESTIONS_DETECTED) {
+                                                stopDetection();
+                                                lectureFamilles();
+                                                question = m_textes.get(currQuest);
+                                                printQuestion();
+                                            }else if(questionState == QUESTION_PRINTED_STATE){
+                                                m_textes.clear();
+                                                m_nbrCodes = 0;
+                                            }
+                                            multiple_detecting = false;
+                                        }
+                                    }, multiple_detection_time * 1000);
+
+
+                                    Log.v("element","Appel de la fonction parse");
+
+                                    currQuest = 0;
+                                    toneGen.startTone(ToneGenerator.TONE_CDMA_SOFT_ERROR_LITE, 150);
+                                    questionState = QUESTION_PRINTED_STATE;
+                                } else {
+                                    toneGen.startTone(ToneGenerator.TONE_PROP_BEEP, 150);
+                                }
+                                if (questionState != MULTIPLE_QUESTIONS_DETECTED) {
+                                    questionState = MULTIPLE_QUESTIONS_DETECTED;
+                                }
+                            }
+                        }else{
+                            if(!lastBarcode.equals(barcodes.valueAt(i).rawValue)){
+                                lastBarcode = barcodes.valueAt(i).rawValue;
+                                parseurXML(DecompressionXml.decompresser(barcodes.valueAt(0).rawValue));
                                 toneGen.startTone(ToneGenerator.TONE_CDMA_SOFT_ERROR_LITE, 150);
-                                questionState = QUESTION_PRINTED_STATE;
-                            } else if (questionState != MULTIPLE_QUESTIONS_DETECTED) {
-                                questionState = MULTIPLE_QUESTIONS_DETECTED;
                             }
-                            if (multiple_detecting) {
-                                toneGen.startTone(ToneGenerator.TONE_PROP_BEEP, 150);
-                            }
-
-
                         }
                     }
                     lastBarcodesSize = barcodes.size();
@@ -1168,51 +1216,28 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
 
-    /**
-     * The AsyncTask used to detect when the Text To Speech engine talk for the first time
-     */
-    private class MultipleDetectionTimer extends AsyncTask<Integer,Void,Boolean>{
-
-        /**
-         * Get out of a while waiting for the text to speech to speak, and then initiate the application
-         * detector
-         * @param params The Text To Speech engine on 0
-         * @return An integer meaning it's ok
-         */
-        @Override
-        protected Boolean doInBackground(Integer... params) {
-            try {
-                Thread.sleep(params[0]);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if(questionState == MULTIPLE_QUESTIONS_DETECTED) {
-                stopDetection();
-            }else if(questionState == QUESTION_PRINTED_STATE){
-                m_barcodes.clear();
-                m_nbrCodes = 0;
-            }
-            multiple_detecting = false;
-            return true;
-        }
-    }
 
 
 
     private void resetQuestion() {
         question = "";
-
         reponse = "";
         text_space.setVisibility(View.INVISIBLE);
         contentLayout.setVisibility(View.INVISIBLE);
         questionState = NO_QUESTION_PRINTED_STATE;
+        m_textes.clear();
         m_barcodes.clear();
         m_nbrCodes = 0;
         currQuest = 0;
         multiple_detecting = false;
-
+        swipeRight=false;
+        lesFamille.clear();
+        soundPlay = false;
+        questionLu=0;
+        paslabonneApproche=false;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initializeListeners() {
     /*    mainLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @OverrideQuestion
@@ -1244,111 +1269,104 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         });*/
         mainLayout.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
             public void onSwipeTop() {
-                if(questionState == QUESTION_PRINTED_STATE || questionState == MULTIPLE_QUESTIONS_DETECTED) {
-                    toSpeech(question, TextToSpeech.QUEUE_FLUSH);
+                if(multiple_detection_time == 0 || cameraState == START_STATE) {
+                    if (soundPlay) {
+                        if (sound.isPlaying()) {
 
-                }
-            }
-            public void onSwipeRight() {
-                /*if(questionState == REPONSE_PRINTED_STATE && question != "") {
-                    printQuestion();
-                }*/
-                if(questionState == MULTIPLE_QUESTIONS_DETECTED && !multiple_detecting && printQuestionReady)
-                {
-                    if(currQuest > 0)
-                    {
-                        currQuest--;
-                        //question = m_barcodes.get(currQuest);
-                        parseurXML(m_barcodes.get(currQuest));
-                        //printQuestion();
-                        if(currQuest == 0)
-                        {
-                            toneGen.startTone(ToneGenerator.TONE_CDMA_HIGH_PBX_SLS, 25);
+                            try {
+                                sound.stop();
+                                sound.prepare();
+                                sound.start();
+                            } catch (IOException ie) {
+                                ie.printStackTrace();
+                            }
+
+                        } else {
+                            try {
+                                sound.prepare();
+                                sound.start();
+                            } catch (IOException ie) {
+                                ie.printStackTrace();
+                            }
                         }
+                    } else if (questionState == QUESTION_PRINTED_STATE || questionState == MULTIPLE_QUESTIONS_DETECTED) {
+                        toSpeech(question, TextToSpeech.QUEUE_FLUSH);
                     }
-                }else if(questionState == QUESTION_PRINTED_STATE || !printQuestionReady){
-                    if((questionLu+1) > 0){
-                        question = m_question.get(--questionLu);
-                        printQuestion();
-                    }else{
-                        question =m_question.get(0) ;
-                        printQuestion();
-                        printQuestionReady=true;
-                    }
+                }
 
+            }
+            public void onSwipeRight() throws IOException {
+                if(multiple_detection_time == 0 || cameraState == START_STATE) {
+                    if (soundPlay)
+                        sound.stop();
+                    if ((currQuest) > 0) {
+                        currQuest--;
+                        if (currQuest == 0) {
+                            toneGen.startTone(ToneGenerator.TONE_CDMA_MED_PBX_SLS, 25);
+                        }
+                        if (!m_textes.get(currQuest).startsWith("fichier")) {
+                            question = m_textes.get(currQuest);
+                            printQuestion();
+                        } else {
+                            downloadSond(m_textes.get(currQuest).split("=")[1]);
+                        }
+
+                    }
                 }
             }
-            public void onSwipeLeft() {
-                Log.d("state",valueOf(questionState == QUESTION_PRINTED_STATE));
-                /*if(questionState == QUESTION_PRINTED_STATE && reponse != "") {
-                    printReponse();
-                }*/
-                if (questionLu==-1)
-                    questionLu=0;
-                if(questionState == MULTIPLE_QUESTIONS_DETECTED && printQuestionReady)
-                {
-                    Log.d("ah","ah");
-                    /*
-                        DD --- cet fonction limite le nbre de detection à 2 qrcode et au 2ieme elle stop la detecton de qr code.
-                        c'est pour cela que j'ai decidé de l'enlever afin de pouvoir scanner autant de qr code que je veux
-                        */
+            public void onSwipeLeft() throws IOException {
+                Log.d("state", valueOf(questionState == QUESTION_PRINTED_STATE));
+                Log.v("testDD", "m_nbreBarcode----> " + m_nbrCodes);
+                Log.v("testDD", "questionLu ----> " + String.valueOf(questionLu));
+                Log.v("testDD", "currentQueston ---> " + String.valueOf(currQuest));
 
-                    /*if(multiple_detecting )
-                    {
-                        multiple_detecting = false;
-                        mdt.cancel(true);
-                        stopDetection();
-                    }*/
+                swipeRight = false;
+                if (multiple_detection_time == 0 || cameraState == START_STATE) {
+                    if (soundPlay)
+                        sound.stop();
 
-                    if(currQuest+1 < m_nbrCodes)
-                    {
-                        printQuestionReady=false;
+                    swipeRight = false;
+                    if (((currQuest + 1) == m_textes.size()) && multiple_detection_time != 0) {
+                        toSpeech("écoute terminée. Retour à la détection.", TextToSpeech.QUEUE_ADD);
+                        resetQuestion();
+                        startDetection();
+                        questionState = NO_QUESTION_PRINTED_STATE;
+                    } else if (((currQuest + 1) < m_textes.size())) {
                         currQuest++;
-                        //question = m_barcodes.get(currQuest); -- DD
-                        parseurXML(DecompressionXml.decompresser(m_barcodes.get(currQuest)));
-                        if(currQuest+1 == m_nbrCodes) {
-                            toneGen.startTone(ToneGenerator.TONE_CDMA_HIGH_PBX_SLS, 25);
+                        if (currQuest + 1 == m_textes.size()) {
+                            toneGen.startTone(ToneGenerator.TONE_CDMA_MED_PBX_SLS, 25);
                             try {
                                 Thread.sleep(100);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
-                            toneGen.startTone(ToneGenerator.TONE_CDMA_HIGH_PBX_SLS, 25);
+                            toneGen.startTone(ToneGenerator.TONE_CDMA_MED_PBX_SLS, 25);
                         }
-                        //printQuestion(); -- DD
-                    }
-                    else if((currQuest+1 == m_nbrCodes)&& (m_question.size()==questionLu+1))
-                    {
-                        toSpeech("L'écriture terminer. Retour à la détéction",TextToSpeech.QUEUE_ADD);
-                        questionState = NO_QUESTION_PRINTED_STATE;
-                        m_barcodes.clear();
-                        question=""; //--DD
-                        m_nbrCodes = 0;
-                        currQuest = 0;
-                        startDetection();
-                    }
-                }else if(questionState == QUESTION_PRINTED_STATE || !printQuestionReady){
-
-                    if((questionLu+1) < m_question.size()){
-                        question = m_question.get(++questionLu);
-                        printQuestion();
-                    }else{
-                        printQuestionReady=true;
+                        if (!m_textes.get(currQuest).startsWith("fichier")) {
+                            question = m_textes.get(currQuest);
+                            printQuestion();
+                        } else {
+                            downloadSond(m_textes.get(currQuest).split("=")[1]);
+                        }
                     }
                 }
             }
-            public void onSwipeBottom() {
 
-                if(ttobj.isSpeaking())
-                {
-                    ttobj.stop();
+            public void onSwipeBottom() {
+                if(multiple_detection_time == 0 || cameraState == START_STATE) {
+
+                    if (ttobj.isSpeaking()) {
+                        ttobj.stop();
+                    }
+
+                    if (soundPlay)
+                        sound.stop();
                 }
 
             }
 
 
         });
-
     }
 
     private boolean isGoogleAccountPermissionGranted(){
@@ -1659,15 +1677,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             public void run() {
 
                 text_space.setText(question);
-                /*if(image)
-                {
-                    Bitmap bmp = BitmapFactory.decodeFile(image_url);
-                    image_space.setImageBitmap(bmp);
-                    image_space.setVisibility(View.VISIBLE);
-                }else
-                {
-                    image_space.setVisibility(View.INVISIBLE);
-                }*/
                 text_space.setVisibility(View.VISIBLE);
                 contentLayout.setVisibility(View.VISIBLE);
                 toSpeech(question, speechMode);
@@ -1676,6 +1685,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     questionState = QUESTION_PRINTED_STATE;
                 }
 
+                soundPlay = false;
                 if(question_reset_time > 0) {
                     if (qdc != null)
                         qdc.cancel(true);
@@ -1734,79 +1744,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         });
     }
 
-    private void parseJSON(String rawValue) {
-        JSONObject object;
-        try {
-            object = new JSONObject(rawValue);
-            question = object.getString("question");
-            reponse = object.getString("reponse");
-            //image = object.getBoolean("picture");
-            musique = object.getBoolean("music");
-
-            /*if(image){
-                JSONObject image_json = object.getJSONObject("Picture");
-                String image_name = image_json.getString("name");
-                Uri uri = Uri.parse(image_json.getString("url"));
-                String type = uri.getScheme();
-                image_url = Environment.getExternalStorageDirectory().getAbsolutePath() +
-                        File.separator + "QRCodeForGames" + File.separator +  image_name + ".jpeg";
-                if(!(new File(image_url).exists())) {
-                    if (type.equals("http") || type.equals("https")) {
-                        if (internet) {
-                            String url = uri.toString();
-                            URLConnection connection = null;
-                            boolean html_image = false;
-                            try {
-                                connection = new URL(url).openConnection();
-                                String contentType = connection.getHeaderField("Content-Type");
-                                html_image = contentType.startsWith("image/");
-                                Log.d("CONTENT", contentType);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            if (html_image) {
-                                if(write) {
-                                    downloadPicture(image_name, url);
-                                }else{
-                                    toSpeech("L'écriture sur le stockage externe n'a pas été accordée.",TextToSpeech.QUEUE_ADD);
-                                }
-                            }else{
-                                toSpeech("L'URL internet n'est pas une image.",TextToSpeech.QUEUE_ADD);
-                            }
-                        } else {
-                            toSpeech("Erreur : Une ressource internet est demandée, mais non permis.", TextToSpeech.QUEUE_ADD);
-                        }
-
-                    } else if(type.equals("file") ){
-                        File f = new File(uri.getSchemeSpecificPart());
-                        if(f.exists()){
-                            image_url = uri.getSchemeSpecificPart();
-                        }else
-                        {
-                            toSpeech("L'url indiquée pour le fichier est erronnée.",TextToSpeech.QUEUE_ADD);
-                        }
-                    }
-                }else{
-                    printQuestion();
-                }
-
-            }*/
-            if(musique)
-            {
-                toSpeech("Il y a une musique.",TextToSpeech.QUEUE_ADD);
-            }
-
-        } catch (JSONException e) {
-            question = rawValue;
-
-            //image = false;
-            musique = false;
-            printQuestion();
-        }
-
-
-
-    }
 
     //---------------------------------------DAVID DEBUT ----------------------------------------------
 
@@ -1817,63 +1754,174 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private void parseurXML(String rawValue){
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         QrcodeAtomique qr;
-        // DLManager download;
+        QrcodeFamille qrcodeFamille;
+        String nomFamille="";
+        int ordreDanslaFamille=0;
+        Log.v("recu", rawValue);
+        Log.v("element", "un element recu");
 
         try{
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document document = builder.parse(new InputSource(new StringReader(rawValue)));
             Element racine = document.getDocumentElement();
-            if(racine.getAttribute("type").equals("atomique")){
-                qr = new QrcodeAtomique(rawValue);
+            NodeList contenu = racine.getChildNodes();
+            /*
+            en principe le fichier xml ne dois contenir qu'un seul childnode qui est contenu.
+            si elle en contient plus d'un,le noeud en plus serais certainement un noeud qui indique la
+            famille du qrcode. Nous sommes ainsi en présence d'un qrcode famille
+             */
+            if(contenu.getLength()>1 && multiple_detection_time > 0){
+                Log.v("element","le contenu est bien supérieur a 1");
+                if(contenu.item(1).getNodeName().equals("famille")){
+                    Log.v("element", "c'est bien un famille");
 
-                m_question = qr.getTexte();
-                if(currQuest==0) {
-                    questionLu = 0;
-                    question = m_question.get(questionLu);
-                    printQuestion();
+                    /*
+                    Dans ce bloc for j'extrai les informations du fichier XML (nom et ordre) me permettant de creer
+                     une QrcodeFamille
+                     */
+                    for (int i=0; i<contenu.item(1).getAttributes().getLength(); i++){
+                        if(contenu.item(1).getAttributes().item(i).getNodeName().equals("nom"))
+                            nomFamille=contenu.item(1).getAttributes().item(i).getNodeValue();
+                        if (contenu.item(1).getAttributes().item(i).getNodeName().equals("ordre"))
+                            ordreDanslaFamille=Integer.parseInt(contenu.item(1).getAttributes().item(i).getNodeValue());
+                    }
+
+                    if (lesFamille.size()==0){ // si il n'existe pas de
+                        qrcodeFamille = new QrcodeFamille(nomFamille);
+                        qrcodeFamille.addMembreFamille(new QrcodeAtomique(rawValue),ordreDanslaFamille);
+                        lesFamille.add(qrcodeFamille);
+                        Log.v("element", "Valeur de Size of lesFamille ---> "+String.valueOf(lesFamille.size()));
+                    }else if(lesFamille.size()>0){
+                        Log.v("element","Contient plus de un element");
+                        int i=0;
+                        while (i<lesFamille.size()){
+                            if(!lesFamille.get(i).getNomDeLaFamille().equals(nomFamille)){
+                                Log.v("element","Nom different");
+                                i++;
+                            }
+                            else {
+                                if(!lesFamille.get(i).existeQr(rawValue))
+                                    lesFamille.get(i).addMembreFamille(new QrcodeAtomique(rawValue), ordreDanslaFamille);
+                                Log.v("element","j'ajoute un nouveau membre de Famille");
+                                break;
+                            }
+                        }
+                        //toSpeech("correcte", TextToSpeech.QUEUE_FLUSH);
+                       /* if(i<lesFamille.size()){
+                            Log.v("element","j'ajoute un nouveau QrcodeFamille");
+                            qrcodeFamille = new QrcodeFamille(nomFamille);
+                            qrcodeFamille.addMembreFamille(new QrcodeAtomique(rawValue), ordreDanslaFamille);
+                            lesFamille.add(qrcodeFamille);
+                        }*/
+                    }
                 }
-                Log.v("test", "la question est deja lu");
-                //questionLu++;
+            }else if(racine.getAttribute("type").equals("atomique")){
+                    qr = new QrcodeAtomique(rawValue);
 
-                //download = new DLManager();
-                //download.useDownloadManager(qr.getFi          chier().getUrl(),qr.getFichier().getNom(), this.getApplicationContext());
-                // download.useDownloadManager(qr.getFichier().getUrl(),"testSon", this.getApplicationContext());
-                Log.v("test", "appel téléchargement");
-                telechargerFichier("1vI39_nk0EajRcLpjisT9iJjIWvSx-shG");
-
+                    //m_question = qr.getTexte();
+                if(multiple_detection_time == 0) {
+                    lectureQrcode(qr.getTexte());
+                }else{
+                    m_textes.addAll(qr.getTexte());
+                    Log.d("coucou","ici");
+                }
+                    // question = rawValue;
+                    //printQuestion();
             }
         }catch (ParserConfigurationException e){
             e.printStackTrace();
-            question = "Test un";
+            question = "Un problème est survenu lors de la lecture du code.";
             printQuestion();
 
         }
         catch (SAXException e){
             e.printStackTrace();
 
-            question = "Test deux";
+            question = rawValue;
             printQuestion();
 
         }
         catch (IOException e) {
             e.printStackTrace();
-
-            question = "Test trois";
+            question = "Permission d'enregistrement du son, Non accordé";
             printQuestion();
         }
-        catch (ConnexionInternetIndisponibleException e) {
+        /*catch (ConnexionInternetIndisponibleException e) {
             e.printStackTrace();
         }
         catch (FichierDejaExistantException e) {
             e.printStackTrace();
-            //toSpeech("Ce fichier existe déja", TextToSpeech.QUEUE_FLUSH);
+            toSpeech("Ce fichier existe déja", TextToSpeech.QUEUE_FLUSH);
             //question= getApplicationContext().getDataDir().getAbsolutePath();
             //printQuestion();
+        }*/
+    }
+
+    public void lectureQrcode(ArrayList<String> liste) throws IOException {
+        m_textes = liste;
+        currQuest = 0;
+        if (!m_textes.get(currQuest).startsWith("fichier")){
+            question = m_textes.get(currQuest);
+            printQuestion();
+        }else{
+            downloadSond(m_textes.get(currQuest).split(".")[1]);
         }
+       /* m_question=liste;
+
+
+        if(swipeRight){
+            questionLu = m_question.size()-1;
+        }else{
+            questionLu = 0;
+        }
+        */
+
+
+    }
+    public void lectureFamilles(){
+        if (!paslabonneApproche){
+            if(lesFamille.size()>0){
+                for (int i=0; i<lesFamille.size(); i++){
+                    Log.v("element", "Size of ArrayList"+String.valueOf(lesFamille.get(i).getFamille().size()));
+                    for (QrcodeAtomique atom : lesFamille.get(i).getFamille()){
+                        m_textes.addAll(atom.getTexte());
+                    }
+                }
+                currQuest=0;
+                Log.v("testDD", m_textes.get(currQuest));
+                //parseurXML(DecompressionXml.decompresser(m_textes.get(currQuest)));
+                paslabonneApproche =true;
+            }
+        }
+    }
+
+    public void downloadSond(String id) throws IOException {
+
+        if(!isFichierDejaTelecharge(id)){
+            download=new DLManager();
+            download.useDownloadManager(id,this.getApplicationContext());
+        }
+
+        text_space.setVisibility(View.GONE);
+        contentLayout.setVisibility(View.GONE);
+
+        if(ttobj.isSpeaking()){
+            ttobj.stop();
+        }
+        sound = new MediaPlayer();
+        sound.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        sound.setDataSource(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Download/"+id+".mp3");
+        sound.prepare();
+        sound.start();
+        soundPlay=true;
+
+
+
+
     }
 //---------------------DAVID FIN ----------------------------------------------
 
-    /*
+    /*parseurXML
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
