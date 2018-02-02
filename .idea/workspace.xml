@@ -17,7 +17,6 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.bin" afterPath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.lock" afterPath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/classes/" />
@@ -2304,7 +2303,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1517574441324" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1517574538632" />
       </method>
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests">
@@ -2352,7 +2351,7 @@
       </Profilers>
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1517574441324" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1517574538632" />
       </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -2514,7 +2513,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1517574441324" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1517574538633" />
       </method>
     </configuration>
     <list size="1">
@@ -2564,7 +2563,14 @@
       <option name="project" value="LOCAL" />
       <updated>1517568763175</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Nouvelle gestion des permissions : plusieurs permissions sont demandées en même temps si nécessaire. Pour le moment, la permission d'accès au disque est obligatoire.">
+      <created>1517574535749</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1517574535749</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -2642,7 +2648,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Réorganisation d'une grande partie du code :&#10;&#10;- Réécriture du code permettant de gérer les objets QRCode après leur détection, dans le but de laisser plus de responsabilités à ces objets, notamment en ce qui concerne le téléchargement de fichiers. L'utilisation d'une classe conteneur QRCodeCollection et d'un design pattern Composite permet en outre d'uniformiser les traitements et de cacher au maximum les différents types de QRCodes à MainActivity.&#10;&#10;- Réécriture du code permettant de définir le comportement à détection d'un QRCode : passage à un design pattern Stratégie qui gère les actions après la détection d'un QRCode, que l'on soit dans le cadre d'une lecture de famille ou non. La stratégie définit également comment lancer la lecture.&#10;&#10;- Réorganisation de la façon dont l'utilisateur interagit avec l'application pendant une lecture, en passant par des sous-fonctions permettant de centraliser certaines tâches récurrentes&#10;&#10;- Modification du comportement en cas de lecture multiple : le timer se relance à chaque détection d'un nouveau QRCode afin de pouvoir lire un nombre très varié de QRCodes tout en adaptant au mieux le temps à la lecture courante&#10;&#10;- Création d'une classe Singleton ToneGenerator permettant de générer des sons prédéfinis par des méthodes adaptées à différents contextes, tout en permettant à toutes les classes de générér facilement des sons&#10;&#10;- Les QRCodes générés pour les anciennes versions de l'application sont de nouveau lisibles : ils sont interprétés commme un qrcode possédant un seul champ texte, ou poitant sur un fichier si le texte contenu est une url vers le drive google&#10;&#10;- Tout n'est pas fini : il reste la gestion de l'interprétation des QRCodes contenant des fichiers devant être téléchargés sans être lus et la gestion des comportements lorsque la lecture multiple est désactivée." />
-    <option name="LAST_COMMIT_MESSAGE" value="Réorganisation d'une grande partie du code :&#10;&#10;- Réécriture du code permettant de gérer les objets QRCode après leur détection, dans le but de laisser plus de responsabilités à ces objets, notamment en ce qui concerne le téléchargement de fichiers. L'utilisation d'une classe conteneur QRCodeCollection et d'un design pattern Composite permet en outre d'uniformiser les traitements et de cacher au maximum les différents types de QRCodes à MainActivity.&#10;&#10;- Réécriture du code permettant de définir le comportement à détection d'un QRCode : passage à un design pattern Stratégie qui gère les actions après la détection d'un QRCode, que l'on soit dans le cadre d'une lecture de famille ou non. La stratégie définit également comment lancer la lecture.&#10;&#10;- Réorganisation de la façon dont l'utilisateur interagit avec l'application pendant une lecture, en passant par des sous-fonctions permettant de centraliser certaines tâches récurrentes&#10;&#10;- Modification du comportement en cas de lecture multiple : le timer se relance à chaque détection d'un nouveau QRCode afin de pouvoir lire un nombre très varié de QRCodes tout en adaptant au mieux le temps à la lecture courante&#10;&#10;- Création d'une classe Singleton ToneGenerator permettant de générer des sons prédéfinis par des méthodes adaptées à différents contextes, tout en permettant à toutes les classes de générér facilement des sons&#10;&#10;- Les QRCodes générés pour les anciennes versions de l'application sont de nouveau lisibles : ils sont interprétés commme un qrcode possédant un seul champ texte, ou poitant sur un fichier si le texte contenu est une url vers le drive google&#10;&#10;- Tout n'est pas fini : il reste la gestion de l'interprétation des QRCodes contenant des fichiers devant être téléchargés sans être lus et la gestion des comportements lorsque la lecture multiple est désactivée." />
+    <MESSAGE value="Nouvelle gestion des permissions : plusieurs permissions sont demandées en même temps si nécessaire. Pour le moment, la permission d'accès au disque est obligatoire." />
+    <option name="LAST_COMMIT_MESSAGE" value="Nouvelle gestion des permissions : plusieurs permissions sont demandées en même temps si nécessaire. Pour le moment, la permission d'accès au disque est obligatoire." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
