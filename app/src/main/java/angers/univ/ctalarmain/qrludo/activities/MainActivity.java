@@ -4,7 +4,9 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,6 +25,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -111,25 +114,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public static final int DEFAULT_CONTENT_RESET_TIME = 60;
 
     /**
-     * The integer corresponding to the request for phone vibration authorization
-     */
-    private static final int VIBRATE_REQUEST = 80;
-
-    /**
      * The integer corresping to the code identifying the option intent used to launch the option activity.
      * @see OptionActivity
      */
     static final int OPTION_REQUEST = 90;  // The request code
 
-    /**
-     * The integer corresponding to the request for the camera authorization.
-     */
-    private static final int CAMERA_REQUEST = 10;
+    public static final int MULTIPLE_PERMISSIONS = 10; // code you want.
 
-    /**
-     * The integer corresponding to the request for the internet access authorization
-     */
-    private static final int INTERNET_REQUEST = 20;
 
     /**
      * The integer corresponding to the default time during which the application is trying to detect a new QRCode during a multiple detection
@@ -407,29 +398,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         checkPermissions();
 
-        checkStoragePermissions(this);
-
     }
 
-    /**
-     * Checks if the app has permission to write to device storage
-     *
-     * If the app does not has permission then the user will be prompted to grant permissions
-     *
-     */
-    public static void checkStoragePermissions(Activity activity) {
-        // Check if we have write permission
-        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            // We don't have permission so prompt the user
-            ActivityCompat.requestPermissions(
-                    activity,
-                    PERMISSIONS_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE
-            );
-        }
-    }
+
+
 
 
     /**
@@ -1176,6 +1149,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @TargetApi(Build.VERSION_CODES.M)
     private void checkPermissions() {
         if (marshmallow) {
+
+            List<String> neededPermissions = new ArrayList<String>();
+
             Log.v("test", "marshmallow");
 
             Log.d("PERMISSION_CHECK","---------Marshallow----------");
@@ -1184,82 +1160,100 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.CAMERA)
                     != PackageManager.PERMISSION_GRANTED) {
-                Log.v("test", "camera ok");
-                Log.d("PERMISSION_CHECK","---------CheckPermission----------");
+
                 // Should we show an explanation?
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                         Manifest.permission.CAMERA)) {
-                    Log.d("PERMISSION_CHECK","---------Explanation----------");
-                    // Show an explanation to the user *asynchronously* -- don't block
-                    // this thread waiting for the user's response! After the user
-                    // sees the explanation, try again to request the permission.
 
                 } else {
                     Log.d("PERMISSION_CHECK","---------NoExplanation----------");
                     // No explanation needed, we can request the permission.
-                    Log.v("test", "requête caméra");
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.CAMERA},
-                            CAMERA_REQUEST);
+                    neededPermissions.add(Manifest.permission.CAMERA);
 
-                    return;
-                    // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                    // app-defined int constant. The callback method gets the
-                    // result of the request.
                 }
             }
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.INTERNET)
-                    != PackageManager.PERMISSION_GRANTED)
-            {
-                Log.d("PERMISSION_CHECK","---------CheckPermission----------");
+                    != PackageManager.PERMISSION_GRANTED) {
+
                 // Should we show an explanation?
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                         Manifest.permission.INTERNET)) {
-                    Log.d("PERMISSION_CHECK","---------Explanation----------");
-                    // Show an explanation to the user *asynchronously* -- don't block
-                    // this thread waiting for the user's response! After the user
-                    // sees the explanation, try again to request the permission.
+
 
                 } else {
                     Log.d("PERMISSION_CHECK","---------NoExplanation----------");
                     // No explanation needed, we can request the permission.
+                    neededPermissions.add(Manifest.permission.INTERNET);
 
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.INTERNET},
-                            INTERNET_REQUEST);
-
-                    return;
-
-                    // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                    // app-defined int constant. The callback method gets the
-                    // result of the request.
                 }
             }
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.VIBRATE)
                     != PackageManager.PERMISSION_GRANTED) {
-                Log.d("PERMISSION_CHECK","---------CheckPermission----------");
-                // Should we show an explanation?
+
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                         Manifest.permission.VIBRATE)) {
-                    Log.d("PERMISSION_CHECK","---------Explanation----------");
-                    // Show an explanation to the user *asynchronously* -- don't block
-                    // this thread waiting for the user's response! After the user
-                    // sees the explanation, try again to request the permission.
 
                 } else {
                     Log.d("PERMISSION_CHECK","---------NoExplanation----------");
                     // No explanation needed, we can request the permission.
 
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.VIBRATE},
-                            VIBRATE_REQUEST);
+                    neededPermissions.add(Manifest.permission.VIBRATE);
                 }
+            }
+
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                } else {
+                    Log.d("PERMISSION_CHECK","---------NoExplanation----------");
+                    // No explanation needed, we can request the permission.
+
+                    neededPermissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                }
+            }
+
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE)) {
+
+                } else {
+                    Log.d("PERMISSION_CHECK","---------NoExplanation----------");
+                    // No explanation needed, we can request the permission.
+
+                    neededPermissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+                }
+            }
+
+            if (!neededPermissions.isEmpty()) {
+                ActivityCompat.requestPermissions(this, neededPermissions.toArray(new String[neededPermissions.size()]),MULTIPLE_PERMISSIONS );
             }
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        //Restarting the application on permissions granted
+        if (requestCode==MULTIPLE_PERMISSIONS){
+            Intent mStartActivity = new Intent(getApplicationContext(), MainActivity.class);
+            int mPendingIntentId = 123456;
+            PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), mPendingIntentId, mStartActivity,
+                    PendingIntent.FLAG_CANCEL_CURRENT);
+            AlarmManager mgr = (AlarmManager) MainActivity.this.getSystemService(Context.ALARM_SERVICE);
+            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+            System.exit(0);
+        }
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -1308,6 +1302,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.VIBRATE)
+                != PackageManager.PERMISSION_GRANTED){
+            Log.v("test", "pas le droit de vibrer");
+            return false;
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED){
+            Log.v("test", "pas le droit de vibrer");
+            return false;
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED){
             Log.v("test", "pas le droit de vibrer");
             return false;
