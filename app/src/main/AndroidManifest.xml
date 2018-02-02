@@ -19,9 +19,10 @@
     <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true" />
     <uses-feature android:name="android.hardware.sensor.proximity" android:required="true" />
 
+
+
     <uses-sdk
         android:maxSdkVersion="23"
-        android:minSdkVersion="15"
         />
 
     <application
@@ -41,6 +42,12 @@
             </intent-filter>
         </activity>
         <activity android:name="angers.univ.ctalarmain.qrludo.activities.OptionActivity" />
+
+        <receiver android:name=".utils.InternetBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

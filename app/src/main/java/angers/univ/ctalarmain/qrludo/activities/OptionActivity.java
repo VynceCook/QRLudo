@@ -17,11 +17,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.vision.text.Text;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -30,7 +27,7 @@ import angers.univ.ctalarmain.qrludo.R;
 import static java.lang.String.valueOf;
 
 /**
- * Created by etudiant on 28/04/17.
+ * Created by Corentin Tarlarmain on 28/04/17.
  */
 
 public class OptionActivity extends AppCompatActivity {
@@ -161,7 +158,7 @@ public class OptionActivity extends AppCompatActivity {
         }
 
 
-        et_SRValue.setText(valueOf(settings.getInt("resetTime",MainActivity.DEFAULT_QUESTION_RESET_TIME)));
+        et_SRValue.setText(valueOf(settings.getInt("resetTime",MainActivity.DEFAULT_CONTENT_RESET_TIME)));
 
         et_MDTValue.setText(valueOf(settings.getInt("MDTime",MainActivity.DEFAULT_MULTIPLE_DETECTION_TIME)));
 

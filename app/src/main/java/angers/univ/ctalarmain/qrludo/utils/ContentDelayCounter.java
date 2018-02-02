@@ -2,7 +2,7 @@ package angers.univ.ctalarmain.qrludo.utils;
 
 import android.os.AsyncTask;
 
-public class QuestionDelayCounter extends AsyncTask<Integer,Void,Boolean> {
+public class ContentDelayCounter extends AsyncTask<Integer,Void,Boolean> {
     public QDCResponse delegate = null;
     @Override
     protected Boolean doInBackground(Integer... params) {
