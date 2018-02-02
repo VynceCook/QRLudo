@@ -10,34 +10,7 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2439f6a3-8d70-4cfb-ae69-deffb6144e6c" name="Default" comment="Réorganisation d'une grande partie du code :&#10;&#10;- Réécriture du code permettant de gérer les objets QRCode après leur détection, dans le but de laisser plus de responsabilités à ces objets, notamment en ce qui concerne le téléchargement de fichiers. L'utilisation d'une classe conteneur QRCodeCollection et d'un design pattern Composite permet en outre d'uniformiser les traitements et de cacher au maximum les différents types de QRCodes à MainActivity.&#10;&#10;- Réécriture du code permettant de définir le comportement à détection d'un QRCode : passage à un design pattern Stratégie qui gère les actions après la détection d'un QRCode, que l'on soit dans le cadre d'une lecture de famille ou non. La stratégie définit également comment lancer la lecture.&#10;&#10;- Réorganisation de la façon dont l'utilisateur interagit avec l'application pendant une lecture, en passant par des sous-fonctions permettant de centraliser certaines tâches récurrentes&#10;&#10;- Modification du comportement en cas de lecture multiple : le timer se relance à chaque détection d'un nouveau QRCode afin de pouvoir lire un nombre très varié de QRCodes tout en adaptant au mieux le temps à la lecture courante&#10;&#10;- Création d'une classe Singleton ToneGenerator permettant de générer des sons prédéfinis par des méthodes adaptées à différents contextes, tout en permettant à toutes les classes de générér facilement des sons&#10;&#10;- Les QRCodes générés pour les anciennes versions de l'application sont de nouveau lisibles : ils sont interprétés commme un qrcode possédant un seul champ texte, ou poitant sur un fichier si le texte contenu est une url vers le drive google&#10;&#10;- Tout n'est pas fini : il reste la gestion de l'interprétation des QRCodes contenant des fichiers devant être téléchargés sans être lus et la gestion des comportements lorsque la lecture multiple est désactivée.">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeBuilder.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeDefaultDetectionStrategy.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeDetectionStrategy.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeFamilyDetectionStrategy.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/FamilleQRCodes.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCode.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeAtomique.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeCollection.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeComponent.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRContent.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRFile.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRText.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/exceptions/FamilyException.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/exceptions/UnhandledQRException.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/FileDowloader.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/InternetBroadcastReceiver.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/ToneGeneratorSingleton.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/ConnexionInternetIndisponibleException.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/FichierDejaExistantException.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/FichierInexistantException.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/Qr/MembreFamille.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/Qr/Qrcode.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/Qr/QrcodeAtomique.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/Qr/QrcodeEnsemble.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/Qr/QrcodeFamille.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/DLManager.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/QuestionDelayCounter.java" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/ContentDelayCounter.java" />
+    <list default="true" id="2439f6a3-8d70-4cfb-ae69-deffb6144e6c" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/fileHashes/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/4.1/fileHashes/fileHashes.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/fileHashes/fileHashes.lock" afterPath="$PROJECT_DIR$/.gradle/4.1/fileHashes/fileHashes.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/fileHashes/resourceHashesCache.bin" afterPath="$PROJECT_DIR$/.gradle/4.1/fileHashes/resourceHashesCache.bin" />
@@ -45,10 +18,6 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.bin" afterPath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.lock" afterPath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/OptionActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/OptionActivity.java" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/classes/" />
@@ -2334,7 +2303,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1517568715641" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1517568758642" />
       </method>
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests">
@@ -2382,7 +2351,7 @@
       </Profilers>
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1517568715641" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1517568758642" />
       </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -2544,7 +2513,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1517568715642" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1517568758643" />
       </method>
     </configuration>
     <list size="1">
@@ -2580,6 +2549,14 @@
       <option name="presentableId" value="Default" />
       <updated>1511705193943</updated>
     </task>
+    <task id="LOCAL-00001" summary="Réorganisation d'une grande partie du code :&#10;&#10;- Réécriture du code permettant de gérer les objets QRCode après leur détection, dans le but de laisser plus de responsabilités à ces objets, notamment en ce qui concerne le téléchargement de fichiers. L'utilisation d'une classe conteneur QRCodeCollection et d'un design pattern Composite permet en outre d'uniformiser les traitements et de cacher au maximum les différents types de QRCodes à MainActivity.&#10;&#10;- Réécriture du code permettant de définir le comportement à détection d'un QRCode : passage à un design pattern Stratégie qui gère les actions après la détection d'un QRCode, que l'on soit dans le cadre d'une lecture de famille ou non. La stratégie définit également comment lancer la lecture.&#10;&#10;- Réorganisation de la façon dont l'utilisateur interagit avec l'application pendant une lecture, en passant par des sous-fonctions permettant de centraliser certaines tâches récurrentes&#10;&#10;- Modification du comportement en cas de lecture multiple : le timer se relance à chaque détection d'un nouveau QRCode afin de pouvoir lire un nombre très varié de QRCodes tout en adaptant au mieux le temps à la lecture courante&#10;&#10;- Création d'une classe Singleton ToneGenerator permettant de générer des sons prédéfinis par des méthodes adaptées à différents contextes, tout en permettant à toutes les classes de générér facilement des sons&#10;&#10;- Les QRCodes générés pour les anciennes versions de l'application sont de nouveau lisibles : ils sont interprétés commme un qrcode possédant un seul champ texte, ou poitant sur un fichier si le texte contenu est une url vers le drive google&#10;&#10;- Tout n'est pas fini : il reste la gestion de l'interprétation des QRCodes contenant des fichiers devant être téléchargés sans être lus et la gestion des comportements lorsque la lecture multiple est désactivée.">
+      <created>1517568733290</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1517568733290</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
