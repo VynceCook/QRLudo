@@ -1,6 +1,5 @@
 # QRLudo
-Projet du module Concrétisation Disciplinaire
-Master I Informatique - Université d'Angers - 2017/2018
+Projet du module Concrétisation Disciplinaire - Master I Informatique - Université d'Angers - 2017/2018
 
 Suite du projet de fin de Master I de Corentin Talarmain (https://github.com/CorTal)
 
