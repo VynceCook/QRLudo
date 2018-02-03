@@ -44,10 +44,14 @@
         <activity android:name="angers.univ.ctalarmain.qrludo.activities.OptionActivity" />
 
         <receiver android:name=".utils.InternetBroadcastReceiver">
+            android:enabled="true"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
+
+
     </application>
 
 </manifest>

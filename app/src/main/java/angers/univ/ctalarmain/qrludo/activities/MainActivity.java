@@ -1041,7 +1041,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
 
-
     private void initializeListeners() {
 
 
@@ -1244,6 +1243,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         //Restarting the application on permissions granted
         if (requestCode==MULTIPLE_PERMISSIONS){
+
+            Log.v("test", "restarting activity");
+
             Intent mStartActivity = new Intent(getApplicationContext(), MainActivity.class);
             int mPendingIntentId = 123456;
             PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), mPendingIntentId, mStartActivity,

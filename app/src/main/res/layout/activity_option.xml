@@ -172,28 +172,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="horizontal"
-        android:layout_weight=".3">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Drive : "
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="20sp" />
-
-
-
-        <Button
-            android:id="@+id/b_deconnexion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Activer connexion drive" />
-
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
