@@ -58,7 +58,7 @@ public class QRFile extends QRContent implements FileDowloader.FileDownloaderObs
 
         //notifies the potential observer
         if (m_QRFileObserver != null){
-            m_QRFileObserver.onCurrentQRFileDownloadComplete();
+            m_QRFileObserver.onQRFileDownloadComplete();
         }
     }
 
@@ -75,7 +75,7 @@ public class QRFile extends QRContent implements FileDowloader.FileDownloaderObs
      * Interface needed by the clients of QRFile
      */
     public interface QRFileObserverInterface {
-        public void onCurrentQRFileDownloadComplete();
+        public void onQRFileDownloadComplete();
     }
 
 }

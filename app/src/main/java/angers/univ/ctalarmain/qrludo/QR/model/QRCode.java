@@ -29,9 +29,24 @@ public abstract class QRCode implements QRCodeComponent {
         return m_rawValue;
     }
 
-
     public ArrayList<QRContent> getQRContent(){
         return m_content;
+    }
+
+
+    /**
+     * Tell each contained QRFile to start downloading
+     */
+    @Override
+    public void downloadQRFiles() {
+
+        for (QRContent qrContent : m_content){
+
+            if (qrContent instanceof QRFile){
+                ((QRFile) qrContent).downloadIfNotInMemory();
+            }
+
+        }
     }
 
 

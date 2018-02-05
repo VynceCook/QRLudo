@@ -164,18 +164,5 @@ public class QRCodeAtomique extends QRCode {
 
     }
 
-    /**
-     * Tell each contained QRFile to start downloading
-     */
-    @Override
-    public void downloadQRFiles() {
 
-        for (QRContent qrContent : m_content){
-
-            if (qrContent instanceof QRFile){
-                ((QRFile) qrContent).downloadIfNotInMemory();
-            }
-
-        }
-    }
 }

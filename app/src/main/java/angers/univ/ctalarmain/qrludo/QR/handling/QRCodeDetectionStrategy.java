@@ -35,11 +35,14 @@ public abstract class QRCodeDetectionStrategy {
 
     
     /**
-     * Called by the activity at the end of a multiple detection.
-     * Starts the audio reading of the detected QR Codes
+     * Called by the activity at the end of the MultipleDetectionTimer if new QRCodes have been detected
      */
-    public abstract void onEndOfMultipleDetection();
+    public abstract void onEndOfMultipleDetectionWithNewDetections();
 
+    /**
+     * Called by the activity at the end of the MultipleDetectionTimer if no new QRCodes has been detected
+     */
+    public abstract void onEndOfMultipleDetectionWithoutNewDetection();
 
 
     /**

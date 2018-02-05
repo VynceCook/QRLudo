@@ -5,6 +5,7 @@ import android.util.Log;
 
 import angers.univ.ctalarmain.qrludo.QR.model.QRCode;
 import angers.univ.ctalarmain.qrludo.QR.model.QRCodeAtomique;
+import angers.univ.ctalarmain.qrludo.QR.model.QRCodeEnsemble;
 import angers.univ.ctalarmain.qrludo.activities.MainActivity;
 import angers.univ.ctalarmain.qrludo.exceptions.FamilyException;
 import angers.univ.ctalarmain.qrludo.utils.ToneGeneratorSingleton;
@@ -14,7 +15,14 @@ import static angers.univ.ctalarmain.qrludo.activities.MainActivity.MULTIPLE_QR_
 
 /**
  * Created by Jules Leguy on 29/01/18.
- * Default detecting strategy used while no QRCode belonging to a family is detected
+ *
+ * Default detecting strategy used while no special QRCode has been detected
+ *
+ * If a QRCode belonging to a family is detected and it is the first of its family, launching QRCodeFamilyDetectionStrategy
+ * by calling startFamilyDetection(). If the detected QRCode isn't the first of its family, ignoring it.
+ *
+ * If a QRCodeEnsemble is detected and is the first of the current detection, launching QREnsembleDetectionStrategy by calling
+ * startEnsembleDetection(). Otherwise, ignoring it.
  */
 public class QRCodeDefaultDetectionStrategy extends QRCodeDetectionStrategy {
 
@@ -26,8 +34,8 @@ public class QRCodeDefaultDetectionStrategy extends QRCodeDetectionStrategy {
     @Override
     public void onFirstDetectionWithTimeNotNull(QRCode detectedQR) {
 
-        //Applies a family related behaviour if necessary or launches the reading of the detected QR Code
-        if (!familyBehaviour(detectedQR, true)){
+        //Applies a family or ensemble related behaviour if necessary or launches the reading of the detected QR Code
+        if (!familyBehaviour(detectedQR, true) && !ensembleBehaviour(detectedQR, true)){
             //adding it to the detected QRCodes
             m_detectedQRCodes.addQR(detectedQR);
 
@@ -50,8 +58,8 @@ public class QRCodeDefaultDetectionStrategy extends QRCodeDetectionStrategy {
 
         Log.v("test", "DefaultStrategy : onNextDetectionWithTimeNotNull");
 
-        //Applies a family related behaviour if necessary or records the given detected QR Code
-        if (!familyBehaviour(detectedQR, false)){
+        //Applies a family or ensemble related behaviour if necessary or records the detected QR Code
+        if (!familyBehaviour(detectedQR, false) && !ensembleBehaviour(detectedQR, false)){
 
             //Building QR and adding it to the detected QRCodes
             m_detectedQRCodes.addQR(detectedQR);
@@ -68,12 +76,18 @@ public class QRCodeDefaultDetectionStrategy extends QRCodeDetectionStrategy {
     }
 
     @Override
-    public void onEndOfMultipleDetection() {
+    public void onEndOfMultipleDetectionWithNewDetections() {
         m_mainActivity.classicMultipleReading();
     }
 
+    @Override
+    public void onEndOfMultipleDetectionWithoutNewDetection() {
+        //Nothings happens
+    }
+
+
     /**
-     * Starts a family detection or ignore a family QRCode if necessary
+     * Starts a family detection or ignores a family QRCode if necessary
      * If no action has been executed, returns false
      * @param detectedQR
      * @param isFirstQRDetected : needs to know if the QR if the first qr detected so that the info can be transmitted to startFamilyDetection
@@ -90,12 +104,44 @@ public class QRCodeDefaultDetectionStrategy extends QRCodeDetectionStrategy {
         //the QRCode belongs to a family but doesn't start one
         else if (belongsToFamily(detectedQR)){
             //signaling the error and ignoring the QRCode
-            ToneGeneratorSingleton.getInstance().familyRelatedErrorTone();
+            ToneGeneratorSingleton.getInstance().ignoredQRCodeTone();
             m_detectedQRCodes.addIgnoredQR(detectedQR);
             return true;
         }
         else{
             Log.v("test", "no family behaviour");
+            return false;
+        }
+
+    }
+
+    /**
+     * Starts a ensemble detection of ignores the QRCodeEnsemble if necessary
+     * If no action has been executed, returns false
+     *
+     * @param detectedQR
+     * @param isFirstQRDetected
+     * @return
+     */
+    private boolean ensembleBehaviour(QRCode detectedQR, boolean isFirstQRDetected){
+
+        //Checking if the detected QRCode is a QRCodeEnsemble
+        if (detectedQR instanceof QRCodeEnsemble){
+
+            if (isFirstQRDetected){
+                startEnsembleDetection(detectedQR);
+                return true;
+            }
+            else{
+                //signaling the error and ignoring the QRCode
+                ToneGeneratorSingleton.getInstance().ignoredQRCodeTone();
+                m_detectedQRCodes.addIgnoredQR(detectedQR);
+                return true;
+            }
+
+        }
+        else{
+            Log.v("test", "no ensemble behaviour");
             return false;
         }
 
@@ -110,12 +156,10 @@ public class QRCodeDefaultDetectionStrategy extends QRCodeDetectionStrategy {
      *                        so that the detectionState can be set properly
      */
     private void startFamilyDetection(QRCode detectedQr, boolean isFirstQRDetected){
-
-        ToneGeneratorSingleton.getInstance().startingFamilyDetectionTone();
         try {
 
             //Family detection tone
-            ToneGeneratorSingleton.getInstance().startingFamilyDetectionTone();
+            ToneGeneratorSingleton.getInstance().familyDetectionTone();
 
             //Adding the first QRCode of the family to the detected ones
             m_detectedQRCodes.addQR(detectedQr);
@@ -139,6 +183,29 @@ public class QRCodeDefaultDetectionStrategy extends QRCodeDetectionStrategy {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * Starting a detection of QRCodeEnsemble
+     *
+     * @param detectedQR
+     */
+    private void startEnsembleDetection(QRCode detectedQR){
+
+        //Ensemble detection tone
+        ToneGeneratorSingleton.getInstance().ensembleDetectionTone();
+
+        //Adding the QRCode to the detected ones
+        m_detectedQRCodes.addQR(detectedQR);
+
+        //Changing current detection state
+        m_mainActivity.setDetectionState(FIRST_QR_DETECTED_STATE);
+
+        //Launching the MultipleDetectionTimer
+        m_mainActivity.startMultipleDetectionTimer();
+
+        //Changing detection strategy
+        m_mainActivity.setDetectionStrategy(new QRCodeEnsembleDetectionStrategy(m_mainActivity));
     }
 
 

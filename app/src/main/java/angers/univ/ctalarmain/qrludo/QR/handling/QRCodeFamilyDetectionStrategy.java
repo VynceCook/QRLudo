@@ -61,11 +61,14 @@ public class QRCodeFamilyDetectionStrategy extends QRCodeDetectionStrategy {
                 //Resetting the MultipleDetectionTimer
                 m_mainActivity.startMultipleDetectionTimer();
 
-                ToneGeneratorSingleton.getInstance().QRCodeNormallyDetectedTone();
+                ToneGeneratorSingleton.getInstance().familyDetectionTone();
             }
             else{
                 //Ignoring the QRCodes not belonging to a family or belonging to a different family
                 m_detectedQRCodes.addIgnoredQR(detectedQR);
+
+                //Signaling that the QRCode is being ignored
+                ToneGeneratorSingleton.getInstance().ignoredQRCodeTone();
 
                 //Resetting the MultipleDetectionTimer
                 m_mainActivity.startMultipleDetectionTimer();
@@ -85,12 +88,17 @@ public class QRCodeFamilyDetectionStrategy extends QRCodeDetectionStrategy {
      * the first has already been read
      */
     @Override
-    public void onEndOfMultipleDetection() {
+    public void onEndOfMultipleDetectionWithNewDetections() {
         if (m_isFirstQRDetected){
             m_mainActivity.familyMultipleReading();
         }
         else{
             m_mainActivity.classicMultipleReading();
         }
+    }
+
+    @Override
+    public void onEndOfMultipleDetectionWithoutNewDetection() {
+        //Nothing happens
     }
 }

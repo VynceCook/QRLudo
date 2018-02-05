@@ -11,6 +11,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import angers.univ.ctalarmain.qrludo.QR.model.QRCode;
 import angers.univ.ctalarmain.qrludo.QR.model.QRCodeAtomique;
+import angers.univ.ctalarmain.qrludo.QR.model.QRCodeEnsemble;
 import angers.univ.ctalarmain.qrludo.exceptions.UnhandledQRException;
 
 
@@ -39,7 +40,7 @@ public class QRCodeBuilder {
                 if (root.getAttribute("type").equals("atomique")){
                     builtQR = new QRCodeAtomique(dataQR);                }
                 else if (root.getAttribute("type").equals("ensemble")){
-
+                    builtQR = new QRCodeEnsemble(dataQR);
                 }
                 else{
                     throw new UnhandledQRException("Unknown QR type");
@@ -53,6 +54,7 @@ public class QRCodeBuilder {
 
         } catch (Exception e) {
             //The XML cannot be parsed so building a QRCodeAtomique from the raw text
+            e.printStackTrace();
             builtQR = buildQRCodeAtomiqueFromText(dataQR);
         }
 

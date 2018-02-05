@@ -26,15 +26,21 @@ public class ToneGeneratorSingleton
         m_toneGen.startTone(ToneGenerator.TONE_CDMA_ABBR_ALERT, 200);
     }
 
-    public void startingFamilyDetectionTone(){
-        m_toneGen.startTone(ToneGenerator.TONE_CDMA_MED_SLS, 15);
+
+
+    public void familyDetectionTone(){
+        m_toneGen.startTone(ToneGenerator.TONE_CDMA_MED_SLS, 50);
+    }
+
+    public void ensembleDetectionTone(){
+        m_toneGen.startTone(ToneGenerator.TONE_CDMA_CALLDROP_LITE, 50);
     }
 
     public void errorTone(){
         m_toneGen.startTone(ToneGenerator.TONE_SUP_ERROR, 15);
     }
 
-    public void familyRelatedErrorTone(){
+    public void ignoredQRCodeTone(){
         m_toneGen.startTone(ToneGenerator.TONE_SUP_ERROR, 15);
         try {
             Thread.sleep(100);

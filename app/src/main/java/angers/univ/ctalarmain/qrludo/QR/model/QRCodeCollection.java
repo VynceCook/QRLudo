@@ -81,6 +81,7 @@ public class QRCodeCollection{
             else{
                 //It is not a QRCodeAtomique : adding it directly to the list
                 m_QRList.addLast(qr);
+                Log.v("test", "Adding non QRCodeAtomique to QRCodeCollection");
             }
         }
         else{

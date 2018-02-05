@@ -3,7 +3,6 @@ package angers.univ.ctalarmain.qrludo.activities;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.PendingIntent;
@@ -25,6 +24,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -57,6 +57,8 @@ import java.util.Locale;
 
 import angers.univ.ctalarmain.qrludo.QR.handling.QRCodeDefaultDetectionStrategy;
 import angers.univ.ctalarmain.qrludo.QR.handling.QRCodeDetectionStrategy;
+import angers.univ.ctalarmain.qrludo.QR.handling.QRCodeEnsembleDetectionStrategy;
+import angers.univ.ctalarmain.qrludo.QR.handling.QRCodeFamilyDetectionStrategy;
 import angers.univ.ctalarmain.qrludo.QR.model.QRCode;
 import angers.univ.ctalarmain.qrludo.QR.handling.QRCodeBuilder;
 import angers.univ.ctalarmain.qrludo.QR.model.QRCodeCollection;
@@ -271,10 +273,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      */
     private Bundle locals;
 
-    /**
-     * This string store the last code scanned, so the detected won't scan it again over and over
-     */
-    String lastBarcode;
 
     private ArrayList<String> m_barcodes;
 
@@ -414,8 +412,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      */
     @Override
     public void processFinish(Boolean output) {
-        cancelCurrentReading();
-        lastBarcode = "";
+        cancelCurrentReading("");
     }
 
     @Override
@@ -464,6 +461,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    Log.v("test", "Fin ttsprogress");
                     ttsprogress.setVisibility(View.GONE);
                     text_progress.setVisibility(View.GONE);
                 }
@@ -471,6 +469,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             ttsready = true;
             return 1;
         }
+
+
     }
 
     /**
@@ -483,14 +483,39 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void onInit(int status) {
 
+                Log.v("test", "status : "+String.valueOf(status));
+
                 ttobj.setLanguage(ttslanguage);
                 ttobj.setSpeechRate(speechSpeed);
-                new detectionOnTTSInitialization().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,ttobj);
-                toSpeech("Application lancée.", TextToSpeech.QUEUE_ADD);
+                toSpeech("Application lancée.", TextToSpeech.QUEUE_FLUSH);
                 fillLocals();
+                new detectionOnTTSInitialization().execute(ttobj);
+
 
             }
         });
+
+        ttobj.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+            @Override
+            public void onStart(String utteranceId) {
+                if (utteranceId.equals("synthetizeKey")) {
+                    Log.d("UTTERANCE", "Start");
+                }
+            }
+
+            @Override
+            public void onDone(String utteranceId) {
+                if (utteranceId.equals("synthetizeKey")) {
+                    Log.d("UTTERANCE", "Done");
+                }
+            }
+
+            @Override
+            public void onError(String utteranceId) {
+                Log.e("UTTERANCE", "Error while trying to synthesize sample text");
+            }
+        });
+
     }
 
     private void fillLocals() {
@@ -626,9 +651,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         m_isMultipleDetectionTimerRunning = false;
 
-
-        lastBarcode = "";
-
         marshmallow = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M;
 
         lollipop = android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ;
@@ -661,6 +683,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             return;
         }
 
+
+
         cameraSource = new CameraSource
                 .Builder(this, detector)
                 .setRequestedPreviewSize(640, 480)
@@ -674,7 +698,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             public void surfaceCreated(SurfaceHolder holder) {
                 try {
 
-                    cameraSource.start(cameraView.getHolder());
+                    //cameraSource.start(cameraView.getHolder());
+                    cameraSource.start();
                     cameraState = CAMERA_DETECTING_STATE;
 
                     Log.d("CAMERA_START", "Camera started");
@@ -755,7 +780,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                                 //TODO detection time == 0
                             }
                         } catch (UnhandledQRException e) {
-                            toSpeech("QR code non interprétable", TextToSpeech.QUEUE_ADD);
+                            ToneGeneratorSingleton.getInstance().errorTone();
                         }
 
                     }
@@ -799,10 +824,42 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         Log.v("test", "call to familyMultipleReading");
 
-        //Fetching the content of all the QR detected
+        //Fetching the content of all the detected QRs
         m_currentReading.addAll(m_detectedQRCodes.getContentAllQR());
 
         readCurrentContent();
+    }
+
+    /**
+     * Called in case of detection of QRCodeEnsemble
+     * Can be called by QRCodeEnsemble at the end of a multiple detection or by the MultipleDetectionTimer if only one QRCodeEnsemble has been detected
+     */
+    public void ensembleReading(){
+
+        //Fetching the content of all the detected QRs
+        m_currentReading.addAll(m_detectedQRCodes.getContentAllQR());
+
+        Log.v("test", "size of current reading : "+m_currentReading.size());
+
+        if (areAllQRFilesDownloaded()){
+            //If all the QRFiles have already been downloaded, going back to the detection
+            endOfEnsembleReading();
+            Log.v("test", "calling endOfEnsembleReading() from ensembleReading()");
+        }
+        else{
+
+            //If all the QRFiles haven't been downloaded, registering as listener of their downloading
+            for (QRContent qrContent : m_currentReading){
+                ((QRFile) qrContent).registerAsDownloadListener(this);
+            }
+
+            if (isOnline()){
+                toSpeech("Téléchargement en cours", TextToSpeech.QUEUE_ADD);
+            }
+            else{
+                toSpeech("Pas de connexion internet, téléchargement impossible", TextToSpeech.QUEUE_ADD);
+            }
+        }
 
     }
 
@@ -828,7 +885,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             //The file is not downloaded
             else {
 
-                //Registering as listener of the QRFile. The method onCurrentQRFileDownloadComplete() will then be called when the downloading is over.
+                //Registering as listener of the QRFile. The method onQRFileDownloadComplete() will then be called when the downloading is over.
                 ((QRFile) currentContent).registerAsDownloadListener(this);
 
                 if (isOnline()) {
@@ -866,11 +923,55 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     /**
-     * Called by the current QRFile when the downloading is over if MainActivity has subscribed to the info
+     * Called by the QRFiles MainActivity as registered as listener when their downloading is over
+     * If the current strategy is QRCodeDefaultDetectionStrategy or QRCodeFamilyDetectionStrategy, MainActivity has registered to at most 1 QRFile (the current one if needed)
+     * If the current strategy is QRCodeEnsembleDetectionStrategy, MainActivity has registered to each QRFile which wasn't already downloaded
      */
-    public void onCurrentQRFileDownloadComplete(){
-        //plays the newly downloaded mediaPlayer
-        playCurrentSoundContent();
+    public void onQRFileDownloadComplete() {
+
+        Log.v("test", "onQRFileDownloadComplete");
+
+        if (m_detectionStrategy instanceof QRCodeDefaultDetectionStrategy || m_detectionStrategy instanceof QRCodeFamilyDetectionStrategy){
+            //plays the newly downloaded mediaPlayer
+            playCurrentSoundContent();
+        }
+        else if (m_detectionStrategy instanceof QRCodeEnsembleDetectionStrategy){
+
+            if (areAllQRFilesDownloaded()){
+                Log.v("test", "calling endOfEnsembleReading() from onQRFileDownloadComplete()");
+                endOfEnsembleReading();
+            }
+            else{
+                Log.v("test", "not all the files downloaded");
+            }
+        }
+    }
+
+    /**
+     * Returns true if all the QRFiles belonging to m_currentReading have been downloaded
+     * Used in case of QRCodeEnsembleDetection
+     * @return
+     */
+    public boolean areAllQRFilesDownloaded(){
+        boolean allQRFilesDownloaded = true;
+
+        for (QRContent qrContent : m_currentReading){
+            if (!((QRFile)qrContent).isFileInMemory()){
+                allQRFilesDownloaded = false;
+                break;
+            }
+        }
+
+        return allQRFilesDownloaded;
+    }
+
+    /**
+     * Called when all the files have been downloaded if the activity is currently reading a set of QRCodeEnsemble
+     * Notifies the user that the files have been downloaded and goes back to the detection
+     */
+    public void endOfEnsembleReading(){
+        //Ending the reading
+        cancelCurrentReading("Tous les fichiers ont été téléchargés");
     }
 
     /**
@@ -949,7 +1050,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      * Starts a new MultipleDetectionTimer
      */
     public void startMultipleDetectionTimer(){
-        Log.v("test", "demande lancement multipledetectiontimer");
 
         //Canceling potentially running MultipleDetectionTimer
         if (mdt!=null){
@@ -992,10 +1092,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     ToneGeneratorSingleton.getInstance().endOfDetectionTone();
 
                     //the current detection strategy chooses how to read the detected QR Codes
-                    m_detectionStrategy.onEndOfMultipleDetection();
+                    m_detectionStrategy.onEndOfMultipleDetectionWithNewDetections();
                 }
                 else{
-                    Log.v("test", "not stopping detection because detectionState!=MULTIPLE_QR_DETECTED");
+                    //No new QRCode has been detected
+                    m_detectionStrategy.onEndOfMultipleDetectionWithoutNewDetection();
                 }
 
             } catch (InterruptedException e) {
@@ -1014,14 +1115,25 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      * Ends the current reading and go back to detection
      * Can be called at the end or in the middle of a reading
      */
-    private void cancelCurrentReading() {
+    private void cancelCurrentReading(String message) {
 
         //Stop talking or making sound
         makeSilence();
 
-        //Hiding graphical elements
-        text_space.setVisibility(View.INVISIBLE);
-        contentLayout.setVisibility(View.INVISIBLE);
+        if (cameraState==CAMERA_INACTIVE_STATE){
+            toSpeech(message+", retour à la détection", TextToSpeech.QUEUE_ADD);
+        }
+        else{
+            toSpeech(message, TextToSpeech.QUEUE_ADD);
+        }
+
+        this.runOnUiThread(new Runnable() {
+                                   public void run() {
+                                       //Hiding graphical elements
+                                       text_space.setVisibility(View.INVISIBLE);
+                                       contentLayout.setVisibility(View.INVISIBLE);
+                                   }
+                               });
 
         //Getting back at the first state of the detection
         detectionState = NO_QR_DETECTED_STATE;
@@ -1038,6 +1150,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         m_currentPos = 0;
 
+        //Restarting detection
+        startDetection();
+
     }
 
 
@@ -1048,10 +1163,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
             /**
              * Swipe top : reads the current content again
+             * Can be used in case of multiple detection, except if the current reading concerns QRCodeEnsemble
              */
             public void onSwipeTop() {
 
-                if(multiple_detection_time == 0 || cameraState == CAMERA_INACTIVE_STATE || detectionState != NO_QR_DETECTED_STATE) {
+                if((cameraState!=CAMERA_INACTIVE_STATE) && (!(m_detectionStrategy instanceof QRCodeEnsembleDetectionStrategy))) {
                     readCurrentContent();
                 }
 
@@ -1061,7 +1177,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
              * Swipe right : jumps to the previous QRContent and notifies the user by a Tone if he reaches the first QRContent
              */
             public void onSwipeRight(){
-                if (detectionState!= NO_QR_DETECTED_STATE) {
+                if (detectionState!= NO_QR_DETECTED_STATE && !(m_detectionStrategy instanceof QRCodeEnsembleDetectionStrategy)) {
 
                     if (m_currentPos == 0) {
                         ToneGeneratorSingleton.getInstance().firstQRCodeReadTone();
@@ -1085,21 +1201,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
              */
             public void onSwipeLeft() throws IOException {
 
-                if (detectionState!= NO_QR_DETECTED_STATE) {
+                if (m_detectionStrategy instanceof QRCodeEnsembleDetectionStrategy){
+                    cancelCurrentReading("Téléchargement annulé");
+                }
+                else if (detectionState!= NO_QR_DETECTED_STATE) {
 
-                    //The user cannot swipe left if a multiple detection is running and he has reached the last QRContent of the current list of QRContent
+                    //The user cannot swipe left if the MultipleDetectionTimer is running and he has reached the last QRContent of the current list of QRContent
                     if (!(m_isMultipleDetectionTimerRunning && m_currentPos <= m_currentReading.size()-1 && detectionState==MULTIPLE_QR_DETECTED)) {
 
                         //If the app is waiting to be notified by the current QRFile of the end of the download, unregister as listener
                         unregisterToQRFile();
 
-                        //Notifies the user that a new detection is starting if so
+                        //Ending reading
                         if (((m_currentPos + 1) == m_currentReading.size()) && multiple_detection_time != 0) {
-                            cancelCurrentReading();
-                            if (cameraState==CAMERA_INACTIVE_STATE) {
-                                toSpeech("Retour à la détection", TextToSpeech.QUEUE_ADD);
-                            }
-                            startDetection();
+                            cancelCurrentReading("");
                         } else if (((m_currentPos + 1) < m_currentReading.size())) {
                             m_currentPos++;
 
@@ -1119,12 +1234,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
              */
             public void onSwipeBottom() {
 
-                if(multiple_detection_time == 0 || cameraState == CAMERA_INACTIVE_STATE) {
+                if(cameraState == CAMERA_INACTIVE_STATE) {
 
-                    cancelCurrentReading();
-
-                    if (detectionState==MULTIPLE_QR_DETECTED){
-                        toSpeech("Retour à la détection", TextToSpeech.QUEUE_ADD);
+                    if (m_detectionStrategy instanceof QRCodeEnsembleDetectionStrategy){
+                        cancelCurrentReading("Téléchargement annulé");
+                    }
+                    else if (detectionState==MULTIPLE_QR_DETECTED){
+                        cancelCurrentReading("");
                     }
 
                 }
@@ -1369,7 +1485,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
 
-    private void stopDetection() {
+    public void stopDetection() {
         final AppCompatActivity activity = this;
         activity.runOnUiThread(new Runnable() {
             public void run() {
@@ -1383,6 +1499,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     private void startDetection() {
+
+        Log.v("test", "call to startdetection");
         final AppCompatActivity activity = this;
         activity.runOnUiThread(new Runnable() {
             public void run() {
