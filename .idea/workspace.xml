@@ -16,8 +16,6 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.bin" afterPath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.lock" afterPath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/OptionActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/OptionActivity.java" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/classes/" />
@@ -2320,7 +2318,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1517945956932" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1517945974898" />
       </method>
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests">
@@ -2368,7 +2366,7 @@
       </Profilers>
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1517945956932" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1517945974898" />
       </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -2551,7 +2549,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1517945956932" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1517945974899" />
       </method>
     </configuration>
     <list size="1">
@@ -2643,7 +2641,14 @@
       <option name="project" value="LOCAL" />
       <updated>1517945238522</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Résolution bugs liés au types des variables">
+      <created>1517945973834</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1517945973834</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -2725,7 +2730,8 @@
     <MESSAGE value="Suppression bouton déconnexion drive inutile dans les options + modification demande broadcast permission" />
     <MESSAGE value="Camera non redirigée vers la cameraView&#10;+ Traitement des QRCodeEnsemble&#10;+ Modification en cours des messages vocaux" />
     <MESSAGE value="Modification options (passage par seekbars avec valeurs minimales)&#10;+ Remplacement de certains messages vocaux par des bips sonores" />
-    <option name="LAST_COMMIT_MESSAGE" value="Modification options (passage par seekbars avec valeurs minimales)&#10;+ Remplacement de certains messages vocaux par des bips sonores" />
+    <MESSAGE value="Résolution bugs liés au types des variables" />
+    <option name="LAST_COMMIT_MESSAGE" value="Résolution bugs liés au types des variables" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
