@@ -54,6 +54,10 @@ public class ToneGeneratorSingleton
         m_toneGen.startTone(ToneGenerator.TONE_CDMA_ABBR_INTERCEPT);
     }
 
+    public void startingDetectionTone(){
+        m_toneGen.startTone(ToneGenerator.TONE_CDMA_PRESSHOLDKEY_LITE);
+    }
+
     public void lastQRCodeReadTone(){
         m_toneGen.startTone(ToneGenerator.TONE_CDMA_MED_PBX_SLS, 25);
         try {

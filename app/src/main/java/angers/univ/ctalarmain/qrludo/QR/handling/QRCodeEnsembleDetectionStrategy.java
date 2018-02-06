@@ -3,6 +3,7 @@ package angers.univ.ctalarmain.qrludo.QR.handling;
 import android.util.Log;
 
 import angers.univ.ctalarmain.qrludo.QR.model.QRCode;
+import angers.univ.ctalarmain.qrludo.QR.model.QRCodeEnsemble;
 import angers.univ.ctalarmain.qrludo.activities.MainActivity;
 import angers.univ.ctalarmain.qrludo.utils.ToneGeneratorSingleton;
 
@@ -30,26 +31,26 @@ public class QRCodeEnsembleDetectionStrategy extends QRCodeDetectionStrategy{
     @Override
     public void onNextDetectionWithTimeNotNull(QRCode detectedQR) {
 
-        //Adding the QRCode to the detected ones
-        m_detectedQRCodes.addQR(detectedQR);
+        if (detectedQR instanceof QRCodeEnsemble) {
 
-        //Setting the new detection state
-        m_mainActivity.setDetectionState(MainActivity.MULTIPLE_QR_DETECTED);
+            //Adding the QRCode to the detected ones
+            m_detectedQRCodes.addQR(detectedQR);
 
-        //Resetting the MultipleDetectionTimer
-        m_mainActivity.startMultipleDetectionTimer();
+            //Setting the new detection state
+            m_mainActivity.setM_detectionState(MainActivity.MULTIPLE_QR_DETECTED);
 
-        //Signaling that a new QRCodeEnsemble has been detected
-        ToneGeneratorSingleton.getInstance().ensembleDetectionTone();
+            //Resetting the MultipleDetectionTimer
+            m_mainActivity.startMultipleDetectionTimer();
 
-    }
+            //Signaling that a new QRCodeEnsemble has been detected
+            ToneGeneratorSingleton.getInstance().ensembleDetectionTone();
 
-    /**
-     * Launching ensembleReading() so that the user is told about the state of the downloading of the files
-     */
-    @Override
-    public void onEndOfMultipleDetectionWithNewDetections() {
-        m_mainActivity.ensembleReading();
+        }
+        else{
+            ToneGeneratorSingleton.getInstance().errorTone();
+            m_detectedQRCodes.addIgnoredQR(detectedQR);
+        }
+
     }
 
     /**
@@ -57,8 +58,19 @@ public class QRCodeEnsembleDetectionStrategy extends QRCodeDetectionStrategy{
      * Also stopping the detection until all the files have been downloaded or the user cancels
      */
     @Override
-    public void onEndOfMultipleDetectionWithoutNewDetection() {
-        m_mainActivity.ensembleReading();
+    public void onEndOfMultipleDetectionTimer() {
         m_mainActivity.stopDetection();
+        m_mainActivity.ensembleReading();
     }
+
+    @Override
+    public void onQRFileDownloadComplete() {
+
+        //If all the files have been downloaded, notifying the user
+        if (m_mainActivity.areAllQRFilesDownloaded()){
+            m_mainActivity.ensembleReadingCompleted();
+        }
+
+    }
+
 }

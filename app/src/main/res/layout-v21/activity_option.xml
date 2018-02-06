@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/option_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -18,10 +17,11 @@
         android:layout_height="0dp"
         android:orientation="vertical"
         android:layout_weight=".3">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Vitesse de la synthèse vocale : "
+            android:text="@string/tts_speed_value"
             android:textSize="20sp"
             android:textColor="@color/colorPrimaryDark" />
 
@@ -81,97 +81,79 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight=".35"
-        android:orientation="horizontal"
-        android:weightSum="1">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Lecture des questions à la suite :  "
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="20sp" />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.36" />
-
-        <Switch
-            android:id="@+id/switch_ajout"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:showText="true"
-            android:textSize="8sp"
-            android:textOff="Non"
-            android:textOn="Oui" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_weight=".3">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Délai avant réinitialisation : "
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textColor="@color/colorPrimaryDark" />
 
-        <EditText
-            android:id="@+id/et_SRValue"
-            android:layout_width="62dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="number"
-            android:maxLength="3"
-            android:nextFocusLeft="@id/et_SRValue"
-            android:nextFocusUp="@id/et_SRValue" />
+            android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" s"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="20sp" />
+            <SeekBar
+                android:id="@+id/sb_SRTime"
+                style="@style/Widget.AppCompat.SeekBar.Discrete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".15"
+                android:max="6"
+                android:progress="1" />
 
+            <TextView
+                android:id="@+id/tv_SRValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".9"
+                android:background="@drawable/frame"
+                android:text="   "
+                android:textAlignment="center"
+                android:layout_marginRight="5dp"/>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_weight=".3">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Durée de détection multiple : "
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="20sp" />
+            android:text="Durée de détection multiple :"
+            android:textSize="20sp"
+            android:textColor="@color/colorPrimaryDark" />
 
-        <EditText
-            android:id="@+id/et_MDTValue"
-            android:layout_width="62dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="number"
-            android:maxLength="3"
-            android:nextFocusLeft="@id/et_MDTValue"
-            android:nextFocusUp="@id/et_MDTValue" />
+            android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" s"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="20sp" />
+            <SeekBar
+                android:id="@+id/sb_MDTTime"
+                style="@style/Widget.AppCompat.SeekBar.Discrete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".15"
+                android:max="18"
+                android:progress="1" />
 
+            <TextView
+                android:id="@+id/tv_MDTValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".9"
+                android:background="@drawable/frame"
+                android:text="   "
+                android:textAlignment="center"
+                android:layout_marginRight="5dp"/>
+        </LinearLayout>
     </LinearLayout>
 
 
@@ -188,7 +170,5 @@
             android:layout_gravity="center_horizontal|center"
             android:text="Valider" />
     </LinearLayout>
-
-
 
 </LinearLayout>

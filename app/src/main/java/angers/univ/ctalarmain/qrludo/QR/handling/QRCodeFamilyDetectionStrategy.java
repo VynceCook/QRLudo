@@ -22,14 +22,13 @@ public class QRCodeFamilyDetectionStrategy extends QRCodeDetectionStrategy {
     public QRCodeFamilyDetectionStrategy(MainActivity mainActivity, String familyName, boolean isFirstQRDetected) {
         super(mainActivity);
 
-        Log.v("test", "beginning familydetectionstrategy");
-
         m_familyName = familyName;
 
         m_isFirstQRDetected = isFirstQRDetected;
 
         //The other QRCodes of the family can be detected again if they have been ignored
         m_detectedQRCodes.clearIgnoredQRComponents();
+
     }
 
     /**
@@ -56,7 +55,7 @@ public class QRCodeFamilyDetectionStrategy extends QRCodeDetectionStrategy {
                 m_detectedQRCodes.addQR(detectedQR);
 
                 //New contentState of the activity
-                m_mainActivity.setDetectionState(MULTIPLE_QR_DETECTED);
+                m_mainActivity.setM_detectionState(MULTIPLE_QR_DETECTED);
 
                 //Resetting the MultipleDetectionTimer
                 m_mainActivity.startMultipleDetectionTimer();
@@ -88,17 +87,25 @@ public class QRCodeFamilyDetectionStrategy extends QRCodeDetectionStrategy {
      * the first has already been read
      */
     @Override
-    public void onEndOfMultipleDetectionWithNewDetections() {
+    public void onEndOfMultipleDetectionTimer() {
+
+        m_mainActivity.stopDetection();
+
         if (m_isFirstQRDetected){
+            //If the first QR of the family was the first detected QR of the current detection and therefore no QR has already been printed, adding all the QR
             m_mainActivity.familyMultipleReading();
         }
-        else{
+        else if (m_mainActivity.getM_detectionState() == MULTIPLE_QR_DETECTED){
+            //If the first QR of the family was not the first detected QR of the current detection and therefore one other has already been printed, adding all the QRComponents but the first
             m_mainActivity.classicMultipleReading();
         }
+
     }
 
     @Override
-    public void onEndOfMultipleDetectionWithoutNewDetection() {
-        //Nothing happens
+    public void onQRFileDownloadComplete() {
+        //plays the newly downloaded sound
+        m_mainActivity.playCurrentSoundContent();
     }
+
 }

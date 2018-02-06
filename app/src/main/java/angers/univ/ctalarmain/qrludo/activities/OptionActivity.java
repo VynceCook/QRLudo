@@ -3,7 +3,6 @@ package angers.univ.ctalarmain.qrludo.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -13,7 +12,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,10 +32,11 @@ public class OptionActivity extends AppCompatActivity {
 
     SeekBar sb_speedSpeech;
     Spinner spin_language;
-    Switch sw_mode;
     TextView tv_SSValue;
-    EditText et_SRValue;
-    EditText et_MDTValue;
+    SeekBar sb_SRValue;
+    TextView tv_SRValue;
+    SeekBar sb_MDTValue;
+    TextView tv_MDTValue;
     Button b_valider;
     SharedPreferences settings;
     List<String> languages;
@@ -58,9 +57,10 @@ public class OptionActivity extends AppCompatActivity {
         sb_speedSpeech = (SeekBar) findViewById(R.id.sb_SpeedSpeech);
         tv_SSValue = (TextView) findViewById(R.id.tv_SSValue);
         spin_language = (Spinner) findViewById(R.id.spin_languages);
-        sw_mode = (Switch) findViewById(R.id.switch_ajout);
-        et_SRValue  = (EditText) findViewById(R.id.et_SRValue);
-        et_MDTValue = (EditText) findViewById(R.id.et_MDTValue);
+        sb_SRValue  = (SeekBar) findViewById(R.id.sb_SRTime);
+        tv_SRValue = (TextView) findViewById(R.id.tv_SRValue);
+        sb_MDTValue = (SeekBar) findViewById(R.id.sb_MDTTime);
+        tv_MDTValue = (TextView) findViewById(R.id.tv_MDTValue);
 
         Intent intent = getIntent();
         boolean enforced = intent.getBooleanExtra("DefaultsEnforced", true);
@@ -70,10 +70,23 @@ public class OptionActivity extends AppCompatActivity {
         sb_speedSpeech.setEnabled(enforced);
 
         settings = getSharedPreferences(MainActivity.PREFS_NAME,0);
+
+
         float speedSpeech = settings.getFloat("speechSpeed",MainActivity.SPEEDSPEECH_DEFAULT);
-        int progress = (int)((speedSpeech-0.8)*5);
-        sb_speedSpeech.setProgress(progress);
+        int progressSS = (int)((speedSpeech-0.8)*5);
+        sb_speedSpeech.setProgress(progressSS);
         tv_SSValue.setText(String.format(Locale.ENGLISH,"%.2f",sb_speedSpeech.getProgress()*0.2 + 0.8));
+
+
+        float mdt = settings.getFloat("MDTime",MainActivity.DEFAULT_MULTIPLE_DETECTION_TIME);
+        sb_MDTValue.setProgress((int)mdt*2-2);
+        tv_MDTValue.setText(String.format(Locale.ENGLISH,"%.2f",mdt));
+
+        float sr = settings.getFloat("resetTime",MainActivity.DEFAULT_CONTENT_RESET_TIME);
+        sb_SRValue.setProgress((int)(sr/10-3));
+        tv_SRValue.setText(String.format(Locale.ENGLISH,"%.2f",sr));
+
+
         sb_speedSpeech.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -91,6 +104,43 @@ public class OptionActivity extends AppCompatActivity {
 
             }
         });
+
+        sb_MDTValue.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+                tv_MDTValue.setText(String.format(Locale.ENGLISH,"%.2f",((float)sb_MDTValue.getProgress()+2)/2));
+                seekBar.setProgress(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        sb_SRValue.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+                tv_SRValue.setText(String.format(Locale.ENGLISH,"%.2f",((float)sb_SRValue.getProgress()+3)*10));
+                seekBar.setProgress(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
 
         String language = settings.getString("speechCountry",MainActivity.LOCALE_DEFAULT.getCountry());
 
@@ -149,37 +199,24 @@ public class OptionActivity extends AppCompatActivity {
         spin_language.setSelection(index);
 
 
-        int mode = settings.getInt("speechMode",MainActivity.DEFAULT_MODE);
-
-        if((mode == TextToSpeech.QUEUE_ADD && !sw_mode.isChecked()) || (mode == TextToSpeech.QUEUE_FLUSH && sw_mode.isChecked())){
-            sw_mode.toggle();
-        }
-
-
-        et_SRValue.setText(valueOf(settings.getInt("resetTime",MainActivity.DEFAULT_CONTENT_RESET_TIME)));
-
-        et_MDTValue.setText(valueOf(settings.getInt("MDTime",MainActivity.DEFAULT_MULTIPLE_DETECTION_TIME)));
 
         b_valider = (Button) findViewById(R.id.b_valider);
         b_valider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if( Integer.parseInt(et_SRValue.getText().toString()) > Integer.parseInt(et_MDTValue.getText().toString())) {
+                if( Integer.parseInt(tv_SRValue.getText().toString()) > Float.parseFloat(tv_MDTValue.getText().toString())) {
                     SharedPreferences.Editor edit = settings.edit();
+
                     edit.putFloat("speechSpeed", Float.parseFloat(tv_SSValue.getText().toString()));
 
                     edit.putString("speechCountry", countries.get(spin_language.getSelectedItemPosition()));
                     Log.d("Country", countries.get(spin_language.getSelectedItemPosition()));
                     edit.putString("speechLanguage", langs.get(spin_language.getSelectedItemPosition()));
                     Log.d("Language", langs.get(spin_language.getSelectedItemPosition()));
-                    if (sw_mode.isChecked()) {
-                        edit.putInt("speechMode", TextToSpeech.QUEUE_ADD);
-                    } else {
-                        edit.putInt("speechMode", TextToSpeech.QUEUE_FLUSH);
-                    }
 
-                    edit.putInt("resetTime", Integer.parseInt(et_SRValue.getText().toString()));
-                    edit.putInt("MDTime", Integer.parseInt(et_MDTValue.getText().toString()));
+
+                    edit.putInt("resetTime", Integer.parseInt(tv_SRValue.getText().toString()));
+                    edit.putFloat("MDTime", Float.parseFloat(tv_MDTValue.getText().toString()));
 
                     edit.apply();
                     Intent intent = new Intent();

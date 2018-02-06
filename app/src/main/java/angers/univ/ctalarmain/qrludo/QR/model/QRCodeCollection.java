@@ -94,14 +94,6 @@ public class QRCodeCollection{
         }
     }
 
-    /**
-     * Returns the number of QRCodeComponents which have been detected and not ignored
-     * @return
-     */
-    public int getNbQR(){
-        return m_QRList.size();
-    }
-
 
     /**
      * returns a list of the content of the first QRCodeComponent of the list.

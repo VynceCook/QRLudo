@@ -35,14 +35,11 @@ public abstract class QRCodeDetectionStrategy {
 
     
     /**
-     * Called by the activity at the end of the MultipleDetectionTimer if new QRCodes have been detected
+     * Called by the activity at the end of the MultipleDetectionTimer
      */
-    public abstract void onEndOfMultipleDetectionWithNewDetections();
+    public abstract void onEndOfMultipleDetectionTimer();
 
-    /**
-     * Called by the activity at the end of the MultipleDetectionTimer if no new QRCodes has been detected
-     */
-    public abstract void onEndOfMultipleDetectionWithoutNewDetection();
+    public abstract void onQRFileDownloadComplete();
 
 
     /**
@@ -54,4 +51,5 @@ public abstract class QRCodeDetectionStrategy {
     protected boolean belongsToFamily(QRCode detectedQR){
         return (detectedQR instanceof QRCodeAtomique && ((QRCodeAtomique) detectedQR).belongsToFamily());
     }
+
 }

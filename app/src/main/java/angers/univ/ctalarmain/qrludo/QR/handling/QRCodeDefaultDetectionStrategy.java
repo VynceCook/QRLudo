@@ -36,11 +36,12 @@ public class QRCodeDefaultDetectionStrategy extends QRCodeDetectionStrategy {
 
         //Applies a family or ensemble related behaviour if necessary or launches the reading of the detected QR Code
         if (!familyBehaviour(detectedQR, true) && !ensembleBehaviour(detectedQR, true)){
+
             //adding it to the detected QRCodes
             m_detectedQRCodes.addQR(detectedQR);
 
             //Changing curent detection state
-            m_mainActivity.setDetectionState(FIRST_QR_DETECTED_STATE);
+            m_mainActivity.setM_detectionState(FIRST_QR_DETECTED_STATE);
 
             //Reading the QR
             m_mainActivity.singleReading();
@@ -65,7 +66,7 @@ public class QRCodeDefaultDetectionStrategy extends QRCodeDetectionStrategy {
             m_detectedQRCodes.addQR(detectedQR);
 
             //New contentState of the activity
-            m_mainActivity.setDetectionState(MULTIPLE_QR_DETECTED);
+            m_mainActivity.setM_detectionState(MULTIPLE_QR_DETECTED);
 
             //Resetting the MultipleDetectionTimer
             m_mainActivity.startMultipleDetectionTimer();
@@ -76,13 +77,20 @@ public class QRCodeDefaultDetectionStrategy extends QRCodeDetectionStrategy {
     }
 
     @Override
-    public void onEndOfMultipleDetectionWithNewDetections() {
+    public void onEndOfMultipleDetectionTimer() {
+
+        //stopping detection
+        m_mainActivity.stopDetection();
+
+        //Launching classic multiple reading (the first has already been printed/said, adding only the others
         m_mainActivity.classicMultipleReading();
     }
 
+
     @Override
-    public void onEndOfMultipleDetectionWithoutNewDetection() {
-        //Nothings happens
+    public void onQRFileDownloadComplete() {
+        //plays the newly downloaded sound
+        m_mainActivity.playCurrentSoundContent();
     }
 
 
@@ -166,10 +174,10 @@ public class QRCodeDefaultDetectionStrategy extends QRCodeDetectionStrategy {
 
             //Changing curent detection state
             if (isFirstQRDetected) {
-                m_mainActivity.setDetectionState(FIRST_QR_DETECTED_STATE);
+                m_mainActivity.setM_detectionState(FIRST_QR_DETECTED_STATE);
             }
             else {
-                m_mainActivity.setDetectionState(MULTIPLE_QR_DETECTED);
+                m_mainActivity.setM_detectionState(MULTIPLE_QR_DETECTED);
             }
 
             //Launching the MultipleDetectionTimer. At its end, playing the entire detected family
@@ -199,7 +207,7 @@ public class QRCodeDefaultDetectionStrategy extends QRCodeDetectionStrategy {
         m_detectedQRCodes.addQR(detectedQR);
 
         //Changing current detection state
-        m_mainActivity.setDetectionState(FIRST_QR_DETECTED_STATE);
+        m_mainActivity.setM_detectionState(FIRST_QR_DETECTED_STATE);
 
         //Launching the MultipleDetectionTimer
         m_mainActivity.startMultipleDetectionTimer();
