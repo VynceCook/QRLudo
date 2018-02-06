@@ -15,18 +15,9 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/taskHistory/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/4.1/taskHistory/fileSnapshots.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.bin" afterPath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.bin" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.lock" afterPath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeDefaultDetectionStrategy.java" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeDefaultDetectionStrategy.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeDetectionStrategy.java" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeDetectionStrategy.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeEnsembleDetectionStrategy.java" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeEnsembleDetectionStrategy.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeFamilyDetectionStrategy.java" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeFamilyDetectionStrategy.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeCollection.java" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeCollection.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/OptionActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/OptionActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/ToneGeneratorSingleton.java" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/ToneGeneratorSingleton.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout-v21/activity_option.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout-v21/activity_option.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_option.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_option.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/classes/" />
@@ -83,29 +74,29 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-66">
-              <caret line="1024" column="69" lean-forward="false" selection-start-line="1024" selection-start-column="69" selection-end-line="1024" selection-end-column="69" />
+            <state relative-caret-position="646">
+              <caret line="603" column="0" lean-forward="false" selection-start-line="603" selection-start-column="0" selection-end-line="603" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#13798#14086#0" expanded="true" />
-                <element signature="e#14085#14086#0" expanded="true" />
-                <element signature="e#14334#14811#0" expanded="true" />
-                <element signature="e#14810#14811#0" expanded="true" />
-                <element signature="e#30521#31191#0" expanded="true" />
-                <element signature="e#31190#31191#0" expanded="true" />
-                <element signature="e#31460#31703#0" expanded="true" />
-                <element signature="e#31702#31703#0" expanded="true" />
-                <element signature="e#34424#34660#0" expanded="true" />
-                <element signature="e#34659#34660#0" expanded="true" />
-                <element signature="e#39845#39853#0" expanded="true" />
-                <element signature="e#44514#44546#0" expanded="true" />
-                <element signature="e#48499#48766#0" expanded="true" />
-                <element signature="e#48765#48766#0" expanded="true" />
-                <element signature="e#48964#49438#0" expanded="true" />
-                <element signature="e#49437#49438#0" expanded="true" />
+                <element signature="e#13802#14090#0" expanded="true" />
+                <element signature="e#14089#14090#0" expanded="true" />
+                <element signature="e#14338#14815#0" expanded="true" />
+                <element signature="e#14814#14815#0" expanded="true" />
+                <element signature="e#30527#31202#0" expanded="true" />
+                <element signature="e#31201#31202#0" expanded="true" />
+                <element signature="e#31471#31714#0" expanded="true" />
+                <element signature="e#31713#31714#0" expanded="true" />
+                <element signature="e#34435#34671#0" expanded="true" />
+                <element signature="e#34670#34671#0" expanded="true" />
+                <element signature="e#39856#39864#0" expanded="true" />
+                <element signature="e#44525#44557#0" expanded="true" />
+                <element signature="e#48512#48779#0" expanded="true" />
+                <element signature="e#48778#48779#0" expanded="true" />
+                <element signature="e#48977#49451#0" expanded="true" />
+                <element signature="e#49450#49451#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -114,8 +105,8 @@
       <file leaf-file-name="OptionActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/OptionActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="406">
-              <caret line="81" column="0" lean-forward="false" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
+            <state relative-caret-position="174">
+              <caret line="217" column="34" lean-forward="false" selection-start-line="217" selection-start-column="34" selection-end-line="217" selection-end-column="34" />
               <folding />
             </state>
           </provider>
@@ -136,10 +127,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="activity_option.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="activity_option.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout-v21/activity_option.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
+            <state relative-caret-position="700">
               <caret line="173" column="15" lean-forward="false" selection-start-line="173" selection-start-column="15" selection-end-line="173" selection-end-column="15" />
               <folding>
                 <element signature="e#829#854#0" expanded="true" />
@@ -242,11 +233,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>cameraVi</find>
-      <find>readC</find>
-      <find>multipledete</find>
-      <find>oncreate</find>
-      <find>cameraView</find>
       <find>ToneGe</find>
       <find>tonegen</find>
       <find>m_barco</find>
@@ -270,8 +256,13 @@
       <find>sb_Spe</find>
       <find>speechSpee</find>
       <find>MULTIPLE_DETEC</find>
-      <find>mult</find>
       <find>tv_</find>
+      <find>mult</find>
+      <find>default_conte</find>
+      <find>DEFAULT_CONt</find>
+      <find>contentDela</find>
+      <find>resetTime</find>
+      <find>reset</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -2100,10 +2091,10 @@
         <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeDefaultDetectionStrategy.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeFamilyDetectionStrategy.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeEnsembleDetectionStrategy.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/OptionActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_option.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout-v21/activity_option.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/OptionActivity.java" />
       </list>
     </option>
   </component>
@@ -2141,6 +2132,92 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="Gradle Scripts" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidBuildScriptsGroupNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="QRLudo" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="QRLudo" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="QRLudo" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="qrludo" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="utils" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="QRLudo" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="qrludo" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="QR" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="QRLudo" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="qrludo" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -2243,7 +2320,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1517945093893" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1517945956932" />
       </method>
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests">
@@ -2291,7 +2368,7 @@
       </Profilers>
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1517945093893" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1517945956932" />
       </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -2474,7 +2551,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1517945093894" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1517945956932" />
       </method>
     </configuration>
     <list size="1">
@@ -2559,7 +2636,14 @@
       <option name="project" value="LOCAL" />
       <updated>1517851783924</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Modification options (passage par seekbars avec valeurs minimales)&#10;+ Remplacement de certains messages vocaux par des bips sonores">
+      <created>1517945238522</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1517945238522</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -2568,7 +2652,7 @@
     <layout>
       <window_info id="Android Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930845" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32930845" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930845" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14636752" sideWeight="0.50584304" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -2578,7 +2662,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930845" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33040616" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930845" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35455543" sideWeight="0.49786323" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35455543" sideWeight="0.49786323" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="14" side_tool="true" content_ui="tabs" />
@@ -2640,7 +2724,8 @@
     <MESSAGE value="Nouvelle gestion des permissions : plusieurs permissions sont demandées en même temps si nécessaire. Pour le moment, la permission d'accès au disque est obligatoire." />
     <MESSAGE value="Suppression bouton déconnexion drive inutile dans les options + modification demande broadcast permission" />
     <MESSAGE value="Camera non redirigée vers la cameraView&#10;+ Traitement des QRCodeEnsemble&#10;+ Modification en cours des messages vocaux" />
-    <option name="LAST_COMMIT_MESSAGE" value="Camera non redirigée vers la cameraView&#10;+ Traitement des QRCodeEnsemble&#10;+ Modification en cours des messages vocaux" />
+    <MESSAGE value="Modification options (passage par seekbars avec valeurs minimales)&#10;+ Remplacement de certains messages vocaux par des bips sonores" />
+    <option name="LAST_COMMIT_MESSAGE" value="Modification options (passage par seekbars avec valeurs minimales)&#10;+ Remplacement de certains messages vocaux par des bips sonores" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2655,22 +2740,22 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#13798#14086#0" expanded="true" />
-            <element signature="e#14085#14086#0" expanded="true" />
-            <element signature="e#14334#14811#0" expanded="true" />
-            <element signature="e#14810#14811#0" expanded="true" />
-            <element signature="e#30521#31191#0" expanded="true" />
-            <element signature="e#31190#31191#0" expanded="true" />
-            <element signature="e#31460#31703#0" expanded="true" />
-            <element signature="e#31702#31703#0" expanded="true" />
-            <element signature="e#34424#34660#0" expanded="true" />
-            <element signature="e#34659#34660#0" expanded="true" />
-            <element signature="e#39845#39853#0" expanded="true" />
-            <element signature="e#44514#44546#0" expanded="true" />
-            <element signature="e#48499#48766#0" expanded="true" />
-            <element signature="e#48765#48766#0" expanded="true" />
-            <element signature="e#48964#49438#0" expanded="true" />
-            <element signature="e#49437#49438#0" expanded="true" />
+            <element signature="e#13802#14090#0" expanded="true" />
+            <element signature="e#14089#14090#0" expanded="true" />
+            <element signature="e#14338#14815#0" expanded="true" />
+            <element signature="e#14814#14815#0" expanded="true" />
+            <element signature="e#30527#31202#0" expanded="true" />
+            <element signature="e#31201#31202#0" expanded="true" />
+            <element signature="e#31471#31714#0" expanded="true" />
+            <element signature="e#31713#31714#0" expanded="true" />
+            <element signature="e#34435#34671#0" expanded="true" />
+            <element signature="e#34670#34671#0" expanded="true" />
+            <element signature="e#39856#39864#0" expanded="true" />
+            <element signature="e#44525#44557#0" expanded="true" />
+            <element signature="e#48512#48779#0" expanded="true" />
+            <element signature="e#48778#48779#0" expanded="true" />
+            <element signature="e#48977#49451#0" expanded="true" />
+            <element signature="e#49450#49451#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2939,40 +3024,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-66">
-          <caret line="1024" column="69" lean-forward="false" selection-start-line="1024" selection-start-column="69" selection-end-line="1024" selection-end-column="69" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#13798#14086#0" expanded="true" />
-            <element signature="e#14085#14086#0" expanded="true" />
-            <element signature="e#14334#14811#0" expanded="true" />
-            <element signature="e#14810#14811#0" expanded="true" />
-            <element signature="e#30521#31191#0" expanded="true" />
-            <element signature="e#31190#31191#0" expanded="true" />
-            <element signature="e#31460#31703#0" expanded="true" />
-            <element signature="e#31702#31703#0" expanded="true" />
-            <element signature="e#34424#34660#0" expanded="true" />
-            <element signature="e#34659#34660#0" expanded="true" />
-            <element signature="e#39845#39853#0" expanded="true" />
-            <element signature="e#44514#44546#0" expanded="true" />
-            <element signature="e#48499#48766#0" expanded="true" />
-            <element signature="e#48765#48766#0" expanded="true" />
-            <element signature="e#48964#49438#0" expanded="true" />
-            <element signature="e#49437#49438#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/OptionActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="406">
-          <caret line="81" column="0" lean-forward="false" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_option.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="89">
@@ -2988,7 +3039,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout-v21/activity_option.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
+        <state relative-caret-position="700">
           <caret line="173" column="15" lean-forward="false" selection-start-line="173" selection-start-column="15" selection-end-line="173" selection-end-column="15" />
           <folding>
             <element signature="e#829#854#0" expanded="true" />
@@ -2997,6 +3048,40 @@
       </provider>
       <provider editor-type-id="android-designer2">
         <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/OptionActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="174">
+          <caret line="217" column="34" lean-forward="false" selection-start-line="217" selection-start-column="34" selection-end-line="217" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="646">
+          <caret line="603" column="0" lean-forward="false" selection-start-line="603" selection-start-column="0" selection-end-line="603" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#13802#14090#0" expanded="true" />
+            <element signature="e#14089#14090#0" expanded="true" />
+            <element signature="e#14338#14815#0" expanded="true" />
+            <element signature="e#14814#14815#0" expanded="true" />
+            <element signature="e#30527#31202#0" expanded="true" />
+            <element signature="e#31201#31202#0" expanded="true" />
+            <element signature="e#31471#31714#0" expanded="true" />
+            <element signature="e#31713#31714#0" expanded="true" />
+            <element signature="e#34435#34671#0" expanded="true" />
+            <element signature="e#34670#34671#0" expanded="true" />
+            <element signature="e#39856#39864#0" expanded="true" />
+            <element signature="e#44525#44557#0" expanded="true" />
+            <element signature="e#48512#48779#0" expanded="true" />
+            <element signature="e#48778#48779#0" expanded="true" />
+            <element signature="e#48977#49451#0" expanded="true" />
+            <element signature="e#49450#49451#0" expanded="true" />
+          </folding>
+        </state>
       </provider>
     </entry>
   </component>

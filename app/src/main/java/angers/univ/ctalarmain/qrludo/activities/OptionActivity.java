@@ -204,7 +204,7 @@ public class OptionActivity extends AppCompatActivity {
         b_valider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if( Integer.parseInt(tv_SRValue.getText().toString()) > Float.parseFloat(tv_MDTValue.getText().toString())) {
+                if( Float.parseFloat(tv_SRValue.getText().toString()) > Float.parseFloat(tv_MDTValue.getText().toString())) {
                     SharedPreferences.Editor edit = settings.edit();
 
                     edit.putFloat("speechSpeed", Float.parseFloat(tv_SSValue.getText().toString()));
@@ -215,7 +215,7 @@ public class OptionActivity extends AppCompatActivity {
                     Log.d("Language", langs.get(spin_language.getSelectedItemPosition()));
 
 
-                    edit.putInt("resetTime", Integer.parseInt(tv_SRValue.getText().toString()));
+                    edit.putFloat("resetTime",Float.parseFloat(tv_SRValue.getText().toString()));
                     edit.putFloat("MDTime", Float.parseFloat(tv_MDTValue.getText().toString()));
 
                     edit.apply();

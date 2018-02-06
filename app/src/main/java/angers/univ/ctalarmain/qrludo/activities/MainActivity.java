@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     /**
      * The default delay for current_text to get resetted.
      */
-    public static final int DEFAULT_CONTENT_RESET_TIME = 60;
+    public static final float DEFAULT_CONTENT_RESET_TIME = 60;
 
     /**
      * The integer corresping to the code identifying the option intent used to launch the option activity.
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     /**
      * The current delay between reset of the contents
      */
-    private int m_content_reset_time;
+    private float m_content_reset_time;
 
     /*
     *--------------------------------------Layouts--------------------------------------
@@ -601,7 +601,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         m_ttslanguage = new Locale(settings.getString("speechLanguage", LOCALE_DEFAULT.getLanguage()),settings.getString("speechCountry", LOCALE_DEFAULT.getCountry()));
 
-        m_content_reset_time = settings.getInt("resetTime", DEFAULT_CONTENT_RESET_TIME);
+        m_content_reset_time = settings.getFloat("resetTime", DEFAULT_CONTENT_RESET_TIME);
 
         m_multiple_detection_time = settings.getFloat("MDTime",DEFAULT_MULTIPLE_DETECTION_TIME);
 
@@ -959,7 +959,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         m_qdc.cancel(true);
                     m_qdc = new ContentDelayCounter();
                     m_qdc.delegate = (QDCResponse) activity;
-                    m_qdc.execute(m_content_reset_time);
+                    m_qdc.execute((int)m_content_reset_time);
                 }
             }
         });
@@ -1425,7 +1425,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 m_ttslanguage = new Locale(settings.getString("speechLanguage",LOCALE_DEFAULT.getLanguage()),settings.getString("speechCountry",LOCALE_DEFAULT.getCountry()));
                 m_ttobj.setLanguage(m_ttslanguage);
 
-                m_content_reset_time = settings.getInt("resetTime", DEFAULT_CONTENT_RESET_TIME);
+                m_content_reset_time = settings.getFloat("resetTime", DEFAULT_CONTENT_RESET_TIME);
 
                 m_multiple_detection_time = settings.getFloat("MDTime",DEFAULT_MULTIPLE_DETECTION_TIME);
 
