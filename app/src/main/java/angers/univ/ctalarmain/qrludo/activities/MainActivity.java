@@ -110,9 +110,9 @@ import angers.univ.ctalarmain.qrludo.utils.ToneGeneratorSingleton;
  * mettre en place.
  *
  * Pour bien comprendre et pouvoir modifier le code de l'application android, il faut s'intéresser aux designs patterns et notamment au Composite
- * (https://sourcemaking.com/design_patterns/composite) pour les classes implémentant QRCodeComponent, et à la Stratégie
- * (https://sourcemaking.com/design_patterns/strategy) pour les sous-classes de QRCodeDetectionModeStrategy.
- *
+ * (https://sourcemaking.com/design_patterns/composite) pour les classes implémentant QRCodeComponent, à la Stratégie
+ * (https://sourcemaking.com/design_patterns/strategy) pour les sous-classes de QRCodeDetectionModeStrategy, et à l'Observateur
+ * (https://sourcemaking.com/design_patterns/observer) pour les classes utilisant FileDownloader et InternetBroadcastReceiver.
  *
  *
  */

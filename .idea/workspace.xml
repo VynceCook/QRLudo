@@ -10,11 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2439f6a3-8d70-4cfb-ae69-deffb6144e6c" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/FamilleQRCodes.java" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/FamilleQRCodesComposite.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeEnsembleDetectionModeStrategy.java" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeEnsembleDetectionModeStrategy.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeCollection.java" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeCollection.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeComponent.java" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeComponent.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -75,28 +71,28 @@
       <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="298">
-              <caret line="1287" column="43" lean-forward="false" selection-start-line="1287" selection-start-column="43" selection-end-line="1287" selection-end-column="43" />
+            <state relative-caret-position="378">
+              <caret line="114" column="126" lean-forward="false" selection-start-line="114" selection-start-column="126" selection-end-line="114" selection-end-column="126" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#16747#17035#0" expanded="true" />
-                <element signature="e#17034#17035#0" expanded="true" />
-                <element signature="e#17283#17760#0" expanded="true" />
-                <element signature="e#17759#17760#0" expanded="true" />
-                <element signature="e#33873#34548#0" expanded="true" />
-                <element signature="e#34547#34548#0" expanded="true" />
-                <element signature="e#34817#35060#0" expanded="true" />
-                <element signature="e#35059#35060#0" expanded="true" />
-                <element signature="e#38116#38352#0" expanded="true" />
-                <element signature="e#38351#38352#0" expanded="true" />
-                <element signature="e#40342#40350#0" expanded="true" />
-                <element signature="e#45055#45087#0" expanded="true" />
-                <element signature="e#49175#49496#0" expanded="true" />
-                <element signature="e#49495#49496#0" expanded="true" />
-                <element signature="e#49753#50280#0" expanded="true" />
-                <element signature="e#50279#50280#0" expanded="true" />
-                <element signature="e#55433#55434#0" expanded="true" />
-                <element signature="e#55466#55467#0" expanded="true" />
+                <element signature="e#16887#17175#0" expanded="true" />
+                <element signature="e#17174#17175#0" expanded="true" />
+                <element signature="e#17423#17900#0" expanded="true" />
+                <element signature="e#17899#17900#0" expanded="true" />
+                <element signature="e#34013#34688#0" expanded="true" />
+                <element signature="e#34687#34688#0" expanded="true" />
+                <element signature="e#34957#35200#0" expanded="true" />
+                <element signature="e#35199#35200#0" expanded="true" />
+                <element signature="e#38256#38492#0" expanded="true" />
+                <element signature="e#38491#38492#0" expanded="true" />
+                <element signature="e#40482#40490#0" expanded="true" />
+                <element signature="e#45195#45227#0" expanded="true" />
+                <element signature="e#49315#49636#0" expanded="true" />
+                <element signature="e#49635#49636#0" expanded="true" />
+                <element signature="e#49893#50420#0" expanded="true" />
+                <element signature="e#50419#50420#0" expanded="true" />
+                <element signature="e#55573#55574#0" expanded="true" />
+                <element signature="e#55606#55607#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -2460,7 +2456,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1518127086522" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1518128136625" />
       </method>
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests">
@@ -2508,7 +2504,7 @@
       </Profilers>
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1518127086523" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1518128136626" />
       </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -2691,7 +2687,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1518127086524" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1518128136627" />
       </method>
     </configuration>
     <list size="1">
@@ -2811,7 +2807,14 @@
       <option name="project" value="LOCAL" />
       <updated>1518121900798</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Ajout de quelques notes pour les futurs développeurs">
+      <created>1518127177708</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1518127177708</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -2895,7 +2898,8 @@
     <MESSAGE value="Modification options (passage par seekbars avec valeurs minimales)&#10;+ Remplacement de certains messages vocaux par des bips sonores" />
     <MESSAGE value="Résolution bugs liés au types des variables" />
     <MESSAGE value="Déplacement de la gestion des swipes dans la stratégie QRCodeDetectionModeStrategy pour simplifier le code de MainActivity" />
-    <option name="LAST_COMMIT_MESSAGE" value="Déplacement de la gestion des swipes dans la stratégie QRCodeDetectionModeStrategy pour simplifier le code de MainActivity" />
+    <MESSAGE value="Ajout de quelques notes pour les futurs développeurs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ajout de quelques notes pour les futurs développeurs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -3209,28 +3213,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="298">
-          <caret line="1287" column="43" lean-forward="false" selection-start-line="1287" selection-start-column="43" selection-end-line="1287" selection-end-column="43" />
+        <state relative-caret-position="378">
+          <caret line="114" column="126" lean-forward="false" selection-start-line="114" selection-start-column="126" selection-end-line="114" selection-end-column="126" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#16747#17035#0" expanded="true" />
-            <element signature="e#17034#17035#0" expanded="true" />
-            <element signature="e#17283#17760#0" expanded="true" />
-            <element signature="e#17759#17760#0" expanded="true" />
-            <element signature="e#33873#34548#0" expanded="true" />
-            <element signature="e#34547#34548#0" expanded="true" />
-            <element signature="e#34817#35060#0" expanded="true" />
-            <element signature="e#35059#35060#0" expanded="true" />
-            <element signature="e#38116#38352#0" expanded="true" />
-            <element signature="e#38351#38352#0" expanded="true" />
-            <element signature="e#40342#40350#0" expanded="true" />
-            <element signature="e#45055#45087#0" expanded="true" />
-            <element signature="e#49175#49496#0" expanded="true" />
-            <element signature="e#49495#49496#0" expanded="true" />
-            <element signature="e#49753#50280#0" expanded="true" />
-            <element signature="e#50279#50280#0" expanded="true" />
-            <element signature="e#55433#55434#0" expanded="true" />
-            <element signature="e#55466#55467#0" expanded="true" />
+            <element signature="e#16887#17175#0" expanded="true" />
+            <element signature="e#17174#17175#0" expanded="true" />
+            <element signature="e#17423#17900#0" expanded="true" />
+            <element signature="e#17899#17900#0" expanded="true" />
+            <element signature="e#34013#34688#0" expanded="true" />
+            <element signature="e#34687#34688#0" expanded="true" />
+            <element signature="e#34957#35200#0" expanded="true" />
+            <element signature="e#35199#35200#0" expanded="true" />
+            <element signature="e#38256#38492#0" expanded="true" />
+            <element signature="e#38491#38492#0" expanded="true" />
+            <element signature="e#40482#40490#0" expanded="true" />
+            <element signature="e#45195#45227#0" expanded="true" />
+            <element signature="e#49315#49636#0" expanded="true" />
+            <element signature="e#49635#49636#0" expanded="true" />
+            <element signature="e#49893#50420#0" expanded="true" />
+            <element signature="e#50419#50420#0" expanded="true" />
+            <element signature="e#55573#55574#0" expanded="true" />
+            <element signature="e#55606#55607#0" expanded="true" />
           </folding>
         </state>
       </provider>
