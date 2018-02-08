@@ -84,6 +84,37 @@ import angers.univ.ctalarmain.qrludo.utils.ToneGeneratorSingleton;
  *
  * 3rd version (complete detection and reading of structured QRCodes) :
  * @author Jules Leguy
+ *
+ *
+ * Notes pour les futurs développeurs :
+ *
+ * Parmi les extensions intéressantes des deux applications qui pourraient être développées, il y a avant tout un meilleur système de compression
+ * des données, basé sur un dictionnaire fixe externe et utilisant un algorithme comme celui du format zip, beaucoup plus efficace et plus
+ * facilement utilisable sur un dictionnaire de grande taille que la version ad-hoc utilisée jusque ici. La difficulté se trouvera principalement
+ * sur l'application de bureau, car beaucoup moins de bibliothèques sont disponibles en JavaScript. C'est d'ailleurs pour cette raison que nous
+ * avons développé le système de compression/décompression actuel. Mais c'est envisageable si vous commencez ce travail dès le début du projet.
+ * Le dictionnaire pourra contenir tous les mots du français, en plus des chaînes XML compressées jusque là, ce qui permettrait une compression
+ * considérable et donc de générer des QRCodes pouvant contenir beaucoup de données. Il serait en revanche préférable que l'application mobile
+ * soit toujours capable de décompresser les QRCodes qui ont été générés jusque là (voir notre rapport de projet et les commentaires dans la classe
+ * qui compresse les chaînes XML dans l'application de bureau).
+ *
+ * L'interprétation des QRCodes appartenant a une famille n'est actuellement pas idéale, car l'application android n'a aucun moyen de savoir si
+ * tous les QRCodes de la famille ont été interprétés. Il faudrait pour cela modifier la structure XML afin d'ajouter la taille de la famille et
+ * pouvoir signaler à l'utilisateur si tous les QRCodes de la famille n'ont pas été détectés. Il faudra toutefois penser au fait que cela changera
+ * en partie les chaînes de caractères utilisées pour la compression/décompression des QRCodes.
+ *
+ * On pourrait également penser à un système permettant de convertir du texte en fichier audio généré par une voix de synthèse sur l'application
+ * de bureau, stocké ensuite automatiquement sur internet et générant un QRCode possédant un lien vers ce fichier. Cette solution permettrait de
+ * générer des QRCodes de petite taille et contenant beaucoup de "texte", mais ne serait pas idéale à cause de l'aspect peu chaleureux de la voix
+ * de synthèse. Elle pourrait toutefois être une alternative à la compression par dictionnaire fixe externe si celle-ci se révèle impossible à
+ * mettre en place.
+ *
+ * Pour bien comprendre et pouvoir modifier le code de l'application android, il faut s'intéresser aux designs patterns et notamment au Composite
+ * (https://sourcemaking.com/design_patterns/composite) pour les classes implémentant QRCodeComponent, et à la Stratégie
+ * (https://sourcemaking.com/design_patterns/strategy) pour les sous-classes de QRCodeDetectionModeStrategy.
+ *
+ *
+ *
  */
 public class MainActivity extends AppCompatActivity implements SensorEventListener, QDCResponse, QRFile.QRFileObserverInterface, InternetBroadcastReceiver.InternetBroadcastReceiverObserverInterface{
 
@@ -242,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
     /**
-     * The boolean indicating if the sdk version of the phone is greater than m_lollipopOrHigher
+     * The boolean indicating if the sdk version of the phone is greater than lollipop
      */
     private boolean m_lollipopOrHigher;
 
@@ -1254,6 +1285,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 }
             }
 
+            //Asking for needed permissions
             if (!neededPermissions.isEmpty()) {
                 ActivityCompat.requestPermissions(this, neededPermissions.toArray(new String[neededPermissions.size()]),MULTIPLE_PERMISSIONS );
             }

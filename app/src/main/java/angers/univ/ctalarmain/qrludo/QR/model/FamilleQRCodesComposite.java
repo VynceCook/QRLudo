@@ -18,13 +18,13 @@ import angers.univ.ctalarmain.qrludo.exceptions.FamilyException;
  * When a QRCodeAtomique is added to the family, it is inserted at the right place in the list.
  * The method getQRContent() returns each content of each QRCodeAtomique of the family in the right sequence.
  */
-public class FamilleQRCodes implements QRCodeComponent {
+public class FamilleQRCodesComposite implements QRCodeComponent {
 
     private String m_familyName;
     private TreeMap<Integer, QRCodeAtomique> m_sortedFamily;
 
 
-    public FamilleQRCodes(String familyName){
+    public FamilleQRCodesComposite(String familyName){
         m_familyName = familyName;
         m_sortedFamily = new TreeMap<Integer, QRCodeAtomique>();
     }

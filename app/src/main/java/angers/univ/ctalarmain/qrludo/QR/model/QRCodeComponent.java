@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Using the Composite design pattern to manage QR Families
  * The leafs are QRCodeAtomique or QRCodeEnsemble
- * The composites are only FamilleQRCodes
+ * The composites are only FamilleQRCodesComposite
  *
  * The leafs and the composites must return a sorted list of their content (QRContent object)
  *

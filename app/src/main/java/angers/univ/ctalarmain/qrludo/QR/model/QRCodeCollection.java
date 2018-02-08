@@ -18,7 +18,7 @@ import angers.univ.ctalarmain.qrludo.exceptions.FamilyException;
  */
 public class QRCodeCollection{
 
-    //Contains QRCodeComponents, which are QRCodeAtomique, QRCodeEnsemble of FamilleQRCodes
+    //Contains QRCodeComponents, which are QRCodeAtomique, QRCodeEnsemble of FamilleQRCodesComposite
     private LinkedList<QRCodeComponent> m_QRList;
 
     //Contains the QRCodeComponents which have been detected but ignored (so that they can't be read anymore)
@@ -31,7 +31,7 @@ public class QRCodeCollection{
 
     /**
      * adds a QRCode at the end of the list if it isn't already a member
-     * if it belongs to a family, adding it into the corresponding FamilleQRCodes if exists or creating it
+     * if it belongs to a family, adding it into the corresponding FamilleQRCodesComposite if exists or creating it
      * @param qr
      */
     public void addQR(QRCode qr) {
@@ -55,16 +55,16 @@ public class QRCodeCollection{
 
 
                             //Looking for a QRCodeFamily for this QR in m_QRList
-                            if (alreadyPresentQRComponent instanceof FamilleQRCodes && ((FamilleQRCodes) alreadyPresentQRComponent).getFamilyName().equals(((QRCodeAtomique) qr).getFamilyName())) {
-                                //adding the qr code to the already existing FamilleQRCodes
-                                ((FamilleQRCodes) alreadyPresentQRComponent).addQRToFamily((QRCodeAtomique) qr);
+                            if (alreadyPresentQRComponent instanceof FamilleQRCodesComposite && ((FamilleQRCodesComposite) alreadyPresentQRComponent).getFamilyName().equals(((QRCodeAtomique) qr).getFamilyName())) {
+                                //adding the qr code to the already existing FamilleQRCodesComposite
+                                ((FamilleQRCodesComposite) alreadyPresentQRComponent).addQRToFamily((QRCodeAtomique) qr);
                                 existingFamily = true;
                             }
                         }
 
                         //Creating the family if non-existing
                         if (!existingFamily) {
-                            FamilleQRCodes newFamily = new FamilleQRCodes(((QRCodeAtomique) qr).getFamilyName());
+                            FamilleQRCodesComposite newFamily = new FamilleQRCodesComposite(((QRCodeAtomique) qr).getFamilyName());
                             newFamily.addQRToFamily((QRCodeAtomique) qr);
                             m_QRList.addLast(newFamily);
                         }

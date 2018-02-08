@@ -16,7 +16,6 @@ public class QRCodeEnsembleDetectionModeStrategy extends QRCodeDetectionModeStra
         super(mainActivity);
     }
 
-
     /**
      * Should never be called because this strategy is set up only once a first QRCodeEnsemble is detected
      * @param detectedQR
