@@ -5,6 +5,7 @@ import android.media.ToneGenerator;
 
 /**
  * Created by Jules Leguy on 29/01/18.
+ *
  * Tone Generator as a Singleton so that it can be accessed by any object
  */
 public class ToneGeneratorSingleton

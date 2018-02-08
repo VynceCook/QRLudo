@@ -11,6 +11,8 @@ import android.util.Log;
 
 
 /**
+ * Created by Jules Leguy
+ *
  * Notifies MainActivity when the internet connection is opened
  * from https://stackoverflow.com/questions/15698790/broadcast-receiver-for-checking-internet-connection-in-android-app
  */

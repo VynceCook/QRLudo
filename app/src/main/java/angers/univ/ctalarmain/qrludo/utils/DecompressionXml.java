@@ -1,5 +1,8 @@
 package angers.univ.ctalarmain.qrludo.utils;
 
+/**
+ * Created by Jules Leguy
+ */
 
 public class DecompressionXml {
 

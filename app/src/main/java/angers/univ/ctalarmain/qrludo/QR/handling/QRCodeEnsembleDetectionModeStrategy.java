@@ -8,12 +8,11 @@ import angers.univ.ctalarmain.qrludo.activities.MainActivity;
 import angers.univ.ctalarmain.qrludo.utils.ToneGeneratorSingleton;
 
 /**
- * Created by etudiant on 04/02/18.
+ * Created by Jules Leguy on 04/02/18.
  */
+public class QRCodeEnsembleDetectionModeStrategy extends QRCodeDetectionModeStrategy {
 
-public class QRCodeEnsembleDetectionStrategy extends QRCodeDetectionStrategy{
-
-    QRCodeEnsembleDetectionStrategy(MainActivity mainActivity) {
+    QRCodeEnsembleDetectionModeStrategy(MainActivity mainActivity) {
         super(mainActivity);
     }
 
@@ -24,7 +23,7 @@ public class QRCodeEnsembleDetectionStrategy extends QRCodeDetectionStrategy{
      */
     @Override
     public void onFirstDetectionWithTimeNotNull(QRCode detectedQR) {
-        Log.v("test", "appel à QRCodeEnsembleDetectionStrategy.onFirstDetectionWithTimeNotNull() ; ne devrait pas arriver");
+        Log.v("test", "appel à QRCodeEnsembleDetectionModeStrategy.onFirstDetectionWithTimeNotNull() ; ne devrait pas arriver");
 
     }
 
@@ -37,7 +36,7 @@ public class QRCodeEnsembleDetectionStrategy extends QRCodeDetectionStrategy{
             m_detectedQRCodes.addQR(detectedQR);
 
             //Setting the new detection state
-            m_mainActivity.setM_detectionState(MainActivity.MULTIPLE_QR_DETECTED);
+            m_mainActivity.setDetectionProgress(MainActivity.MULTIPLE_QR_DETECTED);
 
             //Resetting the MultipleDetectionTimer
             m_mainActivity.startMultipleDetectionTimer();
@@ -47,7 +46,7 @@ public class QRCodeEnsembleDetectionStrategy extends QRCodeDetectionStrategy{
 
         }
         else{
-            ToneGeneratorSingleton.getInstance().errorTone();
+            ToneGeneratorSingleton.getInstance().ignoredQRCodeTone();
             m_detectedQRCodes.addIgnoredQR(detectedQR);
         }
 
@@ -71,6 +70,37 @@ public class QRCodeEnsembleDetectionStrategy extends QRCodeDetectionStrategy{
             m_mainActivity.ensembleReadingCompleted();
         }
 
+    }
+
+    @Override
+    public void onSwipeTop() {
+        //The user cannot swipe top in case of ensemble reading
+        ToneGeneratorSingleton.getInstance().errorTone();
+    }
+
+    @Override
+    public void onSwipeBottom() {
+
+        //If all the QRFiles haven't been downloaded, starting a new detection notifying it
+        if (!m_mainActivity.areAllQRFilesDownloaded()) {
+            m_mainActivity.startNewDetection("Téléchargement annulé");
+        }
+        else{
+            m_mainActivity.startNewDetection("Nouvelle détection");
+        }
+    }
+
+    @Override
+    public void onSwipeLeft()
+    {
+        //Same behaviour as onSwipeBottom
+        onSwipeBottom();
+    }
+
+    @Override
+    public void onSwipeRight() {
+        //The user cannot swipe right in case of ensemble reading
+        ToneGeneratorSingleton.getInstance().errorTone();
     }
 
 }

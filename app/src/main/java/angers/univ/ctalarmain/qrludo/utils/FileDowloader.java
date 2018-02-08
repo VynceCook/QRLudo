@@ -80,7 +80,7 @@ public class FileDowloader extends AsyncTask {
 
         }
         catch (Exception e) {
-            Log.e("Error: ", e.getMessage());
+            Log.e("test", e.getMessage());
         }
 
         return null;

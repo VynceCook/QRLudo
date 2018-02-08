@@ -14,7 +14,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import angers.univ.ctalarmain.qrludo.exceptions.UnhandledQRException;
 
 /**
- * Created by etudiant on 04/02/18.
+ * Created by Jules Leguy on 04/02/18.
  */
 
 public class QRCodeEnsemble extends QRCode{

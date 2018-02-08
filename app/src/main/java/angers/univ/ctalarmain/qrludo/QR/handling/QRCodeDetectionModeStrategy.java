@@ -9,13 +9,13 @@ import angers.univ.ctalarmain.qrludo.activities.MainActivity;
  * Created by Jules Leguy on 29/01/18.
  * Uses Strategy design pattern to manage the detection of QRCode depending on the current state of the application
  */
-public abstract class QRCodeDetectionStrategy {
+public abstract class QRCodeDetectionModeStrategy {
 
     MainActivity m_mainActivity;
     QRCodeCollection m_detectedQRCodes;
 
 
-    QRCodeDetectionStrategy(MainActivity mainActivity){
+    QRCodeDetectionModeStrategy(MainActivity mainActivity){
         m_detectedQRCodes = mainActivity.getDetectedQRCodes();
         m_mainActivity = mainActivity;
     }
@@ -26,20 +26,41 @@ public abstract class QRCodeDetectionStrategy {
      */
     public abstract void onFirstDetectionWithTimeNotNull(QRCode detectedQR);
 
-
     /**
      * Called when the activity detects a QRCode which is not the first of the current detection
      * @param detectedQR
      */
     public abstract void onNextDetectionWithTimeNotNull(QRCode detectedQR);
 
-    
     /**
      * Called by the activity at the end of the MultipleDetectionTimer
      */
     public abstract void onEndOfMultipleDetectionTimer();
 
+    /**
+     * Handles the end of the downloading of a QRFile the application is listening to
+     */
     public abstract void onQRFileDownloadComplete();
+
+    /**
+     * Called when the user swipes towards the top of the screen
+     */
+    public abstract void onSwipeTop();
+
+    /**
+     * Called when the user swipes towards the bottom of the screen
+     */
+    public abstract void onSwipeBottom();
+
+    /**
+     * Called when the user swipes towards the left of the screen
+     */
+    public abstract void onSwipeLeft();
+
+    /**
+     * Called when the user swipes towards the right of the screen
+     */
+    public abstract void onSwipeRight();
 
 
     /**
@@ -51,5 +72,7 @@ public abstract class QRCodeDetectionStrategy {
     protected boolean belongsToFamily(QRCode detectedQR){
         return (detectedQR instanceof QRCodeAtomique && ((QRCodeAtomique) detectedQR).belongsToFamily());
     }
+
+
 
 }

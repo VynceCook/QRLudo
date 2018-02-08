@@ -82,7 +82,7 @@ public class OptionActivity extends AppCompatActivity {
         sb_MDTValue.setProgress((int)mdt*2-2);
         tv_MDTValue.setText(String.format(Locale.ENGLISH,"%.2f",mdt));
 
-        float sr = settings.getFloat("resetTime",MainActivity.DEFAULT_CONTENT_RESET_TIME);
+        float sr = settings.getFloat("resetTime2",MainActivity.DEFAULT_CONTENT_RESET_TIME);
         sb_SRValue.setProgress((int)(sr/10-3));
         tv_SRValue.setText(String.format(Locale.ENGLISH,"%.2f",sr));
 
@@ -215,7 +215,7 @@ public class OptionActivity extends AppCompatActivity {
                     Log.d("Language", langs.get(spin_language.getSelectedItemPosition()));
 
 
-                    edit.putFloat("resetTime",Float.parseFloat(tv_SRValue.getText().toString()));
+                    edit.putFloat("resetTime2",Float.parseFloat(tv_SRValue.getText().toString()));
                     edit.putFloat("MDTime", Float.parseFloat(tv_MDTValue.getText().toString()));
 
                     edit.apply();

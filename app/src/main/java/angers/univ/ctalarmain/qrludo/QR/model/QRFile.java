@@ -9,7 +9,7 @@ import java.io.File;
 import angers.univ.ctalarmain.qrludo.utils.FileDowloader;
 
 /**
- * Created by etudiant on 20/01/18.
+ * Created by Jules Leguy on 20/01/18.
  */
 
 public class QRFile extends QRContent implements FileDowloader.FileDownloaderObserverInterface {

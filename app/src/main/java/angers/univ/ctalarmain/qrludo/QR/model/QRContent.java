@@ -1,7 +1,7 @@
 package angers.univ.ctalarmain.qrludo.QR.model;
 
 /**
- * Created by etudiant on 20/01/18.
+ * Created by Jules Leguy on 20/01/18.
  */
 
 public abstract class QRContent {

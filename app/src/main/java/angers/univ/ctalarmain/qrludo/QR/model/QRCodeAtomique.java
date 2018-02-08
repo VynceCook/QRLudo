@@ -18,7 +18,7 @@ import angers.univ.ctalarmain.qrludo.exceptions.FamilyException;
 import angers.univ.ctalarmain.qrludo.exceptions.UnhandledQRException;
 
 /**
- * Created by etudiant on 20/01/18.
+ * Created by Jules Leguy on 20/01/18.
  */
 
 
