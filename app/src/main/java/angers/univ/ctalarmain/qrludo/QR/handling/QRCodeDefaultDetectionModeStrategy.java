@@ -1,6 +1,7 @@
 package angers.univ.ctalarmain.qrludo.QR.handling;
 
 
+import android.os.Handler;
 import android.util.Log;
 
 import angers.univ.ctalarmain.qrludo.QR.model.QRCode;
@@ -26,6 +27,7 @@ import static angers.univ.ctalarmain.qrludo.activities.MainActivity.NO_QR_DETECT
  * startEnsembleDetection(). Otherwise, ignoring it.
  */
 public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrategy {
+
 
 
     public QRCodeDefaultDetectionModeStrategy(MainActivity mainActivity) {
@@ -110,7 +112,13 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
     public void onSwipeBottom() {
         //Canceling current detection or reading, and starting new detection, provided the tts is ready
         if (m_mainActivity.isTTSReady()) {
-            m_mainActivity.startNewDetection("Nouvelle détection");
+            if(!posted) {
+                posted = hand.postDelayed(runner, 1000);
+            }else{
+                m_mainActivity.startNewDetection("Nouvelle détection");
+                hand.removeCallbacks(runner);
+                posted = false;
+            }
         }
         else{
             ToneGeneratorSingleton.getInstance().errorTone();

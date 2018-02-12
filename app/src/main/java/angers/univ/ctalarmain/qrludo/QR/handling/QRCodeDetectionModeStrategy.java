@@ -1,5 +1,8 @@
 package angers.univ.ctalarmain.qrludo.QR.handling;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import angers.univ.ctalarmain.qrludo.QR.model.QRCode;
 import angers.univ.ctalarmain.qrludo.QR.model.QRCodeAtomique;
 import angers.univ.ctalarmain.qrludo.QR.model.QRCodeCollection;
@@ -14,6 +17,18 @@ public abstract class QRCodeDetectionModeStrategy {
     MainActivity m_mainActivity;
     QRCodeCollection m_detectedQRCodes;
 
+
+    Handler hand = new Handler(Looper.getMainLooper());
+
+    boolean posted = false;
+
+    Runnable runner = new Runnable() {
+        @Override
+        public void run() {
+            m_mainActivity.makeSilence();
+            posted = false;
+        }
+    };
 
     QRCodeDetectionModeStrategy(MainActivity mainActivity){
         m_detectedQRCodes = mainActivity.getDetectedQRCodes();

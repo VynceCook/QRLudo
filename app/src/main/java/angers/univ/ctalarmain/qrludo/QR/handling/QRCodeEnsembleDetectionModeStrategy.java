@@ -85,7 +85,13 @@ public class QRCodeEnsembleDetectionModeStrategy extends QRCodeDetectionModeStra
             m_mainActivity.startNewDetection("Téléchargement annulé");
         }
         else{
-            m_mainActivity.startNewDetection("Nouvelle détection");
+            if(!posted) {
+                posted = hand.postDelayed(runner, 10000);
+            }else{
+                m_mainActivity.startNewDetection("Nouvelle détection");
+                hand.removeCallbacks(runner);
+                posted = false;
+            }
         }
     }
 

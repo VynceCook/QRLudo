@@ -123,7 +123,13 @@ public class QRCodeFamilyDetectionModeStrategy extends QRCodeDetectionModeStrate
     @Override
     public void onSwipeBottom() {
         //Canceling current detection or reading, and starting new detection
-        m_mainActivity.startNewDetection("Nouvelle détection");
+        if(!posted) {
+            posted = hand.postDelayed(runner, 1000);
+        }else{
+            m_mainActivity.startNewDetection("Nouvelle détection");
+            hand.removeCallbacks(runner);
+            posted = false;
+        }
     }
 
     @Override

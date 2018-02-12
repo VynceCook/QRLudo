@@ -1027,7 +1027,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     /**
      * Stops the text to speech engine or the MediaPlayer if they are talking or playing
      */
-    private void makeSilence(){
+    public void makeSilence(){
 
         if (m_ttobj.isSpeaking())
             m_ttobj.stop();
