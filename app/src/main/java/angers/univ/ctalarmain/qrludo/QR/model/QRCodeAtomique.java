@@ -105,7 +105,19 @@ public class QRCodeAtomique extends QRCode {
                 m_content.add(new QRFile(((Element)content.item(i)).getAttribute("url")));
             }
             else if (content.item(i).getNodeName().equals("texte")){
-                m_content.add(new QRText(content.item(i).getTextContent()));
+                //If the text represents an file on google drive
+                if (content.item(i).getTextContent().startsWith("https://drive.google.com")){
+
+                    // fetching the id of the google drive file in the raw string
+                    String id = content.item(i).getTextContent().substring(content.item(i).getTextContent().indexOf("id=")+3);
+
+                    Log.v("test", "id fichier : "+id);
+
+                    //Adding a QRFile to the QRCode
+                    m_content.add(new QRFile(id));
+                }else {
+                    m_content.add(new QRText(content.item(i).getTextContent()));
+                }
             }
 
         }
