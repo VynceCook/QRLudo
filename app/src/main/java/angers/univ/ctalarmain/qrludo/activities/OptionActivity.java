@@ -1,5 +1,7 @@
 package angers.univ.ctalarmain.qrludo.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,11 +23,13 @@ import java.util.List;
 import java.util.Locale;
 
 import angers.univ.ctalarmain.qrludo.R;
+import angers.univ.ctalarmain.qrludo.utils.FileDowloader;
 
 import static java.lang.String.valueOf;
 
 /**
  * Created by Corentin Tarlarmain on 28/04/17.
+ * Modified by Florian Lherbeil
  */
 
 public class OptionActivity extends AppCompatActivity {
@@ -38,6 +42,7 @@ public class OptionActivity extends AppCompatActivity {
     SeekBar sb_MDTValue;
     TextView tv_MDTValue;
     Button b_valider;
+    Button b_supprimer;
     SharedPreferences settings;
     List<String> languages;
     ArrayList<String> langs;
@@ -197,6 +202,39 @@ public class OptionActivity extends AppCompatActivity {
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, lang_list);
         spin_language.setAdapter(spinnerArrayAdapter);
         spin_language.setSelection(index);
+
+
+
+
+         //Ajout d'un bouton pour vider les fichiers stockés par l'application sur le téléphone
+
+        b_supprimer = (Button) findViewById(R.id.b_supprimer);
+        b_supprimer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setCancelable(true);
+                builder.setTitle("Suppression");
+                builder.setMessage("Les données téléchargées vont être supprimées");
+                builder.setPositiveButton("Confirm",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(FileDowloader.viderMemoire())
+                                Toast.makeText(OptionActivity.this, "Les données ont bien été supprimées", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+            }
+        });
 
 
 

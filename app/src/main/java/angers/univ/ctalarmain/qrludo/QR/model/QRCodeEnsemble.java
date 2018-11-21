@@ -1,5 +1,8 @@
 package angers.univ.ctalarmain.qrludo.QR.model;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -15,14 +18,24 @@ import angers.univ.ctalarmain.qrludo.exceptions.UnhandledQRException;
 
 /**
  * Created by Jules Leguy on 04/02/18.
+ * Modified by Florian Lherbeil
  */
 
 public class QRCodeEnsemble extends QRCode{
 
-    public QRCodeEnsemble(String rawValue) throws UnhandledQRException {
-        super(rawValue);
+    public QRCodeEnsemble(QrCodeJson code,String rawValue) throws UnhandledQRException {
+        super(code,rawValue);
 
-        try {
+        for(String data : code.getData()){
+            if(isUrlFile(data)){
+                m_content.add(new QRFile(data));
+            }
+            else {
+                throw new UnhandledQRException("QRCodeEnsemble cannot contain text");
+            }
+        }
+
+        /*try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
             DocumentBuilder builder = null;
@@ -50,7 +63,7 @@ public class QRCodeEnsemble extends QRCode{
         //The string cannot be parsed as XML
         catch (ParserConfigurationException | org.xml.sax.SAXException | java.io.IOException e) {
             throw new UnhandledQRException("Cannot parse XML");
-        }
+        }*/
 
 
     }

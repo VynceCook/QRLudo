@@ -2,6 +2,10 @@ package angers.univ.ctalarmain.qrludo.QR.model;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -16,9 +20,11 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import angers.univ.ctalarmain.qrludo.exceptions.FamilyException;
 import angers.univ.ctalarmain.qrludo.exceptions.UnhandledQRException;
+import angers.univ.ctalarmain.qrludo.utils.FileDowloader;
 
 /**
  * Created by Jules Leguy on 20/01/18.
+ *
  */
 
 
@@ -33,14 +39,27 @@ public class QRCodeAtomique extends QRCode {
 
     /**
      * Constructor that builds the object from a string.
-     * The string can represent XML or only by raw text
+     * The string is in Json
      *
-     * @param rawValue
+     * @param code
      */
-    public QRCodeAtomique(String rawValue) throws UnhandledQRException {
-        super(rawValue);
+    public QRCodeAtomique(QrCodeJson code,String rawValue) throws UnhandledQRException {
+        super(code,rawValue);
+        System.out.println(FileDowloader.viderMemoire());
 
-        try {
+        System.out.println(code);
+
+        boolean contenuRead = false;
+
+        for(String data : code.getData()){
+            if(isUrlFile(data)){
+                m_content.add(new QRFile(data));
+            }
+            else {
+                m_content.add(new QRText(data));
+            }
+        }
+        /*try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
             DocumentBuilder builder = null;
@@ -51,7 +70,7 @@ public class QRCodeAtomique extends QRCode {
 
             NodeList nodes = rootNode.getChildNodes();
 
-            boolean contenuRead = false;
+            //boolean contenuRead = false;
 
             for (int i=0; i<nodes.getLength(); i++){
 
@@ -87,10 +106,12 @@ public class QRCodeAtomique extends QRCode {
                 m_content.add(new QRText(rawValue));
             }
 
-        }
+        }*/
 
 
     }
+
+
 
     /**
      * Reads the content of the QRCodeAtomique and inserts it into the attribute m_content of the superclass QRCode

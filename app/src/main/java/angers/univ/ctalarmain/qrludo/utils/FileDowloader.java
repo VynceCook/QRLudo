@@ -1,6 +1,7 @@
 package angers.univ.ctalarmain.qrludo.utils;
 
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
@@ -10,13 +11,16 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import static android.os.Environment.DIRECTORY_DOWNLOADS;
+
 /**
  * Created by etudiant on 26/01/18.
  */
 
 public class FileDowloader extends AsyncTask {
 
-    public static String DOWNLOAD_PATH = "/sdcard/qrludo/";
+    public static String DOWNLOAD_PATH = "/sdcard/qrludo/"; //DIRECTORY_DOWNLOADS; //"/sdcard/qrludo/";
+    //public static String DOWNLOAD_PATH = Environment.getDataDirectory()+"/qrludo/";
 
     String m_url;
     FileDownloaderObserverInterface m_user;
@@ -47,6 +51,7 @@ public class FileDowloader extends AsyncTask {
             URL url = new URL(m_url);
             connection = (HttpURLConnection) url.openConnection();
             connection.connect();
+            System.out.println(url.toString());
 
             // expect HTTP 200 OK, so we don't mistakenly save error report
             // instead of the file
@@ -93,6 +98,18 @@ public class FileDowloader extends AsyncTask {
      */
     public interface FileDownloaderObserverInterface {
         void onDownloadComplete();
+    }
+
+    public static boolean viderMemoire(){
+        File targetDir = new File(FileDowloader.DOWNLOAD_PATH);
+        if (targetDir.isDirectory()){
+            File[] files=targetDir.listFiles();
+            for(File f : files){
+                f.delete();
+            }
+            return true;
+        }
+        return false;
     }
 
 }

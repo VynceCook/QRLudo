@@ -1,5 +1,8 @@
 package angers.univ.ctalarmain.qrludo.QR.handling;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
@@ -12,18 +15,37 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import angers.univ.ctalarmain.qrludo.QR.model.QRCode;
 import angers.univ.ctalarmain.qrludo.QR.model.QRCodeAtomique;
 import angers.univ.ctalarmain.qrludo.QR.model.QRCodeEnsemble;
+import angers.univ.ctalarmain.qrludo.QR.model.QrCodeJson;
 import angers.univ.ctalarmain.qrludo.exceptions.UnhandledQRException;
+import angers.univ.ctalarmain.qrludo.utils.DecompressionJSON;
 
 
 /**
  * Created by Jules Leguy on 20/01/18.
- * Builds a QRCode object from a XML object
+ * Modified by Florian Lherbeil
+ * Builds a QRCode object from a Json object
  */
 public class QRCodeBuilder {
 
     public static QRCode build(String dataQR) throws UnhandledQRException {
+        if (!dataQR.startsWith("{\"name\"")){
+            // Start decompression
+            dataQR=DecompressionJSON.decompresser(dataQR);
+        }
 
-        QRCode builtQR = null;
+        Gson gson = new GsonBuilder().create();
+        final QrCodeJson code = gson.fromJson(dataQR,QrCodeJson.class);
+        if(code.getType().equalsIgnoreCase("atomique")){
+            return new QRCodeAtomique(code,dataQR);
+        }
+        else if (code.getType().equalsIgnoreCase("ensemble")){
+            return new QRCodeEnsemble(code,dataQR);
+        }
+        else
+            return new QRCodeAtomique(code,dataQR);
+
+
+       /*QRCode builtQR = null;
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
@@ -59,23 +81,16 @@ public class QRCodeBuilder {
         }
 
 
-        return builtQR;
+        return builtQR;*/
     }
 
-    /**
-     * Builds a QRCode object from a non-xml string
-     * Allows backward compatibility with the QRCodes created for the first version of the app
-     * Builds a QRCodeAtomique with a single QRContent, which can be a QRText or a QRFile depending on the string
-     *
-     * @param dataQR
-     * @return
-     */
-    public static QRCode buildQRCodeAtomiqueFromText(String dataQR) throws UnhandledQRException {
+
+    /*public static QRCode buildQRCodeAtomiqueFromText(String dataQR) throws UnhandledQRException {
 
         //The QRCodeAtomique constructor creates the QRCodeAtomique from the raw string if it cannot parse xml
         return new QRCodeAtomique(dataQR);
 
-    }
+    }*/
 
 
 }

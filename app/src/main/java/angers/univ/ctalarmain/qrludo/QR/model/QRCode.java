@@ -15,7 +15,10 @@ public abstract class QRCode implements QRCodeComponent {
     //String detected on the QRCode. Kept to compare easily if two QRCodes are contains
     protected String m_rawValue;
 
-    public QRCode(String rawValue){
+    protected QrCodeJson m_qrcodeJson;
+
+    public QRCode(QrCodeJson code, String rawValue){
+        m_qrcodeJson = code;
         m_rawValue = rawValue;
         m_content = new ArrayList<QRContent>();
     }
@@ -48,6 +51,13 @@ public abstract class QRCode implements QRCodeComponent {
 
         }
     }
+    public boolean isUrlFile(String data){
+        if(data.startsWith(("https://drive.google.com"))){
+            return true;
+        }
+        else
+            return false;
 
+    }
 
 }
