@@ -216,7 +216,7 @@ public class OptionActivity extends AppCompatActivity {
                 builder.setCancelable(true);
                 builder.setTitle("Suppression");
                 builder.setMessage("Les données téléchargées vont être supprimées");
-                builder.setPositiveButton("Confirm",
+                builder.setPositiveButton("Confirmer",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

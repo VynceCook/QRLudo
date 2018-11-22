@@ -30,7 +30,7 @@ public class QRCodeBuilder {
     public static QRCode build(String dataQR) throws UnhandledQRException {
         if (!dataQR.startsWith("{\"name\"")){
             // Start decompression
-            dataQR=DecompressionJSON.decompresser(dataQR);
+            dataQR=DecompressionJSON.decompresser(dataQR); //Ne fait rien pour l'instant
         }
 
         Gson gson = new GsonBuilder().create();

@@ -45,7 +45,6 @@ public class QRCodeAtomique extends QRCode {
      */
     public QRCodeAtomique(QrCodeJson code,String rawValue) throws UnhandledQRException {
         super(code,rawValue);
-        System.out.println(FileDowloader.viderMemoire());
 
         System.out.println(code);
 
