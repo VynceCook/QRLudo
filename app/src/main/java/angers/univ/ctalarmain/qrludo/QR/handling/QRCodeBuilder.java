@@ -7,6 +7,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
+import java.io.IOException;
 import java.io.StringReader;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -28,21 +29,37 @@ import angers.univ.ctalarmain.qrludo.utils.DecompressionJSON;
 public class QRCodeBuilder {
 
     public static QRCode build(String dataQR) throws UnhandledQRException {
-        if (!dataQR.startsWith("{\"name\"")){
+        // On stocke la valeur brute initiale pour pouvoir effetuer la détection multiple
+        String rawvalue=dataQR;
+
+        // On vérfie si la chaine est encodée en base64
+        if(dataQR.matches("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$")){
             // Start decompression
-            dataQR=DecompressionJSON.decompresser(dataQR); //Ne fait rien pour l'instant
+            try {
+                dataQR=DecompressionJSON.decompresser(dataQR);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (!dataQR.startsWith("{\"name\"")){
+            // si la chaine trouvée n'est pas compressée et qu'elle n'est pas du json, c'est alors simplement du texte
+            // On rajoute le texte dans une chaine json comportement les attributs type et data
+            // Le texte est alors traité comme un qrcode atomique
+            dataQR="{\"type\"=\"atomique\",\"data\"=[\""+dataQR+"\"]}";
+
         }
 
         Gson gson = new GsonBuilder().create();
         final QrCodeJson code = gson.fromJson(dataQR,QrCodeJson.class);
         if(code.getType().equalsIgnoreCase("atomique")){
-            return new QRCodeAtomique(code,dataQR);
+            return new QRCodeAtomique(code,rawvalue);
         }
         else if (code.getType().equalsIgnoreCase("ensemble")){
-            return new QRCodeEnsemble(code,dataQR);
+            return new QRCodeEnsemble(code,rawvalue);
         }
         else
-            return new QRCodeAtomique(code,dataQR);
+            return new QRCodeAtomique(code,rawvalue);
 
 
        /*QRCode builtQR = null;

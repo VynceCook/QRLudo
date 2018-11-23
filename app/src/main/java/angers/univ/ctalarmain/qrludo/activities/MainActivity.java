@@ -775,7 +775,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     for (int i = 0; i < barcodes.size(); i++) {
                         String rawValue = barcodes.valueAt(i).rawValue;
                         String decodedValue = DecompressionXml.decompresser(rawValue);
-
                         //ignoring if the QRCode has already been recorded or ignored
                         if (m_detectedQRCodes.isAlreadyInCollection(decodedValue) || m_detectedQRCodes.isAlreadyIgnored(decodedValue)) {
                             Log.v("test", "ignoring QR");

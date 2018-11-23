@@ -7,10 +7,10 @@ package angers.univ.ctalarmain.qrludo.QR.model;
 import java.util.ArrayList;
 
 public class QrCodeJson {
-    private String name;
-    private String type;
-    private ArrayList<String> data;
-    private String color;
+    private String name="";
+    private String type="";
+    private ArrayList<String> data= new ArrayList<>();
+    private String color="";
 
     @Override
     public String toString() {
