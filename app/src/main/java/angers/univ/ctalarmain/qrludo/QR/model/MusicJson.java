@@ -1,5 +1,12 @@
 package angers.univ.ctalarmain.qrludo.QR.model;
 
+/**
+ * Created by Florian Lherbeil
+ */
+
+/**
+ * Classe permettant de récupérer les informations sur les musiques contenues dans un json
+ */
 public class MusicJson {
     private String type="";
     private String url="";

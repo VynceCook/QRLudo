@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import angers.univ.ctalarmain.qrludo.exceptions.FamilyException;
-
 /**
  * Class whose role is to manage collections of QRCodes before they are read by the text to speech engine
  *

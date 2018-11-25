@@ -1,14 +1,11 @@
 package angers.univ.ctalarmain.qrludo.QR.handling;
 
 
-import android.os.Handler;
 import android.util.Log;
 
 import angers.univ.ctalarmain.qrludo.QR.model.QRCode;
-import angers.univ.ctalarmain.qrludo.QR.model.QRCodeAtomique;
 import angers.univ.ctalarmain.qrludo.QR.model.QRCodeEnsemble;
 import angers.univ.ctalarmain.qrludo.activities.MainActivity;
-import angers.univ.ctalarmain.qrludo.exceptions.FamilyException;
 import angers.univ.ctalarmain.qrludo.utils.ToneGeneratorSingleton;
 
 import static angers.univ.ctalarmain.qrludo.activities.MainActivity.FIRST_QR_DETECTED;
@@ -19,9 +16,6 @@ import static angers.univ.ctalarmain.qrludo.activities.MainActivity.NO_QR_DETECT
  * Created by Jules Leguy on 29/01/18.
  *
  * Default detecting strategy used while no special QRCode has been detected
- *
- * If a QRCode belonging to a family is detected and it is the first of its family, launching QRCodeFamilyDetectionModeStrategy
- * by calling startFamilyDetection(). If the detected QRCode isn't the first of its family, ignoring it.
  *
  * If a QRCodeEnsemble is detected and is the first of the current detection, launching QREnsembleDetectionStrategy by calling
  * startEnsembleDetection(). Otherwise, ignoring it.

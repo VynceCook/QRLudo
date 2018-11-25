@@ -64,7 +64,6 @@ import angers.univ.ctalarmain.qrludo.QR.model.QRFile;
 import angers.univ.ctalarmain.qrludo.QR.model.QRText;
 import angers.univ.ctalarmain.qrludo.R;
 import angers.univ.ctalarmain.qrludo.exceptions.UnhandledQRException;
-import angers.univ.ctalarmain.qrludo.utils.DecompressionXml;
 import angers.univ.ctalarmain.qrludo.utils.FileDowloader;
 import angers.univ.ctalarmain.qrludo.utils.InternetBroadcastReceiver;
 import angers.univ.ctalarmain.qrludo.utils.OnSwipeTouchListener;
@@ -774,16 +773,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                     for (int i = 0; i < barcodes.size(); i++) {
                         String rawValue = barcodes.valueAt(i).rawValue;
-                        String decodedValue = DecompressionXml.decompresser(rawValue);
                         //ignoring if the QRCode has already been recorded or ignored
-                        if (m_detectedQRCodes.isAlreadyInCollection(decodedValue) || m_detectedQRCodes.isAlreadyIgnored(decodedValue)) {
+                        if (m_detectedQRCodes.isAlreadyInCollection(rawValue) || m_detectedQRCodes.isAlreadyIgnored(rawValue)) {
                             Log.v("test", "ignoring QR");
                             break;
                         }
 
                         try {
 
-                            QRCode detectedQR = QRCodeBuilder.build(decodedValue);
+                            QRCode detectedQR = QRCodeBuilder.build(rawValue);
 
                             //If first QR detected of the current detection
                             if (m_detectionProgress == NO_QR_DETECTED) {

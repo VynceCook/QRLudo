@@ -9,6 +9,12 @@ import angers.univ.ctalarmain.qrludo.exceptions.UnhandledQRException;
 
 public class QRCodeEnsemble extends QRCode{
 
+    /**
+     *
+     * @param code QrCode Json obtenu dans la cl
+     * @param rawValue valeur initiale contenue dans le qrcode
+     * @throws UnhandledQRException
+     */
     public QRCodeEnsemble(QrCodeJson code,String rawValue) throws UnhandledQRException {
         super(code,rawValue);
 

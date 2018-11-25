@@ -34,7 +34,7 @@ public class QRCodeBuilder {
 
         // On vérfie si la chaine est encodée en base64
         if (dataQR.matches("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$")) {
-            // Start decompression
+            // Début de la décompression
             try {
                 dataQR = DecompressionJSON.decompresser(dataQR);
 
@@ -43,7 +43,7 @@ public class QRCodeBuilder {
             }
         }
         if (!dataQR.startsWith("{\"name\"")) {
-            // si la chaine trouvée n'est pas compressée et qu'elle n'est pas du json, c'est alors simplement du texte
+            // Si la chaine trouvée n'est pas compressée et qu'elle n'est pas du json, c'est alors simplement du texte
             // On rajoute le texte dans une chaine json comportement les attributs type et data
             // Le texte est alors traité comme un qrcode atomique
             dataQR = "{\"type\"=\"atomique\",\"data\"=[\"" + dataQR + "\"]}";
@@ -62,7 +62,7 @@ public class QRCodeBuilder {
             }*/
         }
 
-        if (code.getType().equalsIgnoreCase("atomique")) {
+        if (code.getType().equalsIgnoreCase("atomique")||code.getType().equalsIgnoreCase("unique")||code.getType().equalsIgnoreCase("xl")) {
             return new QRCodeAtomique(code, rawvalue);
         } else if (code.getType().equalsIgnoreCase("ensemble")) {
             return new QRCodeEnsemble(code, rawvalue);

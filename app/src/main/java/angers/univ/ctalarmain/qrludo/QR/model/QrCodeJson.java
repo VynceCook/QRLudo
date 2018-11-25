@@ -10,9 +10,9 @@ import java.util.ArrayList;
 public class QrCodeJson {
     private String name="";
     private String type="";
+
     // Ce tableau contient toute les données contenu dans la balise data
     // Ces données peuvent être sous la forme d'une chaine de caractère ou d'une nouvelle chaine de type Json
-
     private ArrayList<Object> data= new ArrayList<>();
     private String color="";
 
