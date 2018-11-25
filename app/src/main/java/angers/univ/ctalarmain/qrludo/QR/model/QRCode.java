@@ -52,7 +52,8 @@ public abstract class QRCode implements QRCodeComponent {
         }
     }
     public boolean isUrlFile(String data){
-        if(data.startsWith(("https://drive.google.com"))){
+        System.out.println(data);
+        if(data.startsWith(("{type"))){
             return true;
         }
         else

@@ -18,7 +18,7 @@ import angers.univ.ctalarmain.qrludo.exceptions.FamilyException;
  */
 public class QRCodeCollection{
 
-    //Contains QRCodeComponents, which are QRCodeAtomique, QRCodeEnsemble of FamilleQRCodesComposite
+    //Contains QRCodeComponents, which are QRCodeAtomique, QRCodeEnsemble
     private LinkedList<QRCodeComponent> m_QRList;
 
     //Contains the QRCodeComponents which have been detected but ignored (so that they can't be read anymore)
@@ -29,11 +29,7 @@ public class QRCodeCollection{
         m_QRIgnoredList = new LinkedList<>();
     }
 
-    /**
-     * adds a QRCode at the end of the list if it isn't already a member
-     * if it belongs to a family, adding it into the corresponding FamilleQRCodesComposite if exists or creating it
-     * @param qr
-     */
+
     public void addQR(QRCode qr) {
 
         Log.v("test", "appel à addQR");
@@ -46,34 +42,7 @@ public class QRCodeCollection{
 
                 Log.v("test", "le qrcode est atomique");
 
-                if (((QRCodeAtomique) qr).belongsToFamily()){
 
-                    try {
-                        boolean existingFamily = false;
-
-                        for (QRCodeComponent alreadyPresentQRComponent : m_QRList) {
-
-
-                            //Looking for a QRCodeFamily for this QR in m_QRList
-                            if (alreadyPresentQRComponent instanceof FamilleQRCodesComposite && ((FamilleQRCodesComposite) alreadyPresentQRComponent).getFamilyName().equals(((QRCodeAtomique) qr).getFamilyName())) {
-                                //adding the qr code to the already existing FamilleQRCodesComposite
-                                ((FamilleQRCodesComposite) alreadyPresentQRComponent).addQRToFamily((QRCodeAtomique) qr);
-                                existingFamily = true;
-                            }
-                        }
-
-                        //Creating the family if non-existing
-                        if (!existingFamily) {
-                            FamilleQRCodesComposite newFamily = new FamilleQRCodesComposite(((QRCodeAtomique) qr).getFamilyName());
-                            newFamily.addQRToFamily((QRCodeAtomique) qr);
-                            m_QRList.addLast(newFamily);
-                        }
-                    } catch (FamilyException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-                else{
                     //The QRCodeAtomique doesn't belong to a family : adding it directly to the list
                     m_QRList.addLast(qr);
                 }
@@ -84,9 +53,8 @@ public class QRCodeCollection{
                 Log.v("test", "Adding non QRCodeAtomique to QRCodeCollection");
             }
         }
-        else{
-        }
-    }
+
+
 
     public void addIgnoredQR(QRCode qr){
         if (!isAlreadyIgnored(qr.getRawValue())){

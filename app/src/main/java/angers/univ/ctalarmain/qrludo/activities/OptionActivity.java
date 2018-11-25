@@ -221,7 +221,9 @@ public class OptionActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if(FileDowloader.viderMemoire())
-                                Toast.makeText(OptionActivity.this, "Les données ont bien été supprimées", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(OptionActivity.this, "Les données ont bien été supprimées", Toast.LENGTH_LONG).show();
+                                else
+                                    Toast.makeText(OptionActivity.this, "Le dossier n'existe pas", Toast.LENGTH_LONG).show();
                             }
                         });
                 builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {

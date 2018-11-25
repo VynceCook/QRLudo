@@ -15,12 +15,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe8e5896-ea3d-4e48-8de0-519539693096" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/MusicJson.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeDefaultDetectionModeStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeDefaultDetectionModeStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeDetectionModeStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeDetectionModeStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeFamilyDetectionModeStrategy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/FamilleQRCodesComposite.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeAtomique.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeAtomique.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeCollection.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeCollection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeEnsemble.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeEnsemble.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QrCodeJson.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QrCodeJson.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/DecompressionJSON.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/DecompressionJSON.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/OptionActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/OptionActivity.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -47,59 +54,17 @@
       <file leaf-file-name="QRCodeDefaultDetectionModeStrategy.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeDefaultDetectionModeStrategy.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1554">
-              <caret line="43" selection-start-line="43" selection-end-line="43" />
+            <state relative-caret-position="2595">
+              <caret line="187" column="5" selection-start-line="187" selection-start-column="5" selection-end-line="187" selection-end-column="5" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="QRCodeBuilder.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="QRCodeBuilder.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeBuilder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="43" column="9" lean-forward="true" selection-start-line="43" selection-start-column="9" selection-end-line="43" selection-end-column="9" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="QRCodeCollection.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeCollection.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="188">
-              <caret line="40" selection-start-line="40" selection-end-line="40" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DecompressionJSON.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/DecompressionJSON.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" selection-start-line="2" selection-end-line="2" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DecompressionXml.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/DecompressionXml.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="6" column="20" selection-start-line="6" selection-start-column="20" selection-end-line="6" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-322">
-              <caret line="776" column="46" selection-start-line="776" selection-start-column="46" selection-end-line="776" selection-end-column="46" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="765">
+              <caret line="72" column="5" selection-start-line="72" selection-start-column="5" selection-end-line="72" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -107,8 +72,12 @@
       <file leaf-file-name="QrCodeJson.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QrCodeJson.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="12" column="26" selection-start-line="12" selection-start-column="26" selection-end-line="12" selection-end-column="26" />
+            <state relative-caret-position="135">
+              <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+              <folding>
+                <element signature="e#750#751#0" expanded="true" />
+                <element signature="e#777#778#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -116,8 +85,8 @@
       <file leaf-file-name="QRCode.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="53">
-              <caret line="19" column="16" selection-start-line="19" selection-start-column="16" selection-end-line="19" selection-end-column="16" />
+            <state relative-caret-position="765">
+              <caret line="55" column="34" selection-start-line="55" selection-start-column="34" selection-end-line="55" selection-end-column="34" />
               <folding>
                 <element signature="e#724#725#0" expanded="true" />
                 <element signature="e#757#758#0" expanded="true" />
@@ -126,24 +95,49 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="QRCodeEnsemble.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeEnsemble.java">
+      <file leaf-file-name="QRCodeAtomique.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeAtomique.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="26" column="8" selection-start-line="26" selection-start-column="8" selection-end-line="26" selection-end-column="8" />
+            <state relative-caret-position="210">
+              <caret line="34" selection-start-line="34" selection-end-line="34" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="QRCodeAtomique.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeAtomique.java">
+      <file leaf-file-name="QRCodeCollection.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeCollection.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
-              <caret line="59" column="9" selection-start-line="59" selection-start-column="9" selection-end-line="59" selection-end-column="9" />
+            <state relative-caret-position="188">
+              <caret line="20" column="73" selection-start-line="20" selection-start-column="73" selection-end-line="20" selection-end-column="73" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="QRCodeDetectionModeStrategy.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeDetectionModeStrategy.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1065">
+              <caret line="80" selection-start-line="80" selection-end-line="80" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-855">
               <folding>
-                <element signature="e#5044#5045#0" expanded="true" />
-                <element signature="e#5084#5085#0" expanded="true" />
+                <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="QRCodeEnsemble.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeEnsemble.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="135">
+              <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -2435,23 +2429,27 @@
         <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QrCodeEnsembleJson.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QrCodeAtomiqueJson.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRText.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCode.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeEnsemble.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeDefaultDetectionModeStrategy.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/FileDowloader.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_option.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout-v21/activity_option.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/OptionActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QrCodeJson.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeAtomique.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/DecompressionJSON.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/MusicJson.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCode.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/OptionActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QrCodeJson.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeBuilder.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeEnsemble.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeDefaultDetectionModeStrategy.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeCollection.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeAtomique.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeDetectionModeStrategy.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeFamilyDetectionModeStrategy.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="993" />
+    <option name="x" value="67" />
     <option name="y" value="25" />
     <option name="width" value="927" />
     <option name="height" value="1055" />
@@ -2540,6 +2538,7 @@
   <component name="PropertiesComponent">
     <property name="android.sdk.path" value="$USER_HOME$/Android/Sdk" />
     <property name="device.picker.selection" value="FPFDU16927006710" />
+    <property name="settings.editor.selected.configurable" value="copyright.profiles" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -2671,7 +2670,14 @@
       <option name="project" value="LOCAL" />
       <updated>1542818236869</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Ajout de la décompression du json et de la reconnaissance d'un qr code texte">
+      <created>1543002156323</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1543002156323</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TodoView">
@@ -2694,15 +2700,16 @@
       <window_info id="Build Variants" order="2" side_tool="true" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.329718" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.329718" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.329718" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.329718" />
       <window_info anchor="bottom" id="Logcat" order="7" weight="0.329718" />
       <window_info id="Captures" order="2" weight="0.25" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17100166" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17100166" />
       <window_info anchor="bottom" id="Build" order="7" weight="0.31019524" />
+      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.329718" />
       <window_info anchor="right" id="Gradle" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Device File Explorer" order="3" side_tool="true" />
@@ -2718,7 +2725,6 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.329718" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -2726,7 +2732,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Ajout de la reconnaissance du JSON pour les QRCodes Atomiques et Ensemble&#10;Ajout d'un bouton pour supprimer les données dans les paramètres de l'application" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ajout de la reconnaissance du JSON pour les QRCodes Atomiques et Ensemble&#10;Ajout d'un bouton pour supprimer les données dans les paramètres de l'application" />
+    <MESSAGE value="Ajout de la décompression du json et de la reconnaissance d'un qr code texte" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ajout de la décompression du json et de la reconnaissance d'un qr code texte" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2734,13 +2741,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeComponent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="17" selection-start-line="16" selection-start-column="17" selection-end-line="16" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRContent.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
@@ -2832,13 +2832,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeFamilyDetectionModeStrategy.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/exceptions/FamilyException.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
@@ -2924,33 +2917,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/FamilleQRCodesComposite.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="82" column="26" selection-start-line="82" selection-start-column="26" selection-end-line="82" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRFile.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="45" column="39" selection-start-line="45" selection-start-column="39" selection-end-line="45" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/menu_main.xml">
       <provider editor-type-id="text-editor">
         <state />
       </provider>
       <provider selected="true" editor-type-id="android-designer2">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/FileDowloader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1500">
-          <caret line="111" column="21" selection-start-line="111" selection-start-column="21" selection-end-line="111" selection-end-column="21" />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_option.xml">
@@ -2980,13 +2952,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/OptionActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2895">
-          <caret line="218" column="52" selection-start-line="218" selection-start-column="52" selection-end-line="218" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="690">
@@ -3003,49 +2968,6 @@
       </provider>
       <provider editor-type-id="android-designer2">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeDetectionModeStrategy.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="53">
-          <caret line="19" column="16" selection-start-line="19" selection-start-column="16" selection-end-line="19" selection-end-column="16" />
-          <folding>
-            <element signature="e#724#725#0" expanded="true" />
-            <element signature="e#757#758#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeEnsemble.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="26" column="8" selection-start-line="26" selection-start-column="8" selection-end-line="26" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeCollection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="188">
-          <caret line="40" selection-start-line="40" selection-end-line="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeAtomique.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="59" column="9" selection-start-line="59" selection-start-column="9" selection-end-line="59" selection-end-column="9" />
-          <folding>
-            <element signature="e#5044#5045#0" expanded="true" />
-            <element signature="e#5084#5085#0" expanded="true" />
-          </folding>
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/DecompressionJSON.java">
@@ -3065,36 +2987,149 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeDefaultDetectionModeStrategy.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRFile.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1554">
-          <caret line="43" selection-start-line="43" selection-end-line="43" />
+        <state relative-caret-position="210">
+          <caret line="19" column="11" selection-start-line="19" selection-start-column="11" selection-end-line="19" selection-end-column="11" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/FileDowloader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-322">
-          <caret line="776" column="46" selection-start-line="776" selection-start-column="46" selection-end-line="776" selection-end-column="46" />
+        <state relative-caret-position="281">
+          <caret line="102" column="30" selection-start-line="102" selection-start-column="30" selection-end-line="102" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/OptionActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="381">
+          <caret line="225" column="96" selection-start-line="225" selection-start-column="96" selection-end-line="225" selection-end-column="96" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/MusicJson.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="25" selection-start-line="5" selection-start-column="25" selection-end-line="5" selection-end-column="25" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#177#178#0" expanded="true" />
+            <element signature="e#204#205#0" expanded="true" />
+            <element signature="e#244#245#0" expanded="true" />
+            <element signature="e#276#277#0" expanded="true" />
+            <element signature="e#306#307#0" expanded="true" />
+            <element signature="e#332#333#0" expanded="true" />
+            <element signature="e#370#371#0" expanded="true" />
+            <element signature="e#400#401#0" expanded="true" />
+            <element signature="e#431#432#0" expanded="true" />
+            <element signature="e#458#459#0" expanded="true" />
+            <element signature="e#498#499#0" expanded="true" />
+            <element signature="e#530#531#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="765">
+          <caret line="55" column="34" selection-start-line="55" selection-start-column="34" selection-end-line="55" selection-end-column="34" />
+          <folding>
+            <element signature="e#724#725#0" expanded="true" />
+            <element signature="e#757#758#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QrCodeJson.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="26" selection-start-line="12" selection-start-column="26" selection-end-line="12" selection-end-column="26" />
+        <state relative-caret-position="135">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+          <folding>
+            <element signature="e#750#751#0" expanded="true" />
+            <element signature="e#777#778#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeDefaultDetectionModeStrategy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2595">
+          <caret line="187" column="5" selection-start-line="187" selection-start-column="5" selection-end-line="187" selection-end-column="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeBuilder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="43" column="9" lean-forward="true" selection-start-line="43" selection-start-column="9" selection-end-line="43" selection-end-column="9" />
+        <state relative-caret-position="765">
+          <caret line="72" column="5" selection-start-line="72" selection-start-column="5" selection-end-line="72" selection-end-column="5" />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeEnsemble.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/FamilleQRCodesComposite.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-379">
+          <caret line="31" column="4" selection-start-line="31" selection-start-column="4" selection-end-line="31" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeAtomique.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="34" selection-start-line="34" selection-end-line="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-855">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeDetectionModeStrategy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1065">
+          <caret line="80" selection-start-line="80" selection-end-line="80" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/handling/QRCodeFamilyDetectionModeStrategy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCodeCollection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="188">
+          <caret line="20" column="73" selection-start-line="20" selection-start-column="73" selection-end-line="20" selection-end-column="73" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="Copyright.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>

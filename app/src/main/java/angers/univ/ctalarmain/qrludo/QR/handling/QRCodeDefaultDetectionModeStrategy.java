@@ -38,7 +38,7 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
     public void onFirstDetectionWithTimeNotNull(QRCode detectedQR) {
 
         //Applies a family or ensemble related behaviour if necessary or launches the reading of the detected QR Code
-        if (!familyBehaviour(detectedQR, true) && !ensembleBehaviour(detectedQR, true)){
+        if (!ensembleBehaviour(detectedQR, true)){
 
             //adding it to the detected QRCodes
             m_detectedQRCodes.addQR(detectedQR);
@@ -63,7 +63,7 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
         Log.v("test", "DefaultStrategy : onNextDetectionWithTimeNotNull");
 
         //Applies a family or ensemble related behaviour if necessary or records the detected QR Code
-        if (!familyBehaviour(detectedQR, false) && !ensembleBehaviour(detectedQR, false)){
+        if (!ensembleBehaviour(detectedQR, false)){
 
             //Building QR and adding it to the detected QRCodes
             m_detectedQRCodes.addQR(detectedQR);
@@ -187,36 +187,6 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
 
     }
 
-
-    /**
-     * Starts a family detection or ignores a family QRCode if necessary
-     * If no action has been executed, returns false
-     * @param detectedQR
-     * @param isFirstQRDetected : needs to know if the QR if the first qr detected so that the info can be transmitted to startFamilyDetection
-     * @return
-     */
-    private boolean familyBehaviour(QRCode detectedQR, boolean isFirstQRDetected){
-
-        //checking if the qrcode belongs to a family and if it is the first one
-        if (isStartingFamily(detectedQR)){
-            Log.v("test", "starting family detection");
-            startFamilyDetection(detectedQR, isFirstQRDetected);
-            return true;
-        }
-        //the QRCode belongs to a family but doesn't start one
-        else if (belongsToFamily(detectedQR)){
-            //signaling the error and ignoring the QRCode
-            ToneGeneratorSingleton.getInstance().ignoredQRCodeTone();
-            m_detectedQRCodes.addIgnoredQR(detectedQR);
-            return true;
-        }
-        else{
-            Log.v("test", "no family behaviour");
-            return false;
-        }
-
-    }
-
     /**
      * Starts a ensemble detection of ignores the QRCodeEnsemble if necessary
      * If no action has been executed, returns false
@@ -251,43 +221,6 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
 
 
     /**
-     * Starting a family detection
-     *
-     * @param detectedQr
-     * @param isFirstQRDetected needs to know if the QR is the first detected or if other QR not belonging to the family have been detected before
-     *                        so that the detectionState can be set properly
-     */
-    private void startFamilyDetection(QRCode detectedQr, boolean isFirstQRDetected){
-        try {
-
-            //Family detection tone
-            ToneGeneratorSingleton.getInstance().familyDetectionTone();
-
-            //Adding the first QRCode of the family to the detected ones
-            m_detectedQRCodes.addQR(detectedQr);
-
-            //Changing curent detection state
-            if (isFirstQRDetected) {
-                m_mainActivity.setDetectionProgress(FIRST_QR_DETECTED);
-            }
-            else {
-                m_mainActivity.setDetectionProgress(MULTIPLE_QR_DETECTED);
-            }
-
-            //Launching the MultipleDetectionTimer. At its end, playing the entire detected family
-            m_mainActivity.startMultipleDetectionTimer();
-
-            //Changing detection strategy
-            m_mainActivity.setDetectionStrategy(new QRCodeFamilyDetectionModeStrategy(m_mainActivity, ((QRCodeAtomique)detectedQr).getFamilyName(), isFirstQRDetected));
-
-        } catch (FamilyException e) {
-            //Won't happen if the method is adequately used
-            e.printStackTrace();
-        }
-
-    }
-
-    /**
      * Starting a detection of QRCodeEnsemble
      *
      * @param detectedQR
@@ -309,29 +242,5 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
         //Changing detection strategy
         m_mainActivity.setDetectionStrategy(new QRCodeEnsembleDetectionModeStrategy(m_mainActivity));
     }
-
-
-    /**
-     * Checks if the QRCode is the first of a family
-     *
-     * @param detectedQR
-     * @return
-     */
-    private boolean isStartingFamily(QRCode detectedQR){
-
-        if (detectedQR instanceof QRCodeAtomique){
-            QRCodeAtomique qrAtomique = (QRCodeAtomique) detectedQR;
-            try {
-                return (qrAtomique.belongsToFamily() && qrAtomique.getFamilyRank()==1);
-            } catch (FamilyException e) {
-                //won't happen because the test has been made
-                return false;
-            }
-        }
-        else{
-            return false;
-        }
-    }
-
 
 }

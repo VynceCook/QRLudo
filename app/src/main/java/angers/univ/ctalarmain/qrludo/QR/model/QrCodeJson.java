@@ -2,6 +2,7 @@ package angers.univ.ctalarmain.qrludo.QR.model;
 
 /**
  * Created by Florian Lherbeil
+ * Classe permettant de récupérer les informations du json contenu dans le qrcode
  */
 
 import java.util.ArrayList;
@@ -9,7 +10,10 @@ import java.util.ArrayList;
 public class QrCodeJson {
     private String name="";
     private String type="";
-    private ArrayList<String> data= new ArrayList<>();
+    // Ce tableau contient toute les données contenu dans la balise data
+    // Ces données peuvent être sous la forme d'une chaine de caractère ou d'une nouvelle chaine de type Json
+
+    private ArrayList<Object> data= new ArrayList<>();
     private String color="";
 
     @Override
@@ -30,7 +34,7 @@ public class QrCodeJson {
         return type;
     }
 
-    public ArrayList<String> getData() {
+    public ArrayList<Object> getData() {
         return data;
     }
 
