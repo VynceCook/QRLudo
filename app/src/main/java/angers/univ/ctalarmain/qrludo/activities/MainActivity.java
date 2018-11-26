@@ -831,20 +831,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     /**
-     * Called in case of QR Codes belonging to a family
-     * Printing/saying the entire collection
-     */
-    public void familyMultipleReading(){
-
-        Log.v("test", "call to familyMultipleReading");
-
-        //Fetching the content of all the detected QRs
-        m_currentReading.addAll(m_detectedQRCodes.getContentAllQR());
-
-        readCurrentContent();
-    }
-
-    /**
      * Called in case of detection of QRCodeEnsemble
      * Can be called by QRCodeEnsemble at the end of a multiple detection or by the MultipleDetectionTimer if only one QRCodeEnsemble has been detected
      */

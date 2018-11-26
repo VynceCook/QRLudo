@@ -37,6 +37,7 @@ public class QRCodeBuilder {
         // On stocke la valeur brute initiale pour pouvoir effetuer la détection multiple
         String rawvalue = dataQR;
         String result;
+        System.out.println(rawvalue);
 
         // On vérfie si la chaine est encodée en base64
         if (dataQR.matches("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$")) {
@@ -49,21 +50,21 @@ public class QRCodeBuilder {
             }
         }
 
-
         // Si la chaine trouvée n'est pas compressée et qu'elle n'est pas du json, c'est alors simplement du texte
         // On rajoute le texte dans une chaine json comportement les attributs type et data
         // Le texte est alors traité comme un qrcode atomique
         if (!dataQR.startsWith("{\"name\"")) {
-            dataQR = "{\"type\"=\"atomique\",\"data\"=[\"" + dataQR + "\"]}";
+            dataQR = "{\"type\"=\"unique\",\"data\"=[\"" + dataQR + "\"]}";
         }
 
         Gson gson = new GsonBuilder().create();
         QrCodeJson code = gson.fromJson(dataQR, QrCodeJson.class);
         // Si le json est trop gros et est stocké sur le drive dans un fichier texte
         // Manque tests avec un qrcode réel
-        /*if (code.getData().get(0).toString().startsWith("{type=file")){
+
+        if (code.getData().get(0).toString().startsWith("{type=file")){
             Gson gsonUrl = new GsonBuilder().create();
-            final FileJson file = gsonUrl.fromJson(dataQR.toString(),FileJson.class);
+            final FileJson file = gsonUrl.fromJson(code.getData().get(0).toString(),FileJson.class);
             JSONDownloader downloader = new JSONDownloader(file.getUrl());
             downloader.execute();
             try {
@@ -80,9 +81,9 @@ public class QRCodeBuilder {
                 e.printStackTrace();
             }
 
-        }*/
+        }
 
-        if (code.getType().equalsIgnoreCase("atomique")) {
+        if (code.getType().equalsIgnoreCase("atomique")||code.getType().equalsIgnoreCase("unique")||code.getType().equalsIgnoreCase("xl")) {
             return new QRCodeAtomique(code, rawvalue);
         } else if (code.getType().equalsIgnoreCase("ensemble")) {
             return new QRCodeEnsemble(code, rawvalue);

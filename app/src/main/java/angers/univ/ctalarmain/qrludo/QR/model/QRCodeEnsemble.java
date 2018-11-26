@@ -13,13 +13,13 @@ public class QRCodeEnsemble extends QRCode{
      *
      * @param code QrCode Json obtenu dans la cl
      * @param rawValue valeur initiale contenue dans le qrcode
-     * @throws UnhandledQRException
+     * @throws UnhandledQRException Exception levée si le qrcode ensemble n'est pas valide
      */
     public QRCodeEnsemble(QrCodeJson code,String rawValue) throws UnhandledQRException {
         super(code,rawValue);
 
         for(Object data : code.getData()){
-            if(isUrlFile(data.toString())){
+            if(isUrlFile(data.toString())) {
                 m_content.add(new QRFile(data.toString()));
             }
             else {
