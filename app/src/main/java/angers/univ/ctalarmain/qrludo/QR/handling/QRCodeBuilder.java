@@ -9,16 +9,19 @@ import org.xml.sax.InputSource;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.concurrent.ExecutionException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import angers.univ.ctalarmain.qrludo.QR.model.FileJson;
 import angers.univ.ctalarmain.qrludo.QR.model.QRCode;
 import angers.univ.ctalarmain.qrludo.QR.model.QRCodeAtomique;
 import angers.univ.ctalarmain.qrludo.QR.model.QRCodeEnsemble;
 import angers.univ.ctalarmain.qrludo.QR.model.QrCodeJson;
 import angers.univ.ctalarmain.qrludo.exceptions.UnhandledQRException;
 import angers.univ.ctalarmain.qrludo.utils.DecompressionJSON;
+import angers.univ.ctalarmain.qrludo.utils.JSONDownloader;
 
 
 /**
@@ -28,9 +31,12 @@ import angers.univ.ctalarmain.qrludo.utils.DecompressionJSON;
  */
 public class QRCodeBuilder {
 
+    private String result;
+
     public static QRCode build(String dataQR) throws UnhandledQRException {
         // On stocke la valeur brute initiale pour pouvoir effetuer la détection multiple
         String rawvalue = dataQR;
+        String result;
 
         // On vérfie si la chaine est encodée en base64
         if (dataQR.matches("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$")) {
@@ -42,27 +48,41 @@ public class QRCodeBuilder {
                 e.printStackTrace();
             }
         }
-        if (!dataQR.startsWith("{\"name\"")) {
-            // Si la chaine trouvée n'est pas compressée et qu'elle n'est pas du json, c'est alors simplement du texte
-            // On rajoute le texte dans une chaine json comportement les attributs type et data
-            // Le texte est alors traité comme un qrcode atomique
-            dataQR = "{\"type\"=\"atomique\",\"data\"=[\"" + dataQR + "\"]}";
 
+
+        // Si la chaine trouvée n'est pas compressée et qu'elle n'est pas du json, c'est alors simplement du texte
+        // On rajoute le texte dans une chaine json comportement les attributs type et data
+        // Le texte est alors traité comme un qrcode atomique
+        if (!dataQR.startsWith("{\"name\"")) {
+            dataQR = "{\"type\"=\"atomique\",\"data\"=[\"" + dataQR + "\"]}";
         }
 
         Gson gson = new GsonBuilder().create();
-        final QrCodeJson code = gson.fromJson(dataQR, QrCodeJson.class);
-        // Si le json est trop gros et stocké sur internet
-        if (code.getType().equalsIgnoreCase("file")) {
-            // Téléchargement du fichier
-            /*try {
-                dataQR=DecompressionJSON.decompresser(dataQR);
+        QrCodeJson code = gson.fromJson(dataQR, QrCodeJson.class);
+        // Si le json est trop gros et est stocké sur le drive dans un fichier texte
+        // Manque tests avec un qrcode réel
+        /*if (code.getData().get(0).toString().startsWith("{type=file")){
+            Gson gsonUrl = new GsonBuilder().create();
+            final FileJson file = gsonUrl.fromJson(dataQR.toString(),FileJson.class);
+            JSONDownloader downloader = new JSONDownloader(file.getUrl());
+            downloader.execute();
+            try {
+                result = downloader.get();
+                dataQR = DecompressionJSON.decompresser(result);
+                Gson gsonResult = new GsonBuilder().create();
+                code = gsonResult.fromJson(dataQR,QrCodeJson.class);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
-            }*/
-        }
+            }
 
-        if (code.getType().equalsIgnoreCase("atomique")||code.getType().equalsIgnoreCase("unique")||code.getType().equalsIgnoreCase("xl")) {
+        }*/
+
+        if (code.getType().equalsIgnoreCase("atomique")) {
             return new QRCodeAtomique(code, rawvalue);
         } else if (code.getType().equalsIgnoreCase("ensemble")) {
             return new QRCodeEnsemble(code, rawvalue);

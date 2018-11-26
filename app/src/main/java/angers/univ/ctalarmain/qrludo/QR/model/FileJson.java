@@ -7,7 +7,7 @@ package angers.univ.ctalarmain.qrludo.QR.model;
 /**
  * Classe permettant de récupérer les informations sur les musiques contenues dans un json
  */
-public class MusicJson {
+public class FileJson {
     private String type="";
     private String url="";
     private String name="";

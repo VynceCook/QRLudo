@@ -28,7 +28,7 @@ public class QRCodeAtomique extends QRCode {
         for(Object data : code.getData()){
             if(isUrlFile(data.toString())){
                 Gson gson = new GsonBuilder().create();
-                final MusicJson music = gson.fromJson(data.toString(),MusicJson.class);
+                final FileJson music = gson.fromJson(data.toString(),FileJson.class);
                 if(music.getType().equalsIgnoreCase("music")){
                     String url = music.getUrl();
                     m_content.add(new QRFile(url));
