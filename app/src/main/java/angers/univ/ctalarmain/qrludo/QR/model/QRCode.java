@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Jules Leguy on 20/01/18.
+ * Modified by Florian Lherbeil
  */
 
 public abstract class QRCode implements QRCodeComponent {
@@ -52,7 +53,6 @@ public abstract class QRCode implements QRCodeComponent {
         }
     }
     public boolean isUrlFile(String data){
-        System.out.println(data);
         if(data.startsWith(("{type"))){
             return true;
         }
