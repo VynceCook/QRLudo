@@ -32,25 +32,11 @@ public class QRCodeCollection{
 
         Log.v("test", "appel à addQR");
 
-        if (!isAlreadyInCollection(qr.getRawValue())){
+        if (!isAlreadyInCollection(qr.getRawValue())) {
             Log.v("test", "appel à addQR");
-
-            //If it is a QRCodeAtomique, checking if it belongs to a family
-            if (qr instanceof QRCodeAtomique){
-
-                Log.v("test", "le qrcode est atomique");
-
-
-                    //The QRCodeAtomique doesn't belong to a family : adding it directly to the list
-                    m_QRList.addLast(qr);
-                }
-            }
-            else{
-                //It is not a QRCodeAtomique : adding it directly to the list
-                m_QRList.addLast(qr);
-                Log.v("test", "Adding non QRCodeAtomique to QRCodeCollection");
-            }
+            m_QRList.addLast(qr);
         }
+    }
 
 
 
@@ -132,6 +118,16 @@ public class QRCodeCollection{
             }
         }
 
+        return false;
+    }
+
+    public boolean isAlreadyHere(QRCodeComponent qrCodeComponent){
+        for(QRCodeComponent qr : m_QRList){
+            if (qr.equals(qrCodeComponent)){
+                return true;
+            }
+
+        }
         return false;
     }
 

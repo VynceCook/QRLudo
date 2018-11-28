@@ -35,9 +35,8 @@ public class QRCodeBuilder {
 
     public static QRCode build(String dataQR) throws UnhandledQRException {
         // On stocke la valeur brute initiale pour pouvoir effetuer la détection multiple
-        String rawvalue = dataQR;
+        final String rawvalue = dataQR;
         String result;
-        System.out.println(rawvalue);
 
         // On vérfie si la chaine est encodée en base64
         if (dataQR.matches("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$")) {

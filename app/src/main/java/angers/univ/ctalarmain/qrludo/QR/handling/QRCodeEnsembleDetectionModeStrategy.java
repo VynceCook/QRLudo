@@ -3,6 +3,8 @@ package angers.univ.ctalarmain.qrludo.QR.handling;
 import android.util.Log;
 
 import angers.univ.ctalarmain.qrludo.QR.model.QRCode;
+import angers.univ.ctalarmain.qrludo.QR.model.QRCodeCollection;
+import angers.univ.ctalarmain.qrludo.QR.model.QRCodeComponent;
 import angers.univ.ctalarmain.qrludo.QR.model.QRCodeEnsemble;
 import angers.univ.ctalarmain.qrludo.activities.MainActivity;
 import angers.univ.ctalarmain.qrludo.utils.ToneGeneratorSingleton;
@@ -14,7 +16,7 @@ public class QRCodeEnsembleDetectionModeStrategy extends QRCodeDetectionModeStra
 
     QRCodeEnsembleDetectionModeStrategy(MainActivity mainActivity) {
         super(mainActivity);
-    }
+        }
 
     /**
      * Should never be called because this strategy is set up only once a first QRCodeEnsemble is detected
@@ -30,7 +32,8 @@ public class QRCodeEnsembleDetectionModeStrategy extends QRCodeDetectionModeStra
     public void onNextDetectionWithTimeNotNull(QRCode detectedQR) {
 
         if (detectedQR instanceof QRCodeEnsemble) {
-
+            System.out.println("Ensemble Detection !");
+            System.out.println(m_detectedQRCodes.getContentAllQR().size());
             //Adding the QRCode to the detected ones
             m_detectedQRCodes.addQR(detectedQR);
 
