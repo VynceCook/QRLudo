@@ -38,6 +38,7 @@ public class QRCodeBuilder {
         final String rawvalue = dataQR;
         String result;
 
+
         // On vérfie si la chaine est encodée en base64
         if (dataQR.matches("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$")) {
             // Début de la décompression
@@ -48,7 +49,7 @@ public class QRCodeBuilder {
                 e.printStackTrace();
             }
         }
-
+        System.out.println(dataQR);
         // Si la chaine trouvée n'est pas compressée et qu'elle n'est pas du json, c'est alors simplement du texte
         // On rajoute le texte dans une chaine json comportement les attributs type et data
         // Le texte est alors traité comme un qrcode atomique
@@ -64,7 +65,7 @@ public class QRCodeBuilder {
         if (code.getData().get(0).toString().startsWith("{type=file")){
             Gson gsonUrl = new GsonBuilder().create();
             final FileJson file = gsonUrl.fromJson(code.getData().get(0).toString(),FileJson.class);
-            JSONDownloader downloader = new JSONDownloader(file.getUrl());
+            JSONDownloader downloader = new JSONDownloader(file.getUrl().toString());
             downloader.execute();
             try {
                 result = downloader.get();

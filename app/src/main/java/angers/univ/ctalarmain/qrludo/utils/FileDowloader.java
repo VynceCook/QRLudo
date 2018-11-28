@@ -25,10 +25,16 @@ public class FileDowloader extends AsyncTask {
     String m_path;
 
     public FileDowloader(String id, FileDownloaderObserverInterface user){
-        m_url = "https://drive.google.com/uc?export=download&id="+id;
+        m_url = id;
         m_user = user;
-        m_path = FileDowloader.DOWNLOAD_PATH+id+".mp3";
-        m_id= id;
+        if(id.contains("id=")) {
+            m_id = id.split("id=")[1];
+            System.out.println("here");
+        }
+        else
+            m_id=id;
+        m_path = FileDowloader.DOWNLOAD_PATH+m_id+".mp3";
+
 
         // Creating qrludo dir if doesn't exist
         File targetDir = new File(FileDowloader.DOWNLOAD_PATH);

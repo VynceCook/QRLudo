@@ -8,6 +8,7 @@ public abstract class QRContent {
 
     protected String m_content;
 
+
     public QRContent(String content){
         m_content = content;
     }

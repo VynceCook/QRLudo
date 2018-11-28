@@ -1,7 +1,10 @@
 package angers.univ.ctalarmain.qrludo.QR.model;
 
 
+import com.google.gson.internal.LinkedTreeMap;
+
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by Jules Leguy on 20/01/18.
@@ -59,6 +62,24 @@ public abstract class QRCode implements QRCodeComponent {
         else
             return false;
 
+    }
+
+    public FileJson createJsonFile(LinkedTreeMap linkedTreeMap){
+        FileJson fj = new FileJson();
+        for(Object entry : linkedTreeMap.entrySet()){
+            Map.Entry e = (Map.Entry)entry;
+            System.out.println("value : "+e.getValue().toString());
+            if(e.getKey().toString().equalsIgnoreCase("type")){
+                fj.setType(e.getValue().toString());
+            }
+            else if(e.getKey().toString().equalsIgnoreCase("name")){
+                fj.setName(e.getValue().toString());
+            }
+            else if(e.getKey().toString().equalsIgnoreCase("url")){
+                fj.setUrl(e.getValue().toString());
+            }
+        }
+        return fj;
     }
 
 }

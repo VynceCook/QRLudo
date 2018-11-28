@@ -917,7 +917,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             m_mediaPlayer.stop();
             m_mediaPlayer = new MediaPlayer();
             m_mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            m_mediaPlayer.setDataSource(FileDowloader.DOWNLOAD_PATH+m_currentReading.get(m_currentPos).getContent()+".mp3");
+            m_mediaPlayer.setDataSource(FileDowloader.DOWNLOAD_PATH+(m_currentReading.get(m_currentPos).getContent()).split("id=")[1]+".mp3");
             m_mediaPlayer.prepare();
             m_mediaPlayer.start();
 

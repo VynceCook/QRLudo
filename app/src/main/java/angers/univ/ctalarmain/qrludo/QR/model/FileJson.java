@@ -9,7 +9,7 @@ package angers.univ.ctalarmain.qrludo.QR.model;
  */
 public class FileJson {
     private String type="";
-    private String url="";
+    private Object url;
     private String name="";
 
     public String getType() {
@@ -21,7 +21,7 @@ public class FileJson {
     }
 
     public String getUrl() {
-        return url;
+        return url.toString();
     }
 
     public void setUrl(String url) {
