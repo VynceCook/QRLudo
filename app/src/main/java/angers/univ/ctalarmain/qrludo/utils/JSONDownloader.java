@@ -20,11 +20,10 @@ public class JSONDownloader extends AsyncTask<Void, Void, String> {
 
     final static String TAG = Activity.class.getName();
     private String _urlString;
-    private String _id;
 
-    public JSONDownloader(String id){
-        _urlString = "https://drive.google.com/uc?export=download&id="+id;
-        _id= id;
+
+    public JSONDownloader(String url){
+        _urlString = url;
 
     }
 

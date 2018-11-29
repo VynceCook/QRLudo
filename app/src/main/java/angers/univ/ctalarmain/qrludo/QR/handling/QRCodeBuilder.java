@@ -2,6 +2,7 @@ package angers.univ.ctalarmain.qrludo.QR.handling;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.internal.LinkedTreeMap;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -63,22 +64,23 @@ public class QRCodeBuilder {
         // Manque tests avec un qrcode réel
 
         if (code.getData().get(0).toString().startsWith("{type=file")){
-            Gson gsonUrl = new GsonBuilder().create();
-            final FileJson file = gsonUrl.fromJson(code.getData().get(0).toString(),FileJson.class);
-            JSONDownloader downloader = new JSONDownloader(file.getUrl());
-            downloader.execute();
-            try {
-                result = downloader.get();
-                dataQR = DecompressionJSON.decompresser(result);
-                Gson gsonResult = new GsonBuilder().create();
-                code = gsonResult.fromJson(dataQR,QrCodeJson.class);
+            if (code.getData().get(0) instanceof LinkedTreeMap) {
+                FileJson file = QRCode.createJsonFile((LinkedTreeMap) code.getData().get(0));
+                JSONDownloader downloader = new JSONDownloader(file.getUrl());
+                downloader.execute();
+                try {
+                    result = downloader.get();
+                    dataQR = DecompressionJSON.decompresser(result);
+                    Gson gsonResult = new GsonBuilder().create();
+                    code = gsonResult.fromJson(dataQR, QrCodeJson.class);
 
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
         }

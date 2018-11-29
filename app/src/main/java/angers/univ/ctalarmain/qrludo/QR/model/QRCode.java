@@ -68,7 +68,7 @@ public abstract class QRCode implements QRCodeComponent {
      * comme pour les musiques ou les fichiers stockés sur le drive sans passer par gson
      *
      */
-    public FileJson createJsonFile(LinkedTreeMap linkedTreeMap){
+    public static FileJson createJsonFile(LinkedTreeMap linkedTreeMap){
         FileJson fj = new FileJson();
         for(Object entry : linkedTreeMap.entrySet()){
             Map.Entry e = (Map.Entry)entry;
