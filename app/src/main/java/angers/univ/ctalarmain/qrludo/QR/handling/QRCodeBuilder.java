@@ -65,7 +65,7 @@ public class QRCodeBuilder {
         if (code.getData().get(0).toString().startsWith("{type=file")){
             Gson gsonUrl = new GsonBuilder().create();
             final FileJson file = gsonUrl.fromJson(code.getData().get(0).toString(),FileJson.class);
-            JSONDownloader downloader = new JSONDownloader(file.getUrl().toString());
+            JSONDownloader downloader = new JSONDownloader(file.getUrl());
             downloader.execute();
             try {
                 result = downloader.get();

@@ -56,14 +56,18 @@ public abstract class QRCode implements QRCodeComponent {
         }
     }
     public boolean isUrlFile(String data){
-        if(data.startsWith(("{type"))){
-            return true;
-        }
-        else
-            return false;
-
+        return data.startsWith(("{type"));
     }
 
+    /**
+     *
+     * @param linkedTreeMap
+     * @return une instance de FileJson
+     *
+     * Cette fonction permet de récupérer les valeurs contenues dans les data sous forme json
+     * comme pour les musiques ou les fichiers stockés sur le drive sans passer par gson
+     *
+     */
     public FileJson createJsonFile(LinkedTreeMap linkedTreeMap){
         FileJson fj = new FileJson();
         for(Object entry : linkedTreeMap.entrySet()){

@@ -29,30 +29,13 @@ public class QRCodeAtomique extends QRCode {
         super(code,rawValue);
         FileJson music=new FileJson();
         for(Object data : code.getData()){
-            System.out.println(data.getClass());
-            System.out.println(data.toString());
-            if(isUrlFile(data.toString())){
-                if(data instanceof LinkedTreeMap){
-                    LinkedTreeMap l = (LinkedTreeMap)data;
-                    FileJson fj = new FileJson();
-                    for(Object entry : l.entrySet()){
-                        Map.Entry e = (Map.Entry)entry;
-                        System.out.println("value : "+e.getValue().toString());
-                        if(e.getKey().toString().equalsIgnoreCase("type")){
-                            fj.setType(e.getValue().toString());
-                        }
-                        else if(e.getKey().toString().equalsIgnoreCase("name")){
-                            fj.setName(e.getValue().toString());
-                        }
-                        else if(e.getKey().toString().equalsIgnoreCase("url")){
-                            fj.setUrl(e.getValue().toString());
-                        }
+            if(isUrlFile(data.toString())) {
+                if (data instanceof LinkedTreeMap) {
+                    music = createJsonFile((LinkedTreeMap) data);
+                    if (music.getType().equalsIgnoreCase("music")) {
+                        String url = music.getUrl();
+                        m_content.add(new QRFile(url));
                     }
-                    music = fj;
-                }
-                if(music.getType().equalsIgnoreCase("music")){
-                    String url = music.getUrl();
-                    m_content.add(new QRFile(url));
                 }
             }
             else {

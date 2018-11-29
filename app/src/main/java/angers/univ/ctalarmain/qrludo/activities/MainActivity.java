@@ -911,13 +911,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         printText("Fichier audio");
 
-        Log.v("test", "source : "+FileDowloader.DOWNLOAD_PATH+m_currentReading.get(m_currentPos).getContent()+".mp3");
+        Log.v("test", "source : "+FileDowloader.DOWNLOAD_PATH+m_currentReading.get(m_currentPos).getContent().split("id=")[1]+".mp3");
         //Playing the sound
         try {
             m_mediaPlayer.stop();
             m_mediaPlayer = new MediaPlayer();
             m_mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            m_mediaPlayer.setDataSource(FileDowloader.DOWNLOAD_PATH+(m_currentReading.get(m_currentPos).getContent()).split("id=")[1]+".mp3");
+            if((m_currentReading.get(m_currentPos).getContent()).contains("id="))
+                m_mediaPlayer.setDataSource(FileDowloader.DOWNLOAD_PATH+(m_currentReading.get(m_currentPos).getContent()).split("id=")[1]+".mp3");
             m_mediaPlayer.prepare();
             m_mediaPlayer.start();
 

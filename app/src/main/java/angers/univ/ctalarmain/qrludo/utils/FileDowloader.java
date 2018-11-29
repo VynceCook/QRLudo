@@ -1,6 +1,7 @@
 package angers.univ.ctalarmain.qrludo.utils;
 
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
@@ -13,11 +14,12 @@ import java.net.URL;
 
 /**
  * Created by etudiant on 26/01/18.
+ * Modified by Florian Lherbeil
  */
 
 public class FileDowloader extends AsyncTask {
 
-    public static String DOWNLOAD_PATH = "/sdcard/qrludo/";
+    public static String DOWNLOAD_PATH = Environment.getExternalStorageDirectory().getPath()+"/qrludo/";
 
     String m_url;
     FileDownloaderObserverInterface m_user;
@@ -27,9 +29,10 @@ public class FileDowloader extends AsyncTask {
     public FileDowloader(String id, FileDownloaderObserverInterface user){
         m_url = id;
         m_user = user;
+
+        // On récupère l'id du fichier pour pouvoir lui donner un nom reconnaissable
         if(id.contains("id=")) {
             m_id = id.split("id=")[1];
-            System.out.println("here");
         }
         else
             m_id=id;
