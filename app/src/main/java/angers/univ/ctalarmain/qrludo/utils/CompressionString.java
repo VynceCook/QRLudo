@@ -17,6 +17,6 @@ public class CompressionString {
             str=str.substring(str.indexOf(".fr"));
         str=str.replace(".com","");
         byte[] encodedBytes = Base64.encodeBase64(str.getBytes());
-        return new String(encodedBytes).replace("=","");
+        return new String(encodedBytes).replace("=","").replaceAll("/","_");
     }
 }
