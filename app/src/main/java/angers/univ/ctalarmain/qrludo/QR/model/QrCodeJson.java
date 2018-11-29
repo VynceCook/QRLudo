@@ -16,6 +16,7 @@ public class QrCodeJson {
 
     private ArrayList<Object> data= new ArrayList<>();
     private String color="";
+    private String id="";
 
     @Override
     public String toString() {
@@ -24,6 +25,7 @@ public class QrCodeJson {
                 ", type='" + type + '\'' +
                 ", data=" + data +
                 ", color='" + color + '\'' +
+                ", id='" + id + '\'' +
                 '}';
     }
 
