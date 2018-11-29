@@ -34,13 +34,13 @@ public class FileDowloader extends AsyncTask {
 
 
 
-    public FileDowloader(String id, FileDownloaderObserverInterface user){
-        m_url = id;
+    public FileDowloader(String url, FileDownloaderObserverInterface user){
+        m_url = url;
         m_user = user;
         System.out.println("Compress : "+CompressionString.compress(m_url));
 
         // On compresse l'url du fichier pour pouvoir lui donner un nom reconnaissable lors du stockage
-        m_id=CompressionString.compress(id);
+        m_id=CompressionString.compress(url);
         m_path = FileDowloader.DOWNLOAD_PATH+m_id+".mp3";
 
 

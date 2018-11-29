@@ -10,8 +10,12 @@ import com.google.api.client.util.Base64;
  */
 public class CompressionString {
     public static String compress(String str) {
-        //On réduit la taille de la chaine si possible
-        str= str.replace("https://","");
+        //On réduit la taille de la chaine si possible car un nom de fichier ne doit pas être trop grand
+        if(str.contains(".com"))
+            str=str.substring(str.indexOf(".com"));
+        else if(str.contains(".fr"))
+            str=str.substring(str.indexOf(".fr"));
+        str=str.replace(".com","");
         byte[] encodedBytes = Base64.encodeBase64(str.getBytes());
         return new String(encodedBytes).replace("=","");
     }

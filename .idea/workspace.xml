@@ -15,10 +15,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fe8e5896-ea3d-4e48-8de0-519539693096" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/CompressionString.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRFile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/CompressionString.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/CompressionString.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/FileDowloader.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/FileDowloader.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -124,11 +122,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FileDowloader.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="FileDowloader.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/FileDowloader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="383">
-              <caret line="41" column="103" selection-start-line="41" selection-start-column="103" selection-end-line="41" selection-end-column="103" />
+            <state relative-caret-position="218">
+              <caret line="36" column="45" selection-start-line="36" selection-start-column="45" selection-end-line="36" selection-end-column="45" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -136,11 +134,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CompressionString.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CompressionString.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/CompressionString.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="14" column="66" selection-start-line="14" selection-start-column="66" selection-end-line="14" selection-end-column="66" />
+            <state relative-caret-position="240">
+              <caret line="16" column="50" selection-start-line="16" selection-start-column="50" selection-end-line="16" selection-end-column="50" />
             </state>
           </provider>
         </entry>
@@ -2469,8 +2467,8 @@
         <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRCode.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/activities/MainActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/QR/model/QRFile.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/FileDowloader.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/CompressionString.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/FileDowloader.java" />
       </list>
     </option>
   </component>
@@ -2752,7 +2750,14 @@
       <option name="project" value="LOCAL" />
       <updated>1543483155160</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Ajout d'un moyen de nommer les fichiers sans passer par l'id google drive">
+      <created>1543485274787</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1543485274787</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TodoView">
@@ -2812,7 +2817,8 @@
     <MESSAGE value="Gestion des json stockés sur le cloud (en commentaire)" />
     <MESSAGE value="Corrections de bugs sur les ensembles" />
     <MESSAGE value="Corrections de bugs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Corrections de bugs" />
+    <MESSAGE value="Ajout d'un moyen de nommer les fichiers sans passer par l'id google drive" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ajout d'un moyen de nommer les fichiers sans passer par l'id google drive" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -3166,16 +3172,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/FileDowloader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="383">
-          <caret line="41" column="103" selection-start-line="41" selection-start-column="103" selection-end-line="41" selection-end-column="103" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/DecompressionJSON.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
@@ -3188,8 +3184,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/CompressionString.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="66" selection-start-line="14" selection-start-column="66" selection-end-line="14" selection-end-column="66" />
+        <state relative-caret-position="240">
+          <caret line="16" column="50" selection-start-line="16" selection-start-column="50" selection-end-line="16" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/angers/univ/ctalarmain/qrludo/utils/FileDowloader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="36" column="45" selection-start-line="36" selection-start-column="45" selection-end-line="36" selection-end-column="45" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
