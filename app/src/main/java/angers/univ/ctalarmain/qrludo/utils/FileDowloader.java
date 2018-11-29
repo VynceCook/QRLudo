@@ -4,12 +4,17 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
 
+import com.google.api.client.util.Base64;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.zip.GZIPOutputStream;
 
 
 /**
@@ -26,16 +31,16 @@ public class FileDowloader extends AsyncTask {
     String m_id;
     String m_path;
 
+
+
+
     public FileDowloader(String id, FileDownloaderObserverInterface user){
         m_url = id;
         m_user = user;
+        System.out.println("Compress : "+CompressionString.compress(m_url));
 
-        // On récupère l'id du fichier pour pouvoir lui donner un nom reconnaissable
-        if(id.contains("id=")) {
-            m_id = id.split("id=")[1];
-        }
-        else
-            m_id=id;
+        // On compresse l'url du fichier pour pouvoir lui donner un nom reconnaissable lors du stockage
+        m_id=CompressionString.compress(id);
         m_path = FileDowloader.DOWNLOAD_PATH+m_id+".mp3";
 
 
