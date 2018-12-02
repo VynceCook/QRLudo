@@ -64,6 +64,7 @@ public class QRCodeBuilder {
         // Manque tests avec un qrcode réel
 
         if (code.getData().get(0).toString().startsWith("{type=file")){
+            // LinkedTreeMap est la classe qui est instanciée lorsque GSON trouve du JSON
             if (code.getData().get(0) instanceof LinkedTreeMap) {
                 FileJson file = QRCode.createJsonFile((LinkedTreeMap) code.getData().get(0));
                 JSONDownloader downloader = new JSONDownloader(file.getUrl());
