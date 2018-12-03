@@ -54,7 +54,7 @@ public class QRCodeBuilder {
         // Si la chaine trouvée n'est pas compressée et qu'elle n'est pas du json, c'est alors simplement du texte
         // On rajoute le texte dans une chaine json comportement les attributs type et data
         // Le texte est alors traité comme un qrcode atomique
-        if (!dataQR.startsWith("{\"name\"")) {
+        if (!dataQR.startsWith("{")) {
             dataQR = "{\"type\"=\"unique\",\"data\"=[\"" + dataQR + "\"]}";
         }
 
@@ -63,7 +63,7 @@ public class QRCodeBuilder {
         // Si le json est trop gros et est stocké sur le drive dans un fichier texte
         // Manque tests avec un qrcode réel
 
-        if (code.getData().get(0).toString().startsWith("{type=file")){
+        if (code.getType().equalsIgnoreCase("file")){
             // LinkedTreeMap est la classe qui est instanciée lorsque GSON trouve du JSON
             if (code.getData().get(0) instanceof LinkedTreeMap) {
                 FileJson file = QRCode.createJsonFile((LinkedTreeMap) code.getData().get(0));
