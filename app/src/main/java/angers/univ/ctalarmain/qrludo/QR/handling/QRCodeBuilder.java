@@ -21,6 +21,8 @@ import angers.univ.ctalarmain.qrludo.QR.model.FileJson;
 import angers.univ.ctalarmain.qrludo.QR.model.QRCode;
 import angers.univ.ctalarmain.qrludo.QR.model.QRCodeAtomique;
 import angers.univ.ctalarmain.qrludo.QR.model.QRCodeEnsemble;
+import angers.univ.ctalarmain.qrludo.QR.model.QRCodeQuestion;
+import angers.univ.ctalarmain.qrludo.QR.model.QRCodeReponse;
 import angers.univ.ctalarmain.qrludo.QR.model.QrCodeJson;
 import angers.univ.ctalarmain.qrludo.exceptions.UnhandledQRException;
 import angers.univ.ctalarmain.qrludo.exceptions.UnsupportedQRException;
@@ -60,6 +62,7 @@ public class QRCodeBuilder {
             dataQR = "{\"type\"=\"unique\",\"data\"=[\"" + dataQR + "\"]}";
         }
 
+        Log.v("data_qr", dataQR);
         Gson gson = new GsonBuilder().create();
         QrCodeJson code = gson.fromJson(dataQR, QrCodeJson.class);
 
@@ -99,9 +102,15 @@ public class QRCodeBuilder {
             return new QRCodeAtomique(code, rawvalue);
         } else if (code.getType().equalsIgnoreCase("ensemble")) {
             return new QRCodeEnsemble(code, rawvalue);
-        } else
-            return new QRCodeAtomique(code, rawvalue);
+        } else if(code.getType().equalsIgnoreCase("question")){
+            Log.v("scan_question", code.getType());
+            return new QRCodeQuestion(code, dataQR);
+        } else if(code.getType().equalsIgnoreCase("reponse")){
+            Log.v("scan_question", code.getType());
+            return new QRCodeReponse(code, dataQR);
+        }
 
+        return new QRCodeAtomique(code, rawvalue);
 
     }
 
