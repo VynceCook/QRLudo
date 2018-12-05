@@ -32,8 +32,7 @@ public class QRCodeEnsembleDetectionModeStrategy extends QRCodeDetectionModeStra
     public void onNextDetectionWithTimeNotNull(QRCode detectedQR) {
 
         if (detectedQR instanceof QRCodeEnsemble) {
-            System.out.println("Ensemble Detection !");
-            System.out.println(m_detectedQRCodes.getContentAllQR().size());
+
             //Adding the QRCode to the detected ones
             m_detectedQRCodes.addQR(detectedQR);
 

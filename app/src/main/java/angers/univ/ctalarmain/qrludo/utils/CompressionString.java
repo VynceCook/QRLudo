@@ -4,7 +4,7 @@ import com.google.api.client.util.Base64;
 
 /**
  * Created by Florian Lherbeil
- * Classe servant à compresser une chaine de caractère donner un nom reconnaissable aux fichers sans
+ * Classe servant à encoder une chaine de caractère en base64 pour donner un nom reconnaissable aux fichers sans
  * passer par l'id qui est propre à google drive
  * Cette chaine n'aura jamais besoin d'être décompressée
  */
