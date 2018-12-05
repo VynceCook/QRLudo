@@ -1,79 +1,71 @@
 package angers.univ.ctalarmain.qrludo.QR.model;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
-import java.io.StringReader;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.internal.LinkedTreeMap;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import java.io.FileInputStream;
+import java.util.Map;
 
 import angers.univ.ctalarmain.qrludo.exceptions.UnhandledQRException;
 
 /**
- * Created by Jules Leguy on 04/02/18.
+ * Created by Florian Lherbeil
  */
 
 public class QRCodeEnsemble extends QRCode{
 
-    public QRCodeEnsemble(String rawValue) throws UnhandledQRException {
-        super(rawValue);
-
-        try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-
-            DocumentBuilder builder = null;
-            builder = factory.newDocumentBuilder();
-
-            Document document = builder.parse(new InputSource(new StringReader(rawValue)));
-            Element rootNode = document.getDocumentElement();
-
-            NodeList nodes = rootNode.getChildNodes();
-
-            boolean contenuRead = false;
-
-            for (int i=0; i<nodes.getLength(); i++){
-
-                if (nodes.item(i).getNodeName().equals("contenu")){
-                    readContent(nodes.item(i).getChildNodes());
-                    contenuRead = true;
-                }
-            }
-
-            if (!contenuRead){
-                throw new UnhandledQRException("No <contenu> node");
-            }
-        }
-        //The string cannot be parsed as XML
-        catch (ParserConfigurationException | org.xml.sax.SAXException | java.io.IOException e) {
-            throw new UnhandledQRException("Cannot parse XML");
-        }
-
-
-    }
-
     /**
-     * Reads the content of the QRCodeEnsemble and inserts it into the attribute m_content of the superclass QRCode
-     * @param content
+     *
+     * @param code QrCode Json
+     * @param rawValue valeur initiale contenue dans le qrcode
+     * @throws UnhandledQRException Exception levée si le qrcode ensemble n'est pas valide
      */
-    private void readContent(NodeList content) throws UnhandledQRException {
+    public QRCodeEnsemble(QrCodeJson code,String rawValue) throws UnhandledQRException {
+        super(code, rawValue);
+        FileJson music;
+        for (Object data : code.getData()) {
+            if (data instanceof LinkedTreeMap) {
+                // Si on rencontre un QR Code complet dans les data, on récupère les lien qu'il contient
+                if (data.toString().startsWith("{qrcode")) {
+                    LinkedTreeMap linkedTreeMap = (LinkedTreeMap) data;
+                    for (Object entry : linkedTreeMap.entrySet()) {
+                        Map.Entry e = (Map.Entry) entry;
+                        if (e.getKey().toString().equalsIgnoreCase("qrcode")) {
+                            QrCodeJson tempcode = QRCode.createQRCode((LinkedTreeMap) e.getValue());
+                            for (Object data2 : tempcode.getData()) {
+                                if (isUrlFile(data2.toString())) {
+                                    if (data2 instanceof LinkedTreeMap) {
+                                        music = createJsonFile((LinkedTreeMap) data2);
+                                        if (music.getType().equalsIgnoreCase("music")) {
+                                            String url = music.getUrl();
+                                            m_content.add(new QRFile(url));
+                                            }
+                                    }
+                                }
+                            }
+
+                        }
+
+                    }
 
 
-        for (int i=0; i<content.getLength(); i++){
-
-            if (content.item(i).getNodeName().equals("fichier")){
-                QRFile qrFile = new QRFile(((Element)content.item(i)).getAttribute("url"));
-                m_content.add(qrFile);
-            }
-            else if (content.item(i).getNodeName().equals("texte")){
+                }
+                else {
+                    // Ancien code si jamais on décide de revenir au stockage des liens uniquement
+                    music = createJsonFile((LinkedTreeMap) data);
+                    if (music.getType().equalsIgnoreCase("music")) {
+                        String url = music.getUrl();
+                        System.out.println("url :"+url);
+                        m_content.add(new QRFile(url));
+                    }
+                }
+            } else {
                 throw new UnhandledQRException("QRCodeEnsemble cannot contain text");
             }
-
         }
-
+    }
     }
 
-}
+

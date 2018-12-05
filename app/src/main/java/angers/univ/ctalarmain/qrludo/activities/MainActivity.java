@@ -64,7 +64,7 @@ import angers.univ.ctalarmain.qrludo.QR.model.QRFile;
 import angers.univ.ctalarmain.qrludo.QR.model.QRText;
 import angers.univ.ctalarmain.qrludo.R;
 import angers.univ.ctalarmain.qrludo.exceptions.UnhandledQRException;
-import angers.univ.ctalarmain.qrludo.utils.DecompressionXml;
+import angers.univ.ctalarmain.qrludo.utils.CompressionString;
 import angers.univ.ctalarmain.qrludo.utils.FileDowloader;
 import angers.univ.ctalarmain.qrludo.utils.InternetBroadcastReceiver;
 import angers.univ.ctalarmain.qrludo.utils.OnSwipeTouchListener;
@@ -774,17 +774,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                     for (int i = 0; i < barcodes.size(); i++) {
                         String rawValue = barcodes.valueAt(i).rawValue;
-                        String decodedValue = DecompressionXml.decompresser(rawValue);
-
                         //ignoring if the QRCode has already been recorded or ignored
-                        if (m_detectedQRCodes.isAlreadyInCollection(decodedValue) || m_detectedQRCodes.isAlreadyIgnored(decodedValue)) {
+                        if (m_detectedQRCodes.isAlreadyInCollection(rawValue) || m_detectedQRCodes.isAlreadyIgnored(rawValue)) {
                             Log.v("test", "ignoring QR");
                             break;
                         }
 
                         try {
 
-                            QRCode detectedQR = QRCodeBuilder.build(decodedValue);
+                            QRCode detectedQR = QRCodeBuilder.build(rawValue);
 
                             //If first QR detected of the current detection
                             if (m_detectionProgress == NO_QR_DETECTED) {
@@ -831,20 +829,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //Fetching the content of all the detected QR but the first because it has already been read by singleReading()
         m_currentReading.addAll(m_detectedQRCodes.getContentAllQRButFirst());
 
-    }
-
-    /**
-     * Called in case of QR Codes belonging to a family
-     * Printing/saying the entire collection
-     */
-    public void familyMultipleReading(){
-
-        Log.v("test", "call to familyMultipleReading");
-
-        //Fetching the content of all the detected QRs
-        m_currentReading.addAll(m_detectedQRCodes.getContentAllQR());
-
-        readCurrentContent();
     }
 
     /**
@@ -928,13 +912,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         printText("Fichier audio");
 
-        Log.v("test", "source : "+FileDowloader.DOWNLOAD_PATH+m_currentReading.get(m_currentPos).getContent()+".mp3");
+        Log.v("test", "source : "+FileDowloader.DOWNLOAD_PATH+CompressionString.compress(m_currentReading.get(m_currentPos).getContent())+".mp3");
         //Playing the sound
         try {
             m_mediaPlayer.stop();
             m_mediaPlayer = new MediaPlayer();
             m_mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            m_mediaPlayer.setDataSource(FileDowloader.DOWNLOAD_PATH+m_currentReading.get(m_currentPos).getContent()+".mp3");
+            if((m_currentReading.get(m_currentPos).getContent()).contains("id="))
+                m_mediaPlayer.setDataSource(FileDowloader.DOWNLOAD_PATH+CompressionString.compress(m_currentReading.get(m_currentPos).getContent())+".mp3");
             m_mediaPlayer.prepare();
             m_mediaPlayer.start();
 

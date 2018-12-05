@@ -78,16 +78,6 @@ public abstract class QRCodeDetectionModeStrategy {
     public abstract void onSwipeRight();
 
 
-    /**
-     * Used by the subclasses to determine if the given QR Code belongs to a family
-     *
-     * @param detectedQR
-     * @return
-     */
-    protected boolean belongsToFamily(QRCode detectedQR){
-        return (detectedQR instanceof QRCodeAtomique && ((QRCodeAtomique) detectedQR).belongsToFamily());
-    }
-
 
 
 }

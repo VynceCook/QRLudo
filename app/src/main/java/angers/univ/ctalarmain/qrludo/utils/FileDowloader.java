@@ -1,33 +1,46 @@
 package angers.univ.ctalarmain.qrludo.utils;
 
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.Log;
 
+import com.google.api.client.util.Base64;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.zip.GZIPOutputStream;
+
 
 /**
  * Created by etudiant on 26/01/18.
+ * Modified by Florian Lherbeil
  */
 
 public class FileDowloader extends AsyncTask {
 
-    public static String DOWNLOAD_PATH = "/sdcard/qrludo/";
+    public static String DOWNLOAD_PATH = Environment.getExternalStorageDirectory().getPath()+"/qrludo/";
 
     String m_url;
     FileDownloaderObserverInterface m_user;
     String m_id;
     String m_path;
 
-    public FileDowloader(String id, FileDownloaderObserverInterface user){
-        m_url = "https://drive.google.com/uc?export=download&id="+id;
+
+
+
+    public FileDowloader(String url, FileDownloaderObserverInterface user){
+        m_url = url;
         m_user = user;
-        m_path = FileDowloader.DOWNLOAD_PATH+id+".mp3";
-        m_id= id;
+        // On compresse l'url du fichier pour pouvoir lui donner un nom reconnaissable lors du stockage
+        m_id=CompressionString.compress(url);
+        m_path = FileDowloader.DOWNLOAD_PATH+m_id+".mp3";
+
 
         // Creating qrludo dir if doesn't exist
         File targetDir = new File(FileDowloader.DOWNLOAD_PATH);
@@ -47,6 +60,7 @@ public class FileDowloader extends AsyncTask {
             URL url = new URL(m_url);
             connection = (HttpURLConnection) url.openConnection();
             connection.connect();
+            System.out.println(url.toString());
 
             // expect HTTP 200 OK, so we don't mistakenly save error report
             // instead of the file
@@ -93,6 +107,18 @@ public class FileDowloader extends AsyncTask {
      */
     public interface FileDownloaderObserverInterface {
         void onDownloadComplete();
+    }
+
+    public static boolean viderMemoire(){
+        File targetDir = new File(FileDowloader.DOWNLOAD_PATH);
+        if (targetDir.isDirectory()){
+            File[] files=targetDir.listFiles();
+            for(File f : files){
+                f.delete();
+            }
+            return true;
+        }
+        return false;
     }
 
 }
