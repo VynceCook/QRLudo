@@ -32,9 +32,6 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
 
     @Override
     public void onFirstDetectionWithTimeNotNull(QRCode detectedQR) {
-
-        Log.v("scan_question", "onfirstdetectiondefault");
-
         //Applies a family or ensemble related behaviour if necessary or launches the reading of the detected QR Code
         if (!ensembleBehaviour(detectedQR, true) && !questionReponseBehaviour(detectedQR, true)){
 
@@ -57,9 +54,6 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
 
     @Override
     public void onNextDetectionWithTimeNotNull(QRCode detectedQR) {
-
-        Log.v("scan_question", "DefaultStrategy : onNextDetectionWithTimeNotNull");
-
         //Applies a family or ensemble related behaviour if necessary or records the detected QR Code
         if (!ensembleBehaviour(detectedQR, false) && !(questionReponseBehaviour(detectedQR, false))){
 
@@ -230,8 +224,6 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
         //Checking if the detected QRCode is a QRCodeEnsemble
         if ((detectedQR instanceof QRCodeReponse) || (detectedQR instanceof QRCodeQuestion)){
 
-            Log.v("scan_question", "questionreponsebehaviour");
-
             if (isFirstQRDetected){
                 startQuestionReponseDetection(detectedQR);
                 return true;
@@ -245,7 +237,7 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
 
         }
         else {
-            Log.v("test", "no ensemble behaviour");
+            Log.v("test", "no question reponse behaviour");
             return false;
         }
 
@@ -281,7 +273,6 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
      * @param detectedQR
      */
     private void startQuestionReponseDetection(QRCode detectedQR){
-        Log.v("scan_question", "startQuestionReponseDetection");
         //Adding the QRCode to the detected ones
         m_detectedQRCodes.addQR(detectedQR);
 

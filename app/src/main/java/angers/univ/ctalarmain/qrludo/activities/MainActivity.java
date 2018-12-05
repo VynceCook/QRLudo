@@ -1177,8 +1177,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         startDetection();
     }
 
-    public void reponseFind(){
-        toSpeech("Bravo, c'est la bonne réponse", TextToSpeech.QUEUE_ADD);
+    public void reponseFind(String message){
+        toSpeech(message, TextToSpeech.QUEUE_ADD);
     }
 
     public void reponseFausse() { toSpeech("Dommage, ceci n'est pas la bonne réponse", TextToSpeech.QUEUE_ADD);}
