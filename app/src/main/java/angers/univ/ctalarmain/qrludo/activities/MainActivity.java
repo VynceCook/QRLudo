@@ -786,10 +786,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                             //If first QR detected of the current detection
                             if (m_detectionProgress == NO_QR_DETECTED) {
+                                Log.v("scan_question", "no detected qr");
                                 m_currentDetectionModeStrategy.onFirstDetectionWithTimeNotNull(detectedQR);
                             }
                             //If at least one QR has already been detected during the current detection
                             else{
+                                Log.v("scan_question", "detected qr");
                                 m_currentDetectionModeStrategy.onNextDetectionWithTimeNotNull(detectedQR);
                             }
 
@@ -1133,6 +1135,48 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     }
 
+    public void nextDetectionQuestionReponse(String message){
+        Log.v("scan_question", "next_detection");
+        //Getting back at the first state of the detection
+
+        //Cancelling current mdt if necessary
+        if (m_mdt!=null) {
+            m_mdt.cancel(true);
+        }
+
+        //Stop talking or making sound
+        makeSilence();
+
+        toSpeech(message, TextToSpeech.QUEUE_ADD);
+
+        ToneGeneratorSingleton.getInstance().startingDetectionTone();
+
+
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                //Hiding graphical elements
+                m_text_space.setVisibility(View.INVISIBLE);
+                m_contentLayout.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        //Removing the current list of QRContent
+        m_currentReading.clear();
+
+        //Removing the list of QRCodeComponents which have been created after their detection. Also removes the ignored QRCodes
+        m_detectedQRCodes.clear();
+
+        m_currentPos = 0;
+
+        //Restarting detection
+        startDetection();
+    }
+
+    public void reponseFind(){
+        toSpeech("Bravo, c'est la bonne réponse", TextToSpeech.QUEUE_ADD);
+    }
+
+    public void reponseFausse() { toSpeech("Dommage, ceci n'est pas la bonne réponse", TextToSpeech.QUEUE_ADD);}
 
     private void initializeListeners() {
 
