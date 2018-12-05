@@ -32,7 +32,6 @@ import angers.univ.ctalarmain.qrludo.utils.JSONDownloader;
  */
 public class QRCodeBuilder {
 
-    private String result;
 
     public static QRCode build(String dataQR) throws UnhandledQRException {
         // On stocke la valeur brute initiale pour pouvoir effetuer la détection multiple
@@ -63,28 +62,30 @@ public class QRCodeBuilder {
         // Si le json est trop gros et est stocké sur le drive dans un fichier texte
         // Manque tests avec un qrcode réel
 
-        if (code.getType().equalsIgnoreCase("file")){
             // LinkedTreeMap est la classe qui est instanciée lorsque GSON trouve du JSON
             if (code.getData().get(0) instanceof LinkedTreeMap) {
                 FileJson file = QRCode.createJsonFile((LinkedTreeMap) code.getData().get(0));
-                JSONDownloader downloader = new JSONDownloader(file.getUrl());
-                downloader.execute();
-                try {
-                    result = downloader.get();
-                    dataQR = DecompressionJSON.decompresser(result);
-                    Gson gsonResult = new GsonBuilder().create();
-                    code = gsonResult.fromJson(dataQR, QrCodeJson.class);
+                if (file.getType().equalsIgnoreCase("json")) {
+                    JSONDownloader downloader = new JSONDownloader(file.getUrl());
+                    downloader.execute();
+                    try {
+                        result = downloader.get();
+                        System.out.println("result : "+result);
+                        dataQR = DecompressionJSON.decompresser(result);
+                        Gson gsonResult = new GsonBuilder().create();
+                        code = gsonResult.fromJson(dataQR, QrCodeJson.class);
 
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
-        }
+
 
         if (code.getType().equalsIgnoreCase("atomique")||code.getType().equalsIgnoreCase("unique")||code.getType().equalsIgnoreCase("xl")) {
             return new QRCodeAtomique(code, rawvalue);

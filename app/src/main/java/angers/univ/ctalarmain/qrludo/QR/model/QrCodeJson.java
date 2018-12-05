@@ -41,5 +41,21 @@ public class QrCodeJson {
     public String getColor() {
         return color;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setData(ArrayList<Object> data) {
+        this.data = data;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 }
 
