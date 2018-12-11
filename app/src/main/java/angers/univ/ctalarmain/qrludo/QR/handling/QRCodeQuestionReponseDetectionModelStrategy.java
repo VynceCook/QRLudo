@@ -24,7 +24,7 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
         m_question = question;
 
         if(m_question!=null){
-            m_mainActivity.nextDetectionQuestionReponse("Veuillez scanner la bonne réponse");
+            m_mainActivity.nextDetectionQuestionReponse("");
             hand.removeCallbacks(runner);
         }
     }
@@ -40,6 +40,7 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
         if(m_question!=null){
             if(detectedQR instanceof QRCodeReponse){
                 QRCodeReponse reponse = (QRCodeReponse)detectedQR;
+                Log.v("scan_reponse", String.valueOf(reponse.getId()));
                 if(m_question.getReponses().containsKey(reponse.getId())){
                     m_mainActivity.stopDetection();
                     m_mainActivity.reponseFind(m_question.getReponses().get(((QRCodeReponse) detectedQR).getId()));
@@ -53,7 +54,7 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
                 if(!posted) {
                     posted = hand.postDelayed(runner, 1000);
                 }else{
-                    m_mainActivity.nextDetectionQuestionReponse("Veuillez scanner la bonne réponse");
+                    m_mainActivity.nextDetectionQuestionReponse("");
                     hand.removeCallbacks(runner);
                     posted = false;
                 }

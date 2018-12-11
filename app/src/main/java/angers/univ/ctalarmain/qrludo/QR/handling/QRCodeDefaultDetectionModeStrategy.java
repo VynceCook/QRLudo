@@ -225,6 +225,7 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
         if ((detectedQR instanceof QRCodeReponse) || (detectedQR instanceof QRCodeQuestion)){
 
             if (isFirstQRDetected){
+                Log.v("scan_reponse", "detected qr");
                 startQuestionReponseDetection(detectedQR);
                 return true;
             }
