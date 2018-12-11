@@ -1,5 +1,7 @@
 package angers.univ.ctalarmain.qrludo.QR.handling;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
@@ -21,6 +23,7 @@ import angers.univ.ctalarmain.qrludo.QR.model.QRCodeAtomique;
 import angers.univ.ctalarmain.qrludo.QR.model.QRCodeEnsemble;
 import angers.univ.ctalarmain.qrludo.QR.model.QrCodeJson;
 import angers.univ.ctalarmain.qrludo.exceptions.UnhandledQRException;
+import angers.univ.ctalarmain.qrludo.exceptions.UnsupportedQRException;
 import angers.univ.ctalarmain.qrludo.utils.DecompressionJSON;
 import angers.univ.ctalarmain.qrludo.utils.JSONDownloader;
 
@@ -33,7 +36,7 @@ import angers.univ.ctalarmain.qrludo.utils.JSONDownloader;
 public class QRCodeBuilder {
 
 
-    public static QRCode build(String dataQR) throws UnhandledQRException {
+    public static QRCode build(String dataQR, int current_version) throws UnhandledQRException, UnsupportedQRException {
         // On stocke la valeur brute initiale pour pouvoir effetuer la détection multiple
         final String rawvalue = dataQR;
         String result;
@@ -59,6 +62,11 @@ public class QRCodeBuilder {
 
         Gson gson = new GsonBuilder().create();
         QrCodeJson code = gson.fromJson(dataQR, QrCodeJson.class);
+
+        if(code.getVersion()>current_version){
+            throw new UnsupportedQRException("Ce QRCode ne peut pas être lu par cette application, veuillez mettre à jour QRLudo ou QRLudoGénérator");
+
+        }
         // Si le json est trop gros et est stocké sur le drive dans un fichier texte
         // Manque tests avec un qrcode réel
 

@@ -16,6 +16,8 @@ public class QrCodeJson {
     private ArrayList<Object> data= new ArrayList<>();
     private String color="";
 
+    private int version=-1;
+
     @Override
     public String toString() {
         return "QrCodeJson{" +
@@ -56,6 +58,14 @@ public class QrCodeJson {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public int getVersion(){
+        return this.version;
+    }
+
+    public void setVersion(int version){
+        this.version = version;
     }
 }
 

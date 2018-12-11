@@ -64,6 +64,7 @@ import angers.univ.ctalarmain.qrludo.QR.model.QRFile;
 import angers.univ.ctalarmain.qrludo.QR.model.QRText;
 import angers.univ.ctalarmain.qrludo.R;
 import angers.univ.ctalarmain.qrludo.exceptions.UnhandledQRException;
+import angers.univ.ctalarmain.qrludo.exceptions.UnsupportedQRException;
 import angers.univ.ctalarmain.qrludo.utils.CompressionString;
 import angers.univ.ctalarmain.qrludo.utils.FileDowloader;
 import angers.univ.ctalarmain.qrludo.utils.InternetBroadcastReceiver;
@@ -782,7 +783,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                         try {
 
-                            QRCode detectedQR = QRCodeBuilder.build(rawValue);
+                            int version = MainActivity.this.getResources().getInteger(R.integer.version_qrludo);
+                            QRCode detectedQR = QRCodeBuilder.build(rawValue, version);
 
                             //If first QR detected of the current detection
                             if (m_detectionProgress == NO_QR_DETECTED) {
@@ -796,6 +798,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                         } catch (UnhandledQRException e) {
                             ToneGeneratorSingleton.getInstance().ignoredQRCodeTone();
+                        } catch (UnsupportedQRException e) {
+                            toSpeech(e.getMessage(), TextToSpeech.QUEUE_ADD);
+                            stopDetection();
                         }
 
                     }
