@@ -1,13 +1,26 @@
 # QRLudo
-Projet du module Concrétisation Disciplinaire - Master I Informatique - Université d'Angers - 2017/2018
+Projet du module Concrétisation Disciplinaire - Master I Informatique - Université d'Angers - 2018/2019
 
-Suite du projet de fin de Master I de Corentin Talarmain (https://github.com/CorTal)
+Suite du projet de fin de Master I de [Corentin Talarmain](https://github.com/CorTal/QRLudo) et de [Jules Leguy](https://github.com/juleguy/QRLudo)
 
+Application android permettant d'interpréter les QR Codes générés par [QRLudo-Generator](https://github.com/vrahier/QRLudo-Generator/).
 
-Application android permettant d'interpréter les QR Codes générés par QRLudo-Generator (https://github.com/minitoma/QRLudo-Generator/).
+## Types de QRCodes
 
-Ces QR Codes peuvent chacun contenir plusieurs champs texte qui seront alors lus avec une voix de synthèse, ou plusieurs liens vers des fichiers mp3 qui seront alors téléchargés puis joués.
+L'application se comporte différemment selon le QRCode scanné.
 
-Les QR Codes peuvent appartenir à une "famille", signifiant qu'ils seront lus dans un ordre prédéfini, peu importe l'ordre de détection.
+### QRCode unique
 
-Les QR Codes peuvent également contenir des liens vers des fichiers qui seront téléchargés sans être joués.
+Le scan de ce type de QRCode peut posséder du texte ou des fichiers audio.
+Le texte est lu à l'aide d'une synthèse vocale, les fichiers audio sont téléchargés (s'ils ne sont pas présents sur le téléphone) puis joués.
+
+### QRCode ensemble
+
+Ces QRCodes ne contiennent que des QRCodes contenant des fichiers. Le scan de ces QRCodes entraîne le téléchargement de tous les fichiers.
+
+### QRCode Question / Réponse
+
+Pour faire fonctionner le système des questions/réponses, il faut d'abord scanner un qrcode Question. La question est alors lue par synthèse vocale. L'application attend ensuite qu'un qrcode Réponse soit scanné.
+Un message est alors lu pour indiquer si la réponse scanée est la bonne ou non.
+
+Les qrcodes Réponse peuvent être scanné pour entendre le texte de la réponse.
