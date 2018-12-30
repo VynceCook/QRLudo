@@ -103,10 +103,12 @@ public class QRCodeBuilder {
         } else if (code.getType().equalsIgnoreCase("ensemble")) {
             return new QRCodeEnsemble(code, rawvalue);
         } else if(code.getType().equalsIgnoreCase("question")){
-            Log.v("scan_question", code.getType());
+            Log.v("test_scan", code.getType());
+            Log.v("test_scan", String.valueOf(code.getVersion()));
+            Log.v("test_scan", code.getColor());
+            Log.v("test_scan", code.getData().toString());
             return new QRCodeQuestion(code, dataQR);
         } else if(code.getType().equalsIgnoreCase("reponse")){
-            Log.v("scan_question", code.getType());
             return new QRCodeReponse(code, dataQR);
         }
 

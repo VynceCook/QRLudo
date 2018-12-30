@@ -785,7 +785,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                             int version = MainActivity.this.getResources().getInteger(R.integer.version_qrludo);
                             QRCode detectedQR = QRCodeBuilder.build(rawValue, version);
-
+                            Log.v("test_scan", rawValue);
                             //If first QR detected of the current detection
                             if (m_detectionProgress == NO_QR_DETECTED) {
                                 Log.v("scan_question", "no detected qr");
@@ -793,14 +793,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                             }
                             //If at least one QR has already been detected during the current detection
                             else{
-                                Log.v("scan_question", "detected qr");
+                                Log.v("test_scan", "detected qr");
                                 m_currentDetectionModeStrategy.onNextDetectionWithTimeNotNull(detectedQR);
                             }
 
 
                         } catch (UnhandledQRException e) {
+                            Log.v("test_scan", e.getMessage());
                             ToneGeneratorSingleton.getInstance().ignoredQRCodeTone();
                         } catch (UnsupportedQRException e) {
+                            Log.v("test_scan", e.getMessage());
                             toSpeech(e.getMessage(), TextToSpeech.QUEUE_ADD);
                             stopDetection();
                         }
