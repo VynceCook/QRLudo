@@ -23,10 +23,10 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
         super(mainActivity);
         m_question = question;
 
-        if(m_question!=null){
+        /*if(m_question!=null){
             m_mainActivity.nextDetectionQuestionReponse("");
             hand.removeCallbacks(runner);
-        }
+        }*/
     }
 
     @Override
@@ -40,17 +40,16 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
         if(m_question!=null){
             if(detectedQR instanceof QRCodeReponse){
                 QRCodeReponse reponse = (QRCodeReponse)detectedQR;
-                Log.v("scan_reponse", String.valueOf(reponse.getId()));
                 if(m_question.getReponses().containsKey(reponse.getId())){
-                    m_mainActivity.stopDetection();
                     m_mainActivity.reponseFind(m_question.getReponses().get(((QRCodeReponse) detectedQR).getId()));
+                    //m_mainActivity.stopDetection();
                 } else {
-                    m_mainActivity.stopDetection();
-                    m_mainActivity.reponseFausse();
+                    m_mainActivity.reponseFind("Dommage, ceci n'est pas la bonne réponse");
+                    //m_mainActivity.stopDetection();
                 }
             }
         } else {
-            if(detectedQR instanceof QRCodeQuestion){
+            /*if(detectedQR instanceof QRCodeQuestion){
                 if(!posted) {
                     posted = hand.postDelayed(runner, 1000);
                 }else{
@@ -58,7 +57,7 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
                     hand.removeCallbacks(runner);
                     posted = false;
                 }
-            }
+            }*/
         }
     }
 

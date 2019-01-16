@@ -277,8 +277,6 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
         //Adding the QRCode to the detected ones
         m_detectedQRCodes.addQR(detectedQR);
 
-        Log.v("scan_question", detectedQR.toString());
-
         //Changing current detection state
         m_mainActivity.setDetectionProgress(FIRST_QR_DETECTED);
 

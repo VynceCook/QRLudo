@@ -785,24 +785,19 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                             int version = MainActivity.this.getResources().getInteger(R.integer.version_qrludo);
                             QRCode detectedQR = QRCodeBuilder.build(rawValue, version);
-                            Log.v("test_scan", rawValue);
                             //If first QR detected of the current detection
                             if (m_detectionProgress == NO_QR_DETECTED) {
-                                Log.v("scan_question", "no detected qr");
                                 m_currentDetectionModeStrategy.onFirstDetectionWithTimeNotNull(detectedQR);
                             }
                             //If at least one QR has already been detected during the current detection
                             else{
-                                Log.v("test_scan", "detected qr");
                                 m_currentDetectionModeStrategy.onNextDetectionWithTimeNotNull(detectedQR);
                             }
 
 
                         } catch (UnhandledQRException e) {
-                            Log.v("test_scan", e.getMessage());
                             ToneGeneratorSingleton.getInstance().ignoredQRCodeTone();
                         } catch (UnsupportedQRException e) {
-                            Log.v("test_scan", e.getMessage());
                             toSpeech(e.getMessage(), TextToSpeech.QUEUE_ADD);
                             stopDetection();
                         }
@@ -887,9 +882,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             sayTextContent();
         }
         else if (currentContent instanceof QRFile){
-
-            Log.v("test", "reading QRFile");
-
             //If the file is already downloaded, playing the m_mediaPlayer
             if (((QRFile) currentContent).isFileInMemory()){
                 playCurrentSoundContent();
@@ -1179,11 +1171,35 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         startDetection();
     }
 
-    public void reponseFind(String message){
-        toSpeech(message, TextToSpeech.QUEUE_ADD);
-    }
+    public void reponseFind(final String message){
+        final AppCompatActivity activity = this;
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
 
-    public void reponseFausse() { toSpeech("Dommage, ceci n'est pas la bonne réponse", TextToSpeech.QUEUE_ADD);}
+                //printing the text
+                printText(message);
+
+                //Using text to speech engine to say the text
+                toSpeech(message, TextToSpeech.QUEUE_ADD);
+
+
+                if(m_content_reset_time > 0) {
+                    if (m_qdc != null)
+                        m_qdc.cancel(true);
+                    m_qdc = new ContentDelayCounter();
+                    m_qdc.delegate = (QDCResponse) activity;
+                    m_qdc.execute((int)m_content_reset_time);
+                }
+
+                if(m_ttsready) {
+                    m_cameraView.setVisibility(View.INVISIBLE);
+                    m_isApplicationDetecting = false;
+                }else{
+                    cameraState = CAMERA_INACTIVE_STATE;
+                }
+            }
+        });
+    }
 
     private void initializeListeners() {
 

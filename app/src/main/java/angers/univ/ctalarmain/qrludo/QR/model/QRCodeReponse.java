@@ -9,23 +9,23 @@ import com.google.gson.JsonObject;
  */
 public class QRCodeReponse extends QRCode {
 
-    private Double m_id;
+    private String m_id;
     public QRCodeReponse(QrCodeJson code,String rawValue) {
         super(code, rawValue);
 
         JsonObject reponse = new Gson().fromJson(m_rawValue, JsonObject.class);
 
-        m_id = reponse.get("id").getAsDouble();
+        m_id = reponse.get("id").getAsString();
 
         m_content.add(new QRText(m_qrcodeJson.getName()));
 
     }
 
-    public void setId(Double id){
+    public void setId(String id){
         m_id = id;
     }
 
-    public Double getId(){
+    public String getId(){
         return m_id;
     }
 }
