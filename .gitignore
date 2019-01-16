@@ -3,3 +3,4 @@ local.properties
 .gradle/*
 app/app.iml
 *.iml
+.idea/workspace.xml

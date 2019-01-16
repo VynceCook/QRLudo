@@ -48,9 +48,12 @@ import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -884,7 +887,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         else if (currentContent instanceof QRFile){
             //If the file is already downloaded, playing the m_mediaPlayer
             if (((QRFile) currentContent).isFileInMemory()){
-                playCurrentSoundContent();
+                playCurrentSoundContent("Fichier audio");
             }
             //The file is not downloaded
             else {
@@ -906,12 +909,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     /**
      * Plays the current QRFile
      */
-    public void playCurrentSoundContent(){
+    public void playCurrentSoundContent(String textToPrint){
 
         //Stopping current text to speech speaking or sound if necessary
         makeSilence();
 
-        printText("Fichier audio");
+        printText(textToPrint);
 
         Log.v("test", "source : "+FileDowloader.DOWNLOAD_PATH+CompressionString.compress(m_currentReading.get(m_currentPos).getContent())+".mp3");
         //Playing the sound
@@ -919,8 +922,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             m_mediaPlayer.stop();
             m_mediaPlayer = new MediaPlayer();
             m_mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            if((m_currentReading.get(m_currentPos).getContent()).contains("id="))
-                m_mediaPlayer.setDataSource(FileDowloader.DOWNLOAD_PATH+CompressionString.compress(m_currentReading.get(m_currentPos).getContent())+".mp3");
+            m_mediaPlayer.setDataSource(FileDowloader.DOWNLOAD_PATH+CompressionString.compress(m_currentReading.get(m_currentPos).getContent())+".mp3");
             m_mediaPlayer.prepare();
             m_mediaPlayer.start();
 
@@ -928,6 +930,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             e.printStackTrace();
         }
 
+    }
+
+    public void pauseCurrentReading(){
+        if(m_mediaPlayer.isPlaying()){
+            m_mediaPlayer.pause();
+        }
+        else{
+            m_mediaPlayer.start();
+        }
     }
 
     /**
@@ -978,17 +989,43 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 //printing the text
                 printText(m_currentReading.get(m_currentPos).getContent());
 
-                //Using text to speech engine to say the text
-                toSpeech(m_currentReading.get(m_currentPos).getContent(), TextToSpeech.QUEUE_ADD);
+                m_ttobj.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                    @Override
+                    public void onStart(String utteranceId) {
+                    }
 
+                    @Override
+                    public void onDone(String utteranceId) {
 
-                if(m_content_reset_time > 0) {
-                    if (m_qdc != null)
-                        m_qdc.cancel(true);
-                    m_qdc = new ContentDelayCounter();
-                    m_qdc.delegate = (QDCResponse) activity;
-                    m_qdc.execute((int)m_content_reset_time);
+                        playCurrentSoundContent(m_currentReading.get(m_currentPos).getContent());
+
+                        if(m_content_reset_time > 0) {
+                            if (m_qdc != null)
+                                m_qdc.cancel(true);
+                            m_qdc = new ContentDelayCounter();
+                            m_qdc.delegate = (QDCResponse) activity;
+                            m_qdc.execute((int)m_content_reset_time);
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(String utteranceId) {
+                    }
+                });
+
+                HashMap<String, String> myHashRender = new HashMap<String, String>();
+                myHashRender.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,this.hashCode() + " ");
+
+                File file = new File(FileDowloader.DOWNLOAD_PATH + CompressionString.compress(m_currentReading.get(m_currentPos).getContent())  + ".mp3");
+                file.setReadable(true, false);
+                if(file.exists()){
+                    playCurrentSoundContent(m_currentReading.get(m_currentPos).getContent());
+                } else {
+                    int r = m_ttobj.synthesizeToFile(m_currentReading.get(m_currentPos).getContent(), myHashRender,FileDowloader.DOWNLOAD_PATH + CompressionString.compress(m_currentReading.get(m_currentPos).getContent())  + ".mp3");
+                    Log.v("tts_success", String.valueOf(r));
                 }
+
             }
         });
     }
@@ -1235,7 +1272,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 m_currentDetectionModeStrategy.onSwipeBottom();
             }
 
-
+            @Override
+            public void onLongClick() {
+                m_currentDetectionModeStrategy.onLongClick();
+            }
         });
     }
 

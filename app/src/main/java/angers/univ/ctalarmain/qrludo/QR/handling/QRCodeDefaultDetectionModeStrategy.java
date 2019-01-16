@@ -85,7 +85,7 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
     @Override
     public void onQRFileDownloadComplete() {
         //plays the newly downloaded sound
-        m_mainActivity.playCurrentSoundContent();
+        m_mainActivity.playCurrentSoundContent("Fichier audio");
     }
 
     @Override
@@ -177,6 +177,11 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
             ToneGeneratorSingleton.getInstance().errorTone();
         }
 
+    }
+
+    @Override
+    public void onLongClick() {
+        m_mainActivity.pauseCurrentReading();
     }
 
     /**

@@ -117,4 +117,9 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
         //The user cannot swipe right in case of question / reponse reading
         ToneGeneratorSingleton.getInstance().errorTone();
     }
+
+    @Override
+    public void onLongClick() {
+
+    }
 }

@@ -110,4 +110,9 @@ public class QRCodeEnsembleDetectionModeStrategy extends QRCodeDetectionModeStra
         ToneGeneratorSingleton.getInstance().errorTone();
     }
 
+    @Override
+    public void onLongClick() {
+
+    }
+
 }
