@@ -11,6 +11,7 @@ import angers.univ.ctalarmain.qrludo.activities.MainActivity;
 import angers.univ.ctalarmain.qrludo.utils.ToneGeneratorSingleton;
 
 import static angers.univ.ctalarmain.qrludo.activities.MainActivity.MULTIPLE_QR_DETECTED;
+import static angers.univ.ctalarmain.qrludo.activities.MainActivity.NO_QR_DETECTED;
 
 /**
  * Valentine Rahier
@@ -22,11 +23,6 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
     QRCodeQuestionReponseDetectionModelStrategy(MainActivity mainActivity, QRCodeQuestion question) {
         super(mainActivity);
         m_question = question;
-
-        /*if(m_question!=null){
-            m_mainActivity.nextDetectionQuestionReponse("");
-            hand.removeCallbacks(runner);
-        }*/
     }
 
     @Override
@@ -48,30 +44,7 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
                     //m_mainActivity.stopDetection();
                 }
             }
-        } else {
-            /*if(detectedQR instanceof QRCodeQuestion){
-                if(!posted) {
-                    posted = hand.postDelayed(runner, 1000);
-                }else{
-                    m_mainActivity.nextDetectionQuestionReponse("");
-                    hand.removeCallbacks(runner);
-                    posted = false;
-                }
-            }*/
         }
-    }
-
-    public void readContentQRCode(QRCode detectedQR){
-        //Building QR and adding it to the detected QRCodes
-        m_detectedQRCodes.addQR(detectedQR);
-
-        //New contentState of the activity
-        m_mainActivity.setDetectionProgress(MULTIPLE_QR_DETECTED);
-
-        //Resetting the MultipleDetectionTimer
-        m_mainActivity.startMultipleDetectionTimer();
-
-        ToneGeneratorSingleton.getInstance().QRCodeNormallyDetectedTone();
     }
 
     @Override
@@ -86,6 +59,18 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
 
     @Override
     public void onSwipeTop() {
+        if (m_mainActivity.getDetectionProgress()!=NO_QR_DETECTED){
+            //Reading again the current QRContent provided at least one QR has been detected.
+            m_mainActivity.readCurrentContent();
+        }
+        else{
+            //Signaling that the user cannot swipe top
+            ToneGeneratorSingleton.getInstance().errorTone();
+        }
+    }
+
+    @Override
+    public void onSwipeBottom() {
         //Canceling current detection or reading, and starting new detection, provided the tts is ready
         if (m_mainActivity.isTTSReady()) {
             if(!posted) {
@@ -99,11 +84,6 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
         else{
             ToneGeneratorSingleton.getInstance().errorTone();
         }
-    }
-
-    @Override
-    public void onSwipeBottom() {
-        onSwipeTop();
     }
 
     @Override
