@@ -891,7 +891,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
             //If the file is already downloaded, playing the m_mediaPlayer
             if (((QRFile) currentContent).isFileInMemory()){
-                playCurrentSoundContent();
+                playCurrentSoundContent("Fichier audio");
             }
             //The file is not downloaded
             else {
@@ -913,12 +913,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     /**
      * Plays the current QRFile
      */
-    public void playCurrentSoundContent(){
+    public void playCurrentSoundContent(String textToPrint){
 
         //Stopping current text to speech speaking or sound if necessary
         makeSilence();
 
-        printText("Fichier audio");
+        printText(textToPrint);
 
         Log.v("test", "source : "+FileDowloader.DOWNLOAD_PATH+CompressionString.compress(m_currentReading.get(m_currentPos).getContent())+".mp3");
         //Playing the sound
@@ -993,20 +993,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 //printing the text
                 printText(m_currentReading.get(m_currentPos).getContent());
 
-                //Using text to speech engine to say the text
-                //toSpeech(m_currentReading.get(m_currentPos).getContent(), TextToSpeech.QUEUE_ADD);
-                toSpeech("", TextToSpeech.QUEUE_FLUSH);
-
                 m_ttobj.setOnUtteranceProgressListener(new UtteranceProgressListener() {
                     @Override
                     public void onStart(String utteranceId) {
-                        Log.v("tts_success", "start");
                     }
 
                     @Override
                     public void onDone(String utteranceId) {
 
-                        playCurrentSoundContent();
+                        playCurrentSoundContent(m_currentReading.get(m_currentPos).getContent());
 
                         if(m_content_reset_time > 0) {
                             if (m_qdc != null)
@@ -1020,13 +1015,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                     @Override
                     public void onError(String utteranceId) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Log.v("tts_success", "error");
-
-                            }
-                        });
                     }
                 });
 
@@ -1034,8 +1022,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 myHashRender.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,this.hashCode() + " ");
 
                 File file = new File(FileDowloader.DOWNLOAD_PATH + CompressionString.compress(m_currentReading.get(m_currentPos).getContent())  + ".mp3");
+                file.setReadable(true, false);
                 if(file.exists()){
-                    playCurrentSoundContent();
+                    playCurrentSoundContent(m_currentReading.get(m_currentPos).getContent());
                 } else {
                     int r = m_ttobj.synthesizeToFile(m_currentReading.get(m_currentPos).getContent(), myHashRender,FileDowloader.DOWNLOAD_PATH + CompressionString.compress(m_currentReading.get(m_currentPos).getContent())  + ".mp3");
                     Log.v("tts_success", String.valueOf(r));
