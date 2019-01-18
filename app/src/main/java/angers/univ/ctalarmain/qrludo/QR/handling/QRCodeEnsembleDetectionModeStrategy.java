@@ -71,7 +71,6 @@ public class QRCodeEnsembleDetectionModeStrategy extends QRCodeDetectionModeStra
      */
     @Override
     public void onEndOfMultipleDetectionTimer() {
-        Log.v("test_ensemble", "end_multiple_detection");
         m_mainActivity.stopDetection();
         m_mainActivity.ensembleReading();
         m_mainActivity.setCurrentReading(m_qrCodesToRead.get(m_currentQRCode).getQRContent(), -1);
@@ -83,7 +82,6 @@ public class QRCodeEnsembleDetectionModeStrategy extends QRCodeDetectionModeStra
 
         //If all the files have been downloaded, notifying the user
         if (m_mainActivity.areAllQRFilesDownloaded()){
-            Log.v("test_ensemble", "arre fille downloaded");
             m_mainActivity.ensembleReadingCompleted();
             m_mainActivity.setCurrentReading(m_qrCodesToRead.get(m_currentQRCode).getQRContent(), -1);
         }
@@ -189,7 +187,7 @@ public class QRCodeEnsembleDetectionModeStrategy extends QRCodeDetectionModeStra
 
     @Override
     public void onLongClick() {
-
+        m_mainActivity.pauseCurrentReading();
     }
 
 }

@@ -966,9 +966,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         boolean allQRFilesDownloaded = true;
 
         for (QRContent qrContent : m_currentReading){
-            if (!((QRFile)qrContent).isFileInMemory()){
-                allQRFilesDownloaded = false;
-                break;
+            if(qrContent instanceof QRFile){
+                if (!((QRFile)qrContent).isFileInMemory()){
+                    allQRFilesDownloaded = false;
+                    break;
+                }
             }
         }
 
