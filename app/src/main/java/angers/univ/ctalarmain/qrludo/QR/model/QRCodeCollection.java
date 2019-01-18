@@ -29,11 +29,7 @@ public class QRCodeCollection{
 
 
     public void addQR(QRCode qr) {
-
-        Log.v("test", "appel à addQR");
-
         if (!isAlreadyInCollection(qr.getRawValue())) {
-            Log.v("test", "appel à addQR");
             m_QRList.addLast(qr);
         }
     }

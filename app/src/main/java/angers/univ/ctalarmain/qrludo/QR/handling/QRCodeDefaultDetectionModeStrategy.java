@@ -270,7 +270,7 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
         m_mainActivity.startMultipleDetectionTimer();
 
         //Changing detection strategy
-        m_mainActivity.setDetectionStrategy(new QRCodeEnsembleDetectionModeStrategy(m_mainActivity));
+        m_mainActivity.setDetectionStrategy(new QRCodeEnsembleDetectionModeStrategy(m_mainActivity, (QRCodeEnsemble)detectedQR));
     }
 
     /**

@@ -1,11 +1,14 @@
 package angers.univ.ctalarmain.qrludo.QR.model;
 
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
 
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.Map;
 
 import angers.univ.ctalarmain.qrludo.exceptions.UnhandledQRException;
@@ -16,6 +19,7 @@ import angers.univ.ctalarmain.qrludo.exceptions.UnhandledQRException;
 
 public class QRCodeEnsemble extends QRCode{
 
+    private ArrayList<QRCodeAtomique> m_qrcodes;
     /**
      *
      * @param code QrCode Json
@@ -24,6 +28,7 @@ public class QRCodeEnsemble extends QRCode{
      */
     public QRCodeEnsemble(QrCodeJson code,String rawValue) throws UnhandledQRException {
         super(code, rawValue);
+        m_qrcodes = new ArrayList<>();
         FileJson music;
         for (Object data : code.getData()) {
             if (data instanceof LinkedTreeMap) {
@@ -34,15 +39,11 @@ public class QRCodeEnsemble extends QRCode{
                         Map.Entry e = (Map.Entry) entry;
                         if (e.getKey().toString().equalsIgnoreCase("qrcode")) {
                             QrCodeJson tempcode = QRCode.createQRCode((LinkedTreeMap) e.getValue());
-                            for (Object data2 : tempcode.getData()) {
-                                if (isUrlFile(data2.toString())) {
-                                    if (data2 instanceof LinkedTreeMap) {
-                                        music = createJsonFile((LinkedTreeMap) data2);
-                                        if (music.getType().equalsIgnoreCase("music")) {
-                                            String url = music.getUrl();
-                                            m_content.add(new QRFile(url));
-                                            }
-                                    }
+                            QRCodeAtomique qr = new QRCodeAtomique(tempcode, tempcode.toString());
+                            m_qrcodes.add(qr);
+                            for (Object data2 : qr.getQRContent()) {
+                                if(data2 instanceof QRFile){
+                                    m_content.add((QRFile)data2);
                                 }
                             }
 
@@ -66,6 +67,10 @@ public class QRCodeEnsemble extends QRCode{
             }
         }
     }
+
+    public ArrayList<QRCodeAtomique> getQRCodes(){
+        return m_qrcodes;
     }
+}
 
 

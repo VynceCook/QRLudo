@@ -2,21 +2,33 @@ package angers.univ.ctalarmain.qrludo.QR.handling;
 
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import angers.univ.ctalarmain.qrludo.QR.model.QRCode;
+import angers.univ.ctalarmain.qrludo.QR.model.QRCodeAtomique;
 import angers.univ.ctalarmain.qrludo.QR.model.QRCodeCollection;
 import angers.univ.ctalarmain.qrludo.QR.model.QRCodeComponent;
 import angers.univ.ctalarmain.qrludo.QR.model.QRCodeEnsemble;
+import angers.univ.ctalarmain.qrludo.QR.model.QRContent;
 import angers.univ.ctalarmain.qrludo.activities.MainActivity;
 import angers.univ.ctalarmain.qrludo.utils.ToneGeneratorSingleton;
+
+import static angers.univ.ctalarmain.qrludo.activities.MainActivity.NO_QR_DETECTED;
 
 /**
  * Created by Jules Leguy on 04/02/18.
  */
 public class QRCodeEnsembleDetectionModeStrategy extends QRCodeDetectionModeStrategy {
 
-    QRCodeEnsembleDetectionModeStrategy(MainActivity mainActivity) {
+    private int m_currentQRCode;
+    private ArrayList<QRCodeAtomique> m_qrCodesToRead;
+
+    QRCodeEnsembleDetectionModeStrategy(MainActivity mainActivity, QRCodeEnsemble qrcode) {
         super(mainActivity);
-        }
+        m_currentQRCode = 0;
+        m_qrCodesToRead = qrcode.getQRCodes();
+    }
 
     /**
      * Should never be called because this strategy is set up only once a first QRCodeEnsemble is detected
@@ -59,8 +71,11 @@ public class QRCodeEnsembleDetectionModeStrategy extends QRCodeDetectionModeStra
      */
     @Override
     public void onEndOfMultipleDetectionTimer() {
+        Log.v("test_ensemble", "end_multiple_detection");
         m_mainActivity.stopDetection();
         m_mainActivity.ensembleReading();
+        m_mainActivity.setCurrentReading(m_qrCodesToRead.get(m_currentQRCode).getQRContent(), -1);
+
     }
 
     @Override
@@ -68,7 +83,9 @@ public class QRCodeEnsembleDetectionModeStrategy extends QRCodeDetectionModeStra
 
         //If all the files have been downloaded, notifying the user
         if (m_mainActivity.areAllQRFilesDownloaded()){
+            Log.v("test_ensemble", "arre fille downloaded");
             m_mainActivity.ensembleReadingCompleted();
+            m_mainActivity.setCurrentReading(m_qrCodesToRead.get(m_currentQRCode).getQRContent(), -1);
         }
 
     }
@@ -98,16 +115,76 @@ public class QRCodeEnsembleDetectionModeStrategy extends QRCodeDetectionModeStra
     }
 
     @Override
-    public void onSwipeLeft()
-    {
-        //Same behaviour as onSwipeBottom
-        onSwipeBottom();
+    public void onSwipeLeft() {
+        //Can only swipe left if at least one QR has been printed/detected (equivalent in the default detection mode)
+        if (m_mainActivity.getDetectionProgress() != NO_QR_DETECTED) {
+
+            //If the application is still detecting and the user has already reached the last currently available QRContent, cannot swipe left
+            if (!(m_mainActivity.isApplicationDetecting() && m_mainActivity.getCurrentPos() == m_mainActivity.getContentSize() - 1)) {
+
+                if (m_mainActivity.getCurrentPos()==m_mainActivity.getContentSize()-1){
+                    //Ending the reading if the user had already reached the last QRContent
+                    if(m_currentQRCode == m_qrCodesToRead.size() - 1){
+                        ToneGeneratorSingleton.getInstance().errorTone();
+                    } else{
+                        m_currentQRCode++;
+                        m_mainActivity.setCurrentReading(m_qrCodesToRead.get(m_currentQRCode).getQRContent(), -1);
+                        this.onSwipeLeft();
+                    }
+                }
+                else{
+                    //Reading the next QRContent
+                    m_mainActivity.incrementCurrentPos();
+                    //If the app is waiting to be notified by the current QRFile of the end of its downloading, unregister as listener
+                    m_mainActivity.unregisterToQRFile();
+                    m_mainActivity.readCurrentContent();
+
+                    if (m_mainActivity.getCurrentPos()==m_mainActivity.getContentSize()-1){
+                        //Notifying the user if he has just reached the last QRContent
+                        ToneGeneratorSingleton.getInstance().lastQRCodeReadTone();
+                    }
+                }
+
+
+            } else {
+                ToneGeneratorSingleton.getInstance().errorTone();
+            }
+        } else {
+            ToneGeneratorSingleton.getInstance().errorTone();
+        }
     }
 
     @Override
     public void onSwipeRight() {
-        //The user cannot swipe right in case of ensemble reading
-        ToneGeneratorSingleton.getInstance().errorTone();
+        //Can only swipe right if at least one QR has been printed/detected (equivalent in the default detection mode)
+        if (m_mainActivity.getDetectionProgress()!=NO_QR_DETECTED){
+
+            if (m_mainActivity.getCurrentPos()==0){
+                //Notifying the user that he cannot swipe right because the current QRContent is the first
+                ToneGeneratorSingleton.getInstance().firstQRCodeReadTone();
+                if(m_currentQRCode == 0){
+                    ToneGeneratorSingleton.getInstance().errorTone();
+                } else {
+                    m_currentQRCode--;
+                    List<QRContent> newList = m_qrCodesToRead.get(m_currentQRCode).getQRContent();
+                    m_mainActivity.setCurrentReading(newList, newList.size());
+                    this.onSwipeRight();
+                }
+            }
+            else{
+                if(m_mainActivity.getCurrentPos() != m_qrCodesToRead.get(m_currentQRCode).getQRContent().size()){
+                    //If the app is waiting to be notified by the current QRFile of the end of its downloading, unregister as listener
+                    m_mainActivity.unregisterToQRFile();
+                }
+
+                //Reading the previous QRContent
+                m_mainActivity.decrementCurrentPos();
+                m_mainActivity.readCurrentContent();
+            }
+        }
+        else{
+            ToneGeneratorSingleton.getInstance().errorTone();
+        }
     }
 
     @Override

@@ -906,6 +906,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
+    public void readAllContent(){
+        for(m_currentPos = 0; m_currentPos<m_currentReading.size();m_currentPos++){
+            readCurrentContent();
+        }
+    }
+
     /**
      * Plays the current QRFile
      */
@@ -1169,43 +1175,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //Restarting detection
         startDetection();
 
-    }
-
-    public void nextDetectionQuestionReponse(String message){
-        Log.v("scan_question", "next_detection");
-        //Getting back at the first state of the detection
-
-        //Cancelling current mdt if necessary
-        if (m_mdt!=null) {
-            m_mdt.cancel(true);
-        }
-
-        //Stop talking or making sound
-        makeSilence();
-
-        toSpeech(message, TextToSpeech.QUEUE_ADD);
-
-        ToneGeneratorSingleton.getInstance().startingDetectionTone();
-
-
-        this.runOnUiThread(new Runnable() {
-            public void run() {
-                //Hiding graphical elements
-                m_text_space.setVisibility(View.INVISIBLE);
-                m_contentLayout.setVisibility(View.INVISIBLE);
-            }
-        });
-
-        //Removing the current list of QRContent
-        m_currentReading.clear();
-
-        //Removing the list of QRCodeComponents which have been created after their detection. Also removes the ignored QRCodes
-        m_detectedQRCodes.clear();
-
-        m_currentPos = 0;
-
-        //Restarting detection
-        startDetection();
     }
 
     public void reponseFind(final String message){
@@ -1695,6 +1664,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     public void decrementCurrentPos(){
         m_currentPos--;
+    }
+
+    public void setCurrentReading(List<QRContent> contents, int currentPos){
+        m_currentReading = contents;
+        m_currentPos = currentPos;
     }
 
     public int getContentSize(){
