@@ -48,6 +48,8 @@ import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
+import org.w3c.dom.Text;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -1031,7 +1033,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     playCurrentSoundContent(m_currentReading.get(m_currentPos).getContent());
                 } else {
                     int r = m_ttobj.synthesizeToFile(m_currentReading.get(m_currentPos).getContent(), myHashRender,FileDowloader.DOWNLOAD_PATH + CompressionString.compress(m_currentReading.get(m_currentPos).getContent())  + ".mp3");
-                    Log.v("tts_success", String.valueOf(r));
                 }
 
             }
@@ -1179,6 +1180,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     }
 
+    public void readQuestion(final String question){
+        final AppCompatActivity activity = this;
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+
+                //printing the text
+                printText(question);
+
+                //Using text to speech engine to say the text
+                toSpeech(question, TextToSpeech.QUEUE_ADD);
+            }
+        });
+    }
+
     public void reponseFind(final String message){
         final AppCompatActivity activity = this;
         activity.runOnUiThread(new Runnable() {
@@ -1189,7 +1204,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                 //Using text to speech engine to say the text
                 toSpeech(message, TextToSpeech.QUEUE_ADD);
-
 
                 if(m_content_reset_time > 0) {
                     if (m_qdc != null)
@@ -1545,6 +1559,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private void toSpeech(String str, int queue) {
 
+        Log.v("double_question", str);
         AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         if (audioManager !=null){
             if(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) == 0){

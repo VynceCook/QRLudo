@@ -227,10 +227,9 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
     private boolean questionReponseBehaviour(QRCode detectedQR, boolean isFirstQRDetected){
 
         //Checking if the detected QRCode is a QRCodeEnsemble
-        if ((detectedQR instanceof QRCodeReponse) || (detectedQR instanceof QRCodeQuestion)){
+        if ((detectedQR instanceof QRCodeQuestion)){
 
             if (isFirstQRDetected){
-                Log.v("scan_reponse", "detected qr");
                 startQuestionReponseDetection(detectedQR);
                 return true;
             }
@@ -286,7 +285,7 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
         m_mainActivity.setDetectionProgress(FIRST_QR_DETECTED);
 
         //Reading the QR
-        m_mainActivity.singleReading();
+        m_mainActivity.readQuestion(((QRCodeQuestion)detectedQR).getQuestionText());
 
         //Launching the MultipleDetectionTimer
         m_mainActivity.startMultipleDetectionTimer();

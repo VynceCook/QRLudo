@@ -30,6 +30,10 @@ public class QRCodeQuestion extends QRCode {
         m_content.add(new QRText(m_qrcodeJson.getName()));
     }
 
+    public String getQuestionText(){
+        return m_qrcodeJson.getName();
+    }
+
     public Map<String, String> getReponses(){
         return m_reponses;
     }

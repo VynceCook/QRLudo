@@ -21,6 +21,10 @@ public class QRCodeReponse extends QRCode {
 
     }
 
+    public String getReponseText(){
+        return m_qrcodeJson.getName();
+    }
+
     public void setId(String id){
         m_id = id;
     }
