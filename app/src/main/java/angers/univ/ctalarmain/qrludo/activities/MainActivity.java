@@ -1261,6 +1261,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             public void onLongClick() {
                 m_currentDetectionModeStrategy.onLongClick();
             }
+
+            public void onDoubleClick() { m_currentDetectionModeStrategy.onDoubleClick();}
         });
     }
 

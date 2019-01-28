@@ -19,10 +19,12 @@ import static angers.univ.ctalarmain.qrludo.activities.MainActivity.NO_QR_DETECT
 public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetectionModeStrategy {
 
     private QRCodeQuestion m_question;
+    private boolean scan_reponse;
 
     QRCodeQuestionReponseDetectionModelStrategy(MainActivity mainActivity, QRCodeQuestion question) {
         super(mainActivity);
         m_question = question;
+        scan_reponse = false;
     }
 
     @Override
@@ -34,7 +36,7 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
     @Override
     public void onNextDetectionWithTimeNotNull(QRCode detectedQR) {
         if(m_question!=null){
-            if(detectedQR instanceof QRCodeReponse){
+            if((detectedQR instanceof QRCodeReponse) && scan_reponse){
                 QRCodeReponse reponse = (QRCodeReponse)detectedQR;
                 if(m_question.getReponses().containsKey(reponse.getId())){
                     m_mainActivity.reponseFind(m_question.getReponses().get(((QRCodeReponse) detectedQR).getId()));
@@ -60,8 +62,9 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
     @Override
     public void onSwipeTop() {
         if (m_mainActivity.getDetectionProgress()!=NO_QR_DETECTED){
-            //Reading again the current QRContent provided at least one QR has been detected.
-            m_mainActivity.readCurrentContent();
+            if(m_question != null){
+                m_mainActivity.readQuestion(m_question.getQuestionText());
+            }
         }
         else{
             //Signaling that the user cannot swipe top
@@ -88,8 +91,8 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
 
     @Override
     public void onSwipeLeft() {
-        //The user cannot swipe right in case of question /reponse reading
-        ToneGeneratorSingleton.getInstance().errorTone();
+        scan_reponse = true;
+        m_mainActivity.readQuestion("Détection de la réponse");
     }
 
     @Override
@@ -101,5 +104,10 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
     @Override
     public void onLongClick() {
 
+    }
+
+    @Override
+    public void onDoubleClick() {
+        
     }
 }

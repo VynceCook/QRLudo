@@ -82,6 +82,11 @@ public abstract class QRCodeDetectionModeStrategy {
      */
     public abstract void onLongClick();
 
+    /**
+     * Called when the user double tap on the screen
+     */
+    public abstract void onDoubleClick();
+
 
 
 

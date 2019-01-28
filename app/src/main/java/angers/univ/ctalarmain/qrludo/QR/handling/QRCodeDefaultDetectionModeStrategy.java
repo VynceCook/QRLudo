@@ -184,6 +184,11 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
         m_mainActivity.pauseCurrentReading();
     }
 
+    @Override
+    public void onDoubleClick() {
+        m_mainActivity.pauseCurrentReading();
+    }
+
     /**
      * Starts a ensemble detection of ignores the QRCodeEnsemble if necessary
      * If no action has been executed, returns false

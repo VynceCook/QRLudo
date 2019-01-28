@@ -190,4 +190,9 @@ public class QRCodeEnsembleDetectionModeStrategy extends QRCodeDetectionModeStra
         m_mainActivity.pauseCurrentReading();
     }
 
+    @Override
+    public void onDoubleClick() {
+        m_mainActivity.pauseCurrentReading();
+    }
+
 }
