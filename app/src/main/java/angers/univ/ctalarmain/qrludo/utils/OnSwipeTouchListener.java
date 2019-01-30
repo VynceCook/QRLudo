@@ -33,11 +33,6 @@ public class OnSwipeTouchListener implements OnTouchListener {
         public boolean onDown(MotionEvent e) {
             return true;
         }
-        
-        @Override
-        public void onLongPress(MotionEvent e){
-            onLongClick();
-        }
 
         @Override
         public boolean onDoubleTap(MotionEvent e) {
@@ -74,10 +69,6 @@ public class OnSwipeTouchListener implements OnTouchListener {
             }
             return result;
         }
-    }
-
-
-    public void onLongClick() {
     }
 
     public void onDoubleClick(){

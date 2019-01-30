@@ -78,11 +78,6 @@ public abstract class QRCodeDetectionModeStrategy {
     public abstract void onSwipeRight();
 
     /**
-     * Called when the user press the screen
-     */
-    public abstract void onLongClick();
-
-    /**
      * Called when the user double tap on the screen
      */
     public abstract void onDoubleClick();

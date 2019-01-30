@@ -102,11 +102,6 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
     }
 
     @Override
-    public void onLongClick() {
-
-    }
-
-    @Override
     public void onDoubleClick() {
         
     }

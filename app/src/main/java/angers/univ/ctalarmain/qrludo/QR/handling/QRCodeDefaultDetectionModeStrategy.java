@@ -180,11 +180,6 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
     }
 
     @Override
-    public void onLongClick() {
-        m_mainActivity.pauseCurrentReading();
-    }
-
-    @Override
     public void onDoubleClick() {
         m_mainActivity.pauseCurrentReading();
     }

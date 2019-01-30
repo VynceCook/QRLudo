@@ -1257,11 +1257,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 m_currentDetectionModeStrategy.onSwipeBottom();
             }
 
-            @Override
-            public void onLongClick() {
-                m_currentDetectionModeStrategy.onLongClick();
-            }
-
             public void onDoubleClick() { m_currentDetectionModeStrategy.onDoubleClick();}
         });
     }
