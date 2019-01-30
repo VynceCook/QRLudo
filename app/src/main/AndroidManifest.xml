@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="angers.univ.ctalarmain.qrludo">
+    package="fr.angers.univ.qrludo">
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -35,15 +35,15 @@
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
 
-        <activity android:name="angers.univ.ctalarmain.qrludo.activities.MainActivity" android:screenOrientation="portrait">
+        <activity android:name="fr.angers.univ.qrludo.activities.MainActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="angers.univ.ctalarmain.qrludo.activities.OptionActivity" />
+        <activity android:name="fr.angers.univ.qrludo.activities.OptionActivity" />
 
-        <receiver android:name=".utils.InternetBroadcastReceiver">
+        <receiver android:name="fr.angers.univ.qrludo.utils.InternetBroadcastReceiver">
             android:enabled="true"
             android:exported="true" >
             <intent-filter>

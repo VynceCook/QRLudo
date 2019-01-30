@@ -7,3 +7,5 @@ app/app.iml
 gradle/*
 build.gradle
 gradle.properties
+app/release/*
+build/*
