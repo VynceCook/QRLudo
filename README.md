@@ -1,9 +1,11 @@
 # QRLudo
-Projet du module Concrétisation Disciplinaire - Master I Informatique - Université d'Angers - 2018/2019
 
-Suite du projet de fin de Master I de [Corentin Talarmain](https://github.com/CorTal/QRLudo) et de [Jules Leguy](https://github.com/juleguy/QRLudo)
+QR Ludo est un lecteur de QR codes qui permet d'entendre le contenu des QR codes scannés. Cette application mobile est dédiée au personnes atteintes de déficiences visuelles. 
+Elle sert principalement de support de cours pour des élèves aveugles et mal-voyants.
 
-Application android permettant d'interpréter les QR Codes générés par [QRLudo-Generator](https://github.com/vrahier/QRLudo-Generator/).
+Les QR codes à utiliser avec QR Ludo doivent être générés avec l'application de bureau QR Ludo Generateur (disponible [ici](https://github.com/univ-angers/QRLudo-Generator/))
+
+QR Ludo est disponible en téléchargement sur le Google Play Store.
 
 ## Types de QRCodes
 
@@ -24,3 +26,11 @@ Pour faire fonctionner le système des questions/réponses, il faut d'abord scan
 Un message est alors lu pour indiquer si la réponse scanée est la bonne ou non.
 
 Les qrcodes Réponse peuvent être scanné pour entendre le texte de la réponse.
+
+
+## Contexte du développement
+Projet du module Concrétisation Disciplinaire - Master I Informatique - Université d'Angers - 2018/2019
+
+Suite du projet de fin de Master I de [Corentin Talarmain](https://github.com/CorTal/QRLudo) et de [Jules Leguy](https://github.com/juleguy/QRLudo)
+
+Application android permettant d'interpréter les QR Codes générés par [QRLudo-Generator](https://github.com/vrahier/QRLudo-Generator/).
