@@ -1,4 +1,4 @@
-# Règles de confidentialité
+# Règles de confidentialité de QR Ludo
 
 ## Appareil photo
 Scan des QR Codes (aucune photos ou vidéos ne sont prises et aucune données ne sont envoyés via internet).
