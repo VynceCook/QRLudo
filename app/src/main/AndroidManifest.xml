@@ -21,7 +21,7 @@
 
 
     <uses-sdk
-        android:maxSdkVersion="23"
+        android:maxSdkVersion="27"
         />
 
     <application
