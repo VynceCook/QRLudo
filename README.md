@@ -27,10 +27,9 @@ Un message est alors lu pour indiquer si la réponse scanée est la bonne ou non
 
 Les qrcodes Réponse peuvent être scanné pour entendre le texte de la réponse.
 
-
 ## Contexte du développement
-Projet du module Concrétisation Disciplinaire - Master I Informatique - Université d'Angers - 2018/2019
+Ce projet a eu lieu dans le cadre des modules d'enseignement Management de Projet et Concrétisation Disciplinaire suivis par les étudiants de Master 2 Informatique ACDI (Analyse, Conception et Développement Informatique) et de Master 1 Informatique de l'Université d'Angers de l'année universitaire 2018/2019.
 
-Suite du projet de fin de Master I de [Corentin Talarmain](https://github.com/CorTal/QRLudo) et de [Jules Leguy](https://github.com/juleguy/QRLudo)
+## Règles de confidentialité
 
-Application android permettant d'interpréter les QR Codes générés par [QRLudo-Generator](https://github.com/vrahier/QRLudo-Generator/).
+Disponibles [ici](https://github.com/univ-angers/QRLudo/blob/master/regles_confidentialite.md)
