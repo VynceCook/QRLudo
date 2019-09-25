@@ -1,4 +1,4 @@
-# QRLudo
+# QRLudo test
 
 QR Ludo est un lecteur de QR codes qui permet d'entendre le contenu des QR codes scannés. Cette application mobile est dédiée au personnes atteintes de déficiences visuelles. 
 Elle sert principalement de support de cours pour des élèves aveugles et mal-voyants.
