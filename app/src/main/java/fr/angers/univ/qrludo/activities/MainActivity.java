@@ -48,9 +48,14 @@ import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -996,44 +1001,77 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 //printing the text
                 printText(m_currentReading.get(m_currentPos).getContent());
 
-                m_ttobj.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-                    @Override
-                    public void onStart(String utteranceId) {
-                    }
+                //Check and Launch Web Site
+                if (m_currentReading.get(m_currentPos).getContent().startsWith("http://")) {
+                    Log.i("Web", "######################### WebSite trouvé ###########################################");
+                    openWebSite(m_currentReading.get(m_currentPos).getContent());
+                } else {
 
-                    @Override
-                    public void onDone(String utteranceId) {
-
-                        playCurrentSoundContent(m_currentReading.get(m_currentPos).getContent());
-
-                        if(m_content_reset_time > 0) {
-                            if (m_qdc != null)
-                                m_qdc.cancel(true);
-                            m_qdc = new ContentDelayCounter();
-                            m_qdc.delegate = (QDCResponse) activity;
-                            m_qdc.execute((int)m_content_reset_time);
+                    m_ttobj.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                        @Override
+                        public void onStart(String utteranceId) {
                         }
 
+                        @Override
+                        public void onDone(String utteranceId) {
+
+                            playCurrentSoundContent(m_currentReading.get(m_currentPos).getContent());
+
+                            if (m_content_reset_time > 0) {
+                                if (m_qdc != null)
+                                    m_qdc.cancel(true);
+                                m_qdc = new ContentDelayCounter();
+                                m_qdc.delegate = (QDCResponse) activity;
+                                m_qdc.execute((int) m_content_reset_time);
+                            }
+
+                        }
+
+                        @Override
+                        public void onError(String utteranceId) {
+                        }
+                    });
+
+                    HashMap<String, String> myHashRender = new HashMap<String, String>();
+                    myHashRender.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, this.hashCode() + " ");
+
+                    File file = new File(FileDowloader.DOWNLOAD_PATH + CompressionString.compress(m_currentReading.get(m_currentPos).getContent()) + ".mp3");
+                    file.setReadable(true, false);
+                    if (file.exists()) {
+                        playCurrentSoundContent(m_currentReading.get(m_currentPos).getContent());
+                    } else {
+                        int r = m_ttobj.synthesizeToFile(m_currentReading.get(m_currentPos).getContent(), myHashRender, FileDowloader.DOWNLOAD_PATH + CompressionString.compress(m_currentReading.get(m_currentPos).getContent()) + ".mp3");
                     }
 
-                    @Override
-                    public void onError(String utteranceId) {
-                    }
-                });
-
-                HashMap<String, String> myHashRender = new HashMap<String, String>();
-                myHashRender.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,this.hashCode() + " ");
-
-                File file = new File(FileDowloader.DOWNLOAD_PATH + CompressionString.compress(m_currentReading.get(m_currentPos).getContent())  + ".mp3");
-                file.setReadable(true, false);
-                if(file.exists()){
-                    playCurrentSoundContent(m_currentReading.get(m_currentPos).getContent());
-                } else {
-                    int r = m_ttobj.synthesizeToFile(m_currentReading.get(m_currentPos).getContent(), myHashRender,FileDowloader.DOWNLOAD_PATH + CompressionString.compress(m_currentReading.get(m_currentPos).getContent())  + ".mp3");
                 }
-
             }
         });
+    }
+
+    private void openWebSite(String adresse){
+        BufferedReader br;
+
+        try{
+            Log.i("Web","Test");
+            URL url = new URL(adresse);
+
+            URLConnection con=url.openConnection();
+            con.connect();
+            Log.i("Web","Test2");
+            InputStream input = con.getInputStream();
+
+            //Autre Méthode de connexion par BufferedReader
+            //BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+
+        } catch (MalformedURLException e) {
+            Log.i("Web", "Exception MalformedURLException");
+            e.printStackTrace();
+        } catch (IOException e) {
+            Log.i("Web", "Exception IOException");
+            e.printStackTrace();
+        }
+
     }
 
     /**
