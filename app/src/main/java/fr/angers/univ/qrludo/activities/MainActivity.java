@@ -48,14 +48,9 @@ import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -79,6 +74,8 @@ import fr.angers.univ.qrludo.utils.OnSwipeTouchListener;
 import fr.angers.univ.qrludo.utils.QDCResponse;
 import fr.angers.univ.qrludo.utils.ContentDelayCounter;
 import fr.angers.univ.qrludo.utils.ToneGeneratorSingleton;
+import fr.angers.univ.qrludo.utils.UrlContentCallback;
+import fr.angers.univ.qrludo.utils.UrlContentDownloader;
 
 
 /**
@@ -124,7 +121,12 @@ import fr.angers.univ.qrludo.utils.ToneGeneratorSingleton;
  *
  *
  */
-public class MainActivity extends AppCompatActivity implements SensorEventListener, QDCResponse, QRFile.QRFileObserverInterface, InternetBroadcastReceiver.InternetBroadcastReceiverObserverInterface{
+public class MainActivity extends AppCompatActivity
+        implements SensorEventListener,
+        QDCResponse,
+        QRFile.QRFileObserverInterface,
+        InternetBroadcastReceiver.InternetBroadcastReceiverObserverInterface,
+        UrlContentCallback {
 
     /**
      * The name of the file containing the user's settings.
@@ -230,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private float m_content_reset_time;
 
     /*
-    *--------------------------------------Layouts--------------------------------------
+     *--------------------------------------Layouts--------------------------------------
      */
 
     /**
@@ -613,7 +615,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private void initializeAttributes() {
 
         /*
-        * --------------- LAYOUTS ---------------
+         * --------------- LAYOUTS ---------------
          */
 
         m_ttsprogress = (ProgressBar) findViewById(R.id.tts_progress);
@@ -764,7 +766,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         /*
       The processor of the detector, where the events from the detector are handled
      */
-            Detector.Processor<Barcode> detector_processor = new Detector.Processor<Barcode>() {
+        Detector.Processor<Barcode> detector_processor = new Detector.Processor<Barcode>() {
 
             @Override
             public void release() {
@@ -1002,11 +1004,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 printText(m_currentReading.get(m_currentPos).getContent());
 
                 //Check and Launch Web Site
-                if (m_currentReading.get(m_currentPos).getContent().startsWith("http://")) {
+                if (m_currentReading.get(m_currentPos).getContent().startsWith("http://") || m_currentReading.get(m_currentPos).getContent().startsWith("https://")) {
                     Log.i("Web", "######################### WebSite trouvé ###########################################");
                     openWebSite(m_currentReading.get(m_currentPos).getContent());
-                } else {
-
+                }
+                else {
                     m_ttobj.setOnUtteranceProgressListener(new UtteranceProgressListener() {
                         @Override
                         public void onStart(String utteranceId) {
@@ -1042,36 +1044,31 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     } else {
                         int r = m_ttobj.synthesizeToFile(m_currentReading.get(m_currentPos).getContent(), myHashRender, FileDowloader.DOWNLOAD_PATH + CompressionString.compress(m_currentReading.get(m_currentPos).getContent()) + ".mp3");
                     }
-
                 }
             }
         });
     }
 
-    private void openWebSite(String adresse){
-        BufferedReader br;
+    /**
+     * Create the asynctask to download the content of the URL
+     * @param adresse
+     */
+    private void openWebSite(String adresse) {
+        UrlContentDownloader urlDownloader = new UrlContentDownloader(this);
+        urlDownloader.execute(adresse);
+    }
 
-        try{
-            Log.i("Web","Test");
-            URL url = new URL(adresse);
-
-            URLConnection con=url.openConnection();
-            con.connect();
-            Log.i("Web","Test2");
-            InputStream input = con.getInputStream();
-
-            //Autre Méthode de connexion par BufferedReader
-            //BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-
-
-        } catch (MalformedURLException e) {
-            Log.i("Web", "Exception MalformedURLException");
-            e.printStackTrace();
-        } catch (IOException e) {
-            Log.i("Web", "Exception IOException");
-            e.printStackTrace();
-        }
-
+    /**
+     * Method from UrlContentCallback called when the asynctask finished
+     * @param content is a string which contains all the HTML from the page
+     */
+    public void onWebsiteContent(String content)
+    {
+        Log.i("CONTENU","---------------------");
+        Log.i("CONTENU",content);
+        Log.i("CONTENU","---------------------");
+        //TODO Lire le texte que tu veux lire avec la synthèse
+        //TODO Le texte dans content est TOUT l'html de la page à laquelle tu souhaites accéder
     }
 
     /**
@@ -1196,9 +1193,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         this.runOnUiThread(new Runnable() {
             public void run() {
-               //Hiding graphical elements
-               m_text_space.setVisibility(View.INVISIBLE);
-               m_contentLayout.setVisibility(View.INVISIBLE);
+                //Hiding graphical elements
+                m_text_space.setVisibility(View.INVISIBLE);
+                m_contentLayout.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -1610,7 +1607,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-       if(m_hasAccelerometer)
+        if(m_hasAccelerometer)
         {
             long curTime = System.currentTimeMillis();
             if ((curTime - m_lastSensorUpdate) > 2000) {
