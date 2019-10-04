@@ -116,4 +116,9 @@ public class FileDowloader extends AsyncTask {
         return false;
     }
 
+    //method to check if the file is empty
+    public static boolean isEmpty(){
+       return (viderMemoire());
+    }
+
 }

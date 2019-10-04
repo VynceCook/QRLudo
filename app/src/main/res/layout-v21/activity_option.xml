@@ -78,44 +78,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:layout_weight=".3">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Délai avant réinitialisation : "
-            android:textSize="20sp"
-            android:textColor="@color/colorPrimaryDark" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <SeekBar
-                android:id="@+id/sb_SRTime"
-                style="@style/Widget.AppCompat.SeekBar.Discrete"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".15"
-                android:max="6"
-                android:progress="1" />
-
-            <TextView
-                android:id="@+id/tv_SRValue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".9"
-                android:background="@drawable/frame"
-                android:text="   "
-                android:textAlignment="center"
-                android:layout_marginRight="5dp"/>
-        </LinearLayout>
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -154,26 +116,15 @@
                 android:textAlignment="center"
                 android:layout_marginRight="5dp"/>
         </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
-        <Button
-            android:id="@+id/b_supprimer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Supprimer les fichiers"/>
-    </LinearLayout>
 
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
-        android:gravity="center|bottom"
         android:orientation="vertical" >
+
         <Button
             android:id="@+id/b_valider"
             android:layout_width="wrap_content"
@@ -181,5 +132,22 @@
             android:layout_gravity="center_horizontal|center"
             android:text="Valider" />
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <Button
+            android:id="@+id/b_supprimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Supprimer les fichiers" />
+    </LinearLayout>
+
+
+
 
 </LinearLayout>
