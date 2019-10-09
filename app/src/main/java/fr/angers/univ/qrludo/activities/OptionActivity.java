@@ -51,7 +51,6 @@ public class OptionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_option);
-
         OptionLayout = (LinearLayout)findViewById(R.id.option_layout);
         OptionLayout.requestFocus();
         langs = new ArrayList<>();
@@ -129,7 +128,6 @@ public class OptionActivity extends AppCompatActivity {
         });
 
         /*
-
         sb_SRValue.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
@@ -148,7 +146,7 @@ public class OptionActivity extends AppCompatActivity {
             }
         });
 
-        */
+         */
 
 
         String language = settings.getString("speechCountry",MainActivity.LOCALE_DEFAULT.getCountry());
@@ -210,20 +208,17 @@ public class OptionActivity extends AppCompatActivity {
 
 
 
-
-
          //Ajout d'un bouton pour vider les fichiers stockés par l'application sur le téléphone
 
         b_supprimer = (Button) findViewById(R.id.b_supprimer);
 
-        if (FileDowloader.viderMemoire()) {
+
+        if (FileDowloader.isEmpty()){
             b_supprimer.setEnabled(false);
         }
+        //todo rafraichir
 
         b_supprimer.setOnClickListener(new View.OnClickListener() {
-
-
-
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
@@ -236,7 +231,6 @@ public class OptionActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 if(FileDowloader.viderMemoire())
                                     Toast.makeText(OptionActivity.this, "Les données ont bien été supprimées", Toast.LENGTH_LONG).show();
-
                                 else
                                     Toast.makeText(OptionActivity.this, "Le dossier n'existe pas", Toast.LENGTH_LONG).show();
                             }
@@ -270,7 +264,7 @@ public class OptionActivity extends AppCompatActivity {
                     Log.d("Language", langs.get(spin_language.getSelectedItemPosition()));
 
 
-                    //edit.putFloat("resetTime2",Float.parseFloat(tv_SRValue.getText().toString()));
+                   // edit.putFloat("resetTime2",Float.parseFloat(tv_SRValue.getText().toString()));
                     edit.putFloat("MDTime", Float.parseFloat(tv_MDTValue.getText().toString()));
 
                     edit.apply();
@@ -283,9 +277,11 @@ public class OptionActivity extends AppCompatActivity {
                     finish();
                 //}else{
                     //Toast.makeText(OptionActivity.this, "Le délai de réinitialisation ne peut être supérieur au temps de détection multiple.", Toast.LENGTH_SHORT).show();
-                //}
-            }
+                }
+            //}
         });
+
+
     }
 
     @Override

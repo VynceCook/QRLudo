@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:layout_weight="1"
     android:orientation="vertical"
+    android:background="@color/colorBackground"
     android:divider="@drawable/empty_tall_divider">
 
     <LinearLayout
@@ -12,6 +13,39 @@
         android:focusableInTouchMode="true"
         android:layout_width="0px"
         android:layout_height="0px"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight=".3">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBackgroundText"
+            android:text="Language de la synthèse vocale : "
+            android:textSize="20sp"
+            android:textColor="@color/colorText"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/spin_languages"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -21,9 +55,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/colorBackgroundText"
             android:text="@string/tts_speed_value"
             android:textSize="20sp"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorText" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,31 +87,8 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:layout_weight=".3">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Language de la synthèse vocale : "
-            android:textSize="20sp"
-            android:textColor="@color/colorPrimaryDark" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
-            <Spinner
-                android:id="@+id/spin_languages"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-    </LinearLayout>
 
 
     <LinearLayout
@@ -88,9 +100,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/colorBackgroundText"
             android:text="Durée de détection multiple :"
             android:textSize="20sp"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorText" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -116,38 +129,38 @@
                 android:textAlignment="center"
                 android:layout_marginRight="5dp"/>
         </LinearLayout>
-
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:orientation="vertical" >
-
-        <Button
-            android:id="@+id/b_valider"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center"
-            android:text="Valider" />
-    </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         >
 
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:gravity="center|bottom"
+        android:orientation="vertical" >
+        <Button
+            android:id="@+id/b_valider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center"
+            android:background="@color/colorBtn"
+            android:text="Valider" />
+
         <Button
             android:id="@+id/b_supprimer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Supprimer les fichiers" />
+            android:background="@color/colorBtn"
+            android:text="Supprimer les fichiers"/>
+
+
     </LinearLayout>
-
-
-
 
 </LinearLayout>

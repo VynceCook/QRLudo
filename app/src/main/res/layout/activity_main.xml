@@ -68,9 +68,6 @@
         android:layout_centerHorizontal="true"
         android:textSize="20sp"
         android:textColor="@color/colorPrimaryDark"/>
-
-
-
     <SurfaceView
         android:id="@+id/camera_view"
         android:layout_width="match_parent"
