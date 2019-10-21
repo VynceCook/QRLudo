@@ -33,7 +33,9 @@ public class FileDowloader extends AsyncTask {
         m_url = url;
         m_user = user;
         // On compresse l'url du fichier pour pouvoir lui donner un nom reconnaissable lors du stockage
-        m_id=CompressionString.compress(url);
+        //m_id=CompressionString.compress(url);
+
+
         m_path = FileDowloader.DOWNLOAD_PATH+m_id+".mp3";
 
 
@@ -116,4 +118,22 @@ public class FileDowloader extends AsyncTask {
         return false;
     }
 
+
+    public static boolean isEmpty() {
+        File targetDir = new File(FileDowloader.DOWNLOAD_PATH);
+        if (targetDir.isDirectory()) {
+            File[] files = targetDir.listFiles();
+            for (File f : files) {
+                if (f.length() == 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        } return  true;
+
+    }
+
+
 }
+
