@@ -34,13 +34,13 @@
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
 
-        <activity android:name="fr.angers.univ.qrludo.activities.MainActivity" android:screenOrientation="portrait">
+        <activity android:name="fr.angers.univ.qrludo.activities.MainActivity" android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="fr.angers.univ.qrludo.activities.OptionActivity" />
+        <activity android:name="fr.angers.univ.qrludo.activities.OptionActivity"/>
 
         <receiver android:name="fr.angers.univ.qrludo.utils.InternetBroadcastReceiver">
             android:enabled="true"

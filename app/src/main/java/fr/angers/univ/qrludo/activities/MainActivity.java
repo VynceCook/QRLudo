@@ -48,18 +48,18 @@ import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
+
 import java.io.File;
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import fr.angers.univ.qrludo.QR.handling.QRCodeBuilder;
 import fr.angers.univ.qrludo.QR.handling.QRCodeDefaultDetectionModeStrategy;
 import fr.angers.univ.qrludo.QR.handling.QRCodeDetectionModeStrategy;
 import fr.angers.univ.qrludo.QR.model.QRCode;
-import fr.angers.univ.qrludo.QR.handling.QRCodeBuilder;
 import fr.angers.univ.qrludo.QR.model.QRCodeCollection;
 import fr.angers.univ.qrludo.QR.model.QRContent;
 import fr.angers.univ.qrludo.QR.model.QRFile;
@@ -68,15 +68,19 @@ import fr.angers.univ.qrludo.R;
 import fr.angers.univ.qrludo.exceptions.UnhandledQRException;
 import fr.angers.univ.qrludo.exceptions.UnsupportedQRException;
 import fr.angers.univ.qrludo.utils.CompressionString;
+import fr.angers.univ.qrludo.utils.ContentDelayCounter;
 import fr.angers.univ.qrludo.utils.FileDowloader;
 import fr.angers.univ.qrludo.utils.InternetBroadcastReceiver;
 import fr.angers.univ.qrludo.utils.OnSwipeTouchListener;
 import fr.angers.univ.qrludo.utils.QDCResponse;
-import fr.angers.univ.qrludo.utils.ContentDelayCounter;
 import fr.angers.univ.qrludo.utils.ToneGeneratorSingleton;
 import fr.angers.univ.qrludo.utils.UrlContentCallback;
 import fr.angers.univ.qrludo.utils.UrlContentDownloader;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  * MainActivity is the main activity of the application, this is where the user will be able to detect QRCodes and hear the result
@@ -432,7 +436,6 @@ public class MainActivity extends AppCompatActivity
         initializeListeners();
 
         checkPermissions();
-
     }
 
 
@@ -606,6 +609,14 @@ public class MainActivity extends AppCompatActivity
         if(m_hasProximity)
             m_sensorManager.registerListener(this, m_proximity,SensorManager.SENSOR_DELAY_UI);
         super.onResume();
+
+
+        //Hide the navigation bar
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
 
     }
 
@@ -926,15 +937,13 @@ public class MainActivity extends AppCompatActivity
         //Stopping current text to speech speaking or sound if necessary
         makeSilence();
 
-        printText(textToPrint);
-
-        Log.v("test", "source : "+FileDowloader.DOWNLOAD_PATH+CompressionString.compress(m_currentReading.get(m_currentPos).getContent())+".mp3");
+        Log.i("test", "source : "+FileDowloader.DOWNLOAD_PATH+CompressionString.compress(textToPrint)+".mp3");
         //Playing the sound
         try {
             m_mediaPlayer.stop();
             m_mediaPlayer = new MediaPlayer();
             m_mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            m_mediaPlayer.setDataSource(FileDowloader.DOWNLOAD_PATH+CompressionString.compress(m_currentReading.get(m_currentPos).getContent())+".mp3");
+            m_mediaPlayer.setDataSource(FileDowloader.DOWNLOAD_PATH+CompressionString.compress(textToPrint)+".mp3");
             m_mediaPlayer.prepare();
             m_mediaPlayer.start();
 
@@ -1000,15 +1009,15 @@ public class MainActivity extends AppCompatActivity
         activity.runOnUiThread(new Runnable() {
             public void run() {
 
-                //printing the text
-                printText(m_currentReading.get(m_currentPos).getContent());
-
                 //Check and Launch Web Site
                 if (m_currentReading.get(m_currentPos).getContent().startsWith("http://") || m_currentReading.get(m_currentPos).getContent().startsWith("https://")) {
                     Log.i("Web", "######################### WebSite trouvé ###########################################");
                     openWebSite(m_currentReading.get(m_currentPos).getContent());
                 }
                 else {
+                    //printing the text
+                    printText(m_currentReading.get(m_currentPos).getContent());
+
                     m_ttobj.setOnUtteranceProgressListener(new UtteranceProgressListener() {
                         @Override
                         public void onStart(String utteranceId) {
@@ -1049,6 +1058,7 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+
     /**
      * Create the asynctask to download the content of the URL
      * @param adresse
@@ -1064,11 +1074,46 @@ public class MainActivity extends AppCompatActivity
      */
     public void onWebsiteContent(String content)
     {
-        Log.i("CONTENU","---------------------");
-        Log.i("CONTENU",content);
-        Log.i("CONTENU","---------------------");
+        Log.i("Web","---------------------");
+        Log.i("Web",content);
+        Log.i("Web","---------------------");
         //TODO Lire le texte que tu veux lire avec la synthèse
         //TODO Le texte dans content est TOUT l'html de la page à laquelle tu souhaites accéder
+
+
+
+
+
+        //     Méthode 2
+        // Retrouver les <h1> grace à l'API JSoup
+        Document html = Jsoup.parse(content);
+
+
+        String title = html.title();
+        m_currentReading.add(new QRText(title));
+
+        Log.i("Web",title);
+        Log.i("Web","---------------------");
+
+
+
+        Elements listElements = html.select("h0, h1, h2, h3, h4, h5, h6, p");
+
+        for(int i=0; i<listElements.size(); ++i){
+            String texte= listElements.get(i).text();
+            Log.i("Web","   "+texte);
+            Log.i("Web","   "+texte.length());
+
+            /*
+            while(texte.length()>100){
+                m_currentReading.add(new QRText(texte.substring(0,100)));
+                playCurrentSoundContent(texte.substring(0,100));
+                texte = texte.substring(100) ;
+            }*/
+
+            m_currentReading.add(new QRText(texte));
+        }
+
     }
 
     /**
@@ -1421,6 +1466,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         return true;
     }
 
