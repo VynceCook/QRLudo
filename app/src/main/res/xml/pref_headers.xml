@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:key="pref_langue"
+        android:title="@string/language"
+        android:icon="@drawable/ic_settings_voice_black_24dp"
+        android:summary="@string/langue_summary"
+        android:entries="@array/display_lang_array"
+        android:entryValues="@array/languages_array"
+        android:defaultValue="@string/langue_default"
+
+        />
+
+    <Preference
+        android:key="pref_vitesse_synthese"
+        android:icon="@drawable/ic_fast_forward_black1_24dp"
+        android:title="@string/vitesse_synthese"
+        android:summary="@string/vitesse_summary"
+
+
+        />
+
+    <Preference
+        android:key="pref_delai_detection"
+        android:icon="@drawable/ic_access_time_black2_24dp"
+        android:title="@string/duree_multiple"
+        android:summary="@string/duree_summary"
+
+
+        />
+
+    <Preference
+        android:key="pref_supprime"
+        android:icon="@drawable/ic_delete_sweep_black3_24dp"
+        android:title="@string/supp_fichier"
+        android:summary="@string/supp_summary"
+
+
+        />
+
+
+</PreferenceScreen>

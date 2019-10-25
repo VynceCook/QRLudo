@@ -927,6 +927,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             m_mediaPlayer.stop();
             m_mediaPlayer = new MediaPlayer();
             m_mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            //m_mediaPlayer.setDataSource(FileDowloader.DOWNLOAD_PATH+CompressionString.compress(m_currentReading.get(m_currentPos).getContent())+".mp3");
             m_mediaPlayer.setDataSource(FileDowloader.DOWNLOAD_PATH+CompressionString.compress(m_currentReading.get(m_currentPos).getContent())+".mp3");
             m_mediaPlayer.prepare();
             m_mediaPlayer.start();
@@ -1382,6 +1383,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -1389,8 +1391,32 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         return true;
     }
 
-    @Override
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+
+                case  R.id.action_settings :
+                    startActivity(new Intent(this,SettingsActivity.class));
+                    return  true;
+
+                default:
+                    return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+
+
+
+
+
+
+   // @Override
     @SuppressWarnings("deprecation")
+    /*
+
+
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -1400,18 +1426,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent pickOptionIntent = new Intent(getApplicationContext(), OptionActivity.class);
-            /*if(ice_cream && !m_lollipopOrHigher) {
-                pickOptionIntent.putExtra("DefaultsEnforced", m_ttobj.areDefaultsEnforced());
-            }*/
+
             pickOptionIntent.putExtra("languages", m_locals);
             startActivityForResult(pickOptionIntent, OPTION_REQUEST);
-            /*Intent intent = new Intent(getApplicationContext(), OptionActivity.class);
-            startActivity(intent);*/
+
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+     */
 
     private boolean allCompulsoryAuthorizationsGranted(){
 
