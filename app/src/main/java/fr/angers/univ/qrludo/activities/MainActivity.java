@@ -79,7 +79,6 @@ import fr.angers.univ.qrludo.utils.UrlContentDownloader;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 /**
@@ -962,6 +961,16 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    //Replay the current sound 5 seconds before
+    public void rewindFiveSeconds(){
+        if(m_mediaPlayer.isPlaying()){
+            m_mediaPlayer.seekTo(m_mediaPlayer.getCurrentPosition()-5000);
+        }
+        else{
+            m_mediaPlayer.start();
+        }
+    }
+
     /**
      * Called by the QRFiles MainActivity as registered as listener when their downloading is over
      * If the current strategy is QRCodeDefaultDetectionModeStrategy or QRCodeFamilyDetectionModeStrategy, MainActivity has registered to at most 1 QRFile (the current one if needed)
@@ -1009,7 +1018,7 @@ public class MainActivity extends AppCompatActivity
         activity.runOnUiThread(new Runnable() {
             public void run() {
 
-                //Check and Launch Web Site
+                //Check if content is a Web Site
                 if (m_currentReading.get(m_currentPos).getContent().startsWith("http://") || m_currentReading.get(m_currentPos).getContent().startsWith("https://")) {
                     Log.i("Web", "######################### WebSite trouvé ###########################################");
                     openWebSite(m_currentReading.get(m_currentPos).getContent());
@@ -1077,39 +1086,24 @@ public class MainActivity extends AppCompatActivity
         Log.i("Web","---------------------");
         Log.i("Web",content);
         Log.i("Web","---------------------");
-        //TODO Lire le texte que tu veux lire avec la synthèse
-        //TODO Le texte dans content est TOUT l'html de la page à laquelle tu souhaites accéder
 
 
-
-
-
-        //     Méthode 2
-        // Retrouver les <h1> grace à l'API JSoup
         Document html = Jsoup.parse(content);
 
-
+        //Find <title> thanks to JSoup API
         String title = html.title();
         m_currentReading.add(new QRText(title));
 
         Log.i("Web",title);
         Log.i("Web","---------------------");
 
-
-
+        // Find <h1>,<h2> ... <p> in the HTML content, thanks to JSoup API
         Elements listElements = html.select("h0, h1, h2, h3, h4, h5, h6, p");
 
         for(int i=0; i<listElements.size(); ++i){
             String texte= listElements.get(i).text();
             Log.i("Web","   "+texte);
             Log.i("Web","   "+texte.length());
-
-            /*
-            while(texte.length()>100){
-                m_currentReading.add(new QRText(texte.substring(0,100)));
-                playCurrentSoundContent(texte.substring(0,100));
-                texte = texte.substring(100) ;
-            }*/
 
             m_currentReading.add(new QRText(texte));
         }
@@ -1333,6 +1327,7 @@ public class MainActivity extends AppCompatActivity
             public void onSwipeBottom() {
                 m_currentDetectionModeStrategy.onSwipeBottom();
             }
+
 
             public void onDoubleClick() { m_currentDetectionModeStrategy.onDoubleClick();}
         });

@@ -68,6 +68,7 @@ public class OnSwipeTouchListener implements OnTouchListener {
             }
             return result;
         }
+
     }
 
     public void onDoubleClick(){
@@ -85,4 +86,5 @@ public class OnSwipeTouchListener implements OnTouchListener {
 
     public void onSwipeBottom() {
     }
+
 }

@@ -29,6 +29,15 @@ public abstract class QRCodeDetectionModeStrategy {
         }
     };
 
+    Runnable runnerSwipeLeft = new Runnable() {
+        @Override
+        public void run() {
+            m_mainActivity.rewindFiveSeconds();
+            posted = false;
+        }
+    };
+
+
     QRCodeDetectionModeStrategy(MainActivity mainActivity){
         m_detectedQRCodes = mainActivity.getDetectedQRCodes();
         m_mainActivity = mainActivity;
@@ -80,8 +89,5 @@ public abstract class QRCodeDetectionModeStrategy {
      * Called when the user double tap on the screen
      */
     public abstract void onDoubleClick();
-
-
-
 
 }
