@@ -31,4 +31,6 @@
     <string name="supp_fichier">Tout supprimer</string>
     <string name="supp_summary">Supprimez tous les enregistrements du fichier</string>
 
+    <string name="ouverture_web">Ouverture de lien via navigateur</string>
+    <string name="ouverture_summary">Les QR Code http seront ouverts via navigateurs, sinon lu par synthèse vocale</string>
 </resources>

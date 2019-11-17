@@ -142,6 +142,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public static final float DEFAULT_CONTENT_RESET_TIME = 60;
 
     /**
+     * The default way to open an HTTP QR Code.
+     */
+    public static final boolean DEFAULT_WEB_OPENING_VIA_BROWSER = true;
+
+    /**
      * The integer corresping to the code identifying the option intent used to launch the option activity.
      * @see OptionActivity
      */
@@ -225,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private float m_content_reset_time;
 
     /*
-    *--------------------------------------Layouts--------------------------------------
+     *--------------------------------------Layouts--------------------------------------
      */
 
     /**
@@ -387,6 +392,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      * True if a multiple detection is running and not yet ended
      */
     private boolean m_isMultipleDetectionTimerRunning;
+
+    /**
+     * Time during which the application tries to detect another QR after having detecting one
+     */
+    private boolean m_web_opening_via_browser;
 
 
 
@@ -608,7 +618,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private void initializeAttributes() {
 
         /*
-        * --------------- LAYOUTS ---------------
+         * --------------- LAYOUTS ---------------
          */
 
         m_ttsprogress = (ProgressBar) findViewById(R.id.tts_progress);
@@ -641,6 +651,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         m_content_reset_time = settings.getFloat("resetTime2", DEFAULT_CONTENT_RESET_TIME);
 
         m_multiple_detection_time = settings.getFloat("MDTime",DEFAULT_MULTIPLE_DETECTION_TIME);
+
+        m_web_opening_via_browser = settings.getBoolean("WebOpening",DEFAULT_WEB_OPENING_VIA_BROWSER);
 
         SetUpTTS();
 
@@ -759,7 +771,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         /*
       The processor of the detector, where the events from the detector are handled
      */
-            Detector.Processor<Barcode> detector_processor = new Detector.Processor<Barcode>() {
+        Detector.Processor<Barcode> detector_processor = new Detector.Processor<Barcode>() {
 
             @Override
             public void release() {
@@ -1159,9 +1171,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         this.runOnUiThread(new Runnable() {
             public void run() {
-               //Hiding graphical elements
-               m_text_space.setVisibility(View.INVISIBLE);
-               m_contentLayout.setVisibility(View.INVISIBLE);
+                //Hiding graphical elements
+                m_text_space.setVisibility(View.INVISIBLE);
+                m_contentLayout.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -1396,23 +1408,57 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         switch (item.getItemId()){
 
-                case  R.id.action_settings :
-                    startActivity(new Intent(this,SettingsActivity.class));
-                    return  true;
+            case  R.id.action_settings :
+                Intent pickOptionIntent = new Intent(this,SettingsActivity.class);
+                startActivityForResult(pickOptionIntent, OPTION_REQUEST);
+                return  true;
 
-                default:
-                    return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
         }
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+
+        Log.v("test", "activity result");
 
 
+        // On demande les permissions obligatoires si elles ne sont pas toutes autorisées
+        if (!allCompulsoryAuthorizationsGranted()){
+            Log.v("test", "on result : pas toutes les autorisations, on lance checkPermissions()");
+            checkPermissions();
+        }
 
 
+        if (requestCode == OPTION_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                // The user picked a contact.
+                // The Intent's data Uri identifies which contact was selected.
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 
+                m_speechSpeed = settings.getFloat("m_speechSpeed", SPEEDSPEECH_DEFAULT);
 
-   // @Override
+                m_ttslanguage = new Locale(settings.getString("speechLanguage",LOCALE_DEFAULT.getLanguage()),settings.getString("speechCountry",LOCALE_DEFAULT.getCountry()));
+                m_ttobj.setLanguage(m_ttslanguage);
+
+                m_content_reset_time = settings.getFloat("resetTime2", DEFAULT_CONTENT_RESET_TIME);
+
+                m_multiple_detection_time = settings.getFloat("MDTime",DEFAULT_MULTIPLE_DETECTION_TIME);
+
+                m_web_opening_via_browser = settings.getBoolean("WebOpening", DEFAULT_WEB_OPENING_VIA_BROWSER);
+                if (m_web_opening_via_browser)
+                    Toast.makeText(this, "MAIN ACTIVITY : CHECK", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(this, "MAIN ACTIVITY : PAS CHECK", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+    }
+    // @Override
     @SuppressWarnings("deprecation")
     /*
 
@@ -1477,41 +1523,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Check which request we're responding to
 
-        Log.v("test", "activity result");
-
-
-        // On demande les permissions obligatoires si elles ne sont pas toutes autorisées
-        if (!allCompulsoryAuthorizationsGranted()){
-            Log.v("test", "on result : pas toutes les autorisations, on lance checkPermissions()");
-            checkPermissions();
-        }
-
-
-        if (requestCode == OPTION_REQUEST) {
-            // Make sure the request was successful
-            if (resultCode == RESULT_OK) {
-                // The user picked a contact.
-                // The Intent's data Uri identifies which contact was selected.
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-
-                m_speechSpeed = settings.getFloat("m_speechSpeed", SPEEDSPEECH_DEFAULT);
-
-                m_ttslanguage = new Locale(settings.getString("speechLanguage",LOCALE_DEFAULT.getLanguage()),settings.getString("speechCountry",LOCALE_DEFAULT.getCountry()));
-                m_ttobj.setLanguage(m_ttslanguage);
-
-                m_content_reset_time = settings.getFloat("resetTime2", DEFAULT_CONTENT_RESET_TIME);
-
-                m_multiple_detection_time = settings.getFloat("MDTime",DEFAULT_MULTIPLE_DETECTION_TIME);
-
-
-            }
-        }
-
-    }
 
     /**
      * Stops the detection : the application is no longer trying to detect QRCodes
@@ -1597,7 +1609,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-       if(m_hasAccelerometer)
+        if(m_hasAccelerometer)
         {
             long curTime = System.currentTimeMillis();
             if ((curTime - m_lastSensorUpdate) > 2000) {

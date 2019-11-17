@@ -24,8 +24,6 @@ import java.util.Locale;
 import fr.angers.univ.qrludo.R;
 import fr.angers.univ.qrludo.utils.FileDowloader;
 
-import static java.lang.String.valueOf;
-
 /**
  * Created by Corentin Tarlarmain on 28/04/17.
  * Modified by Florian Lherbeil
@@ -119,8 +117,6 @@ public class OptionActivity extends AppCompatActivity {
 
             }
         });
-
-
 
 
         String language = settings.getString("speechCountry",MainActivity.LOCALE_DEFAULT.getCountry());
