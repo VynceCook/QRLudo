@@ -40,7 +40,7 @@
     <CheckBoxPreference
         android:key="pref_lecture_web"
         android:icon="@drawable/ic_action_name_black_24dp"
-        android:summary="@string/ouverture_summary"
+        android:summary="@string/ouverture_summary_web"
         android:title="@string/ouverture_web"
 
 

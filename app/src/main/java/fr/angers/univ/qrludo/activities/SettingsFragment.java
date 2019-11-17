@@ -183,14 +183,22 @@ public class SettingsFragment extends PreferenceFragment {
         });
 
         final CheckBoxPreference p_lectureWeb = (CheckBoxPreference) getPreferenceManager().findPreference("pref_lecture_web");
-        if (webOpeningViaBrowser)
+        if (webOpeningViaBrowser) {
             p_lectureWeb.setChecked(true);
-        else
+            p_lectureWeb.setSummary(getString(R.string.ouverture_summary_web));
+        }
+        else {
             p_lectureWeb.setChecked(false);
+            p_lectureWeb.setSummary(getString(R.string.ouverture_summary_app));
+        }
 
         p_lectureWeb.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 webOpeningViaBrowser = !p_lectureWeb.isChecked();
+                if (webOpeningViaBrowser)
+                    p_lectureWeb.setSummary(getString(R.string.ouverture_summary_web));
+                else
+                    p_lectureWeb.setSummary(getString(R.string.ouverture_summary_app));
                 modifyPreferences();
                 return true;
             }
