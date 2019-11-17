@@ -116,40 +116,54 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
         }
     }
 
-
+    /*
+        If you swipe left once, you rewind the audio from 5 seconds.
+        If you swipe left twice, you start a new detection
+    */
     @Override
     public void onSwipeLeft() {
+        //Launch runnerSwipeLeft if you don't swipe another time in the next 1 second
+        // runnerSwipeLeft is in QRCodeDetectionModeStrategy
+        if(!posted) {
+            posted = hand.postDelayed(runnerSwipeLeft, 1000);
+        }
+        //Stop runnerSwipeLeft if you double swipe and rewind the current audio
+        else{
+            hand.removeCallbacks(runnerSwipeLeft);
 
-        //Can only swipe left if at least one QR has been printed/detected (equivalent in the default detection mode)
-        if (m_mainActivity.getDetectionProgress()!=NO_QR_DETECTED){
+            //Can only swipe left if at least one QR has been printed/detected (equivalent in the default detection mode)
+            if (m_mainActivity.getDetectionProgress()!=NO_QR_DETECTED){
 
-            //If the application is still detecting and the user has already reached the last currently available QRContent, cannot swipe left
-            if (!(m_mainActivity.isApplicationDetecting() && m_mainActivity.getCurrentPos()==m_mainActivity.getContentSize()-1)){
+                //If the application is still detecting and the user has already reached the last currently available QRContent, cannot swipe left
+                if (!(m_mainActivity.isApplicationDetecting() && m_mainActivity.getCurrentPos()==m_mainActivity.getContentSize()-1)){
 
-                //If the app is waiting to be notified by the current QRFile of the end of its downloading, unregister as listener
-                m_mainActivity.unregisterToQRFile();
-
-                if (m_mainActivity.getCurrentPos()==m_mainActivity.getContentSize()-1){
-                    //Ending the reading if the user had already reached the last QRContent
-                    m_mainActivity.startNewDetection("");
-                }
-                else{
-                    //Reading the next QRContent
-                    m_mainActivity.incrementCurrentPos();
-                    m_mainActivity.readCurrentContent();
+                    //If the app is waiting to be notified by the current QRFile of the end of its downloading, unregister as listener
+                    m_mainActivity.unregisterToQRFile();
 
                     if (m_mainActivity.getCurrentPos()==m_mainActivity.getContentSize()-1){
-                        //Notifying the user if he has just reached the last QRContent
-                        ToneGeneratorSingleton.getInstance().lastQRCodeReadTone();
+                        //Ending the reading if the user had already reached the last QRContent
+                        m_mainActivity.startNewDetection("");
                     }
+                    else{
+                        //Reading the next QRContent
+                        m_mainActivity.incrementCurrentPos();
+                        m_mainActivity.readCurrentContent();
+
+                        if (m_mainActivity.getCurrentPos()==m_mainActivity.getContentSize()-1){
+                            //Notifying the user if he has just reached the last QRContent
+                            ToneGeneratorSingleton.getInstance().lastQRCodeReadTone();
+                        }
+                    }
+                }
+                else{
+                    ToneGeneratorSingleton.getInstance().errorTone();
                 }
             }
             else{
                 ToneGeneratorSingleton.getInstance().errorTone();
             }
-        }
-        else{
-            ToneGeneratorSingleton.getInstance().errorTone();
+
+            posted = false;
         }
     }
 
@@ -182,6 +196,7 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
     public void onDoubleClick() {
         m_mainActivity.pauseCurrentReading();
     }
+
 
     /**
      * Starts a ensemble detection of ignores the QRCodeEnsemble if necessary

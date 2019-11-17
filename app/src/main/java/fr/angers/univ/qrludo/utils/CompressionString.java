@@ -1,6 +1,10 @@
 package fr.angers.univ.qrludo.utils;
 
+import android.util.Log;
+
 import com.google.api.client.util.Base64;
+
+import java.sql.Timestamp;
 
 /**
  * Created by Florian Lherbeil
@@ -10,6 +14,7 @@ import com.google.api.client.util.Base64;
  */
 public class CompressionString {
     public static String compress(String str) {
+
         //On réduit la taille de la chaine si possible car un nom de fichier ne doit pas être trop grand
         if(str.contains(".com"))
             str=str.substring(str.indexOf(".com"));
@@ -17,6 +22,12 @@ public class CompressionString {
             str=str.substring(str.indexOf(".fr"));
         str=str.replace(".com","");
         byte[] encodedBytes = Base64.encodeBase64(str.getBytes());
-        return new String(encodedBytes).replace("=","").replaceAll("/","_");
+
+        if(str.length()>100)
+            return new String(encodedBytes).substring(0,10).replace("=","").replaceAll("/","_");
+        else
+            return new String(encodedBytes).replace("=","").replaceAll("/","_");
+
+
     }
 }
