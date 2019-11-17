@@ -18,6 +18,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -48,18 +49,18 @@ import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
+
 import java.io.File;
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import fr.angers.univ.qrludo.QR.handling.QRCodeBuilder;
 import fr.angers.univ.qrludo.QR.handling.QRCodeDefaultDetectionModeStrategy;
 import fr.angers.univ.qrludo.QR.handling.QRCodeDetectionModeStrategy;
 import fr.angers.univ.qrludo.QR.model.QRCode;
-import fr.angers.univ.qrludo.QR.handling.QRCodeBuilder;
 import fr.angers.univ.qrludo.QR.model.QRCodeCollection;
 import fr.angers.univ.qrludo.QR.model.QRContent;
 import fr.angers.univ.qrludo.QR.model.QRFile;
@@ -68,13 +69,18 @@ import fr.angers.univ.qrludo.R;
 import fr.angers.univ.qrludo.exceptions.UnhandledQRException;
 import fr.angers.univ.qrludo.exceptions.UnsupportedQRException;
 import fr.angers.univ.qrludo.utils.CompressionString;
+import fr.angers.univ.qrludo.utils.ContentDelayCounter;
 import fr.angers.univ.qrludo.utils.FileDowloader;
 import fr.angers.univ.qrludo.utils.InternetBroadcastReceiver;
 import fr.angers.univ.qrludo.utils.OnSwipeTouchListener;
 import fr.angers.univ.qrludo.utils.QDCResponse;
-import fr.angers.univ.qrludo.utils.ContentDelayCounter;
 import fr.angers.univ.qrludo.utils.ToneGeneratorSingleton;
+import fr.angers.univ.qrludo.utils.UrlContentCallback;
+import fr.angers.univ.qrludo.utils.UrlContentDownloader;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 /**
  * MainActivity is the main activity of the application, this is where the user will be able to detect QRCodes and hear the result
@@ -119,7 +125,12 @@ import fr.angers.univ.qrludo.utils.ToneGeneratorSingleton;
  *
  *
  */
-public class MainActivity extends AppCompatActivity implements SensorEventListener, QDCResponse, QRFile.QRFileObserverInterface, InternetBroadcastReceiver.InternetBroadcastReceiverObserverInterface{
+public class MainActivity extends AppCompatActivity
+        implements SensorEventListener,
+        QDCResponse,
+        QRFile.QRFileObserverInterface,
+        InternetBroadcastReceiver.InternetBroadcastReceiverObserverInterface,
+        UrlContentCallback {
 
     /**
      * The name of the file containing the user's settings.
@@ -140,6 +151,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      * The default delay for current_text to get resetted.
      */
     public static final float DEFAULT_CONTENT_RESET_TIME = 60;
+
+    /**
+     * The default way to open an HTTP QR Code.
+     */
+    public static final boolean DEFAULT_WEB_OPENING_VIA_BROWSER = true;
 
     /**
      * The integer corresping to the code identifying the option intent used to launch the option activity.
@@ -225,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private float m_content_reset_time;
 
     /*
-    *--------------------------------------Layouts--------------------------------------
+     *--------------------------------------Layouts--------------------------------------
      */
 
     /**
@@ -388,6 +404,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      */
     private boolean m_isMultipleDetectionTimerRunning;
 
+    /**
+     * Time during which the application tries to detect another QR after having detecting one
+     */
+    private boolean m_web_opening_via_browser;
+
 
 
     /**
@@ -425,7 +446,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         initializeListeners();
 
         checkPermissions();
-
     }
 
 
@@ -600,6 +620,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             m_sensorManager.registerListener(this, m_proximity,SensorManager.SENSOR_DELAY_UI);
         super.onResume();
 
+
+        //Hide the navigation bar
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+
     }
 
     /**
@@ -608,7 +636,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private void initializeAttributes() {
 
         /*
-        * --------------- LAYOUTS ---------------
+         * --------------- LAYOUTS ---------------
          */
 
         m_ttsprogress = (ProgressBar) findViewById(R.id.tts_progress);
@@ -641,6 +669,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         m_content_reset_time = settings.getFloat("resetTime2", DEFAULT_CONTENT_RESET_TIME);
 
         m_multiple_detection_time = settings.getFloat("MDTime",DEFAULT_MULTIPLE_DETECTION_TIME);
+
+        m_web_opening_via_browser = settings.getBoolean("WebOpening",DEFAULT_WEB_OPENING_VIA_BROWSER);
 
         SetUpTTS();
 
@@ -759,7 +789,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         /*
       The processor of the detector, where the events from the detector are handled
      */
-            Detector.Processor<Barcode> detector_processor = new Detector.Processor<Barcode>() {
+        Detector.Processor<Barcode> detector_processor = new Detector.Processor<Barcode>() {
 
             @Override
             public void release() {
@@ -919,15 +949,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //Stopping current text to speech speaking or sound if necessary
         makeSilence();
 
-        printText(textToPrint);
-
-        Log.v("test", "source : "+FileDowloader.DOWNLOAD_PATH+CompressionString.compress(m_currentReading.get(m_currentPos).getContent())+".mp3");
+        Log.i("test", "source : "+FileDowloader.DOWNLOAD_PATH+CompressionString.compress(textToPrint)+".mp3");
         //Playing the sound
         try {
             m_mediaPlayer.stop();
             m_mediaPlayer = new MediaPlayer();
             m_mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            m_mediaPlayer.setDataSource(FileDowloader.DOWNLOAD_PATH+CompressionString.compress(m_currentReading.get(m_currentPos).getContent())+".mp3");
+            m_mediaPlayer.setDataSource(FileDowloader.DOWNLOAD_PATH+CompressionString.compress(textToPrint)+".mp3");
             m_mediaPlayer.prepare();
             m_mediaPlayer.start();
 
@@ -940,6 +968,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void pauseCurrentReading(){
         if(m_mediaPlayer.isPlaying()){
             m_mediaPlayer.pause();
+        }
+        else{
+            m_mediaPlayer.start();
+        }
+    }
+
+    //Replay the current sound 5 seconds before
+    public void rewindFiveSeconds(){
+        if(m_mediaPlayer.isPlaying()){
+            m_mediaPlayer.seekTo(m_mediaPlayer.getCurrentPosition()-5000);
         }
         else{
             m_mediaPlayer.start();
@@ -993,47 +1031,104 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         activity.runOnUiThread(new Runnable() {
             public void run() {
 
-                //printing the text
-                printText(m_currentReading.get(m_currentPos).getContent());
-
-                m_ttobj.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-                    @Override
-                    public void onStart(String utteranceId) {
+                //Check if content is a Web Site
+                if (m_currentReading.get(m_currentPos).getContent().startsWith("http://") || m_currentReading.get(m_currentPos).getContent().startsWith("https://")) {
+                    Log.i("Web", "######################### WebSite trouvé ###########################################");
+                    //Si on doit se contenter d'ouvrir le lien dans un navigateur
+                    if (m_web_opening_via_browser)
+                    {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(m_currentReading.get(m_currentPos).getContent()));
+                        startActivity(browserIntent);
                     }
+                    //Sinon on le lit par synthèse vocale
+                    else
+                        openWebSite(m_currentReading.get(m_currentPos).getContent());
+                }
+                else {
+                    //printing the text
+                    printText(m_currentReading.get(m_currentPos).getContent());
 
-                    @Override
-                    public void onDone(String utteranceId) {
-
-                        playCurrentSoundContent(m_currentReading.get(m_currentPos).getContent());
-
-                        if(m_content_reset_time > 0) {
-                            if (m_qdc != null)
-                                m_qdc.cancel(true);
-                            m_qdc = new ContentDelayCounter();
-                            m_qdc.delegate = (QDCResponse) activity;
-                            m_qdc.execute((int)m_content_reset_time);
+                    m_ttobj.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                        @Override
+                        public void onStart(String utteranceId) {
                         }
 
+                        @Override
+                        public void onDone(String utteranceId) {
+
+                            playCurrentSoundContent(m_currentReading.get(m_currentPos).getContent());
+
+                            if (m_content_reset_time > 0) {
+                                if (m_qdc != null)
+                                    m_qdc.cancel(true);
+                                m_qdc = new ContentDelayCounter();
+                                m_qdc.delegate = (QDCResponse) activity;
+                                m_qdc.execute((int) m_content_reset_time);
+                            }
+
+                        }
+
+                        @Override
+                        public void onError(String utteranceId) {
+                        }
+                    });
+
+                    HashMap<String, String> myHashRender = new HashMap<String, String>();
+                    myHashRender.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, this.hashCode() + " ");
+
+                    File file = new File(FileDowloader.DOWNLOAD_PATH + CompressionString.compress(m_currentReading.get(m_currentPos).getContent()) + ".mp3");
+                    file.setReadable(true, false);
+                    if (file.exists()) {
+                        playCurrentSoundContent(m_currentReading.get(m_currentPos).getContent());
+                    } else {
+                        int r = m_ttobj.synthesizeToFile(m_currentReading.get(m_currentPos).getContent(), myHashRender, FileDowloader.DOWNLOAD_PATH + CompressionString.compress(m_currentReading.get(m_currentPos).getContent()) + ".mp3");
                     }
-
-                    @Override
-                    public void onError(String utteranceId) {
-                    }
-                });
-
-                HashMap<String, String> myHashRender = new HashMap<String, String>();
-                myHashRender.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,this.hashCode() + " ");
-
-                File file = new File(FileDowloader.DOWNLOAD_PATH + CompressionString.compress(m_currentReading.get(m_currentPos).getContent())  + ".mp3");
-                file.setReadable(true, false);
-                if(file.exists()){
-                    playCurrentSoundContent(m_currentReading.get(m_currentPos).getContent());
-                } else {
-                    int r = m_ttobj.synthesizeToFile(m_currentReading.get(m_currentPos).getContent(), myHashRender,FileDowloader.DOWNLOAD_PATH + CompressionString.compress(m_currentReading.get(m_currentPos).getContent())  + ".mp3");
                 }
-
             }
         });
+    }
+
+
+    /**
+     * Create the asynctask to download the content of the URL
+     * @param adresse
+     */
+    private void openWebSite(String adresse) {
+        UrlContentDownloader urlDownloader = new UrlContentDownloader(this);
+        urlDownloader.execute(adresse);
+    }
+
+    /**
+     * Method from UrlContentCallback called when the asynctask finished
+     * @param content is a string which contains all the HTML from the page
+     */
+    public void onWebsiteContent(String content)
+    {
+        Log.i("Web","---------------------");
+        Log.i("Web",content);
+        Log.i("Web","---------------------");
+
+
+        Document html = Jsoup.parse(content);
+
+        //Find <title> thanks to JSoup API
+        String title = html.title();
+        m_currentReading.add(new QRText(title));
+
+        Log.i("Web",title);
+        Log.i("Web","---------------------");
+
+        // Find <h1>,<h2> ... <p> in the HTML content, thanks to JSoup API
+        Elements listElements = html.select("h0, h1, h2, h3, h4, h5, h6, p");
+
+        for(int i=0; i<listElements.size(); ++i){
+            String texte= listElements.get(i).text();
+            Log.i("Web","   "+texte);
+            Log.i("Web","   "+texte.length());
+
+            m_currentReading.add(new QRText(texte));
+        }
+
     }
 
     /**
@@ -1158,9 +1253,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         this.runOnUiThread(new Runnable() {
             public void run() {
-               //Hiding graphical elements
-               m_text_space.setVisibility(View.INVISIBLE);
-               m_contentLayout.setVisibility(View.INVISIBLE);
+                //Hiding graphical elements
+                m_text_space.setVisibility(View.INVISIBLE);
+                m_contentLayout.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -1253,6 +1348,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             public void onSwipeBottom() {
                 m_currentDetectionModeStrategy.onSwipeBottom();
             }
+
 
             public void onDoubleClick() { m_currentDetectionModeStrategy.onDoubleClick();}
         });
@@ -1382,15 +1478,71 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         return true;
     }
 
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+
+            case  R.id.action_settings :
+                Intent pickOptionIntent = new Intent(this,SettingsActivity.class);
+                startActivityForResult(pickOptionIntent, OPTION_REQUEST);
+                return  true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+
+        Log.v("test", "activity result");
+
+
+        // On demande les permissions obligatoires si elles ne sont pas toutes autorisées
+        if (!allCompulsoryAuthorizationsGranted()){
+            Log.v("test", "on result : pas toutes les autorisations, on lance checkPermissions()");
+            checkPermissions();
+        }
+
+
+        if (requestCode == OPTION_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                // The user picked a contact.
+                // The Intent's data Uri identifies which contact was selected.
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+
+                m_speechSpeed = settings.getFloat("m_speechSpeed", SPEEDSPEECH_DEFAULT);
+
+                m_ttslanguage = new Locale(settings.getString("speechLanguage",LOCALE_DEFAULT.getLanguage()),settings.getString("speechCountry",LOCALE_DEFAULT.getCountry()));
+                m_ttobj.setLanguage(m_ttslanguage);
+
+                m_content_reset_time = settings.getFloat("resetTime2", DEFAULT_CONTENT_RESET_TIME);
+
+                m_multiple_detection_time = settings.getFloat("MDTime",DEFAULT_MULTIPLE_DETECTION_TIME);
+
+                m_web_opening_via_browser = settings.getBoolean("WebOpening", DEFAULT_WEB_OPENING_VIA_BROWSER);
+            }
+        }
+
+    }
+    // @Override
     @SuppressWarnings("deprecation")
+    /*
+
+
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -1400,18 +1552,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent pickOptionIntent = new Intent(getApplicationContext(), OptionActivity.class);
-            /*if(ice_cream && !m_lollipopOrHigher) {
-                pickOptionIntent.putExtra("DefaultsEnforced", m_ttobj.areDefaultsEnforced());
-            }*/
+
             pickOptionIntent.putExtra("languages", m_locals);
             startActivityForResult(pickOptionIntent, OPTION_REQUEST);
-            /*Intent intent = new Intent(getApplicationContext(), OptionActivity.class);
-            startActivity(intent);*/
+
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+     */
 
     private boolean allCompulsoryAuthorizationsGranted(){
 
@@ -1452,41 +1603,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Check which request we're responding to
 
-        Log.v("test", "activity result");
-
-
-        // On demande les permissions obligatoires si elles ne sont pas toutes autorisées
-        if (!allCompulsoryAuthorizationsGranted()){
-            Log.v("test", "on result : pas toutes les autorisations, on lance checkPermissions()");
-            checkPermissions();
-        }
-
-
-        if (requestCode == OPTION_REQUEST) {
-            // Make sure the request was successful
-            if (resultCode == RESULT_OK) {
-                // The user picked a contact.
-                // The Intent's data Uri identifies which contact was selected.
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-
-                m_speechSpeed = settings.getFloat("m_speechSpeed", SPEEDSPEECH_DEFAULT);
-
-                m_ttslanguage = new Locale(settings.getString("speechLanguage",LOCALE_DEFAULT.getLanguage()),settings.getString("speechCountry",LOCALE_DEFAULT.getCountry()));
-                m_ttobj.setLanguage(m_ttslanguage);
-
-                m_content_reset_time = settings.getFloat("resetTime2", DEFAULT_CONTENT_RESET_TIME);
-
-                m_multiple_detection_time = settings.getFloat("MDTime",DEFAULT_MULTIPLE_DETECTION_TIME);
-
-
-            }
-        }
-
-    }
 
     /**
      * Stops the detection : the application is no longer trying to detect QRCodes
@@ -1572,7 +1689,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-       if(m_hasAccelerometer)
+        if(m_hasAccelerometer)
         {
             long curTime = System.currentTimeMillis();
             if ((curTime - m_lastSensorUpdate) > 2000) {

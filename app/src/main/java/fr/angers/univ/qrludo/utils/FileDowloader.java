@@ -11,6 +11,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import fr.angers.univ.qrludo.QR.model.QrCodeJson;
+
 
 /**
  * Created by etudiant on 26/01/18.
@@ -33,8 +35,10 @@ public class FileDowloader extends AsyncTask {
         m_url = url;
         m_user = user;
         // On compresse l'url du fichier pour pouvoir lui donner un nom reconnaissable lors du stockage
-        m_id=CompressionString.compress(url);
-        m_path = FileDowloader.DOWNLOAD_PATH+m_id+".mp3";
+        //m_id=CompressionString.compress(url);
+
+
+        m_path = FileDowloader.DOWNLOAD_PATH+"m_id"+".mp3";
 
 
         // Creating qrludo dir if doesn't exist
@@ -44,6 +48,7 @@ public class FileDowloader extends AsyncTask {
         }
 
     }
+
 
     @Override
     protected Object doInBackground(Object[] objects) {
@@ -97,6 +102,8 @@ public class FileDowloader extends AsyncTask {
     }
 
 
+
+
     /**
      * Interface needed by the clients of FileDownloader
      */
@@ -116,4 +123,22 @@ public class FileDowloader extends AsyncTask {
         return false;
     }
 
+
+    public static boolean isEmpty() {
+        File targetDir = new File(FileDowloader.DOWNLOAD_PATH);
+        if (targetDir.isDirectory()) {
+            File[] files = targetDir.listFiles();
+            for (File f : files) {
+                if (f.length() == 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        } return  true;
+
+    }
+
+
 }
+
