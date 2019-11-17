@@ -18,6 +18,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -1033,7 +1034,15 @@ public class MainActivity extends AppCompatActivity
                 //Check if content is a Web Site
                 if (m_currentReading.get(m_currentPos).getContent().startsWith("http://") || m_currentReading.get(m_currentPos).getContent().startsWith("https://")) {
                     Log.i("Web", "######################### WebSite trouvé ###########################################");
-                    openWebSite(m_currentReading.get(m_currentPos).getContent());
+                    //Si on doit se contenter d'ouvrir le lien dans un navigateur
+                    if (m_web_opening_via_browser)
+                    {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(m_currentReading.get(m_currentPos).getContent()));
+                        startActivity(browserIntent);
+                    }
+                    //Sinon on le lit par synthèse vocale
+                    else
+                        openWebSite(m_currentReading.get(m_currentPos).getContent());
                 }
                 else {
                     //printing the text
