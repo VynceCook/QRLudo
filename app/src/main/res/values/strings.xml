@@ -19,14 +19,14 @@
     </string-array>
 
     <string name="language">Language de la synthese vocale</string>
-    <string name="langue_summary">Choisissez votre language</string>
+    <string name="langue_summary">Langue actuelle : </string>
     <string name="langue_default">Français</string>
 
     <string name="vitesse_synthese">Vitesse de la synthese vocale</string>
-    <string name="vitesse_summary">Modifiez la vitesse de la synthèse vocale</string>
+    <string name="vitesse_summary">Valeur actuelle : </string>
 
     <string name="duree_multiple">Durée de la détéction multiple</string>
-    <string name="duree_summary">Modifiez la durée de la détection multiple</string>
+    <string name="duree_summary">Valeur actuelle : </string>
 
     <string name="supp_fichier">Tout supprimer</string>
     <string name="supp_summary">Supprimez tous les enregistrements du fichier</string>
