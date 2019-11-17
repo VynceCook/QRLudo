@@ -1450,10 +1450,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 m_multiple_detection_time = settings.getFloat("MDTime",DEFAULT_MULTIPLE_DETECTION_TIME);
 
                 m_web_opening_via_browser = settings.getBoolean("WebOpening", DEFAULT_WEB_OPENING_VIA_BROWSER);
-                if (m_web_opening_via_browser)
-                    Toast.makeText(this, "MAIN ACTIVITY : CHECK", Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(this, "MAIN ACTIVITY : PAS CHECK", Toast.LENGTH_SHORT).show();
             }
         }
 

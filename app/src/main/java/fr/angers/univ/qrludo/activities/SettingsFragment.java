@@ -11,11 +11,8 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -30,8 +27,9 @@ public class SettingsFragment extends PreferenceFragment {
     SharedPreferences.Editor edit;
     float speedSpeech;
     float mdt;
-    float sr;
     boolean webOpeningViaBrowser;
+    String speechLanguage;
+    String speechCountry;
     Locale ttslanguage;
 
     @Override
@@ -45,31 +43,23 @@ public class SettingsFragment extends PreferenceFragment {
 
         speedSpeech = settings.getFloat("speechSpeed",MainActivity.SPEEDSPEECH_DEFAULT);
         mdt = settings.getFloat("MDTime",MainActivity.DEFAULT_MULTIPLE_DETECTION_TIME);
-        sr = settings.getFloat("resetTime2",MainActivity.DEFAULT_CONTENT_RESET_TIME);
         webOpeningViaBrowser = settings.getBoolean("WebOpening", MainActivity.DEFAULT_WEB_OPENING_VIA_BROWSER);
+        speechLanguage = settings.getString("speechLanguage",MainActivity.LOCALE_DEFAULT.getLanguage());
+        speechCountry = settings.getString("speechCountry",MainActivity.LOCALE_DEFAULT.getCountry());
         ttslanguage = new Locale(settings.getString("speechLanguage",MainActivity.LOCALE_DEFAULT.getLanguage()),settings.getString("speechCountry",MainActivity.LOCALE_DEFAULT.getCountry()));
 
-
-//        Toast.makeText(getActivity(), "Vitesse de lecture : " + speedSpeech, Toast.LENGTH_LONG).show();
-//        Toast.makeText(getActivity(), "MDTime : " + speedSpeech, Toast.LENGTH_LONG).show();
-//        Toast.makeText(getActivity(), "Reset time " + speedSpeech, Toast.LENGTH_LONG).show();
-
-        Toast.makeText(getActivity(), "Speech " + speedSpeech, Toast.LENGTH_SHORT).show();
-
-
-
-//        android:key="pref_langue"
-//        android:key="pref_delai_detection"
-//        android:key="pref_lecture_web"
         final ListPreference p_language = (ListPreference) findPreference("pref_langue");
         p_language.setSummary(getString(R.string.langue_summary) + ttslanguage);
         p_language.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 int index = p_language.findIndexOfValue(newValue.toString());
                 p_language.setValueIndex(index);
+                speechLanguage = newValue.toString();
+                speechCountry = newValue.toString().toUpperCase();
+                ttslanguage = new Locale(speechLanguage, speechCountry);
+                p_language.setSummary(getString(R.string.langue_summary) + ttslanguage);
 
-
-                Toast.makeText(getActivity(), "Nouvel index " + index, Toast.LENGTH_SHORT).show();
+                modifyPreferences();
                 return true;
             }
         });
@@ -244,12 +234,11 @@ public class SettingsFragment extends PreferenceFragment {
 
     private void modifyPreferences()
     {
-//        Locale m_ttslanguage;
-
         edit.putFloat("speechSpeed", speedSpeech);
-        edit.putFloat("resetTime2", sr);
         edit.putFloat("MDTime", mdt);
         edit.putBoolean("WebOpening", webOpeningViaBrowser);
+        edit.putString("speechLanguage",speechLanguage);
+        edit.putString("speechCountry",speechCountry);
 
         edit.apply();
     }
