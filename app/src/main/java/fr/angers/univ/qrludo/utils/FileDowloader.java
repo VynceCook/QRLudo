@@ -21,7 +21,7 @@ import fr.angers.univ.qrludo.QR.model.QrCodeJson;
 
 public class FileDowloader extends AsyncTask {
 
-    public static String DOWNLOAD_PATH = Environment.getExternalStorageDirectory().getPath()+"/qrludo/";
+    public static String DOWNLOAD_PATH = Environment.getExternalStorageDirectory().getPath() + "/qrludo/";
 
     String m_url;
     FileDownloaderObserverInterface m_user;
@@ -29,16 +29,14 @@ public class FileDowloader extends AsyncTask {
     String m_path;
 
 
-
-
-    public FileDowloader(String url, FileDownloaderObserverInterface user){
+    public FileDowloader(String url, FileDownloaderObserverInterface user) {
         m_url = url;
         m_user = user;
         // On compresse l'url du fichier pour pouvoir lui donner un nom reconnaissable lors du stockage
         //m_id=CompressionString.compress(url);
 
 
-        m_path = FileDowloader.DOWNLOAD_PATH+"m_id"+".mp3";
+        m_path = FileDowloader.DOWNLOAD_PATH + "m_id" + ".mp3";
 
 
         // Creating qrludo dir if doesn't exist
@@ -92,16 +90,13 @@ public class FileDowloader extends AsyncTask {
             m_user.onDownloadComplete();
 
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.e("test", e.getMessage());
         }
 
         return null;
 
     }
-
-
 
 
     /**
@@ -111,11 +106,11 @@ public class FileDowloader extends AsyncTask {
         void onDownloadComplete();
     }
 
-    public static boolean viderMemoire(){
+    public static boolean viderMemoire() {
         File targetDir = new File(FileDowloader.DOWNLOAD_PATH);
-        if (targetDir.isDirectory()){
-            File[] files=targetDir.listFiles();
-            for(File f : files){
+        if (targetDir.isDirectory()) {
+            File[] files = targetDir.listFiles();
+            for (File f : files) {
                 f.delete();
             }
             return true;
@@ -128,17 +123,10 @@ public class FileDowloader extends AsyncTask {
         File targetDir = new File(FileDowloader.DOWNLOAD_PATH);
         if (targetDir.isDirectory()) {
             File[] files = targetDir.listFiles();
-            for (File f : files) {
-                if (f.length() == 0) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        } return  true;
-
+            if (files.length > 0)
+                return false;
+        }
+        return true;
     }
-
-
 }
 

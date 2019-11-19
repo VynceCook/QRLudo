@@ -159,7 +159,6 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * The integer corresping to the code identifying the option intent used to launch the option activity.
-     * @see OptionActivity
      */
     static final int OPTION_REQUEST = 90;  // The request code
 
@@ -1538,31 +1537,6 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
-    // @Override
-    @SuppressWarnings("deprecation")
-    /*
-
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent pickOptionIntent = new Intent(getApplicationContext(), OptionActivity.class);
-
-            pickOptionIntent.putExtra("languages", m_locals);
-            startActivityForResult(pickOptionIntent, OPTION_REQUEST);
-
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-     */
 
     private boolean allCompulsoryAuthorizationsGranted(){
 
