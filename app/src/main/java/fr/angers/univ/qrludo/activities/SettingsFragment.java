@@ -205,7 +205,13 @@ public class SettingsFragment extends PreferenceFragment {
         });
 
         //Suppression des fichiers
-        Preference p_supprimer  = findPreference("pref_supprime");
+        final Preference p_supprimer  = findPreference("pref_supprime");
+
+        if(FileDowloader.isEmpty())
+            p_supprimer.setEnabled(false);
+        else
+            p_supprimer.setEnabled(true);
+
         p_supprimer.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -219,9 +225,8 @@ public class SettingsFragment extends PreferenceFragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 if(FileDowloader.viderMemoire()) {
                                     Toast.makeText(getActivity(), "Les données ont bien été supprimées", Toast.LENGTH_LONG).show();
-                                }
-                                else {
-                                    Toast.makeText(getActivity(), "Le dossier n'existe pas", Toast.LENGTH_LONG).show();
+
+                                    p_supprimer.setEnabled(false);
                                 }
                             }
                         });
