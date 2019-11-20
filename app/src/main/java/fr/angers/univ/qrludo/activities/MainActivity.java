@@ -18,6 +18,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -153,8 +154,12 @@ public class MainActivity extends AppCompatActivity
     public static final float DEFAULT_CONTENT_RESET_TIME = 60;
 
     /**
+     * The default way to open an HTTP QR Code.
+     */
+    public static final boolean DEFAULT_WEB_OPENING_VIA_BROWSER = true;
+
+    /**
      * The integer corresping to the code identifying the option intent used to launch the option activity.
-     * @see OptionActivity
      */
     static final int OPTION_REQUEST = 90;  // The request code
 
@@ -398,6 +403,11 @@ public class MainActivity extends AppCompatActivity
      * True if a multiple detection is running and not yet ended
      */
     private boolean m_isMultipleDetectionTimerRunning;
+
+    /**
+     * Time during which the application tries to detect another QR after having detecting one
+     */
+    private boolean m_web_opening_via_browser;
 
 
 
@@ -659,6 +669,8 @@ public class MainActivity extends AppCompatActivity
         m_content_reset_time = settings.getFloat("resetTime2", DEFAULT_CONTENT_RESET_TIME);
 
         m_multiple_detection_time = settings.getFloat("MDTime",DEFAULT_MULTIPLE_DETECTION_TIME);
+
+        m_web_opening_via_browser = settings.getBoolean("WebOpening",DEFAULT_WEB_OPENING_VIA_BROWSER);
 
         SetUpTTS();
 
@@ -1026,7 +1038,15 @@ public class MainActivity extends AppCompatActivity
                 //Check if content is a Web Site
                 if (m_currentReading.get(m_currentPos).getContent().startsWith("http://") || m_currentReading.get(m_currentPos).getContent().startsWith("https://")) {
                     Log.i("Web", "######################### WebSite trouvé ###########################################");
-                    openWebSite(m_currentReading.get(m_currentPos).getContent());
+                    //Si on doit se contenter d'ouvrir le lien dans un navigateur
+                    if (m_web_opening_via_browser)
+                    {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(m_currentReading.get(m_currentPos).getContent()));
+                        startActivity(browserIntent);
+                    }
+                    //Sinon on le lit par synthèse vocale
+                    else
+                        openWebSite(m_currentReading.get(m_currentPos).getContent());
                 }
                 else {
                     //printing the text
@@ -1462,6 +1482,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -1470,28 +1491,56 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent pickOptionIntent = new Intent(getApplicationContext(), OptionActivity.class);
-            /*if(ice_cream && !m_lollipopOrHigher) {
-                pickOptionIntent.putExtra("DefaultsEnforced", m_ttobj.areDefaultsEnforced());
-            }*/
-            pickOptionIntent.putExtra("languages", m_locals);
-            startActivityForResult(pickOptionIntent, OPTION_REQUEST);
-            /*Intent intent = new Intent(getApplicationContext(), OptionActivity.class);
-            startActivity(intent);*/
-            return true;
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+
+            case  R.id.action_settings :
+                Intent pickOptionIntent = new Intent(this,SettingsActivity.class);
+                startActivityForResult(pickOptionIntent, OPTION_REQUEST);
+                return  true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
 
-        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+
+        Log.v("test", "activity result");
+
+
+        // On demande les permissions obligatoires si elles ne sont pas toutes autorisées
+        if (!allCompulsoryAuthorizationsGranted()){
+            Log.v("test", "on result : pas toutes les autorisations, on lance checkPermissions()");
+            checkPermissions();
+        }
+
+
+        if (requestCode == OPTION_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                // The user picked a contact.
+                // The Intent's data Uri identifies which contact was selected.
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+
+                m_speechSpeed = settings.getFloat("m_speechSpeed", SPEEDSPEECH_DEFAULT);
+
+                m_ttslanguage = new Locale(settings.getString("speechLanguage",LOCALE_DEFAULT.getLanguage()),settings.getString("speechCountry",LOCALE_DEFAULT.getCountry()));
+                m_ttobj.setLanguage(m_ttslanguage);
+
+                m_content_reset_time = settings.getFloat("resetTime2", DEFAULT_CONTENT_RESET_TIME);
+
+                m_multiple_detection_time = settings.getFloat("MDTime",DEFAULT_MULTIPLE_DETECTION_TIME);
+
+                m_web_opening_via_browser = settings.getBoolean("WebOpening", DEFAULT_WEB_OPENING_VIA_BROWSER);
+            }
+        }
+
     }
 
     private boolean allCompulsoryAuthorizationsGranted(){
@@ -1533,41 +1582,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Check which request we're responding to
 
-        Log.v("test", "activity result");
-
-
-        // On demande les permissions obligatoires si elles ne sont pas toutes autorisées
-        if (!allCompulsoryAuthorizationsGranted()){
-            Log.v("test", "on result : pas toutes les autorisations, on lance checkPermissions()");
-            checkPermissions();
-        }
-
-
-        if (requestCode == OPTION_REQUEST) {
-            // Make sure the request was successful
-            if (resultCode == RESULT_OK) {
-                // The user picked a contact.
-                // The Intent's data Uri identifies which contact was selected.
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-
-                m_speechSpeed = settings.getFloat("m_speechSpeed", SPEEDSPEECH_DEFAULT);
-
-                m_ttslanguage = new Locale(settings.getString("speechLanguage",LOCALE_DEFAULT.getLanguage()),settings.getString("speechCountry",LOCALE_DEFAULT.getCountry()));
-                m_ttobj.setLanguage(m_ttslanguage);
-
-                m_content_reset_time = settings.getFloat("resetTime2", DEFAULT_CONTENT_RESET_TIME);
-
-                m_multiple_detection_time = settings.getFloat("MDTime",DEFAULT_MULTIPLE_DETECTION_TIME);
-
-
-            }
-        }
-
-    }
 
     /**
      * Stops the detection : the application is no longer trying to detect QRCodes

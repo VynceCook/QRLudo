@@ -25,7 +25,6 @@ public class QRFile extends QRContent implements FileDowloader.FileDownloaderObs
         m_isFileInMemory =  (new File(FileDowloader.DOWNLOAD_PATH+(CompressionString.compress(fileUrl))+".mp3").exists());
 
         downloadIfNotInMemory();
-
     }
 
     public boolean isFileInMemory(){
@@ -52,7 +51,7 @@ public class QRFile extends QRContent implements FileDowloader.FileDownloaderObs
     @Override
     public void onDownloadComplete() {
 
-        Log.v("test", "fichier téléchargé");
+        Log.v("plop", "fichier téléchargé");
 
         //registers that the downloading is over
         m_isFileInMemory = true;

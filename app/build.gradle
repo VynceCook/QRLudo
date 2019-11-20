@@ -23,7 +23,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    
+
 }
 repositories {
     jcenter()
@@ -48,4 +48,6 @@ dependencies {
         exclude group: 'org.apache.httpcomponents'
     }
     implementation 'com.google.code.gson:gson:2.8.2'
+
+
 }
