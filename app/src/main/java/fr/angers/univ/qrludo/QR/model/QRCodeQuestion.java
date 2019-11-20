@@ -1,7 +1,12 @@
 package fr.angers.univ.qrludo.QR.model;
 
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,22 +15,29 @@ import java.util.Map;
  * Valentine Rahier
  */
 public class QRCodeQuestion extends QRCode {
-    private Map<String, String> m_reponses;
+    private ArrayList<Object> liste_bonne_rep = new ArrayList<>();
+    private String id = null;
+    private String m_text_bonne_rep;
+    private String m_text_mauvaise_rep;
+    private int nb_min_reponses;
+
+
 
     public QRCodeQuestion(QrCodeJson code, String rawValue) {
         super(code, rawValue);
 
+        //id = m_qrcodeJson.
 
-        m_reponses = new HashMap<>();
+        Gson gson = new GsonBuilder().create();
+        QrCodeJsonQuestion codeQuestion = gson.fromJson(rawValue, QrCodeJsonQuestion.class);
+        Log.i("test", "Ceci est la bonne rep : "+codeQuestion);
 
-        for(Object reponse : m_qrcodeJson.getData()){
-            LinkedTreeMap<String, Object> reponseString = (LinkedTreeMap<String, Object>)reponse;
+        liste_bonne_rep = codeQuestion.getData();
+        id = codeQuestion.getId();
+        m_text_bonne_rep = codeQuestion.getText_bonne_reponse();
+        m_text_mauvaise_rep = codeQuestion.getText_mauvaise_reponse();
+        nb_min_reponses = codeQuestion.getNb_min_reponses();
 
-            String id = (String) reponseString.get("id");
-            String message = (String)reponseString.get("message");
-
-            m_reponses.put(id, message);
-        }
 
         m_content.add(new QRText(m_qrcodeJson.getName()));
     }
@@ -34,7 +46,43 @@ public class QRCodeQuestion extends QRCode {
         return m_qrcodeJson.getName();
     }
 
-    public Map<String, String> getReponses(){
-        return m_reponses;
+    public ArrayList<Object> getListe_bonne_rep() {
+        return liste_bonne_rep;
+    }
+
+    public void setListe_bonne_rep(ArrayList<Object> liste_bonne_rep) {
+        this.liste_bonne_rep = liste_bonne_rep;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getM_text_bonne_rep() {
+        return m_text_bonne_rep;
+    }
+
+    public void setM_text_bonne_rep(String m_text_bonne_rep) {
+        this.m_text_bonne_rep = m_text_bonne_rep;
+    }
+
+    public String getM_text_mauvaise_rep() {
+        return m_text_mauvaise_rep;
+    }
+
+    public void setM_text_mauvaise_rep(String m_text_mauvaise_rep) {
+        this.m_text_mauvaise_rep = m_text_mauvaise_rep;
+    }
+
+    public int getNb_min_reponses() {
+        return nb_min_reponses;
+    }
+
+    public void setNb_min_reponses(int nb_min_reponses) {
+        this.nb_min_reponses = nb_min_reponses;
     }
 }
