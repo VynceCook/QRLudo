@@ -87,15 +87,31 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
         m_mainActivity.playCurrentSoundContent("Fichier audio");
     }
 
+    /*
+        If you swipe top once, you rewind the audio from 5 seconds.
+        If you swipe top twice, you replay the current detection from the start
+    */
     @Override
     public void onSwipeTop() {
-        if (m_mainActivity.getDetectionProgress()!=NO_QR_DETECTED){
-            //Reading again the current QRContent provided at least one QR has been detected.
-            m_mainActivity.readCurrentContent();
+        //Launch runnerSwipeLeft if you don't swipe another time in the next 1 second
+        // runnerSwipeLeft is in QRCodeDetectionModeStrategy
+        if(!posted) {
+            posted = hand.postDelayed(runnerSwipeLeft, 1000);
         }
+        //Stop runnerSwipeLeft if you double swipe and rewind the current audio
         else{
-            //Signaling that the user cannot swipe top
-            ToneGeneratorSingleton.getInstance().errorTone();
+            hand.removeCallbacks(runnerSwipeLeft);
+
+            if (m_mainActivity.getDetectionProgress()!=NO_QR_DETECTED){
+                //Reading again the current QRContent provided at least one QR has been detected.
+                m_mainActivity.readCurrentContent();
+            }
+            else{
+                //Signaling that the user cannot swipe top
+                ToneGeneratorSingleton.getInstance().errorTone();
+            }
+
+            posted = false;
         }
     }
 
@@ -116,54 +132,38 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
         }
     }
 
-    /*
-        If you swipe left once, you rewind the audio from 5 seconds.
-        If you swipe left twice, you start a new detection
-    */
     @Override
     public void onSwipeLeft() {
-        //Launch runnerSwipeLeft if you don't swipe another time in the next 1 second
-        // runnerSwipeLeft is in QRCodeDetectionModeStrategy
-        if(!posted) {
-            posted = hand.postDelayed(runnerSwipeLeft, 1000);
-        }
-        //Stop runnerSwipeLeft if you double swipe and rewind the current audio
-        else{
-            hand.removeCallbacks(runnerSwipeLeft);
+        //Can only swipe left if at least one QR has been printed/detected (equivalent in the default detection mode)
+        if (m_mainActivity.getDetectionProgress()!=NO_QR_DETECTED){
 
-            //Can only swipe left if at least one QR has been printed/detected (equivalent in the default detection mode)
-            if (m_mainActivity.getDetectionProgress()!=NO_QR_DETECTED){
+            //If the application is still detecting and the user has already reached the last currently available QRContent, cannot swipe left
+            if (!(m_mainActivity.isApplicationDetecting() && m_mainActivity.getCurrentPos()==m_mainActivity.getContentSize()-1)){
 
-                //If the application is still detecting and the user has already reached the last currently available QRContent, cannot swipe left
-                if (!(m_mainActivity.isApplicationDetecting() && m_mainActivity.getCurrentPos()==m_mainActivity.getContentSize()-1)){
+                //If the app is waiting to be notified by the current QRFile of the end of its downloading, unregister as listener
+                m_mainActivity.unregisterToQRFile();
 
-                    //If the app is waiting to be notified by the current QRFile of the end of its downloading, unregister as listener
-                    m_mainActivity.unregisterToQRFile();
-
-                    if (m_mainActivity.getCurrentPos()==m_mainActivity.getContentSize()-1){
-                        //Ending the reading if the user had already reached the last QRContent
-                        m_mainActivity.startNewDetection("");
-                    }
-                    else{
-                        //Reading the next QRContent
-                        m_mainActivity.incrementCurrentPos();
-                        m_mainActivity.readCurrentContent();
-
-                        if (m_mainActivity.getCurrentPos()==m_mainActivity.getContentSize()-1){
-                            //Notifying the user if he has just reached the last QRContent
-                            ToneGeneratorSingleton.getInstance().lastQRCodeReadTone();
-                        }
-                    }
+                if (m_mainActivity.getCurrentPos()==m_mainActivity.getContentSize()-1){
+                    //Ending the reading if the user had already reached the last QRContent
+                    m_mainActivity.startNewDetection("");
                 }
                 else{
-                    ToneGeneratorSingleton.getInstance().errorTone();
+                    //Reading the next QRContent
+                    m_mainActivity.incrementCurrentPos();
+                    m_mainActivity.readCurrentContent();
+
+                    if (m_mainActivity.getCurrentPos()==m_mainActivity.getContentSize()-1){
+                        //Notifying the user if he has just reached the last QRContent
+                        ToneGeneratorSingleton.getInstance().lastQRCodeReadTone();
+                    }
                 }
             }
             else{
                 ToneGeneratorSingleton.getInstance().errorTone();
             }
-
-            posted = false;
+        }
+        else{
+            ToneGeneratorSingleton.getInstance().errorTone();
         }
     }
 

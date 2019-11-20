@@ -45,6 +45,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
+import com.google.android.gms.vision.MultiDetector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
@@ -718,6 +719,7 @@ public class MainActivity extends AppCompatActivity
                 .setBarcodeFormats(Barcode.DATA_MATRIX | Barcode.QR_CODE)
                 .build();
 
+
         if (!detector.isOperational()) {
             Log.e("DETECTOR","Could not set up detector.");
             return;
@@ -799,6 +801,9 @@ public class MainActivity extends AppCompatActivity
                             Log.v("test", "ignoring QR");
                             break;
                         }
+
+                        Log.i("DETECTION MULTIPLE", barcodes.size()+" : "+rawValue);
+
 
                         try {
 

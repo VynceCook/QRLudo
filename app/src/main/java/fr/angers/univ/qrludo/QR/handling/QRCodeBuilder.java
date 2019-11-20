@@ -98,7 +98,11 @@ public class QRCodeBuilder {
             return new QRCodeQuestion(code, dataQR);
         } else if(code.getType().equalsIgnoreCase("reponse")){
             return new QRCodeReponse(code, dataQR);
-        }
+        } /*else if((code.getType().equalsIgnoreCase("questionQCM")){
+            return new QRCodeQuestionQCM(code, dataQR);
+        } else if((code.getType().equalsIgnoreCase("reponseQCM"){
+            return new QRCodeReponseQCM(code, dataQR);
+        }*/
 
         return new QRCodeAtomique(code, rawvalue);
 
