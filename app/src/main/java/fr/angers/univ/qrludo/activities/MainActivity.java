@@ -62,6 +62,7 @@ import fr.angers.univ.qrludo.QR.handling.QRCodeDefaultDetectionModeStrategy;
 import fr.angers.univ.qrludo.QR.handling.QRCodeDetectionModeStrategy;
 import fr.angers.univ.qrludo.QR.model.QRCode;
 import fr.angers.univ.qrludo.QR.model.QRCodeCollection;
+import fr.angers.univ.qrludo.QR.model.QRCodeQuestion;
 import fr.angers.univ.qrludo.QR.model.QRContent;
 import fr.angers.univ.qrludo.QR.model.QRFile;
 import fr.angers.univ.qrludo.QR.model.QRText;
@@ -1268,6 +1269,20 @@ public class MainActivity extends AppCompatActivity
 
         //Restarting detection
         startDetection();
+
+    }
+
+    //Methode qui permet d'entrer dans le mode exploration : scan de plusieur qrCodeUnique en mode Question/reponse (reponses)
+    public void modeExploration(final String question){
+
+        final AppCompatActivity activity = this;
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+
+                readQuestion(question);
+                toSpeech("Mode Exploration", TextToSpeech.QUEUE_ADD);
+            }
+        });
 
     }
 
