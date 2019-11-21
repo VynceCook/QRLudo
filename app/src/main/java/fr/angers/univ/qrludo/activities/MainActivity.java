@@ -63,6 +63,8 @@ import fr.angers.univ.qrludo.QR.handling.QRCodeDefaultDetectionModeStrategy;
 import fr.angers.univ.qrludo.QR.handling.QRCodeDetectionModeStrategy;
 import fr.angers.univ.qrludo.QR.model.QRCode;
 import fr.angers.univ.qrludo.QR.model.QRCodeCollection;
+import fr.angers.univ.qrludo.QR.model.QRCodeQuestionQCM;
+import fr.angers.univ.qrludo.QR.model.QRCodeReponseQCM;
 import fr.angers.univ.qrludo.QR.model.QRContent;
 import fr.angers.univ.qrludo.QR.model.QRFile;
 import fr.angers.univ.qrludo.QR.model.QRText;
@@ -791,6 +793,7 @@ public class MainActivity extends AppCompatActivity
       The processor of the detector, where the events from the detector are handled
      */
         Detector.Processor<Barcode> detector_processor = new Detector.Processor<Barcode>() {
+            ArrayList<QRCode> listQR = new ArrayList<>();
 
             @Override
             public void release() {
@@ -814,22 +817,33 @@ public class MainActivity extends AppCompatActivity
                             break;
                         }
 
-                        Log.i("DETECTION MULTIPLE", barcodes.size()+" : "+rawValue);
-
+                        Log.i("DETECTION MULTIPLE", String.valueOf(barcodes.size())+" : "+rawValue);
 
                         try {
 
                             int version = MainActivity.this.getResources().getInteger(R.integer.version_qrludo);
                             QRCode detectedQR = QRCodeBuilder.build(rawValue, version);
+
+                            if(detectedQR instanceof QRCodeQuestionQCM){
+                                QRCodeQuestionQCM detectedQRQuestionQCM = (QRCodeQuestionQCM) detectedQR;
+                                Log.i("DETECTION MULTIPLE", detectedQRQuestionQCM.getId()+ "    " + detectedQRQuestionQCM.getText());
+                            }
+                            if(detectedQR instanceof QRCodeReponseQCM){
+                                QRCodeReponseQCM detectedQRQuestionQCM = (QRCodeReponseQCM) detectedQR;
+                                Log.i("DETECTION MULTIPLE", detectedQRQuestionQCM.getId()+ "    " + detectedQRQuestionQCM.isAnswer());
+                            }
+
+                            //listQR.add(detectedQR);
+
                             //If first QR detected of the current detection
-                            if (m_detectionProgress == NO_QR_DETECTED) {
+                            /*if (m_detectionProgress == NO_QR_DETECTED) {
                                 m_currentDetectionModeStrategy.onFirstDetectionWithTimeNotNull(detectedQR);
                             }
                             //If at least one QR has already been detected during the current detection
                             else{
                                 m_currentDetectionModeStrategy.onNextDetectionWithTimeNotNull(detectedQR);
                             }
-
+                            */
 
                         } catch (UnhandledQRException e) {
                             ToneGeneratorSingleton.getInstance().ignoredQRCodeTone();
@@ -837,6 +851,7 @@ public class MainActivity extends AppCompatActivity
                             toSpeech(e.getMessage(), TextToSpeech.QUEUE_ADD);
                             stopDetection();
                         }
+
 
                     }
                 }

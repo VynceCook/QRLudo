@@ -14,7 +14,9 @@ import fr.angers.univ.qrludo.QR.model.QRCode;
 import fr.angers.univ.qrludo.QR.model.QRCodeAtomique;
 import fr.angers.univ.qrludo.QR.model.QRCodeEnsemble;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestion;
+import fr.angers.univ.qrludo.QR.model.QRCodeQuestionQCM;
 import fr.angers.univ.qrludo.QR.model.QRCodeReponse;
+import fr.angers.univ.qrludo.QR.model.QRCodeReponseQCM;
 import fr.angers.univ.qrludo.QR.model.QrCodeJson;
 import fr.angers.univ.qrludo.exceptions.UnhandledQRException;
 import fr.angers.univ.qrludo.exceptions.UnsupportedQRException;
@@ -98,11 +100,12 @@ public class QRCodeBuilder {
             return new QRCodeQuestion(code, dataQR);
         } else if(code.getType().equalsIgnoreCase("reponse")){
             return new QRCodeReponse(code, dataQR);
-        } /*else if((code.getType().equalsIgnoreCase("questionQCM")){
+        } else if(code.getType().equalsIgnoreCase("questionQCM")){
+            Log.i("DETECTION MULTIPLE", "QUESTION QCM DETECTEE");
             return new QRCodeQuestionQCM(code, dataQR);
-        } else if((code.getType().equalsIgnoreCase("reponseQCM"){
+        } else if (code.getType().equalsIgnoreCase("reponseQCM")){
             return new QRCodeReponseQCM(code, dataQR);
-        }*/
+        }
 
         return new QRCodeAtomique(code, rawvalue);
 
