@@ -22,17 +22,22 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
         super(mainActivity);
         m_question = question;
         scan_reponse = false;
+        if(m_question!=null) {
+            m_mainActivity.modeExploration(m_question.getQuestionText());
+        }
     }
 
     @Override
     public void onFirstDetectionWithTimeNotNull(QRCode detectedQR) {
         Log.v("first_detection_qrep", "appel à QRCodeQuestionReponseDetectionModelStrategy.onFirstDetectionWithTimeNotNull() ; ne devrait pas arriver");
-
     }
 
     @Override
     public void onNextDetectionWithTimeNotNull(QRCode detectedQR) {
-        if(m_question!=null){
+        Log.i("======================", "ok");
+        //m_mainActivity.stopDetection();
+
+        /*if(m_question!=null){
             if((detectedQR instanceof QRCodeReponse) && scan_reponse){
                 QRCodeReponse reponse = (QRCodeReponse)detectedQR;
                 if(m_question.getReponses().containsKey(reponse.getId())){
@@ -43,7 +48,7 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
                     //m_mainActivity.stopDetection();
                 }
             }
-        }
+        }*/
     }
 
     @Override

@@ -1,5 +1,7 @@
 package fr.angers.univ.qrludo.QR.model;
 
+import android.util.Log;
+
 import com.google.gson.internal.LinkedTreeMap;
 
 import fr.angers.univ.qrludo.exceptions.UnhandledQRException;
@@ -23,6 +25,9 @@ public class QRCodeAtomique extends QRCode {
      */
     public QRCodeAtomique(QrCodeJson code,String rawValue) throws UnhandledQRException {
         super(code,rawValue);
+
+        Log.i("test","Data dans unique : "+code.getData());
+
         FileJson music=new FileJson();
         for(Object data : code.getData()){
             if(isUrlFile(data.toString())) {

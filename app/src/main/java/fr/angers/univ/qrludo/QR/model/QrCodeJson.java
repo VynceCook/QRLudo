@@ -11,6 +11,8 @@ public class QrCodeJson {
     private String name="";
     private String type="";
 
+
+
     // Ce tableau contient toute les données contenu dans la balise data
     // Ces données peuvent être sous la forme d'une chaine de caractère ou d'une nouvelle chaine de type Json
     private ArrayList<Object> data= new ArrayList<>();
@@ -23,7 +25,7 @@ public class QrCodeJson {
         return "QrCodeJson{" +
                 "name='" + name + '\'' +
                 ", type='" + type + '\'' +
-                ", data=" + data +
+                ", data=" + data.size() +
                 ", color='" + color + '\'' +
                 '}';
     }
