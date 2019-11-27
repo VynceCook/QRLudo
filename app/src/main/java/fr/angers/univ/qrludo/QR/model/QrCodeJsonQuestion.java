@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class QrCodeJsonQuestion extends QrCodeJson {
     //private ArrayList<String> liste_bonne_rep = new ArrayList<>();
-    private String id = null;
     private String text_bonne_reponse = null;
     private String text_mauvaise_reponse = null;
     private int nb_min_reponses = 0;
@@ -12,18 +11,10 @@ public class QrCodeJsonQuestion extends QrCodeJson {
     @Override
     public String toString() {
         return super.toString()+" QrCodeJsonQuestion{" +
-                ", id='" + id + '\'' +
+                ", id='" + super.getId() + '\'' +
                 ", m_text_bonne_rep=" + text_bonne_reponse +
                 ", m_text_mauvaise_rep='" + text_mauvaise_reponse + '\'' +
                 '}';
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getText_mauvaise_reponse() {

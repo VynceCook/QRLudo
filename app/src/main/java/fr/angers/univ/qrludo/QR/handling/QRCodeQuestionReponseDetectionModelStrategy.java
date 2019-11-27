@@ -1,8 +1,10 @@
 package fr.angers.univ.qrludo.QR.handling;
 
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
 import fr.angers.univ.qrludo.QR.model.QRCode;
+import fr.angers.univ.qrludo.QR.model.QRCodeAtomique;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestion;
 import fr.angers.univ.qrludo.QR.model.QRCodeReponse;
 import fr.angers.univ.qrludo.activities.MainActivity;
@@ -34,21 +36,27 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
 
     @Override
     public void onNextDetectionWithTimeNotNull(QRCode detectedQR) {
-        Log.i("======================", "ok");
         //m_mainActivity.stopDetection();
 
-        /*if(m_question!=null){
-            if((detectedQR instanceof QRCodeReponse) && scan_reponse){
-                QRCodeReponse reponse = (QRCodeReponse)detectedQR;
-                if(m_question.getReponses().containsKey(reponse.getId())){
-                    m_mainActivity.reponseFind(m_question.getReponses().get(((QRCodeReponse) detectedQR).getId()));
-                    //m_mainActivity.stopDetection();
-                } else {
-                    m_mainActivity.reponseFind("Dommage, ceci n'est pas la bonne réponse");
-                    //m_mainActivity.stopDetection();
-                }
+        scan_reponse = true;
+
+        if(m_question!=null){
+            if((detectedQR instanceof QRCodeAtomique) && scan_reponse) {
+                QRCodeAtomique reponse = (QRCodeAtomique) detectedQR;
+
+                m_mainActivity.reponseFind(reponse.getM_reponse());
+
             }
-        }*/
+
+
+            /*if(m_question.getListe_bonne_rep().contains(reponse.getId())){
+                m_mainActivity.reponseFind(m_question.getListe_bonne_rep().get(m_question.getM_text_bonne_rep()));
+                //m_mainActivity.stopDetection();
+            } else {
+                m_mainActivity.reponseFind("Dommage, ceci n'est pas la bonne réponse");
+                //m_mainActivity.stopDetection();
+            }*/
+        }
     }
 
     @Override

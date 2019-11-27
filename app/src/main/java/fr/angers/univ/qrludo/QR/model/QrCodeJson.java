@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class QrCodeJson {
     private String name="";
     private String type="";
+    private String id = null;
 
 
 
@@ -68,6 +69,14 @@ public class QrCodeJson {
 
     public void setVersion(int version){
         this.version = version;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
 

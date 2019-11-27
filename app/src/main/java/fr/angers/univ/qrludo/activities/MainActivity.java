@@ -1281,10 +1281,12 @@ public class MainActivity extends AppCompatActivity
     public void modeExploration(final String question){
 
         final AppCompatActivity activity = this;
+
+        //m_currentDetectionModeStrategy = new QRCodeDefaultDetectionModeStrategy(this);
+
         activity.runOnUiThread(new Runnable() {
             public void run() {
 
-                readQuestion(question);
                 toSpeech("Mode Exploration", TextToSpeech.QUEUE_ADD);
             }
         });

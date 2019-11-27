@@ -4,11 +4,8 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.internal.LinkedTreeMap;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -30,7 +27,6 @@ public class QRCodeQuestion extends QRCode {
 
         Gson gson = new GsonBuilder().create();
         QrCodeJsonQuestion codeQuestion = gson.fromJson(rawValue, QrCodeJsonQuestion.class);
-        Log.i("test", "Ceci est la bonne rep : "+codeQuestion);
 
         liste_bonne_rep = codeQuestion.getData();
         id = codeQuestion.getId();
