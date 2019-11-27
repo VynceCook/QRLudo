@@ -57,6 +57,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import fr.angers.univ.qrludo.QR.handling.QRCodeBuilder;
 import fr.angers.univ.qrludo.QR.handling.QRCodeDefaultDetectionModeStrategy;
@@ -788,11 +790,27 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        final ArrayList<QRCode> tabQRCodeQCM = new ArrayList<>();
+
+        //class made to clear the table every second so that the user has to re-scan in case he scans the wrong QRCode
+         class tableauQRCodeQCM extends TimerTask{
+            final ArrayList<QRCode> tabQRCodeQCM = new ArrayList<>();
+
+            public void run()
+            {
+                tabQRCodeQCM.clear();
+                System.out.println("Reinitialisation du tableau ");
+            }
+
+        }
+
+
 
         /*
       The processor of the detector, where the events from the detector are handled
      */
+
+        final tableauQRCodeQCM tabQCM = new tableauQRCodeQCM();
+
         Detector.Processor<Barcode> detector_processor = new Detector.Processor<Barcode>() {
             ArrayList<QRCode> listQR = new ArrayList<>();
 
@@ -841,7 +859,12 @@ public class MainActivity extends AppCompatActivity
                             }
                             else{
                                 //If there is more than 5 elements in the array tabQRCodeQCM, lauching QRCodeQCMDetectionModeStrategy
-                                if(tabQRCodeQCM.size()>=5){
+
+                                if(tabQCM.tabQRCodeQCM.size()>=5){
+                                    Timer timer = new Timer();
+                                    TimerTask task = new tableauQRCodeQCM();
+                                    timer.schedule(task,2000,2000);
+
                                     Log.i("DETECTION MULTIPLE","Lancement de la strategie QCM");
                                 }
                                 else {
@@ -850,16 +873,16 @@ public class MainActivity extends AppCompatActivity
                                         QRCodeQuestionQCM detectedQRQuestionQCM = (QRCodeQuestionQCM) detectedQR;
 
                                         boolean isAlreadyInTab=false;
-                                        for(int j = 0; j<tabQRCodeQCM.size();++j){
-                                            if(tabQRCodeQCM.get(j)instanceof QRCodeQuestionQCM){
-                                                QRCodeQuestionQCM tempQuestionQCM = (QRCodeQuestionQCM) tabQRCodeQCM.get(j);
+                                        for(int j = 0; j<tabQCM.tabQRCodeQCM.size();++j){
+                                            if(tabQCM.tabQRCodeQCM.get(j)instanceof QRCodeQuestionQCM){
+                                                QRCodeQuestionQCM tempQuestionQCM = (QRCodeQuestionQCM) tabQCM.tabQRCodeQCM.get(j);
                                                 if(detectedQRQuestionQCM.getId().equals(tempQuestionQCM.getId())) {
                                                     isAlreadyInTab = true;
                                                 }
                                             }
                                         }
                                         if(!isAlreadyInTab)
-                                            tabQRCodeQCM.add(detectedQRQuestionQCM);
+                                            tabQCM.tabQRCodeQCM.add(detectedQRQuestionQCM);
 
 
 
@@ -870,16 +893,16 @@ public class MainActivity extends AppCompatActivity
                                         Log.i("DETECTION MULTIPLE", detectedQRReponseQCM.getId());
 
                                         boolean isAlreadyInTab=false;
-                                        for(int j = 0; j<tabQRCodeQCM.size();++j){
-                                            if(tabQRCodeQCM.get(j)instanceof QRCodeReponseQCM){
-                                                QRCodeReponseQCM tempQuestionQCM = (QRCodeReponseQCM) tabQRCodeQCM.get(j);
+                                        for(int j = 0; j<tabQCM.tabQRCodeQCM.size();++j){
+                                            if(tabQCM.tabQRCodeQCM.get(j)instanceof QRCodeReponseQCM){
+                                                QRCodeReponseQCM tempQuestionQCM = (QRCodeReponseQCM) tabQCM.tabQRCodeQCM.get(j);
                                                 if(detectedQRReponseQCM.getId().equals(tempQuestionQCM.getId())) {
                                                     isAlreadyInTab = true;
                                                 }
                                             }
                                         }
                                         if(!isAlreadyInTab)
-                                            tabQRCodeQCM.add(detectedQRReponseQCM);
+                                            tabQCM.tabQRCodeQCM.add(detectedQRReponseQCM);
                                     }
                                 }
                             }
