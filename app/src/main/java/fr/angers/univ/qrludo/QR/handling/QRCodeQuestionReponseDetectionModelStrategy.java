@@ -56,12 +56,24 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                } else if(detectedQR instanceof QRCodeQuestion) {
+                    QRCodeQuestion question = (QRCodeQuestion) detectedQR;
+
+                    if(question.getQuestionText().equals(this.m_question.getQuestionText())) {
+
+                        m_mainActivity.readPrint(question.getQuestionText());
+
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
         }
 
         if(mode_reponse){
-            Log.i("================","mode reponse");
             if (m_question != null) {
                 if ((detectedQR instanceof QRCodeAtomique)) {
                     QRCodeAtomique reponse = (QRCodeAtomique) detectedQR;
@@ -93,6 +105,9 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
                                             + m_question.getNb_min_reponses()
                                             + " bonne réponse");
                                 }
+                            }
+                            else {
+                                m_mainActivity.read("Tu as déjà trouvé cette réponse");
                             }
 
                         } else

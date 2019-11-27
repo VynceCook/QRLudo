@@ -299,7 +299,7 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
         m_mainActivity.setDetectionProgress(FIRST_QR_DETECTED);
 
         //Reading the QR
-        m_mainActivity.readQuestion(((QRCodeQuestion)detectedQR).getQuestionText());
+        m_mainActivity.readPrint(((QRCodeQuestion)detectedQR).getQuestionText());
 
         //Launching the MultipleDetectionTimer
         m_mainActivity.startMultipleDetectionTimer();
