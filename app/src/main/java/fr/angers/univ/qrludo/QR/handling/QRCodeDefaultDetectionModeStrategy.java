@@ -313,7 +313,7 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
         }
 
         //Changing detection strategy
-        m_mainActivity.setDetectionStrategy(new QRCodeQuestionReponseDetectionModelStrategy(m_mainActivity, question));
+        m_mainActivity.setDetectionStrategy(new QRCodeExerciceDetectionModelStrategy(m_mainActivity, question));
     }
 
 }

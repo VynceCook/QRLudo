@@ -17,7 +17,7 @@ import static fr.angers.univ.qrludo.activities.MainActivity.NO_QR_DETECTED;
 /**
  * Valentine Rahier
  */
-public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetectionModeStrategy {
+public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStrategy {
 
     private QRCodeQuestion m_question;
     private boolean scan_reponse;
@@ -25,7 +25,7 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
     private boolean mode_reponse = false;
     private ArrayList<String> m_tab_reponse_trouve= new ArrayList<>();
 
-    QRCodeQuestionReponseDetectionModelStrategy(MainActivity mainActivity, QRCodeQuestion question) {
+    QRCodeExerciceDetectionModelStrategy(MainActivity mainActivity, QRCodeQuestion question) {
         super(mainActivity);
         m_question = question;
         scan_reponse = false;
@@ -37,7 +37,7 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
 
     @Override
     public void onFirstDetectionWithTimeNotNull(QRCode detectedQR) {
-        Log.v("first_detection_qrep", "appel à QRCodeQuestionReponseDetectionModelStrategy.onFirstDetectionWithTimeNotNull() ; ne devrait pas arriver");
+        Log.v("first_detection_qrep", "appel à QRCodeExerciceDetectionModelStrategy.onFirstDetectionWithTimeNotNull() ; ne devrait pas arriver");
     }
 
     @Override
