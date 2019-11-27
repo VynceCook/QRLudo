@@ -51,11 +51,26 @@ public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStr
                     QRCodeAtomique reponse = (QRCodeAtomique) detectedQR;
 
                     m_mainActivity.readPrint(reponse.getM_reponse());
+                  
                     //Le sleep permet de retarder la prochaine detection en mode exploration
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                    }
+                //Permet de relire la question
+                } else if(detectedQR instanceof QRCodeQuestion) {
+                    QRCodeQuestion question = (QRCodeQuestion) detectedQR;
+
+                    if(question.getQuestionText().equals(this.m_question.getQuestionText())) {
+
+                        m_mainActivity.readPrint(question.getQuestionText());
+
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
@@ -75,6 +90,7 @@ public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStr
                             m_mainActivity.readPrint(reponse.getM_reponse());
                             m_mainActivity.read(m_question.getM_text_bonne_rep());
 
+
                             //On vérifie si le QrCode lu n'a pas déjaà été lu par l'utilisateur
                             if(!m_tab_reponse_trouve.contains(reponse.getM_id())) {
 
@@ -93,6 +109,7 @@ public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStr
                                     }
                                     m_mainActivity.startNewDetection("Nouvelle détection");
                                 }
+
                                 //Sinon on indique le nombre de bonne réponse demandé et le nombre de bonne réponse trouvé
                                 else {
                                     m_mainActivity.read("Tu as trouvé "
@@ -102,12 +119,16 @@ public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStr
                                             + " bonne réponse");
                                 }
                             }
+                            else {
+                                m_mainActivity.read("Tu as déjà trouvé cette réponse");
+                            }
+
                         //Sinon on indique le méssage de la mauvaise réponse et on indique que c'est une mauvaise réponse
                         } else{
                             m_mainActivity.readPrint(reponse.getM_reponse());
                             m_mainActivity.read(m_question.getM_text_mauvaise_rep());
                         }
-
+                        
                     //On retarde la prochaine détéction fluidifié la détection
                     try {
                         Thread.sleep(1000);
@@ -160,6 +181,7 @@ public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStr
         }
     }
 
+
     //On lance le mode détection de bonne réponse ce qui arrète le mode exploration
     @Override
     public void onSwipeLeft() {
@@ -168,6 +190,7 @@ public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStr
         mode_reponse = true;
         mode_exploration = false;
     }
+
 
     //Relance le mode éxploration
     @Override
