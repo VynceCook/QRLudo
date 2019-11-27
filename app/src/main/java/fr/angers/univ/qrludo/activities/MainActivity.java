@@ -63,6 +63,7 @@ import fr.angers.univ.qrludo.QR.handling.QRCodeDefaultDetectionModeStrategy;
 import fr.angers.univ.qrludo.QR.handling.QRCodeDetectionModeStrategy;
 import fr.angers.univ.qrludo.QR.model.QRCode;
 import fr.angers.univ.qrludo.QR.model.QRCodeCollection;
+import fr.angers.univ.qrludo.QR.model.QRCodeQuestion;
 import fr.angers.univ.qrludo.QR.model.QRContent;
 import fr.angers.univ.qrludo.QR.model.QRFile;
 import fr.angers.univ.qrludo.QR.model.QRText;
@@ -1276,7 +1277,34 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void readQuestion(final String question){
+    //Methode qui permet d'entrer dans le mode exploration : scan de plusieur qrCodeUnique en mode Question/reponse (reponses)
+    public void modeExploration(final String question){
+
+        final AppCompatActivity activity = this;
+
+        //m_currentDetectionModeStrategy = new QRCodeDefaultDetectionModeStrategy(this);
+
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+
+                toSpeech("Mode Exploration", TextToSpeech.QUEUE_ADD);
+            }
+        });
+
+    }
+
+    public void read(final String question){
+        final AppCompatActivity activity = this;
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+
+                //Using text to speech engine to say the text
+                toSpeech(question, TextToSpeech.QUEUE_ADD);
+            }
+        });
+    }
+
+    public void readPrint(final String question){
         final AppCompatActivity activity = this;
         activity.runOnUiThread(new Runnable() {
             public void run() {
@@ -1289,6 +1317,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
     }
+
 
     public void reponseFind(final String message){
         final AppCompatActivity activity = this;

@@ -299,7 +299,7 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
         m_mainActivity.setDetectionProgress(FIRST_QR_DETECTED);
 
         //Reading the QR
-        m_mainActivity.readQuestion(((QRCodeQuestion)detectedQR).getQuestionText());
+        m_mainActivity.readPrint(((QRCodeQuestion)detectedQR).getQuestionText());
 
         //Launching the MultipleDetectionTimer
         m_mainActivity.startMultipleDetectionTimer();
@@ -313,7 +313,7 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
         }
 
         //Changing detection strategy
-        m_mainActivity.setDetectionStrategy(new QRCodeQuestionReponseDetectionModelStrategy(m_mainActivity, question));
+        m_mainActivity.setDetectionStrategy(new QRCodeExerciceDetectionModelStrategy(m_mainActivity, question));
     }
 
 }

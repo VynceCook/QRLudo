@@ -10,6 +10,9 @@ import java.util.ArrayList;
 public class QrCodeJson {
     private String name="";
     private String type="";
+    private String id = null;
+
+
 
     // Ce tableau contient toute les données contenu dans la balise data
     // Ces données peuvent être sous la forme d'une chaine de caractère ou d'une nouvelle chaine de type Json
@@ -23,7 +26,7 @@ public class QrCodeJson {
         return "QrCodeJson{" +
                 "name='" + name + '\'' +
                 ", type='" + type + '\'' +
-                ", data=" + data +
+                ", data=" + data.size() +
                 ", color='" + color + '\'' +
                 '}';
     }
@@ -66,6 +69,14 @@ public class QrCodeJson {
 
     public void setVersion(int version){
         this.version = version;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
 
