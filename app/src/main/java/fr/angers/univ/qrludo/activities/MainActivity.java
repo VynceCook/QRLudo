@@ -1293,7 +1293,18 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void readQuestion(final String question){
+    public void read(final String question){
+        final AppCompatActivity activity = this;
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+
+                //Using text to speech engine to say the text
+                toSpeech(question, TextToSpeech.QUEUE_ADD);
+            }
+        });
+    }
+
+    public void readPrint(final String question){
         final AppCompatActivity activity = this;
         activity.runOnUiThread(new Runnable() {
             public void run() {
@@ -1307,19 +1318,6 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    public void readReponse(final String reponse){
-        final AppCompatActivity activity = this;
-        activity.runOnUiThread(new Runnable() {
-            public void run() {
-
-                //printing the text
-                printText(reponse);
-
-                //Using text to speech engine to say the text
-                toSpeech(reponse, TextToSpeech.QUEUE_ADD);
-            }
-        });
-    }
 
     public void reponseFind(final String message){
         final AppCompatActivity activity = this;
