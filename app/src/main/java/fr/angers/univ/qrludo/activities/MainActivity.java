@@ -826,7 +826,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-
+                            //Check if the current QR is a QRCodeQuestionQCM or a QRCodeReponseQCM
                             if(!(detectedQR instanceof QRCodeQuestionQCM) & !(detectedQR instanceof QRCodeReponseQCM)){
                                 listQR.add(detectedQR);
 
@@ -842,7 +842,24 @@ public class MainActivity extends AppCompatActivity
                             else{
                                 //If there is more than 5 elements in the array tabQRCodeQCM, lauching QRCodeQCMDetectionModeStrategy
                                 if(tabQRCodeQCM.size()>=5){
-                                    Log.i("DETECTION MULTIPLE","Lancement de la strategie QCM");
+                                    //Recover the QRCodeQuestionQCM from the tab
+                                    QRCodeQuestionQCM detectedQRQuestionQCM = null;
+                                    for(int j=0; j<tabQRCodeQCM.size();++j){
+                                        if(tabQRCodeQCM.get(j)instanceof QRCodeQuestionQCM){
+                                            detectedQRQuestionQCM = (QRCodeQuestionQCM) tabQRCodeQCM.get(j);
+                                        }
+                                    }
+
+                                    listQR.add(detectedQRQuestionQCM);
+
+                                    //If first QR detected of the current detection
+                                    if (m_detectionProgress == NO_QR_DETECTED) {
+                                        m_currentDetectionModeStrategy.onFirstDetectionWithTimeNotNull(detectedQRQuestionQCM);
+                                    }
+                                    //If at least one QR has already been detected during the current detection
+                                    else{
+                                        m_currentDetectionModeStrategy.onNextDetectionWithTimeNotNull(detectedQR);
+                                    }
                                 }
                                 else {
                                     //Adding Question QCM and Reponse QCM into tabQRCodeQCM (if not already added)
@@ -866,8 +883,6 @@ public class MainActivity extends AppCompatActivity
                                     }
                                     if(detectedQR instanceof QRCodeReponseQCM){
                                         QRCodeReponseQCM detectedQRReponseQCM = (QRCodeReponseQCM) detectedQR;
-
-                                        Log.i("DETECTION MULTIPLE", detectedQRReponseQCM.getId());
 
                                         boolean isAlreadyInTab=false;
                                         for(int j = 0; j<tabQRCodeQCM.size();++j){
@@ -902,6 +917,7 @@ public class MainActivity extends AppCompatActivity
 
         detector.setProcessor(detector_processor);
     }
+
 
 
     /**
