@@ -94,9 +94,9 @@ public class QRCodeBuilder {
 
 
         if (code.getType().equalsIgnoreCase("atomique")||code.getType().equalsIgnoreCase("unique")||code.getType().equalsIgnoreCase("xl")) {
-            return new QRCodeAtomique(code, rawvalue);
+            return new QRCodeAtomique(code, dataQR);
         } else if (code.getType().equalsIgnoreCase("ensemble")) {
-            return new QRCodeEnsemble(code, rawvalue);
+            return new QRCodeEnsemble(code, dataQR);
         } else if(code.getType().equalsIgnoreCase("question")){
             return new QRCodeQuestion(code, dataQR);
         } else if(code.getType().equalsIgnoreCase("reponse")){
