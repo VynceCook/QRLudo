@@ -1307,6 +1307,20 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    public void readReponse(final String reponse){
+        final AppCompatActivity activity = this;
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+
+                //printing the text
+                printText(reponse);
+
+                //Using text to speech engine to say the text
+                toSpeech(reponse, TextToSpeech.QUEUE_ADD);
+            }
+        });
+    }
+
     public void reponseFind(final String message){
         final AppCompatActivity activity = this;
         activity.runOnUiThread(new Runnable() {

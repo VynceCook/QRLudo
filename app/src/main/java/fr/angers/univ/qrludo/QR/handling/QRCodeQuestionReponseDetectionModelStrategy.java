@@ -19,6 +19,9 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
 
     private QRCodeQuestion m_question;
     private boolean scan_reponse;
+    private String textQrCodePrecedent = "";
+    private boolean mode_exploration = false;
+    private boolean mode_reponse = false;
 
     QRCodeQuestionReponseDetectionModelStrategy(MainActivity mainActivity, QRCodeQuestion question) {
         super(mainActivity);
@@ -26,6 +29,7 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
         scan_reponse = false;
         if(m_question!=null) {
             m_mainActivity.modeExploration(m_question.getQuestionText());
+            mode_exploration = true;
         }
     }
 
@@ -36,26 +40,33 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
 
     @Override
     public void onNextDetectionWithTimeNotNull(QRCode detectedQR) {
-        //m_mainActivity.stopDetection();
 
-        scan_reponse = true;
+        if(mode_exploration) {
+            if (m_question != null) {
+                if ((detectedQR instanceof QRCodeAtomique)) {
+                    QRCodeAtomique reponse = (QRCodeAtomique) detectedQR;
 
-        if(m_question!=null){
-            if((detectedQR instanceof QRCodeAtomique) && scan_reponse) {
-                QRCodeAtomique reponse = (QRCodeAtomique) detectedQR;
-
-                m_mainActivity.reponseFind(reponse.getM_reponse());
-
+                    if (!textQrCodePrecedent.equals(reponse.getM_reponse())) {
+                        m_mainActivity.readReponse(reponse.getM_reponse());
+                        textQrCodePrecedent = reponse.getM_reponse();
+                    }
+                }
             }
+        }
 
+        if(mode_reponse){
+            Log.i("================","mode reponse");
+            if (m_question != null) {
+                if ((detectedQR instanceof QRCodeAtomique)) {
+                    QRCodeAtomique reponse = (QRCodeAtomique) detectedQR;
 
-            /*if(m_question.getListe_bonne_rep().contains(reponse.getId())){
-                m_mainActivity.reponseFind(m_question.getListe_bonne_rep().get(m_question.getM_text_bonne_rep()));
-                //m_mainActivity.stopDetection();
-            } else {
-                m_mainActivity.reponseFind("Dommage, ceci n'est pas la bonne réponse");
-                //m_mainActivity.stopDetection();
-            }*/
+                    if(m_question.getListe_bonne_rep().contains(reponse.getM_id())) {
+                        m_mainActivity.readQuestion(m_question.getM_text_bonne_rep());
+                    }
+                    else
+                        m_mainActivity.readQuestion(m_question.getM_text_mauvaise_rep());
+                }
+            }
         }
     }
 
@@ -103,16 +114,19 @@ public class QRCodeQuestionReponseDetectionModelStrategy extends QRCodeDetection
     public void onSwipeLeft() {
         scan_reponse = true;
         m_mainActivity.readQuestion("Détection de la réponse");
+        mode_reponse = true;
+        mode_exploration = false;
     }
 
     @Override
     public void onSwipeRight() {
-        //The user cannot swipe right in case of question / reponse reading
-        ToneGeneratorSingleton.getInstance().errorTone();
+        m_mainActivity.readQuestion("Mode exploration");
+        mode_reponse = false;
+        mode_exploration = true;
     }
 
     @Override
     public void onDoubleClick() {
-        
+        ToneGeneratorSingleton.getInstance().errorTone();
     }
 }
