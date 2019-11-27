@@ -101,7 +101,6 @@ public class QRCodeBuilder {
         } else if(code.getType().equalsIgnoreCase("reponse")){
             return new QRCodeReponse(code, dataQR);
         } else if(code.getType().equalsIgnoreCase("questionQCM")){
-            Log.i("DETECTION MULTIPLE", "QUESTION QCM DETECTEE");
             return new QRCodeQuestionQCM(code, dataQR);
         } else if (code.getType().equalsIgnoreCase("reponseQCM")){
             return new QRCodeReponseQCM(code, dataQR);

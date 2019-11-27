@@ -788,6 +788,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        final ArrayList<QRCode> tabQRCodeQCM = new ArrayList<>();
 
         /*
       The processor of the detector, where the events from the detector are handled
@@ -817,33 +818,74 @@ public class MainActivity extends AppCompatActivity
                             break;
                         }
 
-                        Log.i("DETECTION MULTIPLE", String.valueOf(barcodes.size())+" : "+rawValue);
 
                         try {
 
                             int version = MainActivity.this.getResources().getInteger(R.integer.version_qrludo);
                             QRCode detectedQR = QRCodeBuilder.build(rawValue, version);
 
-                            if(detectedQR instanceof QRCodeQuestionQCM){
-                                QRCodeQuestionQCM detectedQRQuestionQCM = (QRCodeQuestionQCM) detectedQR;
-                                Log.i("DETECTION MULTIPLE", detectedQRQuestionQCM.getId()+ "    " + detectedQRQuestionQCM.getText());
-                            }
-                            if(detectedQR instanceof QRCodeReponseQCM){
-                                QRCodeReponseQCM detectedQRQuestionQCM = (QRCodeReponseQCM) detectedQR;
-                                Log.i("DETECTION MULTIPLE", detectedQRQuestionQCM.getId()+ "    " + detectedQRQuestionQCM.isAnswer());
-                            }
 
-                            //listQR.add(detectedQR);
 
-                            //If first QR detected of the current detection
-                            /*if (m_detectionProgress == NO_QR_DETECTED) {
-                                m_currentDetectionModeStrategy.onFirstDetectionWithTimeNotNull(detectedQR);
+
+                            if(!(detectedQR instanceof QRCodeQuestionQCM) & !(detectedQR instanceof QRCodeReponseQCM)){
+                                listQR.add(detectedQR);
+
+                                //If first QR detected of the current detection
+                                if (m_detectionProgress == NO_QR_DETECTED) {
+                                    m_currentDetectionModeStrategy.onFirstDetectionWithTimeNotNull(detectedQR);
+                                }
+                                //If at least one QR has already been detected during the current detection
+                                else{
+                                    m_currentDetectionModeStrategy.onNextDetectionWithTimeNotNull(detectedQR);
+                                }
                             }
-                            //If at least one QR has already been detected during the current detection
                             else{
-                                m_currentDetectionModeStrategy.onNextDetectionWithTimeNotNull(detectedQR);
+                                //If there is more than 5 elements in the array tabQRCodeQCM, lauching QRCodeQCMDetectionModeStrategy
+                                if(tabQRCodeQCM.size()>=5){
+                                    Log.i("DETECTION MULTIPLE","Lancement de la strategie QCM");
+                                }
+                                else {
+                                    //Adding Question QCM and Reponse QCM into tabQRCodeQCM (if not already added)
+                                    if(detectedQR instanceof QRCodeQuestionQCM){
+                                        QRCodeQuestionQCM detectedQRQuestionQCM = (QRCodeQuestionQCM) detectedQR;
+
+                                        boolean isAlreadyInTab=false;
+                                        for(int j = 0; j<tabQRCodeQCM.size();++j){
+                                            if(tabQRCodeQCM.get(j)instanceof QRCodeQuestionQCM){
+                                                QRCodeQuestionQCM tempQuestionQCM = (QRCodeQuestionQCM) tabQRCodeQCM.get(j);
+                                                if(detectedQRQuestionQCM.getId().equals(tempQuestionQCM.getId())) {
+                                                    isAlreadyInTab = true;
+                                                }
+                                            }
+                                        }
+                                        if(!isAlreadyInTab)
+                                            tabQRCodeQCM.add(detectedQRQuestionQCM);
+
+
+
+                                    }
+                                    if(detectedQR instanceof QRCodeReponseQCM){
+                                        QRCodeReponseQCM detectedQRReponseQCM = (QRCodeReponseQCM) detectedQR;
+
+                                        Log.i("DETECTION MULTIPLE", detectedQRReponseQCM.getId());
+
+                                        boolean isAlreadyInTab=false;
+                                        for(int j = 0; j<tabQRCodeQCM.size();++j){
+                                            if(tabQRCodeQCM.get(j)instanceof QRCodeReponseQCM){
+                                                QRCodeReponseQCM tempQuestionQCM = (QRCodeReponseQCM) tabQRCodeQCM.get(j);
+                                                if(detectedQRReponseQCM.getId().equals(tempQuestionQCM.getId())) {
+                                                    isAlreadyInTab = true;
+                                                }
+                                            }
+                                        }
+                                        if(!isAlreadyInTab)
+                                            tabQRCodeQCM.add(detectedQRReponseQCM);
+                                    }
+                                }
                             }
-                            */
+
+
+
 
                         } catch (UnhandledQRException e) {
                             ToneGeneratorSingleton.getInstance().ignoredQRCodeTone();
