@@ -8,14 +8,17 @@ import fr.angers.univ.qrludo.QR.model.QRCode;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestionQCM;
 import fr.angers.univ.qrludo.QR.model.QRCodeReponseQCM;
 import fr.angers.univ.qrludo.activities.MainActivity;
+import fr.angers.univ.qrludo.utils.ContentDelayCounter;
+import fr.angers.univ.qrludo.utils.QDCResponse;
 import fr.angers.univ.qrludo.utils.ToneGeneratorSingleton;
 
 import static fr.angers.univ.qrludo.activities.MainActivity.NO_QR_DETECTED;
 
-public class QRCodeQCMDetectionModeStrategy extends QRCodeDetectionModeStrategy{
+public class QRCodeQCMDetectionModeStrategy extends QRCodeDetectionModeStrategy implements QDCResponse {
     private QRCodeQuestionQCM m_question;
     private boolean scan_reponse;
     private ArrayList<QRCode> tabOfQRReponse;
+    private ContentDelayCounter timer;
 
 
     QRCodeQCMDetectionModeStrategy(MainActivity mainActivity, QRCodeQuestionQCM m_question) {
@@ -34,46 +37,19 @@ public class QRCodeQCMDetectionModeStrategy extends QRCodeDetectionModeStrategy{
     @Override
     public void onNextDetectionWithTimeNotNull(QRCode detectedQR) {
         if(scan_reponse){
-            if(tabOfQRReponse.size()>=4){
-                Log.i("DETECTION MULTIPLE","Erreur : Trop de réponse sont scannées");
-                m_mainActivity.readQuestion("Trop de réponse sont scannées");
-                tabOfQRReponse.clear();
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            if(tabOfQRReponse.size()==3){
-                if(tabOfQRReponse.size()==3){
-                    boolean reponseBonne = false;
-
-                    for(int i=0; i<tabOfQRReponse.size(); ++i){
-                        QRCodeReponseQCM tempQuestionQCM = (QRCodeReponseQCM) tabOfQRReponse.get(i);
-                        reponseBonne = reponseBonne || tempQuestionQCM.isAnswer();
-                    }
-
-                    if(reponseBonne){
-                        m_mainActivity.readQuestion("Mauvaise Reponse");
-                    }
-                    else{
-                        m_mainActivity.readQuestion("Bonne Reponse");
-                    }
-
-                    try {
-                        Thread.sleep(3000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    m_mainActivity.startNewDetection("Nouvelle détection");
-                    scan_reponse = false;
-                }
-            }
-
             //Adding Reponse QCM into tabQRCodeQCM (if not already added)
             if(detectedQR instanceof QRCodeReponseQCM){
                 QRCodeReponseQCM detectedQRReponseQCM = (QRCodeReponseQCM) detectedQR;
                 addQRReponseToTab(detectedQRReponseQCM);
+
+                //Lancement de timer permettant d'attendre que tous les QR Réponses soient scannés avant de
+                //vérifier la réponse
+                if (tabOfQRReponse.size() == 1)
+                {
+                    timer = new ContentDelayCounter();
+                    timer.delegate = this;
+                    timer.execute();
+                }
             }
         }
 
@@ -164,5 +140,43 @@ public class QRCodeQCMDetectionModeStrategy extends QRCodeDetectionModeStrategy{
     @Override
     public void onDoubleClick() {
 
+    }
+
+    public void processFinish(Boolean output) {
+        if(tabOfQRReponse.size()>=4){
+            Log.i("DETECTION MULTIPLE","Erreur : Trop de réponse sont scannées");
+            m_mainActivity.readQuestion("Trop de réponse sont scannées");
+            tabOfQRReponse.clear();
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        if(tabOfQRReponse.size()==3){
+            if(tabOfQRReponse.size()==3){
+                boolean reponseBonne = false;
+
+                for(int i=0; i<tabOfQRReponse.size(); ++i){
+                    QRCodeReponseQCM tempQuestionQCM = (QRCodeReponseQCM) tabOfQRReponse.get(i);
+                    reponseBonne = reponseBonne || tempQuestionQCM.isAnswer();
+                }
+
+                if(reponseBonne){
+                    m_mainActivity.readQuestion("Mauvaise Reponse");
+                }
+                else{
+                    m_mainActivity.readQuestion("Bonne Reponse");
+                }
+
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                m_mainActivity.startNewDetection("Nouvelle détection");
+                scan_reponse = false;
+            }
+        }
     }
 }
