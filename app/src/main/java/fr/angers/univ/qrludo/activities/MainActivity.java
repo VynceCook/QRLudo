@@ -411,6 +411,10 @@ public class MainActivity extends AppCompatActivity
      */
     private boolean m_web_opening_via_browser;
 
+    /**
+     * Array QRQuestionQCM and QRReponseQCM
+     */
+    private final ArrayList<QRCode> tabQRCodeQCM = new ArrayList<>();
 
 
     /**
@@ -788,7 +792,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        final ArrayList<QRCode> tabQRCodeQCM = new ArrayList<>();
 
         /*
       The processor of the detector, where the events from the detector are handled
@@ -842,7 +845,7 @@ public class MainActivity extends AppCompatActivity
                             else{
                                 //If there is more than 5 elements in the array tabQRCodeQCM, lauching QRCodeQCMDetectionModeStrategy
                                 if(tabQRCodeQCM.size()>=5){
-                                    //Recover the QRCodeQuestionQCM from the tab
+                                    //Get the QRCodeQuestionQCM from the tab tabQRCodeQCM
                                     QRCodeQuestionQCM detectedQRQuestionQCM = null;
                                     for(int j=0; j<tabQRCodeQCM.size();++j){
                                         if(tabQRCodeQCM.get(j)instanceof QRCodeQuestionQCM){
@@ -862,40 +865,7 @@ public class MainActivity extends AppCompatActivity
                                     }
                                 }
                                 else {
-                                    //Adding Question QCM and Reponse QCM into tabQRCodeQCM (if not already added)
-                                    if(detectedQR instanceof QRCodeQuestionQCM){
-                                        QRCodeQuestionQCM detectedQRQuestionQCM = (QRCodeQuestionQCM) detectedQR;
-
-                                        boolean isAlreadyInTab=false;
-                                        for(int j = 0; j<tabQRCodeQCM.size();++j){
-                                            if(tabQRCodeQCM.get(j)instanceof QRCodeQuestionQCM){
-                                                QRCodeQuestionQCM tempQuestionQCM = (QRCodeQuestionQCM) tabQRCodeQCM.get(j);
-                                                if(detectedQRQuestionQCM.getId().equals(tempQuestionQCM.getId())) {
-                                                    isAlreadyInTab = true;
-                                                }
-                                            }
-                                        }
-                                        if(!isAlreadyInTab)
-                                            tabQRCodeQCM.add(detectedQRQuestionQCM);
-
-
-
-                                    }
-                                    if(detectedQR instanceof QRCodeReponseQCM){
-                                        QRCodeReponseQCM detectedQRReponseQCM = (QRCodeReponseQCM) detectedQR;
-
-                                        boolean isAlreadyInTab=false;
-                                        for(int j = 0; j<tabQRCodeQCM.size();++j){
-                                            if(tabQRCodeQCM.get(j)instanceof QRCodeReponseQCM){
-                                                QRCodeReponseQCM tempQuestionQCM = (QRCodeReponseQCM) tabQRCodeQCM.get(j);
-                                                if(detectedQRReponseQCM.getId().equals(tempQuestionQCM.getId())) {
-                                                    isAlreadyInTab = true;
-                                                }
-                                            }
-                                        }
-                                        if(!isAlreadyInTab)
-                                            tabQRCodeQCM.add(detectedQRReponseQCM);
-                                    }
+                                    addQRQCMInTab(detectedQR);
                                 }
                             }
 
@@ -913,11 +883,53 @@ public class MainActivity extends AppCompatActivity
                     }
                 }
             }
+
+
+            /**
+             * Method called to add Question QCM and Reponse QCM into tabQRCodeQCM (if not already added)
+             * @param detectedQR
+             */
+            public void addQRQCMInTab(QRCode detectedQR){
+                //Check if detectedQR is a QuestionQCM
+                if(detectedQR instanceof QRCodeQuestionQCM){
+                    QRCodeQuestionQCM detectedQRQuestionQCM = (QRCodeQuestionQCM) detectedQR;
+
+                    boolean isAlreadyInTab=false;
+                    for(int j = 0; j<tabQRCodeQCM.size();++j){
+                        if(tabQRCodeQCM.get(j)instanceof QRCodeQuestionQCM){
+                            QRCodeQuestionQCM tempQuestionQCM = (QRCodeQuestionQCM) tabQRCodeQCM.get(j);
+                            if(detectedQRQuestionQCM.getId().equals(tempQuestionQCM.getId())) {
+                                isAlreadyInTab = true;
+                            }
+                        }
+                    }
+                    if(!isAlreadyInTab)
+                        tabQRCodeQCM.add(detectedQRQuestionQCM);
+
+
+
+                }
+                //Check if detectedQR is a ReponseQCM
+                if(detectedQR instanceof QRCodeReponseQCM){
+                    QRCodeReponseQCM detectedQRReponseQCM = (QRCodeReponseQCM) detectedQR;
+
+                    boolean isAlreadyInTab=false;
+                    for(int j = 0; j<tabQRCodeQCM.size();++j){
+                        if(tabQRCodeQCM.get(j)instanceof QRCodeReponseQCM){
+                            QRCodeReponseQCM tempQuestionQCM = (QRCodeReponseQCM) tabQRCodeQCM.get(j);
+                            if(detectedQRReponseQCM.getId().equals(tempQuestionQCM.getId())) {
+                                isAlreadyInTab = true;
+                            }
+                        }
+                    }
+                    if(!isAlreadyInTab)
+                        tabQRCodeQCM.add(detectedQRReponseQCM);
+                }
+            }
         };
 
         detector.setProcessor(detector_processor);
     }
-
 
 
     /**
@@ -1309,6 +1321,7 @@ public class MainActivity extends AppCompatActivity
      * Can be called at the end or in the middle of a reading
      */
     public void startNewDetection(String message) {
+        tabQRCodeQCM.clear();
 
         //Getting back at the first state of the detection
         m_detectionProgress = NO_QR_DETECTED;

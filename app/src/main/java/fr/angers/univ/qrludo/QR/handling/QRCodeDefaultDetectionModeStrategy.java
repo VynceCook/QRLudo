@@ -95,14 +95,14 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
     */
     @Override
     public void onSwipeTop() {
-        //Launch runnerSwipeLeft if you don't swipe another time in the next 1 second
-        // runnerSwipeLeft is in QRCodeDetectionModeStrategy
+        //Launch runnerRewind if you don't swipe another time in the next 1 second
+        // runnerRewind is in QRCodeDetectionModeStrategy
         if(!posted) {
-            posted = hand.postDelayed(runnerSwipeLeft, 1000);
+            posted = hand.postDelayed(runnerRewind, 1000);
         }
-        //Stop runnerSwipeLeft if you double swipe and rewind the current audio
+        //Stop runnerRewind if you double swipe and rewind the current audio
         else{
-            hand.removeCallbacks(runnerSwipeLeft);
+            hand.removeCallbacks(runnerRewind);
 
             if (m_mainActivity.getDetectionProgress()!=NO_QR_DETECTED){
                 //Reading again the current QRContent provided at least one QR has been detected.
@@ -352,6 +352,8 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
     private void startQuestionReponseDetectionQCM(QRCode detectedQR){
         //Adding the QRCode to the detected ones
         m_detectedQRCodes.addQR(detectedQR);
+
+        ToneGeneratorSingleton.getInstance().QRCodeNormallyDetectedTone();
 
         //Changing current detection state
         m_mainActivity.setDetectionProgress(FIRST_QR_DETECTED);

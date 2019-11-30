@@ -36,8 +36,8 @@ public class QRCodeQCMDetectionModeStrategy extends QRCodeDetectionModeStrategy 
 
     @Override
     public void onNextDetectionWithTimeNotNull(QRCode detectedQR) {
+        //If strategy is on detection mode
         if(scan_reponse){
-            //Adding Reponse QCM into tabQRCodeQCM (if not already added)
             if(detectedQR instanceof QRCodeReponseQCM){
                 QRCodeReponseQCM detectedQRReponseQCM = (QRCodeReponseQCM) detectedQR;
                 addQRReponseToTab(detectedQRReponseQCM);
@@ -48,13 +48,14 @@ public class QRCodeQCMDetectionModeStrategy extends QRCodeDetectionModeStrategy 
                 {
                     timer = new ContentDelayCounter();
                     timer.delegate = this;
-                    timer.execute();
+                    timer.execute(3);
                 }
             }
         }
 
     }
 
+    //Adding Reponse QCM into tabQRCodeQCM (if not already added)
     public void addQRReponseToTab(QRCodeReponseQCM QRReponseQCM){
         boolean isAlreadyInTab=false;
         for(int j = 0; j<tabOfQRReponse.size();++j){
@@ -84,14 +85,26 @@ public class QRCodeQCMDetectionModeStrategy extends QRCodeDetectionModeStrategy 
 
     @Override
     public void onSwipeTop() {
-        if (m_mainActivity.getDetectionProgress()!=NO_QR_DETECTED){
-            if(m_question != null){
-                m_mainActivity.readQuestion(m_question.getText());
-            }
+        //Launch runnerRewind if you don't swipe another time in the next 1 second
+        // runnerRewind is in QRCodeDetectionModeStrategy
+        if(!posted) {
+            posted = hand.postDelayed(runnerRewind, 1000);
         }
         else{
-            //Signaling that the user cannot swipe top
-            ToneGeneratorSingleton.getInstance().errorTone();
+            //Stop runnerRewind if you double swipe and rewind the current audio
+            hand.removeCallbacks(runnerRewind);
+
+            if (m_mainActivity.getDetectionProgress()!=NO_QR_DETECTED){
+                //Reading again the current QRContent provided at least one QR has been detected.
+                m_mainActivity.makeSilence();
+                m_mainActivity.readQuestion(m_question.getText());
+            }
+            else{
+                //Signaling that the user cannot swipe top
+                ToneGeneratorSingleton.getInstance().errorTone();
+            }
+
+            posted = false;
         }
     }
 
@@ -102,6 +115,7 @@ public class QRCodeQCMDetectionModeStrategy extends QRCodeDetectionModeStrategy 
             if(!posted) {
                 posted = hand.postDelayed(runner, 1000);
             }else{
+                scan_reponse = false;
                 m_mainActivity.startNewDetection("Nouvelle détection");
                 hand.removeCallbacks(runner);
                 posted = false;
@@ -114,20 +128,13 @@ public class QRCodeQCMDetectionModeStrategy extends QRCodeDetectionModeStrategy 
 
     @Override
     public void onSwipeLeft() {
-        //Can only swipe left if at least one QR has been printed/detected (equivalent in the default detection mode)
-        if (m_mainActivity.getDetectionProgress()!=NO_QR_DETECTED){
-
-            //If the application is still detecting and the user has already reached the last currently available QRContent, cannot swipe left
-            if (!(m_mainActivity.isApplicationDetecting() && m_mainActivity.getCurrentPos()==m_mainActivity.getContentSize()-1)){
-                scan_reponse = true;
-                m_mainActivity.readQuestion("Détection de la réponse");
-            }
-            else{
-                ToneGeneratorSingleton.getInstance().errorTone();
-            }
+        if(scan_reponse){
+            ToneGeneratorSingleton.getInstance().errorTone();
         }
         else{
-            ToneGeneratorSingleton.getInstance().errorTone();
+            scan_reponse = true;
+            m_mainActivity.makeSilence();
+            m_mainActivity.readQuestion("Détection de la réponse");
         }
     }
 
@@ -139,20 +146,23 @@ public class QRCodeQCMDetectionModeStrategy extends QRCodeDetectionModeStrategy 
 
     @Override
     public void onDoubleClick() {
-
+        m_mainActivity.pauseCurrentReading();
     }
 
+    //This method start at the end of the timer on detection mode
     public void processFinish(Boolean output) {
+        //If the user scanned more than 3 answers, he can retry
         if(tabOfQRReponse.size()>=4){
-            Log.i("DETECTION MULTIPLE","Erreur : Trop de réponse sont scannées");
-            m_mainActivity.readQuestion("Trop de réponse sont scannées");
-            tabOfQRReponse.clear();
+            Log.i("DETECTION MULTIPLE","Erreur : Trop de réponses sont scannées");
+            m_mainActivity.readQuestion("Trop de réponses sont scannées");
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            tabOfQRReponse.clear();
         }
+        //If the user scanned 3 answers, check if the answer is right or wrong
         if(tabOfQRReponse.size()==3){
             if(tabOfQRReponse.size()==3){
                 boolean reponseBonne = false;
@@ -162,21 +172,30 @@ public class QRCodeQCMDetectionModeStrategy extends QRCodeDetectionModeStrategy 
                     reponseBonne = reponseBonne || tempQuestionQCM.isAnswer();
                 }
 
+                //Good Answer
                 if(reponseBonne){
-                    m_mainActivity.readQuestion("Mauvaise Reponse");
+                    m_mainActivity.readQuestion("Mauvaise Réponse");
                 }
+                //Bad Answer
                 else{
-                    m_mainActivity.readQuestion("Bonne Reponse");
+                    m_mainActivity.readQuestion("Bonne Réponse");
                 }
 
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                m_mainActivity.startNewDetection("Nouvelle détection");
+
+                //Launch new detection
                 scan_reponse = false;
+                m_mainActivity.startNewDetection("Nouvelle détection");
             }
+        }
+        //If the user scanned less than 3 answers, he can retry
+        else{
+            Log.i("DETECTION MULTIPLE","Reset");
+            tabOfQRReponse.clear();
         }
     }
 }
