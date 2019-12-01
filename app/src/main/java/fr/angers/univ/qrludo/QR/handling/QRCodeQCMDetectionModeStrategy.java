@@ -97,7 +97,8 @@ public class QRCodeQCMDetectionModeStrategy extends QRCodeDetectionModeStrategy 
             if (m_mainActivity.getDetectionProgress()!=NO_QR_DETECTED){
                 //Reading again the current QRContent provided at least one QR has been detected.
                 m_mainActivity.makeSilence();
-                m_mainActivity.readQuestion(m_question.getText());
+                m_mainActivity.read(m_question.getText());
+                //m_mainActivity.readQuestion(m_question.getText());
             }
             else{
                 //Signaling that the user cannot swipe top
@@ -134,7 +135,8 @@ public class QRCodeQCMDetectionModeStrategy extends QRCodeDetectionModeStrategy 
         else{
             scan_reponse = true;
             m_mainActivity.makeSilence();
-            m_mainActivity.readQuestion("Détection de la réponse");
+
+            m_mainActivity.readPrint("Détection de la réponse");
         }
     }
 
@@ -154,7 +156,9 @@ public class QRCodeQCMDetectionModeStrategy extends QRCodeDetectionModeStrategy 
         //If the user scanned more than 3 answers, he can retry
         if(tabOfQRReponse.size()>=4){
             Log.i("DETECTION MULTIPLE","Erreur : Trop de réponses sont scannées");
-            m_mainActivity.readQuestion("Trop de réponses sont scannées");
+
+            m_mainActivity.readPrint("Trop de réponses sont scannées");
+
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
@@ -174,11 +178,11 @@ public class QRCodeQCMDetectionModeStrategy extends QRCodeDetectionModeStrategy 
 
                 //Good Answer
                 if(reponseBonne){
-                    m_mainActivity.readQuestion("Mauvaise Réponse");
+                    m_mainActivity.readPrint("Mauvaise Réponse");
                 }
                 //Bad Answer
                 else{
-                    m_mainActivity.readQuestion("Bonne Réponse");
+                    m_mainActivity.readPrint("Bonne Réponse");
                 }
 
                 try {
