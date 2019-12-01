@@ -57,6 +57,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import fr.angers.univ.qrludo.QR.handling.QRCodeBuilder;
 import fr.angers.univ.qrludo.QR.handling.QRCodeDefaultDetectionModeStrategy;
@@ -793,9 +795,26 @@ public class MainActivity extends AppCompatActivity
         });
 
 
+        //class made to clear the table every second so that the user has to re-scan in case he scans the wrong QRCode
+         class tableauQRCodeQCM extends TimerTask{
+            final ArrayList<QRCode> tabQRCodeQCM = new ArrayList<>();
+
+            public void run()
+            {
+                tabQRCodeQCM.clear();
+                System.out.println("Reinitialisation du tableau ");
+            }
+
+        }
+
+
+
         /*
       The processor of the detector, where the events from the detector are handled
      */
+
+        final tableauQRCodeQCM tabQCM = new tableauQRCodeQCM();
+
         Detector.Processor<Barcode> detector_processor = new Detector.Processor<Barcode>() {
             ArrayList<QRCode> listQR = new ArrayList<>();
 
