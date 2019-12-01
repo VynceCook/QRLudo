@@ -38,6 +38,7 @@ public class QRCodeBuilder {
         String result;
 
 
+
         // On vérfie si la chaine est encodée en base64
         if (dataQR.matches("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$")) {
             // Début de la décompression
@@ -59,6 +60,8 @@ public class QRCodeBuilder {
         Log.v("data_qr", dataQR);
         Gson gson = new GsonBuilder().create();
         QrCodeJson code = gson.fromJson(dataQR, QrCodeJson.class);
+
+        Log.i("build","Miss Build : "+code.getType());
 
         if(code.getVersion()>current_version){
             throw new UnsupportedQRException("Ce QRCode ne peut pas être lu par cette application, veuillez mettre à jour QRLudo ou QRLudoGénérator");
@@ -93,9 +96,9 @@ public class QRCodeBuilder {
 
 
         if (code.getType().equalsIgnoreCase("atomique")||code.getType().equalsIgnoreCase("unique")||code.getType().equalsIgnoreCase("xl")) {
-            return new QRCodeAtomique(code, rawvalue);
+            return new QRCodeAtomique(code, dataQR);
         } else if (code.getType().equalsIgnoreCase("ensemble")) {
-            return new QRCodeEnsemble(code, rawvalue);
+            return new QRCodeEnsemble(code, dataQR);
         } else if(code.getType().equalsIgnoreCase("question")){
             return new QRCodeQuestion(code, dataQR);
         } else if(code.getType().equalsIgnoreCase("reponse")){
