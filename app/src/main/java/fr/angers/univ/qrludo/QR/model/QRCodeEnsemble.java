@@ -34,7 +34,7 @@ public class QRCodeEnsemble extends QRCode{
                         Map.Entry e = (Map.Entry) entry;
                         if (e.getKey().toString().equalsIgnoreCase("qrcode")) {
                             QrCodeJson tempcode = QRCode.createQRCode((LinkedTreeMap) e.getValue());
-                            QRCodeAtomique qr = new QRCodeAtomique(tempcode, tempcode.toString());
+                            QRCodeAtomique qr = new QRCodeAtomique(tempcode, rawValue);
                             m_qrcodes.add(qr);
                             for (Object data2 : qr.getQRContent()) {
                                 if(data2 instanceof QRFile){
