@@ -1153,8 +1153,10 @@ public class MainActivity extends AppCompatActivity
                         startActivity(browserIntent);
                     }
                     //Sinon on le lit par synthèse vocale
-                    else
+                    else{
                         openWebSite(m_currentReading.get(m_currentPos).getContent());
+                        printText(m_currentReading.get(m_currentPos).getContent());
+                    }
                 }
                 else {
                     //printing the text
