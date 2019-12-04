@@ -1388,15 +1388,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     //Methode qui permet d'entrer dans le mode exploration : scan de plusieur qrCodeUnique en mode Question/reponse (reponses)
-    public void modeExploration(final String question){
+    public void modeExploration(){
 
         final AppCompatActivity activity = this;
 
-        //m_currentDetectionModeStrategy = new QRCodeDefaultDetectionModeStrategy(this);
-
         activity.runOnUiThread(new Runnable() {
             public void run() {
-
                 toSpeech("Mode Exploration", TextToSpeech.QUEUE_ADD);
             }
         });

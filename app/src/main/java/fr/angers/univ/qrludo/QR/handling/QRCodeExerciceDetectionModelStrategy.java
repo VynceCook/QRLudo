@@ -25,14 +25,16 @@ public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStr
     private boolean mode_reponse = false;
     //Représente le tableau avec les id des bonne réponse déjà lu par l'utilisateur
     private ArrayList<String> m_tab_reponse_trouve= new ArrayList<>();
+    boolean firstRead;
 
     QRCodeExerciceDetectionModelStrategy(MainActivity mainActivity, QRCodeQuestion question) {
         super(mainActivity);
         m_question = question;
         scan_reponse = false;
         if(m_question!=null) {
-            m_mainActivity.modeExploration(m_question.getQuestionText());
+            m_mainActivity.modeExploration();
             mode_exploration = true;
+            firstRead = true;
         }
     }
 
@@ -51,20 +53,25 @@ public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStr
                     QRCodeAtomique reponse = (QRCodeAtomique) detectedQR;
 
                     m_mainActivity.readPrint(reponse.getM_reponse());
-                  
+
                     //Le sleep permet de retarder la prochaine detection en mode exploration
                     try {
                         Thread.sleep(2000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                //Permet de relire la question
+                    //Permet de relire la question
                 } else if(detectedQR instanceof QRCodeQuestion) {
                     QRCodeQuestion question = (QRCodeQuestion) detectedQR;
 
                     if(question.getQuestionText().equals(this.m_question.getQuestionText())) {
 
-                        m_mainActivity.readPrint(question.getQuestionText());
+                        //Les QR Codes sont toujours lu dès la détection lorsque l'on n'est pas dans une stratégié
+                        //La première fois que l'on arrive dans la stratégie, on ne doit donc pas relire la question
+                        if (firstRead)
+                            firstRead = false;
+                        else
+                            m_mainActivity.readPrint(question.getQuestionText());
 
                         try {
                             Thread.sleep(3000);
@@ -84,51 +91,51 @@ public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStr
                 if ((detectedQR instanceof QRCodeAtomique)) {
                     QRCodeAtomique reponse = (QRCodeAtomique) detectedQR;
 
-                        //On vérifie si le QrCode lu est une bonne réponse
-                        if (m_question.getListe_bonne_rep().contains(reponse.getM_id())) {
+                    //On vérifie si le QrCode lu est une bonne réponse
+                    if (m_question.getListe_bonne_rep().contains(reponse.getM_id())) {
 
-                            m_mainActivity.readPrint(reponse.getM_reponse());
-                            m_mainActivity.read(m_question.getM_text_bonne_rep());
+                        m_mainActivity.readPrint(reponse.getM_reponse());
+                        m_mainActivity.read(m_question.getM_text_bonne_rep());
 
 
-                            //On vérifie si le QrCode lu n'a pas déjaà été lu par l'utilisateur
-                            if(!m_tab_reponse_trouve.contains(reponse.getM_id())) {
+                        //On vérifie si le QrCode lu n'a pas déjaà été lu par l'utilisateur
+                        if(!m_tab_reponse_trouve.contains(reponse.getM_id())) {
 
-                                m_tab_reponse_trouve.add(reponse.getM_id());
+                            m_tab_reponse_trouve.add(reponse.getM_id());
 
-                                //Si le nombre d'élément dans le le tableau de réponse trouvé est égale au
-                                // nombre de bonne réponse demandé l'exercice est terminé et nous revenons en mode normal
-                                if (m_question.getNb_min_reponses() == m_tab_reponse_trouve.size()) {
-                                    //Log.i("================", reponse.getM_reponse());
-                                    m_mainActivity.read("Tu as réussi l'exercice");
+                            //Si le nombre d'élément dans le le tableau de réponse trouvé est égale au
+                            // nombre de bonne réponse demandé l'exercice est terminé et nous revenons en mode normal
+                            if (m_question.getNb_min_reponses() == m_tab_reponse_trouve.size()) {
+                                //Log.i("================", reponse.getM_reponse());
+                                m_mainActivity.read("Tu as réussi l'exercice");
 
-                                    try {
-                                        Thread.sleep(5000);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
-                                    m_mainActivity.startNewDetection("Nouvelle détection");
+                                try {
+                                    Thread.sleep(5000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
                                 }
-
-                                //Sinon on indique le nombre de bonne réponse demandé et le nombre de bonne réponse trouvé
-                                else {
-                                    m_mainActivity.read("Tu as trouvé "
-                                            + m_tab_reponse_trouve.size()
-                                            + " bonne réponse sur "
-                                            + m_question.getNb_min_reponses()
-                                            + " bonne réponse");
-                                }
+                                m_mainActivity.startNewDetection("Nouvelle détection");
                             }
+
+                            //Sinon on indique le nombre de bonne réponse demandé et le nombre de bonne réponse trouvé
                             else {
-                                m_mainActivity.read("Tu as déjà trouvé cette réponse");
+                                m_mainActivity.read("Tu as trouvé "
+                                        + m_tab_reponse_trouve.size()
+                                        + " bonne réponse sur "
+                                        + m_question.getNb_min_reponses()
+                                        + " bonne réponse");
                             }
+                        }
+                        else {
+                            m_mainActivity.read("Tu as déjà trouvé cette réponse");
+                        }
 
                         //Sinon on indique le méssage de la mauvaise réponse et on indique que c'est une mauvaise réponse
-                        } else{
-                            m_mainActivity.readPrint(reponse.getM_reponse());
-                            m_mainActivity.read(m_question.getM_text_mauvaise_rep());
-                        }
-                        
+                    } else{
+                        m_mainActivity.readPrint(reponse.getM_reponse());
+                        m_mainActivity.read(m_question.getM_text_mauvaise_rep());
+                    }
+
                     //On retarde la prochaine détéction fluidifié la détection
                     try {
                         Thread.sleep(2000);
