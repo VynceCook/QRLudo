@@ -99,7 +99,7 @@ public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStr
                                 //Si le nombre d'élément dans le le tableau de réponse trouvé est égale au
                                 // nombre de bonne réponse demandé l'exercice est terminé et nous revenons en mode normal
                                 if (m_question.getNb_min_reponses() == m_tab_reponse_trouve.size()) {
-
+                                    //Log.i("================", reponse.getM_reponse());
                                     m_mainActivity.read("Tu as réussi l'exercice");
 
                                     try {
@@ -186,6 +186,7 @@ public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStr
     @Override
     public void onSwipeLeft() {
         scan_reponse = true;
+        m_mainActivity.makeSilence();
         m_mainActivity.readPrint("Détection de la réponse");
         mode_reponse = true;
         mode_exploration = false;
@@ -195,7 +196,7 @@ public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStr
     //Relance le mode éxploration
     @Override
     public void onSwipeRight() {
-        m_mainActivity.read("Mode exploration");
+        m_mainActivity.readPrint("Mode exploration");
         mode_reponse = false;
         mode_exploration = true;
     }

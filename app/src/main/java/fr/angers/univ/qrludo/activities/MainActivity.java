@@ -1403,27 +1403,27 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void read(final String question){
+    public void read(final String texte){
         final AppCompatActivity activity = this;
         activity.runOnUiThread(new Runnable() {
             public void run() {
 
                 //Using text to speech engine to say the text
-                toSpeech(question, TextToSpeech.QUEUE_ADD);
+                toSpeech(texte, TextToSpeech.QUEUE_ADD);
             }
         });
     }
 
-    public void readPrint(final String question){
+    public void readPrint(final String texte){
         final AppCompatActivity activity = this;
         activity.runOnUiThread(new Runnable() {
             public void run() {
 
                 //printing the text
-                printText(question);
+                printText(texte);
 
                 //Using text to speech engine to say the text
-                toSpeech(question, TextToSpeech.QUEUE_ADD);
+                toSpeech(texte, TextToSpeech.QUEUE_ADD);
             }
         });
     }
@@ -1788,7 +1788,7 @@ public class MainActivity extends AppCompatActivity
 
     private void toSpeech(String str, int queue) {
 
-        Log.v("double_question", str);
+        //Log.v("double_question", str);
         AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         if (audioManager !=null){
             if(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) == 0){
