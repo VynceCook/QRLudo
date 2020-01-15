@@ -14,7 +14,9 @@ import fr.angers.univ.qrludo.QR.model.QRCode;
 import fr.angers.univ.qrludo.QR.model.QRCodeAtomique;
 import fr.angers.univ.qrludo.QR.model.QRCodeEnsemble;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestion;
+import fr.angers.univ.qrludo.QR.model.QRCodeQuestionQCM;
 import fr.angers.univ.qrludo.QR.model.QRCodeReponse;
+import fr.angers.univ.qrludo.QR.model.QRCodeReponseQCM;
 import fr.angers.univ.qrludo.QR.model.QrCodeJson;
 import fr.angers.univ.qrludo.exceptions.UnhandledQRException;
 import fr.angers.univ.qrludo.exceptions.UnsupportedQRException;
@@ -34,6 +36,7 @@ public class QRCodeBuilder {
         // On stocke la valeur brute initiale pour pouvoir effetuer la détection multiple
         final String rawvalue = dataQR;
         String result;
+
 
 
         // On vérfie si la chaine est encodée en base64
@@ -57,6 +60,8 @@ public class QRCodeBuilder {
         Log.v("data_qr", dataQR);
         Gson gson = new GsonBuilder().create();
         QrCodeJson code = gson.fromJson(dataQR, QrCodeJson.class);
+
+        Log.i("build","Miss Build : "+code.getType());
 
         if(code.getVersion()>current_version){
             throw new UnsupportedQRException("Ce QRCode ne peut pas être lu par cette application, veuillez mettre à jour QRLudo ou QRLudoGénérator");
@@ -91,13 +96,17 @@ public class QRCodeBuilder {
 
 
         if (code.getType().equalsIgnoreCase("atomique")||code.getType().equalsIgnoreCase("unique")||code.getType().equalsIgnoreCase("xl")) {
-            return new QRCodeAtomique(code, rawvalue);
+            return new QRCodeAtomique(code, dataQR);
         } else if (code.getType().equalsIgnoreCase("ensemble")) {
-            return new QRCodeEnsemble(code, rawvalue);
+            return new QRCodeEnsemble(code, dataQR);
         } else if(code.getType().equalsIgnoreCase("question")){
             return new QRCodeQuestion(code, dataQR);
         } else if(code.getType().equalsIgnoreCase("reponse")){
             return new QRCodeReponse(code, dataQR);
+        } else if(code.getType().equalsIgnoreCase("questionQCM")){
+            return new QRCodeQuestionQCM(code, dataQR);
+        } else if (code.getType().equalsIgnoreCase("reponseQCM")){
+            return new QRCodeReponseQCM(code, dataQR);
         }
 
         return new QRCodeAtomique(code, rawvalue);

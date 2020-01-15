@@ -29,7 +29,8 @@ public abstract class QRCodeDetectionModeStrategy {
         }
     };
 
-    Runnable runnerSwipeLeft = new Runnable() {
+    
+    Runnable runnerRewind = new Runnable() {
         @Override
         public void run() {
             m_mainActivity.rewindFiveSeconds();

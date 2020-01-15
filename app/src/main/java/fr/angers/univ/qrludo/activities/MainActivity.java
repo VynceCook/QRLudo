@@ -46,6 +46,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
+import com.google.android.gms.vision.MultiDetector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
@@ -56,12 +57,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import fr.angers.univ.qrludo.QR.handling.QRCodeBuilder;
 import fr.angers.univ.qrludo.QR.handling.QRCodeDefaultDetectionModeStrategy;
 import fr.angers.univ.qrludo.QR.handling.QRCodeDetectionModeStrategy;
 import fr.angers.univ.qrludo.QR.model.QRCode;
 import fr.angers.univ.qrludo.QR.model.QRCodeCollection;
+import fr.angers.univ.qrludo.QR.model.QRCodeQuestionQCM;
+import fr.angers.univ.qrludo.QR.model.QRCodeReponseQCM;
+import fr.angers.univ.qrludo.QR.model.QRCodeQuestion;
 import fr.angers.univ.qrludo.QR.model.QRContent;
 import fr.angers.univ.qrludo.QR.model.QRFile;
 import fr.angers.univ.qrludo.QR.model.QRText;
@@ -408,7 +414,23 @@ public class MainActivity extends AppCompatActivity
      */
     private boolean m_web_opening_via_browser;
 
+    /**
+     * Array QRQuestionQCM and QRReponseQCM
+     */
+    //class made to clear the table every second so that the user has to re-scan in case he scans the wrong QRCode
+    class tableauQRCodeQCM extends TimerTask{
+        final ArrayList<QRCode> tabQRCodeQCM = new ArrayList<>();
 
+        public void run()
+        {
+            if(tabQCM.tabQRCodeQCM.size()<5){
+                tabQCM.tabQRCodeQCM.clear();
+                Log.i("DETECTION MULTIPLE", "Reinitialisation du tableau "+tabQCM.tabQRCodeQCM.size());
+            }
+        }
+    }
+
+    final tableauQRCodeQCM tabQCM = new tableauQRCodeQCM();
 
     /**
      * The OnCreate event of the main activity, called at the creation.
@@ -730,6 +752,7 @@ public class MainActivity extends AppCompatActivity
                 .setBarcodeFormats(Barcode.DATA_MATRIX | Barcode.QR_CODE)
                 .build();
 
+
         if (!detector.isOperational()) {
             Log.e("DETECTOR","Could not set up detector.");
             return;
@@ -789,6 +812,7 @@ public class MainActivity extends AppCompatActivity
       The processor of the detector, where the events from the detector are handled
      */
         Detector.Processor<Barcode> detector_processor = new Detector.Processor<Barcode>() {
+            ArrayList<QRCode> listQR = new ArrayList<>();
 
             @Override
             public void release() {
@@ -812,27 +836,116 @@ public class MainActivity extends AppCompatActivity
                             break;
                         }
 
+
                         try {
 
                             int version = MainActivity.this.getResources().getInteger(R.integer.version_qrludo);
                             QRCode detectedQR = QRCodeBuilder.build(rawValue, version);
-                            //If first QR detected of the current detection
-                            if (m_detectionProgress == NO_QR_DETECTED) {
-                                m_currentDetectionModeStrategy.onFirstDetectionWithTimeNotNull(detectedQR);
+
+
+
+                            //Check if the current QR is a QRCodeQuestionQCM or a QRCodeReponseQCM
+                            if(!(detectedQR instanceof QRCodeQuestionQCM) & !(detectedQR instanceof QRCodeReponseQCM)){
+                                listQR.add(detectedQR);
+
+                                //If first QR detected of the current detection
+                                if (m_detectionProgress == NO_QR_DETECTED) {
+                                    m_currentDetectionModeStrategy.onFirstDetectionWithTimeNotNull(detectedQR);
+                                }
+                                //If at least one QR has already been detected during the current detection
+                                else{
+                                    m_currentDetectionModeStrategy.onNextDetectionWithTimeNotNull(detectedQR);
+                                }
                             }
-                            //If at least one QR has already been detected during the current detection
                             else{
-                                m_currentDetectionModeStrategy.onNextDetectionWithTimeNotNull(detectedQR);
+                                //If there is more than 5 elements in the array tabQRCodeQCM, lauching QRCodeQCMDetectionModeStrategy
+                                if(tabQCM.tabQRCodeQCM.size()>=5){
+
+                                    //If first QR detected of the current detection
+                                    if (m_detectionProgress == NO_QR_DETECTED) {
+                                        //Get QCM Question in the tab to start the strategy
+                                        QRCodeQuestionQCM qrQuestionQCM = null;
+                                        for(int j=0; j<tabQCM.tabQRCodeQCM.size();++j){
+                                            if(tabQCM.tabQRCodeQCM.get(j) instanceof QRCodeQuestionQCM){
+                                                QRCodeQuestionQCM temp = (QRCodeQuestionQCM) tabQCM.tabQRCodeQCM.get(j);
+                                                qrQuestionQCM = temp;
+                                            }
+                                        }
+                                        m_currentDetectionModeStrategy.onFirstDetectionWithTimeNotNull(qrQuestionQCM);
+                                    }
+                                    //If at least one QR has already been detected during the current detection
+                                    else{
+                                        m_currentDetectionModeStrategy.onNextDetectionWithTimeNotNull(detectedQR);
+                                    }
+                                }
+                                else {
+                                    addQRQCMInTab(detectedQR);
+                                }
                             }
-
-
                         } catch (UnhandledQRException e) {
                             ToneGeneratorSingleton.getInstance().ignoredQRCodeTone();
                         } catch (UnsupportedQRException e) {
                             toSpeech(e.getMessage(), TextToSpeech.QUEUE_ADD);
                             stopDetection();
                         }
+                    }
+                }
+            }
 
+
+            /**
+             * Method called to add Question QCM and Reponse QCM into tabQRCodeQCM (if not already added)
+             * @param detectedQR
+             */
+            public void addQRQCMInTab(QRCode detectedQR){
+                //Check if detectedQR is a QuestionQCM
+                if(detectedQR instanceof QRCodeQuestionQCM){
+                    QRCodeQuestionQCM detectedQRQuestionQCM = (QRCodeQuestionQCM) detectedQR;
+
+                    boolean isAlreadyInTab=false;
+                    for(int j = 0; j<tabQCM.tabQRCodeQCM.size();++j){
+                        if(tabQCM.tabQRCodeQCM.get(j)instanceof QRCodeQuestionQCM){
+                            QRCodeQuestionQCM tempQuestionQCM = (QRCodeQuestionQCM) tabQCM.tabQRCodeQCM.get(j);
+                            if(detectedQRQuestionQCM.getId().equals(tempQuestionQCM.getId())) {
+                                isAlreadyInTab = true;
+                            }
+                        }
+                    }
+                    if(!isAlreadyInTab){
+                        tabQCM.tabQRCodeQCM.add(detectedQRQuestionQCM);
+                        //Launch the reset timer if it's the first in tab
+                        if(tabQCM.tabQRCodeQCM.size()==1){
+                            Timer timer = new Timer();
+                            TimerTask task = new tableauQRCodeQCM();
+                            timer.schedule(task,2000);
+                        }
+                    }
+
+
+
+
+                }
+                //Check if detectedQR is a ReponseQCM
+                if(detectedQR instanceof QRCodeReponseQCM){
+                    QRCodeReponseQCM detectedQRReponseQCM = (QRCodeReponseQCM) detectedQR;
+
+                    boolean isAlreadyInTab=false;
+                    for(int j = 0; j<tabQCM.tabQRCodeQCM.size();++j){
+                        if(tabQCM.tabQRCodeQCM.get(j)instanceof QRCodeReponseQCM){
+                            QRCodeReponseQCM tempQuestionQCM = (QRCodeReponseQCM) tabQCM.tabQRCodeQCM.get(j);
+                            if(detectedQRReponseQCM.getId().equals(tempQuestionQCM.getId())) {
+                                isAlreadyInTab = true;
+                            }
+                        }
+                    }
+                    if(!isAlreadyInTab) {
+                        tabQCM.tabQRCodeQCM.add(detectedQRReponseQCM);
+                        //Launch the reset timer if it's the first in tab
+                        if (tabQCM.tabQRCodeQCM.size() == 1) {
+                            Timer timer = new Timer();
+                            TimerTask task = new tableauQRCodeQCM();
+                            timer.schedule(task, 2000);
+                        }
                     }
                 }
             }
@@ -1040,8 +1153,10 @@ public class MainActivity extends AppCompatActivity
                         startActivity(browserIntent);
                     }
                     //Sinon on le lit par synthèse vocale
-                    else
+                    else{
                         openWebSite(m_currentReading.get(m_currentPos).getContent());
+                        printText(m_currentReading.get(m_currentPos).getContent());
+                    }
                 }
                 else {
                     //printing the text
@@ -1231,6 +1346,7 @@ public class MainActivity extends AppCompatActivity
      * Can be called at the end or in the middle of a reading
      */
     public void startNewDetection(String message) {
+        tabQCM.tabQRCodeQCM.clear();
 
         //Getting back at the first state of the detection
         m_detectionProgress = NO_QR_DETECTED;
@@ -1271,19 +1387,44 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void readQuestion(final String question){
+    //Methode qui permet d'entrer dans le mode exploration : scan de plusieur qrCodeUnique en mode Question/reponse (reponses)
+    public void modeExploration(){
+
+        final AppCompatActivity activity = this;
+
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+                toSpeech("Mode Exploration", TextToSpeech.QUEUE_ADD);
+            }
+        });
+
+    }
+
+    public void read(final String texte){
+        final AppCompatActivity activity = this;
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+
+                //Using text to speech engine to say the text
+                toSpeech(texte, TextToSpeech.QUEUE_ADD);
+            }
+        });
+    }
+
+    public void readPrint(final String texte){
         final AppCompatActivity activity = this;
         activity.runOnUiThread(new Runnable() {
             public void run() {
 
                 //printing the text
-                printText(question);
+                printText(texte);
 
                 //Using text to speech engine to say the text
-                toSpeech(question, TextToSpeech.QUEUE_ADD);
+                toSpeech(texte, TextToSpeech.QUEUE_ADD);
             }
         });
     }
+
 
     public void reponseFind(final String message){
         final AppCompatActivity activity = this;
@@ -1644,7 +1785,7 @@ public class MainActivity extends AppCompatActivity
 
     private void toSpeech(String str, int queue) {
 
-        Log.v("double_question", str);
+        //Log.v("double_question", str);
         AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         if (audioManager !=null){
             if(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) == 0){
