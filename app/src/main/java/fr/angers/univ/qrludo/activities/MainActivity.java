@@ -415,6 +415,11 @@ public class MainActivity extends AppCompatActivity
     private boolean m_web_opening_via_browser;
 
     /**
+     * True if the last detected QR is a url
+     */
+    private boolean m_next_QR_is_web_link;
+
+    /**
      * Array QRQuestionQCM and QRReponseQCM
      */
     //class made to clear the table every second so that the user has to re-scan in case he scans the wrong QRCode
@@ -561,8 +566,6 @@ public class MainActivity extends AppCompatActivity
                 toSpeech("Application lancée.", TextToSpeech.QUEUE_FLUSH);
                 fillLocals();
                 new detectionOnTTSInitialization().execute(m_ttobj);
-
-
             }
         });
 
@@ -838,11 +841,10 @@ public class MainActivity extends AppCompatActivity
 
 
                         try {
+                            //TODO VERSION QR LUDO ICI
 
                             int version = MainActivity.this.getResources().getInteger(R.integer.version_qrludo);
                             QRCode detectedQR = QRCodeBuilder.build(rawValue, version);
-
-
 
                             //Check if the current QR is a QRCodeQuestionQCM or a QRCodeReponseQCM
                             if(!(detectedQR instanceof QRCodeQuestionQCM) & !(detectedQR instanceof QRCodeReponseQCM)){
@@ -1144,8 +1146,7 @@ public class MainActivity extends AppCompatActivity
             public void run() {
 
                 //Check if content is a Web Site
-                if (m_currentReading.get(m_currentPos).getContent().startsWith("http://") || m_currentReading.get(m_currentPos).getContent().startsWith("https://")) {
-                    Log.i("Web", "######################### WebSite trouvé ###########################################");
+                if (m_next_QR_is_web_link) {
                     //Si on doit se contenter d'ouvrir le lien dans un navigateur
                     if (m_web_opening_via_browser)
                     {
@@ -1157,6 +1158,7 @@ public class MainActivity extends AppCompatActivity
                         openWebSite(m_currentReading.get(m_currentPos).getContent());
                         printText(m_currentReading.get(m_currentPos).getContent());
                     }
+                    cancelNextQRIsWeb();
                 }
                 else {
                     //printing the text
@@ -1920,6 +1922,20 @@ public class MainActivity extends AppCompatActivity
 
     public boolean isTTSReady(){
         return m_ttsready;
+    }
+
+    /**
+     * Set that the next QR read is an url
+     */
+    public void setNextQRIsWeb() {
+        m_next_QR_is_web_link = true;
+    }
+
+    /**
+     * Cancel that the next QR read is an url
+     */
+    public void cancelNextQRIsWeb() {
+        m_next_QR_is_web_link = false;
     }
 }
 

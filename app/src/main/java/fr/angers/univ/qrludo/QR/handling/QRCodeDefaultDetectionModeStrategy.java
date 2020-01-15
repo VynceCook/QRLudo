@@ -4,6 +4,7 @@ package fr.angers.univ.qrludo.QR.handling;
 import android.util.Log;
 
 import fr.angers.univ.qrludo.QR.model.QRCode;
+import fr.angers.univ.qrludo.QR.model.QRCodeAtomique;
 import fr.angers.univ.qrludo.QR.model.QRCodeEnsemble;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestion;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestionQCM;
@@ -34,6 +35,12 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
     public void onFirstDetectionWithTimeNotNull(QRCode detectedQR) {
         //Applies a family or ensemble related behaviour if necessary or launches the reading of the detected QR Code
         if (!ensembleBehaviour(detectedQR, true) && !questionReponseBehaviour(detectedQR, true) && !qcmBehaviour(detectedQR, true)){
+
+            if(detectedQR instanceof QRCodeAtomique) {
+                QRCodeAtomique tmpQr = (QRCodeAtomique) detectedQR;
+                if (tmpQr.isWebsite())
+                    m_mainActivity.setNextQRIsWeb();
+            }
 
             //adding it to the detected QRCodes
             m_detectedQRCodes.addQR(detectedQR);

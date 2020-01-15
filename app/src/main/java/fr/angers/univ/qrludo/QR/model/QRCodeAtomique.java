@@ -28,6 +28,7 @@ public class QRCodeAtomique extends QRCode {
 
     private String m_reponse;
     private String m_id;
+    private boolean m_isWebsite = false;
 
 
     public QRCodeAtomique(QrCodeJson code,String rawValue) throws UnhandledQRException {
@@ -66,4 +67,8 @@ public class QRCodeAtomique extends QRCode {
     public String getM_id() {
         return this.m_id;
     }
+
+    public void setWebSite() { this.m_isWebsite = true; }
+
+    public boolean isWebsite() { return m_isWebsite; }
 }
