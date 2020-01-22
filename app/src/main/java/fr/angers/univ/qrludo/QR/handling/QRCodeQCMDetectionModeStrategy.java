@@ -17,6 +17,7 @@ import static fr.angers.univ.qrludo.activities.MainActivity.NO_QR_DETECTED;
 public class QRCodeQCMDetectionModeStrategy extends QRCodeDetectionModeStrategy implements QDCResponse {
     private QRCodeQuestionQCM m_question;
     private boolean scan_reponse;
+    private boolean timer_is_running;
     private ArrayList<QRCode> tabOfQRReponse;
     private ContentDelayCounter timer;
 
@@ -25,13 +26,13 @@ public class QRCodeQCMDetectionModeStrategy extends QRCodeDetectionModeStrategy 
         super(mainActivity);
         this.m_question = m_question;
         scan_reponse = false;
+        timer_is_running = false;
         tabOfQRReponse = new ArrayList<QRCode>();
     }
 
     @Override
     public void onFirstDetectionWithTimeNotNull(QRCode detectedQR) {
         Log.v("first_detection_qrep", "appel à QRCodeQCMDetectionModeStrategy.onFirstDetectionWithTimeNotNull() ; ne devrait pas arriver");
-
     }
 
     @Override
@@ -44,11 +45,12 @@ public class QRCodeQCMDetectionModeStrategy extends QRCodeDetectionModeStrategy 
 
                 //Lancement de timer permettant d'attendre que tous les QR Réponses soient scannés avant de
                 //vérifier la réponse
-                if (tabOfQRReponse.size() == 1)
+                if (tabOfQRReponse.size() == 1 && !timer_is_running)
                 {
                     timer = new ContentDelayCounter();
                     timer.delegate = this;
                     timer.execute(3);
+                    timer_is_running = true;
                 }
             }
         }
@@ -153,8 +155,10 @@ public class QRCodeQCMDetectionModeStrategy extends QRCodeDetectionModeStrategy 
 
     //This method start at the end of the timer on detection mode
     public void processFinish(Boolean output) {
+        timer_is_running = false;
+
         //If the user scanned more than 3 answers, he can retry
-        if(tabOfQRReponse.size()>=4){
+        if(tabOfQRReponse.size()>=m_question.getNombreReponses()){
             Log.i("DETECTION MULTIPLE","Erreur : Trop de réponses sont scannées");
 
             m_mainActivity.readPrint("Trop de réponses sont scannées");
@@ -167,20 +171,19 @@ public class QRCodeQCMDetectionModeStrategy extends QRCodeDetectionModeStrategy 
             tabOfQRReponse.clear();
         }
         //If the user scanned 3 answers, check if the answer is right or wrong
-        if(tabOfQRReponse.size()==3){
-            if(tabOfQRReponse.size()==3){
-                boolean reponseBonne = false;
+        if(tabOfQRReponse.size()==m_question.getNombreReponses()-1){
+                boolean reponseBonneIsDetected = false;
 
                 for(int i=0; i<tabOfQRReponse.size(); ++i){
                     QRCodeReponseQCM tempQuestionQCM = (QRCodeReponseQCM) tabOfQRReponse.get(i);
-                    reponseBonne = reponseBonne || tempQuestionQCM.isAnswer();
+                    reponseBonneIsDetected = reponseBonneIsDetected || tempQuestionQCM.isAnswer();
                 }
 
-                //Good Answer
-                if(reponseBonne){
+                //Good Answer is detected
+                if(reponseBonneIsDetected){
                     m_mainActivity.readPrint("Mauvaise Réponse");
                 }
-                //Bad Answer
+                //Good Answer is not detected
                 else{
                     m_mainActivity.readPrint("Bonne Réponse");
                 }
@@ -194,7 +197,6 @@ public class QRCodeQCMDetectionModeStrategy extends QRCodeDetectionModeStrategy 
                 //Launch new detection
                 scan_reponse = false;
                 m_mainActivity.startNewDetection("Nouvelle détection");
-            }
         }
         //If the user scanned less than 3 answers, he can retry
         else{
