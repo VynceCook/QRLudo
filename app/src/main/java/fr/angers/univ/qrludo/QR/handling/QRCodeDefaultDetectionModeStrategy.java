@@ -73,8 +73,6 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
 
             //Resetting the MultipleDetectionTimer
             m_mainActivity.startMultipleDetectionTimer();
-
-            ToneGeneratorSingleton.getInstance().QRCodeNormallyDetectedTone();
         }
 
     }
