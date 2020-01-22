@@ -1043,7 +1043,7 @@ public class MainActivity extends AppCompatActivity
         else if (currentContent instanceof QRFile){
             //If the file is already downloaded, playing the m_mediaPlayer
             if (((QRFile) currentContent).isFileInMemory()){
-                playCurrentSoundContent("Fichier audio");
+                playCurrentSoundFromFile();
             }
             //The file is not downloaded
             else {
@@ -1089,7 +1089,32 @@ public class MainActivity extends AppCompatActivity
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    /**
+     * Plays the current QRFile
+     */
+    public void playCurrentSoundFromFile(){
+        Log.i("%%%%APRESTELECHARGEMENT", "Lecture directe du fichier");
+        QRContent currentContent = m_currentReading.get(m_currentPos);
+        if (currentContent instanceof QRFile) {
+            //If the file is already downloaded, playing the m_mediaPlayer
+            if (((QRFile) currentContent).isFileInMemory()) {
+                String pathToFile = ((QRFile) currentContent).getDownloadedFilePath();
+
+                try {
+                    m_mediaPlayer.stop();
+                    m_mediaPlayer = new MediaPlayer();
+                    m_mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    m_mediaPlayer.setDataSource(pathToFile);
+                    m_mediaPlayer.prepare();
+                    m_mediaPlayer.start();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public void pauseCurrentReading(){

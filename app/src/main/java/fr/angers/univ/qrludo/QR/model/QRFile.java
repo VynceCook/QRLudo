@@ -16,15 +16,21 @@ import fr.angers.univ.qrludo.utils.FileDowloader;
 public class QRFile extends QRContent implements FileDowloader.FileDownloaderObserverInterface {
 
     private boolean m_isFileInMemory;
+    private String m_download_path;
     private QRFileObserverInterface m_QRFileObserver;
 
     public QRFile(String fileUrl) {
         super(fileUrl);
 
-
-        m_isFileInMemory =  (new File(FileDowloader.DOWNLOAD_PATH+(CompressionString.compress(fileUrl))+".mp3").exists());
+        m_download_path = FileDowloader.DOWNLOAD_PATH+(CompressionString.compress(fileUrl))+".mp3";
+        m_isFileInMemory =  (new File(m_download_path).exists());
 
         downloadIfNotInMemory();
+    }
+
+    public String getDownloadedFilePath()
+    {
+        return m_download_path;
     }
 
     public boolean isFileInMemory(){

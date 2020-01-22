@@ -32,11 +32,11 @@ public class FileDowloader extends AsyncTask {
     public FileDowloader(String url, FileDownloaderObserverInterface user) {
         m_url = url;
         m_user = user;
+
         // On compresse l'url du fichier pour pouvoir lui donner un nom reconnaissable lors du stockage
-        //m_id=CompressionString.compress(url);
+        m_id=CompressionString.compress(url);
 
-
-        m_path = FileDowloader.DOWNLOAD_PATH + "m_id" + ".mp3";
+        m_path = FileDowloader.DOWNLOAD_PATH + m_id + ".mp3";
 
 
         // Creating qrludo dir if doesn't exist
@@ -44,7 +44,6 @@ public class FileDowloader extends AsyncTask {
         if (!targetDir.exists()) {
             targetDir.mkdirs();
         }
-
     }
 
 

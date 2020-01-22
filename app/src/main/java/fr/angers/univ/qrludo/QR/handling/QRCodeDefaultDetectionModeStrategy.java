@@ -91,7 +91,7 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
     @Override
     public void onQRFileDownloadComplete() {
         //plays the newly downloaded sound
-        m_mainActivity.playCurrentSoundContent("Fichier audio");
+        m_mainActivity.playCurrentSoundFromFile();
     }
 
     /*
