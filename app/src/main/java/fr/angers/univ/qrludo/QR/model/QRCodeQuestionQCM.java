@@ -15,6 +15,7 @@ public class QRCodeQuestionQCM extends QRCode {
     private String text;
     private String m_text_bonne_rep;
     private String m_text_mauvaise_rep;
+    private int m_nombreReponses;
 
 
     public QRCodeQuestionQCM(QrCodeJson code, String dataQR) {
@@ -28,6 +29,9 @@ public class QRCodeQuestionQCM extends QRCode {
         m_text_bonne_rep = codeQuestion.getText_bonne_reponse();
         m_text_mauvaise_rep = codeQuestion.getText_mauvaise_reponse();
         text = codeQuestion.getText();
+
+        String textNombreReponsse = codeQuestion.getText_nombre_reponse();
+        m_nombreReponses = Integer.parseInt(textNombreReponsse);
 
         m_content.add(new QRText(m_qrcodeJson.getName()));
     }
@@ -43,6 +47,8 @@ public class QRCodeQuestionQCM extends QRCode {
     public void setId(String id) {
         this.id = id;
     }
+
+    public int getNombreReponses() { return m_nombreReponses; }
 
     public String getM_text_bonne_rep() {
         return m_text_bonne_rep;

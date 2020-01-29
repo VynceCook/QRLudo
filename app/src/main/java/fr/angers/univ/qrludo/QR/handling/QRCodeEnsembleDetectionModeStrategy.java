@@ -54,7 +54,7 @@ public class QRCodeEnsembleDetectionModeStrategy extends QRCodeDetectionModeStra
             m_mainActivity.startMultipleDetectionTimer();
 
             //Signaling that a new QRCodeEnsemble has been detected
-            ToneGeneratorSingleton.getInstance().ensembleDetectionTone();
+//            ToneGeneratorSingleton.getInstance().ensembleDetectionTone();
 
         }
         else{

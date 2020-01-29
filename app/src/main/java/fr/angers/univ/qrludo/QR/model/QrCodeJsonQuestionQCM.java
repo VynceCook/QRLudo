@@ -3,6 +3,7 @@ package fr.angers.univ.qrludo.QR.model;
 public class QrCodeJsonQuestionQCM extends QrCodeJson{
     //private ArrayList<String> liste_bonne_rep = new ArrayList<>();
     private String text = null; //Affiche la question et les réponses
+    private String nbReponse = null;
     private String text_bonne_reponse = null;
     private String text_mauvaise_reponse = null;
 
@@ -10,6 +11,7 @@ public class QrCodeJsonQuestionQCM extends QrCodeJson{
     public String toString() {
         return super.toString()+" QrCodeJsonQuestion{" +
                 ", id='" + super.getId() + '\'' +
+                ", nbReponse ='" + nbReponse + '\'' +
                 ", m_text_bonne_rep=" + text_bonne_reponse +
                 ", m_text_mauvaise_rep='" + text_mauvaise_reponse + '\'' +
                 '}';
@@ -21,6 +23,14 @@ public class QrCodeJsonQuestionQCM extends QrCodeJson{
 
     public void setText_mauvaise_reponse(String text_mauvaise_reponse) {
         this.text_mauvaise_reponse = text_mauvaise_reponse;
+    }
+
+    public String getText_nombre_reponse() {
+        return nbReponse;
+    }
+
+    public void setText_nombre_reponse(String text_nombre_reponse) {
+        this.nbReponse = text_nombre_reponse;
     }
 
     public String getText_bonne_reponse() {

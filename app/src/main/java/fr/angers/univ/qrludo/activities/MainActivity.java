@@ -415,6 +415,16 @@ public class MainActivity extends AppCompatActivity
     private boolean m_web_opening_via_browser;
 
     /**
+     * True if the last detected QR is a url
+     */
+    private boolean m_next_QR_is_web_link;
+
+    /**
+     * The amount of answers wanted for the next QCM
+     */
+    private int m_next_amount_of_qcm_answer = -1;
+
+    /**
      * Array QRQuestionQCM and QRReponseQCM
      */
     //class made to clear the table every second so that the user has to re-scan in case he scans the wrong QRCode
@@ -423,7 +433,7 @@ public class MainActivity extends AppCompatActivity
 
         public void run()
         {
-            if(tabQCM.tabQRCodeQCM.size()<5){
+            if(tabQCM.tabQRCodeQCM.size()<m_next_amount_of_qcm_answer+1){
                 tabQCM.tabQRCodeQCM.clear();
                 Log.i("DETECTION MULTIPLE", "Reinitialisation du tableau "+tabQCM.tabQRCodeQCM.size());
             }
@@ -561,8 +571,6 @@ public class MainActivity extends AppCompatActivity
                 toSpeech("Application lancée.", TextToSpeech.QUEUE_FLUSH);
                 fillLocals();
                 new detectionOnTTSInitialization().execute(m_ttobj);
-
-
             }
         });
 
@@ -838,11 +846,8 @@ public class MainActivity extends AppCompatActivity
 
 
                         try {
-
                             int version = MainActivity.this.getResources().getInteger(R.integer.version_qrludo);
                             QRCode detectedQR = QRCodeBuilder.build(rawValue, version);
-
-
 
                             //Check if the current QR is a QRCodeQuestionQCM or a QRCodeReponseQCM
                             if(!(detectedQR instanceof QRCodeQuestionQCM) & !(detectedQR instanceof QRCodeReponseQCM)){
@@ -858,28 +863,38 @@ public class MainActivity extends AppCompatActivity
                                 }
                             }
                             else{
-                                //If there is more than 5 elements in the array tabQRCodeQCM, lauching QRCodeQCMDetectionModeStrategy
-                                if(tabQCM.tabQRCodeQCM.size()>=5){
+                                //Un nombre de réponses a été fourni, on peut alors récupérer les informations
+                                if (m_next_amount_of_qcm_answer != -1) {
+                                    //If there is more than the <amoount of answers plus the question> elements in the array tabQRCodeQCM, lauching QRCodeQCMDetectionModeStrategy
+                                    if (tabQCM.tabQRCodeQCM.size() >= m_next_amount_of_qcm_answer+1) {
 
-                                    //If first QR detected of the current detection
-                                    if (m_detectionProgress == NO_QR_DETECTED) {
-                                        //Get QCM Question in the tab to start the strategy
-                                        QRCodeQuestionQCM qrQuestionQCM = null;
-                                        for(int j=0; j<tabQCM.tabQRCodeQCM.size();++j){
-                                            if(tabQCM.tabQRCodeQCM.get(j) instanceof QRCodeQuestionQCM){
-                                                QRCodeQuestionQCM temp = (QRCodeQuestionQCM) tabQCM.tabQRCodeQCM.get(j);
-                                                qrQuestionQCM = temp;
+                                        //If first QR detected of the current detection
+                                        if (m_detectionProgress == NO_QR_DETECTED) {
+                                            //Get QCM Question in the tab to start the strategy
+                                            QRCodeQuestionQCM qrQuestionQCM = null;
+                                            for (int j = 0; j < tabQCM.tabQRCodeQCM.size(); ++j) {
+                                                if (tabQCM.tabQRCodeQCM.get(j) instanceof QRCodeQuestionQCM) {
+                                                    QRCodeQuestionQCM temp = (QRCodeQuestionQCM) tabQCM.tabQRCodeQCM.get(j);
+                                                    qrQuestionQCM = temp;
+                                                }
                                             }
+                                            m_currentDetectionModeStrategy.onFirstDetectionWithTimeNotNull(qrQuestionQCM);
                                         }
-                                        m_currentDetectionModeStrategy.onFirstDetectionWithTimeNotNull(qrQuestionQCM);
-                                    }
-                                    //If at least one QR has already been detected during the current detection
-                                    else{
-                                        m_currentDetectionModeStrategy.onNextDetectionWithTimeNotNull(detectedQR);
+                                        //If at least one QR has already been detected during the current detection
+                                        else {
+                                            m_currentDetectionModeStrategy.onNextDetectionWithTimeNotNull(detectedQR);
+                                        }
+                                    } else {
+                                        addQRQCMInTab(detectedQR);
                                     }
                                 }
-                                else {
-                                    addQRQCMInTab(detectedQR);
+                                else
+                                {
+                                    if (detectedQR instanceof QRCodeQuestionQCM)
+                                   {
+                                        QRCodeQuestionQCM question = (QRCodeQuestionQCM) detectedQR;
+                                        m_next_amount_of_qcm_answer = question.getNombreReponses();
+                                    }
                                 }
                             }
                         } catch (UnhandledQRException e) {
@@ -1028,7 +1043,7 @@ public class MainActivity extends AppCompatActivity
         else if (currentContent instanceof QRFile){
             //If the file is already downloaded, playing the m_mediaPlayer
             if (((QRFile) currentContent).isFileInMemory()){
-                playCurrentSoundContent("Fichier audio");
+                playCurrentSoundFromFile();
             }
             //The file is not downloaded
             else {
@@ -1074,7 +1089,32 @@ public class MainActivity extends AppCompatActivity
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    /**
+     * Plays the current QRFile
+     */
+    public void playCurrentSoundFromFile(){
+        Log.i("%%%%APRESTELECHARGEMENT", "Lecture directe du fichier");
+        QRContent currentContent = m_currentReading.get(m_currentPos);
+        if (currentContent instanceof QRFile) {
+            //If the file is already downloaded, playing the m_mediaPlayer
+            if (((QRFile) currentContent).isFileInMemory()) {
+                String pathToFile = ((QRFile) currentContent).getDownloadedFilePath();
+
+                try {
+                    m_mediaPlayer.stop();
+                    m_mediaPlayer = new MediaPlayer();
+                    m_mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    m_mediaPlayer.setDataSource(pathToFile);
+                    m_mediaPlayer.prepare();
+                    m_mediaPlayer.start();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public void pauseCurrentReading(){
@@ -1144,8 +1184,7 @@ public class MainActivity extends AppCompatActivity
             public void run() {
 
                 //Check if content is a Web Site
-                if (m_currentReading.get(m_currentPos).getContent().startsWith("http://") || m_currentReading.get(m_currentPos).getContent().startsWith("https://")) {
-                    Log.i("Web", "######################### WebSite trouvé ###########################################");
+                if (m_next_QR_is_web_link) {
                     //Si on doit se contenter d'ouvrir le lien dans un navigateur
                     if (m_web_opening_via_browser)
                     {
@@ -1157,6 +1196,7 @@ public class MainActivity extends AppCompatActivity
                         openWebSite(m_currentReading.get(m_currentPos).getContent());
                         printText(m_currentReading.get(m_currentPos).getContent());
                     }
+                    cancelNextQRIsWeb();
                 }
                 else {
                     //printing the text
@@ -1346,6 +1386,8 @@ public class MainActivity extends AppCompatActivity
      * Can be called at the end or in the middle of a reading
      */
     public void startNewDetection(String message) {
+        m_next_amount_of_qcm_answer = -1;
+        Log.i("DEBUGDETECT",String.valueOf(m_next_amount_of_qcm_answer));
         tabQCM.tabQRCodeQCM.clear();
 
         //Getting back at the first state of the detection
@@ -1920,6 +1962,20 @@ public class MainActivity extends AppCompatActivity
 
     public boolean isTTSReady(){
         return m_ttsready;
+    }
+
+    /**
+     * Set that the next QR read is an url
+     */
+    public void setNextQRIsWeb() {
+        m_next_QR_is_web_link = true;
+    }
+
+    /**
+     * Cancel that the next QR read is an url
+     */
+    public void cancelNextQRIsWeb() {
+        m_next_QR_is_web_link = false;
     }
 }
 
