@@ -1,10 +1,15 @@
 # Règles de confidentialité de QR Ludo
 
+Date de dernière modification : 30 Janvier 2020
+
 ## Appareil photo
-Scan des QR Codes (aucune photos ou vidéos ne sont prises et aucune données ne sont envoyés via internet).
+Il est utilisé pour scanner les QR Codes. Aucune photo ou vidéo ne sont prises et aucune donnée n'est envoyée via internet.
+
 ## Accès à Internet
-Téléchargement des fichiers sons stockés dans les QR codes. Aucune donnée n’est envoyé via internet.
+Nous accèdons à internet pour le téléchargement des fichiers qui sont stockés dans les QR Codes. Aucune donnée n’est envoyée via internet.
+
 ## Accès au système de fichiers
-Sauvegarde des fichiers sons téléchargés sur le disque interne du téléphone. Aucune donnée n’est importée ou envoyée via internet.
+Nous avons besoin de l'accès aux fichiers pour sauvegarder les fichiers son téléchargés, et y accéder pour leurs lectures. Aucune donnée n’est envoyée via internet.
+
 ## Données personnelles
 Aucune donnée personnelle n’est collectée par QR Ludo.
