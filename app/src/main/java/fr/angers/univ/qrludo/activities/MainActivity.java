@@ -894,6 +894,7 @@ public class MainActivity extends AppCompatActivity
                                    {
                                         QRCodeQuestionQCM question = (QRCodeQuestionQCM) detectedQR;
                                         m_next_amount_of_qcm_answer = question.getNombreReponses();
+                                        addQRQCMInTab(detectedQR);
                                     }
                                 }
                             }
