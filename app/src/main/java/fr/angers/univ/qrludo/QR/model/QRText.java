@@ -6,6 +6,7 @@ package fr.angers.univ.qrludo.QR.model;
 
 public class QRText extends QRContent {
 
+
     public QRText(String text){
         super(text);
     }

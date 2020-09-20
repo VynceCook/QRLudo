@@ -11,15 +11,13 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import fr.angers.univ.qrludo.QR.model.QrCodeJson;
-
 
 /**
  * Created by etudiant on 26/01/18.
  * Modified by Florian Lherbeil
  */
 
-public class FileDowloader extends AsyncTask {
+public class FileDownloader extends AsyncTask {
 
     public static String DOWNLOAD_PATH = Environment.getExternalStorageDirectory().getPath() + "/qrludo/";
 
@@ -29,18 +27,18 @@ public class FileDowloader extends AsyncTask {
     String m_path;
 
 
-    public FileDowloader(String url, FileDownloaderObserverInterface user) {
+    public FileDownloader(String url, FileDownloaderObserverInterface user) {
         m_url = url;
         m_user = user;
 
         // On compresse l'url du fichier pour pouvoir lui donner un nom reconnaissable lors du stockage
         m_id=CompressionString.compress(url);
 
-        m_path = FileDowloader.DOWNLOAD_PATH + m_id + ".mp3";
+        m_path = FileDownloader.DOWNLOAD_PATH + m_id + ".mp3";
 
 
         // Creating qrludo dir if doesn't exist
-        File targetDir = new File(FileDowloader.DOWNLOAD_PATH);
+        File targetDir = new File(FileDownloader.DOWNLOAD_PATH);
         if (!targetDir.exists()) {
             targetDir.mkdirs();
         }
@@ -106,7 +104,7 @@ public class FileDowloader extends AsyncTask {
     }
 
     public static boolean viderMemoire() {
-        File targetDir = new File(FileDowloader.DOWNLOAD_PATH);
+        File targetDir = new File(FileDownloader.DOWNLOAD_PATH);
         if (targetDir.isDirectory()) {
             File[] files = targetDir.listFiles();
             for (File f : files) {
@@ -119,7 +117,7 @@ public class FileDowloader extends AsyncTask {
 
 
     public static boolean isEmpty() {
-        File targetDir = new File(FileDowloader.DOWNLOAD_PATH);
+        File targetDir = new File(FileDownloader.DOWNLOAD_PATH);
         if (targetDir.isDirectory()) {
             File[] files = targetDir.listFiles();
             if (files.length > 0)
