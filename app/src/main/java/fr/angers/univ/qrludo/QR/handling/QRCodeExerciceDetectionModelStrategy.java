@@ -33,7 +33,8 @@ public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStr
         scan_reponse = false;
         if(m_question!=null) {
             m_mainActivity.modeExploration();
-            mode_exploration = true;
+            //mode_exploration = true;
+            mode_reponse = true;
             firstRead = true;
         }
     }
@@ -189,16 +190,10 @@ public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStr
     }
 
 
-    //On lance le  (mode détection de bonne réponse => Fin de Pause)  ce qui arrête le (mode exploration =>  La Pause)
+    //On lance le  (mode détection de bonne réponse => Fin de laPause)  ce qui arrête le (mode exploration =>  Exercice en pause)
     @Override
     public void onSwipeLeft() {
-        scan_reponse = true;
-        // On arrête toute lecture
-        m_mainActivity.makeSilence();
-        // On annonce la fin de la pause pour chercher les réponses
-        m_mainActivity.readPrint("Fin de pause");
-        mode_reponse = true;
-        mode_exploration = false;
+        ToneGeneratorSingleton.getInstance().errorTone();
     }
 
 
@@ -208,12 +203,24 @@ public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStr
         ToneGeneratorSingleton.getInstance().errorTone();
     }
 
-    //Relance le (mode exploration => Début de pause)
+    //Relance le (mode exploration => Exercice en pause)
     @Override
     public void onDoubleClick() {
-        m_mainActivity.readPrint("Début pause");
-        mode_reponse = false;
-        mode_exploration = true;
+        if(!mode_exploration && mode_reponse){
+            m_mainActivity.makeSilence();
+            m_mainActivity.readPrint("Exercice en pause");
+            mode_reponse = false;
+            mode_exploration = true;
+        }else if(mode_exploration && !mode_reponse){
+            scan_reponse = true;
+            // On arrête toute lecture
+            m_mainActivity.makeSilence();
+            // On annonce la fin de la pause pour chercher les réponses
+            m_mainActivity.readPrint("Fin de la pause");
+            mode_reponse = true;
+            mode_exploration = false;
+        }
+
 
     }
 }
