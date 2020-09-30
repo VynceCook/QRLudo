@@ -1433,9 +1433,14 @@ public class MainActivity extends AppCompatActivity
 
         final AppCompatActivity activity = this;
 
-        activity.runOnUiThread(new Runnable() {
+        /*activity.runOnUiThread(new Runnable() {
             public void run() {
                 toSpeech("Mode Exploration", TextToSpeech.QUEUE_ADD);
+            }
+        });*/
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+                toSpeech("Début pause", TextToSpeech.QUEUE_ADD);
             }
         });
 
