@@ -189,27 +189,31 @@ public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStr
     }
 
 
-    //On lance le mode détection de bonne réponse ce qui arrète le mode exploration
+    //On lance le  (mode détection de bonne réponse => Fin de Pause)  ce qui arrête le (mode exploration =>  La Pause)
     @Override
     public void onSwipeLeft() {
         scan_reponse = true;
+        // On arrête toute lecture
         m_mainActivity.makeSilence();
-        m_mainActivity.readPrint("Détection de la réponse");
+        // On annonce la fin de la pause pour chercher les réponses
+        m_mainActivity.readPrint("Fin de pause");
         mode_reponse = true;
         mode_exploration = false;
     }
 
 
-    //Relance le mode éxploration
-    @Override
-    public void onSwipeRight() {
-        m_mainActivity.readPrint("Mode exploration");
-        mode_reponse = false;
-        mode_exploration = true;
-    }
 
     @Override
-    public void onDoubleClick() {
+    public void onSwipeRight() {
         ToneGeneratorSingleton.getInstance().errorTone();
+    }
+
+    //Relance le (mode exploration => Début de pause)
+    @Override
+    public void onDoubleClick() {
+        m_mainActivity.readPrint("Début pause");
+        mode_reponse = false;
+        mode_exploration = true;
+
     }
 }
