@@ -1440,7 +1440,7 @@ public class MainActivity extends AppCompatActivity
         });*/
         activity.runOnUiThread(new Runnable() {
             public void run() {
-                toSpeech("Scanner votre réponse ", TextToSpeech.QUEUE_ADD);
+                toSpeech("Scannez votre réponse ", TextToSpeech.QUEUE_ADD);
             }
         });
 
