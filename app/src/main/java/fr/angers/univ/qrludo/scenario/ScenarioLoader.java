@@ -24,15 +24,22 @@ import fr.angers.univ.qrludo.activities.MainActivity;
 import fr.angers.univ.qrludo.atom.QRAtom;
 import fr.angers.univ.qrludo.atom.SpeechAtom;
 
+/**
+ *  Cette classe permet de parser un fichier xml donné en des classes Java
+ */
+
 public class ScenarioLoader {
     MainActivity mainActivity;
+    private String filename;
 
-    public ScenarioLoader(MainActivity mainactivity){
+    public ScenarioLoader(MainActivity mainactivity, String filename){
         mainActivity = mainactivity;
+        this.filename = filename;
     }
 
+    // Cette fonction lance le parsing du fichier XML passé dans l'attribut filename dans le constructeur
     private ArrayList<Node> XMLScenario(MainActivity mainActivity) throws XmlPullParserException, IOException {
-        InputStream in = mainActivity.getResources().openRawResource(mainActivity.getResources().getIdentifier("exemple_scenario_type", "raw", mainActivity.getPackageName()));
+        InputStream in = mainActivity.getResources().openRawResource(mainActivity.getResources().getIdentifier(filename, "raw", mainActivity.getPackageName()));
 
         try {
             XmlPullParser parser = Xml.newPullParser();
@@ -47,6 +54,7 @@ public class ScenarioLoader {
 
     }
 
+    // Cette fonction lit la première balise <node> et lance le parsing des sous-balises
     private ArrayList<Node> readList(XmlPullParser parser) throws IOException, XmlPullParserException{
         ArrayList<Node> nodes = new ArrayList<Node>();
 
@@ -61,6 +69,7 @@ public class ScenarioLoader {
         return nodes;
     }
 
+    // Cette fonction parsent les sous-balises de la balise <node>
     private Node readNode(XmlPullParser parser) throws XmlPullParserException, IOException{
         parser.require(XmlPullParser.START_TAG, null, "node");
 
@@ -84,6 +93,7 @@ public class ScenarioLoader {
         return new Node(mainActivity, ID, actions, conditions);
     }
 
+    //Cette fonction permet de retourner la valeur d'une balise dont la valeur est un entier
     private int readInt(XmlPullParser parser, String tag) throws XmlPullParserException, IOException{
 
         parser.require(XmlPullParser.START_TAG, null, tag);
@@ -92,6 +102,7 @@ public class ScenarioLoader {
         return id;
     }
 
+    // Cette fonction parse une chaîne de caractères dont la valeur est un entier
     private int readNumber(XmlPullParser parser) throws XmlPullParserException, IOException{
         int result = 0;
         if (parser.next() == XmlPullParser.TEXT) {
@@ -101,6 +112,7 @@ public class ScenarioLoader {
         return result;
     }
 
+    // Cette fonction parse la balise <action-list> et lance le parsing de ses sous-balises
     private ArrayList<Action> readActions(XmlPullParser parser, int ID) throws XmlPullParserException, IOException {
         ArrayList<Action> actions = new ArrayList<Action>();
         parser.require(XmlPullParser.START_TAG, null, "action_list");
@@ -136,6 +148,7 @@ public class ScenarioLoader {
         return actions;
     }
 
+    // Cette fonction parse une balise dont la valeur est une chaîne de caractères
     private String readText(XmlPullParser parser, String tag) throws XmlPullParserException, IOException{
         parser.require(XmlPullParser.START_TAG, null, tag);
         String text = "";
@@ -147,6 +160,7 @@ public class ScenarioLoader {
         return text;
     }
 
+    // Cette fonction parse la balise <required_atoms> et lance le parsing de ses sous-balises
     private ArrayList<Atom> readAtoms(XmlPullParser parser) throws XmlPullParserException, IOException {
         ArrayList<Atom> conditions = new ArrayList<Atom>();
         parser.require(XmlPullParser.START_TAG, null, "required_atoms");
@@ -163,6 +177,7 @@ public class ScenarioLoader {
         return conditions;
     }
 
+    // Cette fonction parse la balise <atom> et lance le parsing de ses sous-balises
     private Atom readAtom(XmlPullParser parser, String tag) throws XmlPullParserException, IOException {
         parser.require(XmlPullParser.START_TAG, null, "atom");
         String content ="";
