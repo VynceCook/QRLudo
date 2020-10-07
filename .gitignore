@@ -1,18 +1,13 @@
-# IntelliJ
-.idea/
+
+.idea/*
+local.properties
+.gradle/*
+app/app.iml
 *.iml
 .idea/workspace.xml
-
-# Local configuration file (sdk path, etc)
-local.properties
-gradle.properties
-
-# Gradle files
-.gradle/
-.build/
+gradle/*
 build.gradle
-
-.app/app.iml
-.app/release/*
-.app/app.iml
+gradle.properties
+app/release/*
+build/*
 
