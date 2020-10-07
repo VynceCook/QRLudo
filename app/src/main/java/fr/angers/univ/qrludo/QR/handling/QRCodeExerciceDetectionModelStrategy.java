@@ -179,7 +179,7 @@ public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStr
             if(!posted) {
                 posted = hand.postDelayed(runner, 1000);
             }else{
-                m_mainActivity.startNewDetection("Question annulée, réactivation du mode normal.Nouvelle détection");
+                m_mainActivity.startNewDetection("Question annulée, réactivation du mode normal. Nouvelle détection");
                 hand.removeCallbacks(runner);
                 posted = false;
             }
