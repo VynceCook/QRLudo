@@ -1,0 +1,53 @@
+apply plugin: 'com.android.application'
+
+configurations.all {
+    resolutionStrategy {
+        force 'com.google.code.findbugs:jsr305:2.0.1'
+    }
+}
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
+    defaultConfig {
+        applicationId "fr.angers.univ.qrludo"
+        minSdkVersion 15
+        targetSdkVersion 28
+        versionCode 8
+        versionName "1.1"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+repositories {
+    jcenter()
+}
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    androidTestImplementation 'com.android.support:support-annotations:25.3.1'
+    implementation 'pub.devrel:easypermissions:1.0.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.google.android.gms:play-services-vision:10.2.6'
+    implementation 'com.android.support:design:25.3.1'
+    implementation 'org.jsoup:jsoup:1.12.1'
+    testImplementation 'junit:junit:4.12'
+    implementation 'com.google.android.gms:play-services-auth:10.2.6'
+    implementation('com.google.api-client:google-api-client-android:1.23.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    implementation('com.google.apis:google-api-services-drive:v3-rev90-1.23.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    implementation 'com.google.code.gson:gson:2.8.2'
+
+
+}
