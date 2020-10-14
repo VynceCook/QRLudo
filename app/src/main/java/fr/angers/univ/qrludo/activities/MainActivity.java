@@ -23,6 +23,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.support.annotation.NonNull;
@@ -62,6 +63,7 @@ import java.util.TimerTask;
 import fr.angers.univ.qrludo.QR.handling.QRCodeBuilder;
 import fr.angers.univ.qrludo.QR.handling.QRCodeDefaultDetectionModeStrategy;
 import fr.angers.univ.qrludo.QR.handling.QRCodeDetectionModeStrategy;
+import fr.angers.univ.qrludo.QR.handling.QRCodeExerciceVocaleDetectionModeStrategy;
 import fr.angers.univ.qrludo.QR.model.QRCode;
 import fr.angers.univ.qrludo.QR.model.QRCodeCollection;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestionQCM;
@@ -197,6 +199,11 @@ public class MainActivity extends AppCompatActivity
      */
     private final int CAMERA_DETECTING_STATE = 40;
 
+    /*
+     * ----------------------------------------- SPEECH RECOGNITION -----------------------------------------
+     */
+    // SPEECH_REQUEST est code qui identifie l'intent utilisé pour lancer la reconnaissance vocale du QRCodeExerciceVocaleDetectionModeStrategy
+    static final int SPEECH_REQUEST = 666; // The request code
 
     /*
      * ----------------------------------------- DETECTION PROGRESS -----------------------------------------
@@ -1631,7 +1638,7 @@ public class MainActivity extends AppCompatActivity
                         Manifest.permission.READ_EXTERNAL_STORAGE)) {
 
                 } else {
-                    Log.d("PERMISSION_CHECK","---------NoExplanation----------");
+                    Log.d("PERMISSION_CHECK", "---------NoExplanation----------");
                     // No explanation needed, we can request the permission.
 
                     neededPermissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -1720,6 +1727,19 @@ public class MainActivity extends AppCompatActivity
                 m_multiple_detection_time = settings.getFloat("MDTime",DEFAULT_MULTIPLE_DETECTION_TIME);
 
                 m_web_opening_via_browser = settings.getBoolean("WebOpening", DEFAULT_WEB_OPENING_VIA_BROWSER);
+            }
+        }
+        // Résultat de la reconnaissance vocale  du QRCodeExerciceVocaleDetectionModeStrategy
+        if(requestCode == SPEECH_REQUEST){
+            if(resultCode == RESULT_OK && data != null){
+                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                String text = result.get(0);
+                //m_currentDetectionModeStrategy = (QRCodeExerciceVocaleDetectionModeStrategy) m_currentDetectionModeStrategy;
+
+                // On envoie la réponse à QRCodeExerciceVocaleDetectionModeStrategy
+                ((QRCodeExerciceVocaleDetectionModeStrategy) m_currentDetectionModeStrategy).setM_reponse(text);
+                ((QRCodeExerciceVocaleDetectionModeStrategy) m_currentDetectionModeStrategy).verifReponse();
+
             }
         }
 
