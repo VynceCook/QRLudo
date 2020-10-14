@@ -33,7 +33,8 @@ public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStr
         scan_reponse = false;
         if(m_question!=null) {
             m_mainActivity.modeExploration();
-            mode_exploration = true;
+            //mode_exploration = true;
+            mode_reponse = true;
             firstRead = true;
         }
     }
@@ -178,7 +179,7 @@ public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStr
             if(!posted) {
                 posted = hand.postDelayed(runner, 1000);
             }else{
-                m_mainActivity.startNewDetection("Nouvelle détection");
+                m_mainActivity.startNewDetection("Question annulée, réactivation du mode normal. Nouvelle détection");
                 hand.removeCallbacks(runner);
                 posted = false;
             }
@@ -189,27 +190,37 @@ public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStr
     }
 
 
-    //On lance le mode détection de bonne réponse ce qui arrète le mode exploration
+    //On lance le  (mode détection de bonne réponse => Fin de laPause)  ce qui arrête le (mode exploration =>  Exercice en pause)
     @Override
     public void onSwipeLeft() {
-        scan_reponse = true;
-        m_mainActivity.makeSilence();
-        m_mainActivity.readPrint("Détection de la réponse");
-        mode_reponse = true;
-        mode_exploration = false;
+        ToneGeneratorSingleton.getInstance().errorTone();
     }
 
 
-    //Relance le mode éxploration
+
     @Override
     public void onSwipeRight() {
-        m_mainActivity.readPrint("Mode exploration");
-        mode_reponse = false;
-        mode_exploration = true;
+        ToneGeneratorSingleton.getInstance().errorTone();
     }
 
+    //Relance le (mode exploration => Exercice en pause)
     @Override
     public void onDoubleClick() {
-        ToneGeneratorSingleton.getInstance().errorTone();
+        if(!mode_exploration && mode_reponse){
+            m_mainActivity.makeSilence();
+            m_mainActivity.readPrint("Exercice en pause");
+            mode_reponse = false;
+            mode_exploration = true;
+        }else if(mode_exploration && !mode_reponse){
+            scan_reponse = true;
+            // On arrête toute lecture
+            m_mainActivity.makeSilence();
+            // On annonce la fin de la pause pour chercher les réponses
+            m_mainActivity.readPrint("Fin de la pause");
+            mode_reponse = true;
+            mode_exploration = false;
+        }
+
+
     }
 }
