@@ -9,4 +9,6 @@ public class TTSReading extends Action {
         super(mainActivity,ID);
         this.TextToRead = TextToRead;
     }
+
+    public String getTextToRead() {return TextToRead;}
 }

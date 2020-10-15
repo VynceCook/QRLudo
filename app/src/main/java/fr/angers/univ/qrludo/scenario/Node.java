@@ -20,4 +20,10 @@ public class Node {
         this.Actions = Actions;
         this.Conditions = Conditions;
     }
+
+    public List<Action> getActions() {
+        return Actions;
+    }
+    public List<Atom> getConditions() { return  Conditions;}
+
 }

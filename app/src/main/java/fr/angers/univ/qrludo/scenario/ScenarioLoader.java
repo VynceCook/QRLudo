@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 import fr.angers.univ.qrludo.action.Action;
+import fr.angers.univ.qrludo.action.AddAtom;
 import fr.angers.univ.qrludo.action.AddNode;
 import fr.angers.univ.qrludo.action.CaptureQR;
 import fr.angers.univ.qrludo.action.CaptureSpeech;
@@ -128,6 +129,9 @@ public class ScenarioLoader {
             else if(name.equals("AddNode")){
                 actions.add(new AddNode(mainActivity, ID, readInt(parser, "AddNode")));
             }
+            else if(name.equals("AddAtom")){
+                actions.add(new AddAtom(mainActivity, ID, readAtom(parser, "AddAtom")));
+            }
             else if(name.equals("ClearNodes")){
                 actions.add(new ClearNodes(mainActivity, ID));
             }
@@ -200,5 +204,7 @@ public class ScenarioLoader {
         else return new SpeechAtom(content);
     }
 
-
+    public ArrayList<Node> getNodes() throws XmlPullParserException, IOException {
+        return XMLScenario(mainActivity);
+    }
 }
