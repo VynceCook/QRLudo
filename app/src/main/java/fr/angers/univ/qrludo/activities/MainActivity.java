@@ -1734,7 +1734,6 @@ public class MainActivity extends AppCompatActivity
             if(resultCode == RESULT_OK && data != null){
                 ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 String text = result.get(0);
-                //m_currentDetectionModeStrategy = (QRCodeExerciceVocaleDetectionModeStrategy) m_currentDetectionModeStrategy;
 
                 // On envoie la réponse à QRCodeExerciceVocaleDetectionModeStrategy
                 ((QRCodeExerciceVocaleDetectionModeStrategy) m_currentDetectionModeStrategy).setM_reponse(text);

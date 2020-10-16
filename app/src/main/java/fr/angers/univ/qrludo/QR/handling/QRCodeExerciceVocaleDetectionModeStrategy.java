@@ -33,7 +33,7 @@ public class QRCodeExerciceVocaleDetectionModeStrategy extends QRCodeDetectionMo
     //private ArrayList<String> m_tab_reponse_trouve= new ArrayList<>();
     boolean firstRead;
 
-    QRCodeExerciceVocaleDetectionModeStrategy(MainActivity mainActivity, QRCodeQuestionVocaleQCM question){
+    public QRCodeExerciceVocaleDetectionModeStrategy(MainActivity mainActivity, QRCodeQuestionVocaleQCM question){
         super(mainActivity);
         m_question = question;
         firstRead = true;
@@ -45,10 +45,28 @@ public class QRCodeExerciceVocaleDetectionModeStrategy extends QRCodeDetectionMo
             ArrayList rep = new ArrayList();
             rep = (ArrayList) reponse ;
             Log.i("DebugDPY", rep.toString() );
-
             m_mainActivity.read(rep.get(0).toString());
             m_mainActivity.read(rep.get(2).toString());
 
+        }
+        // Message pour dire qu'elle est la façon de répondre selon lettreRepondeVocale
+        m_mainActivity.read("Pour donner la bonne réponse prononcez :");
+        if(m_question.getLettreReponseVocale()){
+            // On doit répondre par l'identifiant
+            for(Object reponse :m_question.getListe_rep()){
+                ArrayList rep = new ArrayList();
+                rep = (ArrayList) reponse ;
+                Log.i("DebugDPY", rep.toString() );
+                m_mainActivity.read(rep.get(0).toString());
+            }
+        }else {
+            // On doit répondre par l'énoncé
+            for(Object reponse :m_question.getListe_rep()){
+                ArrayList rep = new ArrayList();
+                rep = (ArrayList) reponse ;
+                Log.i("DebugDPY", rep.toString() );
+                m_mainActivity.read(rep.get(2).toString());
+            }
         }
 
         for( String s : m_question.getListe_bonne_reponse()){
@@ -64,41 +82,15 @@ public class QRCodeExerciceVocaleDetectionModeStrategy extends QRCodeDetectionMo
 
     @Override
     public void onNextDetectionWithTimeNotNull(QRCode detectedQR) {
-        Log.i("DebugDPY",this.m_question.getQuestionText() );
-        // Répète la question si QRCodeQuestionVocaleQCM de nouveau détecté
-        if(m_question != null){
-            if((detectedQR instanceof QRCodeQuestionVocaleQCM)) {
-                QRCodeQuestionVocaleQCM question = (QRCodeQuestionVocaleQCM) detectedQR;
-                Log.i("DebugDPY",question.getQuestionText() );
-                Log.i("DebugDPY",this.m_question.getQuestionText() );
-                if(question.getQuestionText().equals(this.m_question.getQuestionText())) {
-
-                    //Les QR Codes sont toujours lu dès la détection lorsque l'on n'est pas dans une stratégié
-                    //La première fois que l'on arrive dans la stratégie, on ne doit donc pas relire la question
-                    if (firstRead) {
-                        firstRead = false;
-                        Log.i("DebugDPY", "Firstread a faux");
-                    }else {
-                        m_mainActivity.readPrint(question.getQuestionText());
-                    }
-                    try {
-                        Thread.sleep(3000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
+        Log.v("next_detection_qrep", "appel à QRCodeExerciceVocaleDetectionModeStrategy.onNextDetectionWithTimeNotNull ; ne devrait pas arriver");
     }
 
     @Override
     public void onEndOfMultipleDetectionTimer() {
-
     }
 
     @Override
     public void onQRFileDownloadComplete() {
-
     }
 
     @Override
@@ -118,18 +110,11 @@ public class QRCodeExerciceVocaleDetectionModeStrategy extends QRCodeDetectionMo
                 posted = false;
             }
         }
-        else{
-            ToneGeneratorSingleton.getInstance().errorTone();
-        }
+        else{ToneGeneratorSingleton.getInstance().errorTone();}
     }
 
     @Override
     public void onSwipeLeft() {
-        ToneGeneratorSingleton.getInstance().errorTone();
-    }
-
-    @Override
-    public void onSwipeRight() {
         // On crée l'inent de la reconnaissance vocale
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
@@ -142,7 +127,11 @@ public class QRCodeExerciceVocaleDetectionModeStrategy extends QRCodeDetectionMo
             Toast.makeText(m_mainActivity.getApplicationContext(), "Désolé ! La reconnaissance vocale n'est pas supportée sur cet appareil.", Toast.LENGTH_SHORT);
         }
 
+
     }
+
+    @Override
+    public void onSwipeRight() {ToneGeneratorSingleton.getInstance().errorTone(); }
 
     @Override
     public void onDoubleClick() {
@@ -181,7 +170,6 @@ public class QRCodeExerciceVocaleDetectionModeStrategy extends QRCodeDetectionMo
     }
 
     public void repeteQuestion(){
-
         if (m_mainActivity.getDetectionProgress()!=NO_QR_DETECTED){
             if(m_question != null){
                 // On répète la question
@@ -193,10 +181,29 @@ public class QRCodeExerciceVocaleDetectionModeStrategy extends QRCodeDetectionMo
                     ArrayList rep = new ArrayList();
                     rep = (ArrayList) reponse ;
                     Log.i("DebugDPY", rep.toString() );
-
                     m_mainActivity.read(rep.get(0).toString());
                     m_mainActivity.read(rep.get(2).toString());
 
+                }
+
+                // Message pour dire qu'elle est la façon de répondre selon lettreRepondeVocale
+                m_mainActivity.read("Pour donner la bonne réponse prononcez :");
+                if(m_question.getLettreReponseVocale()){
+                    // On doit répondre par l'identifiant
+                    for(Object reponse :m_question.getListe_rep()){
+                        ArrayList rep = new ArrayList();
+                        rep = (ArrayList) reponse ;
+                        Log.i("DebugDPY", rep.toString() );
+                        m_mainActivity.read(rep.get(0).toString());
+                    }
+                }else {
+                    // On doit répondre par l'énoncé
+                    for(Object reponse :m_question.getListe_rep()){
+                        ArrayList rep = new ArrayList();
+                        rep = (ArrayList) reponse ;
+                        Log.i("DebugDPY", rep.toString() );
+                        m_mainActivity.read(rep.get(2).toString());
+                    }
                 }
             }
         }
