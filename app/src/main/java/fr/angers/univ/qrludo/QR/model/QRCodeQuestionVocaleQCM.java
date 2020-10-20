@@ -45,7 +45,7 @@ public class QRCodeQuestionVocaleQCM extends QRCode{
                 if(lettreReponseVocale){
                     liste_bonne_reponse.add(rep.get(0).toString().toLowerCase());
                 }else{
-                    liste_bonne_reponse.add(rep.get(2).toString());
+                    liste_bonne_reponse.add(rep.get(2).toString().toLowerCase());
                 }
             }
 
