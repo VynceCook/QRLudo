@@ -8,6 +8,7 @@ import fr.angers.univ.qrludo.QR.model.QRCodeAtomique;
 import fr.angers.univ.qrludo.QR.model.QRCodeEnsemble;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestion;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestionQCM;
+import fr.angers.univ.qrludo.QR.model.QRCodeQuestionVocaleQCM;
 import fr.angers.univ.qrludo.activities.MainActivity;
 import fr.angers.univ.qrludo.utils.ToneGeneratorSingleton;
 
@@ -34,7 +35,8 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
     @Override
     public void onFirstDetectionWithTimeNotNull(QRCode detectedQR) {
         //Applies a family or ensemble related behaviour if necessary or launches the reading of the detected QR Code
-        if (!ensembleBehaviour(detectedQR, true) && !questionReponseBehaviour(detectedQR, true) && !qcmBehaviour(detectedQR, true)){
+        if (!ensembleBehaviour(detectedQR, true) && !questionReponseBehaviour(detectedQR, true) && !qcmBehaviour(detectedQR, true)
+                && !reconnaissanceVocaleBehaviour(detectedQR, true)){
 
             if(detectedQR instanceof QRCodeAtomique) {
                 QRCodeAtomique tmpQr = (QRCodeAtomique) detectedQR;
@@ -63,7 +65,8 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
     @Override
     public void onNextDetectionWithTimeNotNull(QRCode detectedQR) {
         //Applies a family or ensemble related behaviour if necessary or records the detected QR Code
-        if (!ensembleBehaviour(detectedQR, false) && !(questionReponseBehaviour(detectedQR, false)) && !qcmBehaviour(detectedQR, false)){
+        if (!ensembleBehaviour(detectedQR, false) && !(questionReponseBehaviour(detectedQR, false)) && !qcmBehaviour(detectedQR, false)
+                && !reconnaissanceVocaleBehaviour(detectedQR, false)){
 
             //Building QR and adding it to the detected QRCodes
             m_detectedQRCodes.addQR(detectedQR);
@@ -297,6 +300,38 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
     }
 
     /**
+     * Starts a question / reponse Vocale detection of ignores the QRCodeQuestion / Reponse if necessary
+     * If no action has been executed, returns false
+     *
+     * @param detectedQR
+     * @param isFirstQRDetected
+     * @return
+     */
+    private boolean reconnaissanceVocaleBehaviour(QRCode detectedQR, boolean isFirstQRDetected) {
+        //Checking if the detected QRCode is a QRCodeQuestionVocaleQCM
+        if ((detectedQR instanceof QRCodeQuestionVocaleQCM)){
+
+            if (isFirstQRDetected){
+                startReconnaissanceVocaleQCM(detectedQR);
+                return true;
+            }
+            else{
+                //signaling the error and ignoring the QRCode
+                ToneGeneratorSingleton.getInstance().ignoredQRCodeTone();
+                m_detectedQRCodes.addIgnoredQR(detectedQR);
+                return true;
+            }
+
+        }
+        else {
+            Log.v("test", "no QCM behaviour");
+            return false;
+        }
+    }
+
+
+
+    /**
      * Starting a detection of QRCodeEnsemble
      *
      * @param detectedQR
@@ -379,6 +414,38 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
 
         //Changing detection strategy
         m_mainActivity.setDetectionStrategy(new QRCodeQCMDetectionModeStrategy(m_mainActivity, question));
+    }
+
+    /**
+     * Starting a detection of QRCodeQuestionVocaleQCM
+     *
+     * @param detectedQR
+     */
+    private void startReconnaissanceVocaleQCM(QRCode detectedQR){
+        //Adding the QRCode to the detected ones
+        m_detectedQRCodes.addQR(detectedQR);
+
+        ToneGeneratorSingleton.getInstance().QRCodeNormallyDetectedTone();
+
+        //Changing current detection state
+        m_mainActivity.setDetectionProgress(FIRST_QR_DETECTED);
+
+        //Reading the QR
+        m_mainActivity.readPrint(((QRCodeQuestionVocaleQCM)detectedQR).getQuestionText());
+
+        //Launching the MultipleDetectionTimer
+        m_mainActivity.startMultipleDetectionTimer();
+
+        QRCodeQuestionVocaleQCM question;
+
+        if(detectedQR instanceof QRCodeQuestionVocaleQCM){
+            question = (QRCodeQuestionVocaleQCM)detectedQR;
+        } else {
+            question = null;
+        }
+
+        //Changing detection strategy
+        m_mainActivity.setDetectionStrategy(new QRCodeExerciceVocaleDetectionModeStrategy(m_mainActivity, question));
     }
 
 }

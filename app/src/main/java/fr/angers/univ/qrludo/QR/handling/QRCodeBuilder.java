@@ -15,6 +15,7 @@ import fr.angers.univ.qrludo.QR.model.QRCodeAtomique;
 import fr.angers.univ.qrludo.QR.model.QRCodeEnsemble;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestion;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestionQCM;
+import fr.angers.univ.qrludo.QR.model.QRCodeQuestionVocaleQCM;
 import fr.angers.univ.qrludo.QR.model.QRCodeReponse;
 import fr.angers.univ.qrludo.QR.model.QRCodeReponseQCM;
 import fr.angers.univ.qrludo.QR.model.QrCodeJson;
@@ -102,6 +103,8 @@ public class QRCodeBuilder {
             return new QRCodeEnsemble(code, dataQR);
         } else if(code.getType().equalsIgnoreCase("question")){
             return new QRCodeQuestion(code, dataQR);
+        } else if(code.getType().equalsIgnoreCase("ExerciceReconnaissanceVocaleQCM")){
+            return new QRCodeQuestionVocaleQCM(code, dataQR);
         } else if(code.getType().equalsIgnoreCase("reponse")){
             return new QRCodeReponse(code, dataQR);
         } else if(code.getType().equalsIgnoreCase("questionQCM")){

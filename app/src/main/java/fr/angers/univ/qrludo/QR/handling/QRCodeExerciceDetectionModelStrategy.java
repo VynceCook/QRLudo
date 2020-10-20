@@ -189,14 +189,10 @@ public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStr
         }
     }
 
-
-    //On lance le  (mode détection de bonne réponse => Fin de laPause)  ce qui arrête le (mode exploration =>  Exercice en pause)
     @Override
     public void onSwipeLeft() {
         ToneGeneratorSingleton.getInstance().errorTone();
     }
-
-
 
     @Override
     public void onSwipeRight() {
