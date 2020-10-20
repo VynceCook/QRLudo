@@ -64,6 +64,7 @@ import fr.angers.univ.qrludo.QR.handling.QRCodeBuilder;
 import fr.angers.univ.qrludo.QR.handling.QRCodeDefaultDetectionModeStrategy;
 import fr.angers.univ.qrludo.QR.handling.QRCodeDetectionModeStrategy;
 import fr.angers.univ.qrludo.QR.handling.QRCodeExerciceVocaleDetectionModeStrategy;
+import fr.angers.univ.qrludo.QR.handling.QRCodeExerciceVocaleQuestionOuverteDetectionModeStrategy;
 import fr.angers.univ.qrludo.QR.model.QRCode;
 import fr.angers.univ.qrludo.QR.model.QRCodeCollection;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestionQCM;
@@ -204,6 +205,8 @@ public class MainActivity extends AppCompatActivity
      */
     // SPEECH_REQUEST est code qui identifie l'intent utilisé pour lancer la reconnaissance vocale du QRCodeExerciceVocaleDetectionModeStrategy
     static final int SPEECH_REQUEST = 666; // The request code
+    // SPEECH_REQUEST est code qui identifie l'intent utilisé pour lancer la reconnaissance vocale du QRCodeExerciceVocaleQuestionOuverteDetectionModeStrategy
+    static final int SPEECH_REQUEST_2 = 667;
 
     /*
      * ----------------------------------------- DETECTION PROGRESS -----------------------------------------
@@ -1738,6 +1741,18 @@ public class MainActivity extends AppCompatActivity
                 // On envoie la réponse à QRCodeExerciceVocaleDetectionModeStrategy
                 ((QRCodeExerciceVocaleDetectionModeStrategy) m_currentDetectionModeStrategy).setM_reponse(text);
                 ((QRCodeExerciceVocaleDetectionModeStrategy) m_currentDetectionModeStrategy).verifReponse();
+
+            }
+        }
+
+        if(requestCode == SPEECH_REQUEST_2){
+            if(resultCode == RESULT_OK && data != null){
+                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                String text = result.get(0);
+
+                // On envoie la réponse à QRCodeExerciceVocaleQuestionOuverteDetectionModeStrategy
+                ((QRCodeExerciceVocaleQuestionOuverteDetectionModeStrategy) m_currentDetectionModeStrategy).setM_reponse(text);
+                ((QRCodeExerciceVocaleQuestionOuverteDetectionModeStrategy) m_currentDetectionModeStrategy).verifReponse();
 
             }
         }
