@@ -254,28 +254,39 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
         Log.v("fonction", "detectionAnswer");
         Log.v("reponse", reponseSpeech);
         if(this.reponseSpeech.equals("Mine") || this.reponseSpeech.equals("mine")){
-            if(!enigmeUneResolu)
+            if(!enigmeUneResolu) {
                 readNode(101);
+                enigmeUneResolu=true;
+            }
             else {
                 readNode(104);
-                readNode(2);
             }
         }
         else if(this.reponseSpeech.equals("Cabane") || this.reponseSpeech.equals("cabane")){
-            if(!enigmeDeuxResolu)
+            if(!enigmeDeuxResolu) {
                 readNode(102);
-            else
+                enigmeDeuxResolu=true;
+            }
+            else {
                 readNode(104);
+            }
         }
         else if(this.reponseSpeech.equals("Forge") || this.reponseSpeech.equals("forge")){
-            if(!enigmeTroisResolu)
+            if(!enigmeTroisResolu) {
                 readNode(103);
-            else
+                enigmeTroisResolu=true;
+            }
+            else {
                 readNode(104);
+            }
         }
         else {
             readNode(100);
         }
+        if(enigmeUneResolu && enigmeDeuxResolu && enigmeTroisResolu)
+            readNode(105);
+        else
+            readNode(2);
     }
 
     @Override

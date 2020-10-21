@@ -102,7 +102,7 @@
         <action_list>
             <ClearAtoms>SpeechAtom</ClearAtoms>
             <ClearNodes></ClearNodes>
-            <TTSReading>Bienvenue dans (texte de la destination 2)) ! Repondez à la question suivante : ...</TTSReading>
+            <TTSReading>Bienvenue dans (texte de la destination 2)) ! Répondez à la question suivante : ...</TTSReading>
             <!-- Ici l'action pour répondre à la question est : 
                 <CaptureQR></CaptureQR> si c'est une question avec des réponses QR Codes
                 <CaptureSpeech></CaptureSpeech> si c'est une question à reconnaissance vocale  -->            
@@ -133,7 +133,7 @@
         <action_list>
             <ClearAtoms>SpeechAtom</ClearAtoms>
             <ClearNodes></ClearNodes>
-            <TTSReading>Bienvenue dans (texte de la destination 3) ! Repondez à la question suivante : ...</TTSReading>
+            <TTSReading>Bienvenue dans (texte de la destination 3) ! Répondez à la question suivante : ...</TTSReading>
             <!-- Ici l'action pour répondre à la question est : 
                 <CaptureQR></CaptureQR> si c'est une question avec des réponses QR Codes
                 <CaptureSpeech></CaptureSpeech> si c'est une question à reconnaissance vocale  -->           
