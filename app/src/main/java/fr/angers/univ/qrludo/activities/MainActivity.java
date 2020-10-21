@@ -1648,6 +1648,22 @@ public class MainActivity extends AppCompatActivity
                 }
             }
 
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.RECORD_AUDIO)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                // Should we show an explanation?
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        Manifest.permission.RECORD_AUDIO)) {
+
+                } else {
+                    Log.d("PERMISSION_CHECK","---------NoExplanation----------");
+                    // No explanation needed, we can request the permission.
+                    neededPermissions.add(Manifest.permission.RECORD_AUDIO);
+
+                }
+            }
+
             //Asking for needed permissions
             if (!neededPermissions.isEmpty()) {
                 ActivityCompat.requestPermissions(this, neededPermissions.toArray(new String[neededPermissions.size()]),MULTIPLE_PERMISSIONS );
@@ -1789,6 +1805,12 @@ public class MainActivity extends AppCompatActivity
                 Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED){
             Log.v("test", "pas le droit de vibrer");
+            return false;
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED){
+            Log.v("test", "pas le droit micro");
             return false;
         }
 
