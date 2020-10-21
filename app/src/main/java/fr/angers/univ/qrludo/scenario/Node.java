@@ -21,6 +21,17 @@ public class Node {
         this.Conditions = Conditions;
     }
 
+    public String toString(){
+        String text = "Node "+ID+"\n";
+        for(Atom a : Conditions){
+            text += a.toString()+"\n";
+        }
+        for(Action a : Actions){
+            text += a.toString()+"\n";
+        }
+        return text;
+    }
+
     public List<Action> getActions() {
         return Actions;
     }

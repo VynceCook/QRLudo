@@ -1,6 +1,7 @@
 package fr.angers.univ.qrludo.QR.handling;
 
 
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
 import fr.angers.univ.qrludo.QR.model.QRCode;
@@ -8,6 +9,7 @@ import fr.angers.univ.qrludo.QR.model.QRCodeAtomique;
 import fr.angers.univ.qrludo.QR.model.QRCodeEnsemble;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestion;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestionQCM;
+import fr.angers.univ.qrludo.QR.model.QRCodeSeriousGame;
 import fr.angers.univ.qrludo.activities.MainActivity;
 import fr.angers.univ.qrludo.utils.ToneGeneratorSingleton;
 
@@ -34,7 +36,8 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
     @Override
     public void onFirstDetectionWithTimeNotNull(QRCode detectedQR) {
         //Applies a family or ensemble related behaviour if necessary or launches the reading of the detected QR Code
-        if (!ensembleBehaviour(detectedQR, true) && !questionReponseBehaviour(detectedQR, true) && !qcmBehaviour(detectedQR, true)){
+        if (!ensembleBehaviour(detectedQR, true) && !questionReponseBehaviour(detectedQR, true) && !qcmBehaviour(detectedQR, true)
+            && !seriousGameBehaviour(detectedQR, true)){
 
             if(detectedQR instanceof QRCodeAtomique) {
                 QRCodeAtomique tmpQr = (QRCodeAtomique) detectedQR;
@@ -63,7 +66,8 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
     @Override
     public void onNextDetectionWithTimeNotNull(QRCode detectedQR) {
         //Applies a family or ensemble related behaviour if necessary or records the detected QR Code
-        if (!ensembleBehaviour(detectedQR, false) && !(questionReponseBehaviour(detectedQR, false)) && !qcmBehaviour(detectedQR, false)){
+        if (!ensembleBehaviour(detectedQR, false) && !(questionReponseBehaviour(detectedQR, false)) && !qcmBehaviour(detectedQR, false)
+                && !seriousGameBehaviour(detectedQR, false)){
 
             //Building QR and adding it to the detected QRCodes
             m_detectedQRCodes.addQR(detectedQR);
@@ -296,6 +300,23 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
         }
     }
 
+    private boolean seriousGameBehaviour(QRCode detectedQR, boolean isFirstQRDetected) {
+        if(detectedQR instanceof QRCodeSeriousGame){
+            Log.v("behaviour", "SeriousGame");
+            if(isFirstQRDetected){
+                startSeriousGame(detectedQR);
+            }
+            else {
+                ToneGeneratorSingleton.getInstance().ignoredQRCodeTone();
+                m_detectedQRCodes.addIgnoredQR(detectedQR);
+            }
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     /**
      * Starting a detection of QRCodeEnsemble
      *
@@ -381,4 +402,26 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
         m_mainActivity.setDetectionStrategy(new QRCodeQCMDetectionModeStrategy(m_mainActivity, question));
     }
 
+    private void startSeriousGame(QRCode detectedQR){
+        Log.v("Start", "SeriousGame");
+        m_detectedQRCodes.addQR(detectedQR);
+
+        ToneGeneratorSingleton.getInstance().QRCodeNormallyDetectedTone();
+
+        m_mainActivity.setDetectionProgress(FIRST_QR_DETECTED);
+
+        m_mainActivity.readPrint(((QRCodeSeriousGame) detectedQR).getQuestionText());
+
+        m_mainActivity.startMultipleDetectionTimer();
+
+        QRCodeSeriousGame code;
+
+        if(detectedQR instanceof QRCodeSeriousGame){
+            code = (QRCodeSeriousGame) detectedQR;
+        } else {
+            code = null;
+        }
+
+        m_mainActivity.setDetectionStrategy(new QRCodeSeriousGameStrategy(m_mainActivity, code));
+    }
 }

@@ -10,4 +10,6 @@ public class AddAtom extends Action{
         super(mainActivity,nodeID);
         this.atom = atom;
     }
+
+    public String toString() {return "AddAtom";}
 }

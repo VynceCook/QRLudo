@@ -14,4 +14,9 @@ public class RemoveNode extends Action {
     public int getNodeToAddID() {
         return nodeToRemoveID;
     }
+
+    @Override
+    public String toString() {
+        return "RemoveNode" + nodeToRemoveID;
+    }
 }

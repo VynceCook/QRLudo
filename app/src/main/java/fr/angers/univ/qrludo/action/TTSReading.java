@@ -11,4 +11,9 @@ public class TTSReading extends Action {
     }
 
     public String getTextToRead() {return TextToRead;}
+
+    @Override
+    public String toString() {
+        return "TTsReading" + TextToRead;
+    }
 }

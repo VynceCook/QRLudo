@@ -6,7 +6,7 @@ import fr.angers.univ.qrludo.scenario.Node;
 public class AddNode extends Action {
     private int nodeToAddID;
 
-    public AddNode(MainActivity mainActivity, int nodeID, int nodeToAddIDID) {
+    public AddNode(MainActivity mainActivity, int nodeID, int nodeToAddID) {
         super(mainActivity, nodeID);
         this.nodeToAddID = nodeToAddID;
     }
@@ -14,4 +14,6 @@ public class AddNode extends Action {
     public int getNodeToAddID() {
         return nodeToAddID;
     }
+
+    public String toString() {return "AddNode "+ nodeToAddID;}
 }

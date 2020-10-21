@@ -1729,6 +1729,7 @@ public class MainActivity extends AppCompatActivity
 
         if(requestCode == SPEECH_REQUEST){
             if(resultCode == RESULT_OK && data != null){
+                Log.v("result", "OK");
                 ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 String text = result.get(0);
                 //m_currentDetectionModeStrategy = (QRCodeExerciceVocaleDetectionModeStrategy) m_currentDetectionModeStrategy;
