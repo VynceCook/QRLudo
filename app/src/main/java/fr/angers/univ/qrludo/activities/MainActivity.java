@@ -204,9 +204,11 @@ public class MainActivity extends AppCompatActivity
      * ----------------------------------------- SPEECH RECOGNITION -----------------------------------------
      */
     // SPEECH_REQUEST est code qui identifie l'intent utilisé pour lancer la reconnaissance vocale du QRCodeExerciceVocaleDetectionModeStrategy
-    static final int SPEECH_REQUEST = 666; // The request code
+    static public final int SPEECH_REQUEST = 666; // The request code
     // SPEECH_REQUEST est code qui identifie l'intent utilisé pour lancer la reconnaissance vocale du QRCodeExerciceVocaleQuestionOuverteDetectionModeStrategy
-    static final int SPEECH_REQUEST_2 = 667;
+    static public final int SPEECH_REQUEST_2 = 667;
+
+    public static final int ONE_PERMISSION = 11;// Code for the onRequestPermissionsResult
 
     /*
      * ----------------------------------------- DETECTION PROGRESS -----------------------------------------
@@ -1686,6 +1688,25 @@ public class MainActivity extends AppCompatActivity
             AlarmManager mgr = (AlarmManager) MainActivity.this.getSystemService(Context.ALARM_SERVICE);
             mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
             System.exit(0);
+        }
+        // Result pour la demande de permission de record audio
+        if(requestCode == ONE_PERMISSION){
+            // Si la permission de RECORD AUDIO est accepté
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                // On remercie l'utilisateur
+                Toast.makeText(this, "Merci d'avoir accepté", Toast.LENGTH_SHORT).show();
+                // On relance la detection vocale
+                if(m_currentDetectionModeStrategy instanceof QRCodeExerciceVocaleDetectionModeStrategy){
+                    ((QRCodeExerciceVocaleDetectionModeStrategy)m_currentDetectionModeStrategy).lancementReconnaissanceVocale();
+                }
+                if(m_currentDetectionModeStrategy instanceof QRCodeExerciceVocaleQuestionOuverteDetectionModeStrategy){
+                    ((QRCodeExerciceVocaleQuestionOuverteDetectionModeStrategy)m_currentDetectionModeStrategy).lancementReconnaissanceVocale();
+                }
+
+            }else{
+                // On affiche à l'utilisateur pourquoi nous avons besoin de l'audio
+                Toast.makeText(this, "Nous en avons besoin de cette permission pour les questions à reconnaissance vocale", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
