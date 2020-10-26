@@ -8,4 +8,9 @@ public class Any extends Atom{
     }
 
     public String toString() { return "Any "+content;}
+
+    @Override
+    public String getContent() {
+        return content;
+    }
 }

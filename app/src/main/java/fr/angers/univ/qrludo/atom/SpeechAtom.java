@@ -8,4 +8,6 @@ public class SpeechAtom extends Atom {
     }
 
     public String toString() {return "SpeechAtom "+ content;}
+
+    public String getContent() {return content;}
 }

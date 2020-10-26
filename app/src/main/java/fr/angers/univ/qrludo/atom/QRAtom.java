@@ -8,4 +8,6 @@ public class QRAtom extends Atom {
     }
 
     public String toString() {return "QRAtom "+content;}
+
+    public String getContent() {return content;}
 }
