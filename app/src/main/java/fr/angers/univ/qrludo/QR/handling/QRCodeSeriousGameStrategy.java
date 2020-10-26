@@ -76,6 +76,7 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
         }
     }
 
+    // Fonction qui lit un noeud
     public void readNode(int nodeID){
         Log.v("fonction", "readNode "+nodeID);
         current_node = getNode(nodeID);
@@ -88,11 +89,7 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
         }
     }
 
-    public void readCondition(List<Atom> conditions){
-        Log.v("fonction", "readCondition");
-        Atom current_atom = conditions.get(0);
-    }
-
+    // Fonction qui effectue les actions d'un noeud
     public void doActions(List<Action> actions){
         Log.v("fonction", "doActions");
 
@@ -127,6 +124,7 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
         }
     }
 
+    // Fonction qui sert à gérer la résolution des énigmes
     public void Enigme(Node bonne_reponse, Node mauvaise_reponse){
         if(bonne_reponse.getConditions().get(0) instanceof SpeechAtom) {
             if (!reponseSpeech.equals("vide")) {
@@ -159,11 +157,13 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
         readNode(2);
     }
 
+    // Fonction qui lit un texte
     public void readTTSReader(TTSReading tts){
         Log.v("fonction", "readTTSReader");
         mainActivity.read(tts.getTextToRead());
     }
 
+    // Fonction qui regarde si le correspondant à l'ID a bien été créé
     public boolean checkNodes(int nodeID){
         for(Node node : AllNodes){
             if(node.ID==nodeID) return true;
@@ -171,13 +171,7 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
         return false;
     }
 
-    public void removeNode(RemoveNode removeNode){
-        for(Node node : OpenNodes){
-            if(node.ID==removeNode.getNodeToAddID())
-                OpenNodes.remove(node);
-        }
-    }
-
+    // Fonction qui retourne un noeud à partir de son ID
     public Node getNode(int nodeId){
         Log.v("fonction", "getNode");
         for(Node node : AllNodes){
@@ -290,6 +284,7 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
         }
     }
 
+    // Fonction qui en fonction de la réponse reçu par la reconnaissance vocale envoie sur la bonne énigme
     public void detectionAnswer(){
         Log.v("fonction", "detectionAnswer");
         if(this.reponseSpeech.equals("Mine") || this.reponseSpeech.equals("mine")){
@@ -330,6 +325,7 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
         ToneGeneratorSingleton.getInstance().errorTone();
     }
 
+    // Fonction qui récupère la réponse de la reconnaissance vocale
     public void setReponseSpeech(String reponse){
         Log.v("fonction", "setReponseSpeech");
         this.reponseSpeech = reponse;
