@@ -71,19 +71,19 @@
         <action_list>
             <ClearAtoms>SpeechAtom</ClearAtoms>
             <ClearNodes></ClearNodes>
-            <TTSReading>Bienvenue dans (texte de la destination 1)) ! Répondez à la question suivante : ...</TTSReading>
+            <TTSReading>Bienvenue dans (texte de la destination 1)) ! Répondez à la question suivante : Combien fait 5 fois 5</TTSReading>
             <!-- Ici l'action pour répondre à la question est : 
-                <CaptureQR></CaptureQR> si c'est une question avec des réponses QR Codes
-                <CaptureSpeech></CaptureSpeech> si c'est une question à reconnaissance vocale  -->
+                <CaptureQR></CaptureQR> si c'est une question avec des réponses QR Codes -->
+                <CaptureSpeech></CaptureSpeech>
             <!-- Les noeuds ajoutés ici dépendent du type de la question :
                 si c'est une question avec des réponses QR Codes alors il y a 4 noeuds à ajouter (dont l'un est la bonne réponse) :
                     <AddNode>1011</AddNode>
                     <AddNode>1012</AddNode>
                     <AddNode>1013</AddNode>
                     <AddNode>1014</AddNode>
-                si c'est une question à reconnaissance vocale, il y a deux noeuds : 
+                si c'est une question à reconnaissance vocale, il y a deux noeuds : -->
                     <AddNode>1011</AddNode>
-                    <AddNode>1012</AddNode> -->
+                    <AddNode>1012</AddNode>
         </action_list>
     </node>
 
@@ -200,8 +200,8 @@
     
         <required_atoms>
             <atom>
-                <type>QRAtom</type>
-                <content>(texte du qrcode de la bonne réponse)</content>
+                <type>SpeechAtom</type>
+                <content>25</content>
             </atom>
         </required_atoms>
 
@@ -226,8 +226,8 @@
     
         <required_atoms>
             <atom>
-                <type>QRAtom</type>
-                <content>(texte du qrcode d'une mauvaise réponse)</content>
+                <type>Any</type>
+                <content>SpeechAtom</content>
             </atom>
         </required_atoms>
 
