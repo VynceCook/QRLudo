@@ -82,6 +82,10 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
             Log.v("Lecture", "Introduction");
             readNode(1);
         }
+
+        for(Node n : AllNodes){
+            Log.i("Debug_scenario","AllNode \n"+n.toString());
+        }
     }
 
     // Fonction qui lit un noeud et ses actions
@@ -117,6 +121,13 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
             else if(a instanceof VerificationConditionFinScenario){
                 if(enigmeUneResolu && enigmeDeuxResolu && enigmeTroisResolu) {
                     readNode(105);
+                    // On quitte le mode Scénario
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    m_mainActivity.startNewDetection("Nouvelle détection");
                     break;
                 }
             }
@@ -142,6 +153,8 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
 
     // Fonction qui sert à gérer la résolution des énigmes
     public void Enigme(Node bonne_reponse, Node mauvaise_reponse){
+        Log.i("Debug_scenario",Boolean.toString(bonne_reponse.getConditions().get(0) instanceof SpeechAtom));
+        Log.i("Debug_scenario",Boolean.toString(bonne_reponse.getConditions().get(0) instanceof QRAtom));
         if(bonne_reponse.getConditions().get(0) instanceof SpeechAtom) {
             if (!reponseSpeech.equals("vide")) {
                 if (bonne_reponse.getConditions().get(0).getContent().equals(reponseSpeech)) {
@@ -357,13 +370,18 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
     public void setReponseSpeech(String reponse){
         Log.v("fonction", "setReponseSpeech");
         this.reponseSpeech = reponse;
+        Log.i("Debug_scenario","Node id = "+ current_node.ID);
         if(current_node.ID == 2)
             detectionDestination();
         else if(current_node.ID > 2){
+            Log.i("Debug_scenario","Passe dans le if");
             int ID_bonne_reponse = Integer.parseInt(current_node.ID+"1");
             int ID_mauvaise_reponse = Integer.parseInt(current_node.ID+"2");
-            if(checkNodes(ID_bonne_reponse) && checkNodes(ID_mauvaise_reponse))
+            if(checkNodes(ID_bonne_reponse) && checkNodes(ID_mauvaise_reponse)){
+                Log.i("Debug_scenario","Passe vers enigme");
                 Enigme(getNode(ID_bonne_reponse), getNode(ID_mauvaise_reponse));
+            }
+
         }
     }
 

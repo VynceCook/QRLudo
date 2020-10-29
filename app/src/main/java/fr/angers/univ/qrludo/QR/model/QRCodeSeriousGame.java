@@ -245,7 +245,7 @@ public class QRCodeSeriousGame extends QRCode {
 
         for(String id_node : ids){
             Element addNodes = doc.createElement("AddNode");
-            addNodes.insertBefore(doc.createTextNode(id_node), addNodes.getLastChild());
+            addNodes.insertBefore(doc.createTextNode("10"+id_node), addNodes.getLastChild());
             action_list.appendChild(addNodes);
         }
 
@@ -340,7 +340,7 @@ public class QRCodeSeriousGame extends QRCode {
             Element required_atom = doc.createElement("required_atoms");
             Element atom = doc.createElement("atom");
             Element type = doc.createElement("type");
-            type.insertBefore(doc.createTextNode("Any"), type.getLastChild());
+            type.insertBefore(doc.createTextNode("SpeechAtom"), type.getLastChild());
             atom.appendChild(type);
             Element content = doc.createElement("content");
             content.insertBefore(doc.createTextNode(enigme.get(1).toString()), content.getLastChild());
@@ -497,7 +497,7 @@ public class QRCodeSeriousGame extends QRCode {
             Element required_atom = doc.createElement("required_atoms");
             Element atom = doc.createElement("atom");
             Element type = doc.createElement("type");
-            type.insertBefore(doc.createTextNode("QRAtom"), type.getLastChild());
+            type.insertBefore(doc.createTextNode("SpeechAtom"), type.getLastChild());
             atom.appendChild(type);
             Element content = doc.createElement("content");
             content.insertBefore(doc.createTextNode(questionRecoVocal.get(2).toString()), content.getLastChild());
