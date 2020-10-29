@@ -28,8 +28,6 @@ import javax.xml.transform.stream.StreamResult;
 
 import fr.angers.univ.qrludo.activities.MainActivity;
 
-import static fr.angers.univ.qrludo.QR.model.QRCodeScenarioLoader.prettyPrint;
-
 /**
  *  Created by Simon Mitaty
  *  Implement by Pierre-Yves Delépine (29/10/2020)
