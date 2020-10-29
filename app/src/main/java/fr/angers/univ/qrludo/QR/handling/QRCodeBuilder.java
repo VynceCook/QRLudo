@@ -15,10 +15,13 @@ import fr.angers.univ.qrludo.QR.model.QRCodeAtomique;
 import fr.angers.univ.qrludo.QR.model.QRCodeEnsemble;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestion;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestionQCM;
+import fr.angers.univ.qrludo.QR.model.QRCodeQuestionVocaleOuverte;
+import fr.angers.univ.qrludo.QR.model.QRCodeQuestionVocaleQCM;
 import fr.angers.univ.qrludo.QR.model.QRCodeReponse;
 import fr.angers.univ.qrludo.QR.model.QRCodeReponseQCM;
 import fr.angers.univ.qrludo.QR.model.QRCodeReponseSeriousGame;
 import fr.angers.univ.qrludo.QR.model.QRCodeSeriousGame;
+import fr.angers.univ.qrludo.QR.model.QRCodeScenarioLoader;
 import fr.angers.univ.qrludo.QR.model.QrCodeJson;
 import fr.angers.univ.qrludo.exceptions.UnhandledQRException;
 import fr.angers.univ.qrludo.exceptions.UnsupportedQRException;
@@ -104,12 +107,18 @@ public class QRCodeBuilder {
             return new QRCodeEnsemble(code, dataQR);
         } else if(code.getType().equalsIgnoreCase("question")){
             return new QRCodeQuestion(code, dataQR);
+        } else if(code.getType().equalsIgnoreCase("ExerciceReconnaissanceVocaleQCM")){
+            return new QRCodeQuestionVocaleQCM(code, dataQR);
+        } else if(code.getType().equalsIgnoreCase("ExerciceReconnaissanceVocaleQuestionOuverte")){
+            return new QRCodeQuestionVocaleOuverte(code, dataQR);
         } else if(code.getType().equalsIgnoreCase("reponse")){
             return new QRCodeReponse(code, dataQR);
         } else if(code.getType().equalsIgnoreCase("questionQCM")){
             return new QRCodeQuestionQCM(code, dataQR);
         } else if (code.getType().equalsIgnoreCase("reponseQCM")){
             return new QRCodeReponseQCM(code, dataQR);
+        } else if(code.getType().equalsIgnoreCase("SeriousGameScenario")) {
+            return new QRCodeScenarioLoader(code, dataQR);
         }
         else if (code.getType().equalsIgnoreCase("SeriousGameScenario")){
             return new QRCodeSeriousGame(code, dataQR);
@@ -117,6 +126,7 @@ public class QRCodeBuilder {
         else if(code.getType().equalsIgnoreCase("ReponseSeriousGame")){
             return new QRCodeReponseSeriousGame(code, dataQR);
         }
+
 
         //Normalement impossible, mais si aucun cas précédent
         return new QRCodeAtomique(code, rawvalue);
