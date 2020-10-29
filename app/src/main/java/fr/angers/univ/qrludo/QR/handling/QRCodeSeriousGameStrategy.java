@@ -75,7 +75,7 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
         }
     }
 
-    // Fonction qui lit un noeud
+    // Fonction qui lit un noeud et ses actions
     public void readNode(int nodeID){
         Log.v("fonction", "readNode "+nodeID);
         current_node = getNode(nodeID);
@@ -136,29 +136,35 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
         if(bonne_reponse.getConditions().get(0) instanceof SpeechAtom) {
             if (!reponseSpeech.equals("vide")) {
                 if (bonne_reponse.getConditions().get(0).getContent().equals(reponseSpeech)) {
-                    readNode(bonne_reponse.ID);
+                    mainActivity.read("Bonne réponse");
                     if(current_node.ID == 101)
                         enigmeUneResolu = true;
                     if(current_node.ID == 102)
                         enigmeDeuxResolu = true;
                     if(current_node.ID == 103)
                         enigmeTroisResolu = true;
-                } else
+                    readNode(bonne_reponse.ID);
+                } else {
+                    mainActivity.read("Mauvaise réponse");
                     readNode(mauvaise_reponse.ID);
+                }
             }
         }
         else if(bonne_reponse.getConditions().get(0) instanceof QRAtom){
             if(reponseQR != null) {
                 if (reponseQR.isGoodAnswer()) {
-                    readNode(bonne_reponse.ID);
+                    mainActivity.read("Bonne réponse");
                     if(current_node.ID == 101)
                         enigmeUneResolu = true;
                     if(current_node.ID == 102)
                         enigmeDeuxResolu = true;
                     if(current_node.ID == 103)
                         enigmeTroisResolu = true;
-                } else
+                    readNode(bonne_reponse.ID);
+                } else {
+                    mainActivity.read("Mauvaise réponse");
                     readNode(mauvaise_reponse.ID);
+                }
             }
         }
         readNode(2);
@@ -201,8 +207,10 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
             this.reponseQR = (QRCodeReponseSeriousGame) detectedQR;
             int ID_bonne_reponse = Integer.parseInt(current_node.ID+"1");
             int ID_mauvaise_reponse = Integer.parseInt(current_node.ID+"2");
-            if(checkNodes(ID_bonne_reponse) && checkNodes(ID_mauvaise_reponse))
+            if(checkNodes(ID_bonne_reponse) && checkNodes(ID_mauvaise_reponse)) {
                 Enigme(getNode(ID_bonne_reponse), getNode(ID_mauvaise_reponse));
+            }
+            mode_reponse = false;
         }
     }
 
@@ -301,7 +309,6 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
         if(this.reponseSpeech.equals("Mine") || this.reponseSpeech.equals("mine")){
             if(!enigmeUneResolu) {
                 readNode(101);
-                enigmeUneResolu=true;
             }
             else {
                 readNode(104);
@@ -310,7 +317,6 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
         else if(this.reponseSpeech.equals("Cabane") || this.reponseSpeech.equals("cabane")){
             if(!enigmeDeuxResolu) {
                 readNode(102);
-                enigmeDeuxResolu=true;
             }
             else {
                 readNode(104);
@@ -319,7 +325,6 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
         else if(this.reponseSpeech.equals("Forge") || this.reponseSpeech.equals("forge")){
             if(!enigmeTroisResolu) {
                 readNode(103);
-                enigmeTroisResolu=true;
             }
             else {
                 readNode(104);
