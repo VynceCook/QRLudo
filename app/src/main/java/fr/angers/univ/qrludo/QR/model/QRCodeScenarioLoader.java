@@ -1,6 +1,8 @@
 package fr.angers.univ.qrludo.QR.model;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -9,6 +11,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -49,6 +54,8 @@ public class QRCodeScenarioLoader extends QRCode{
      * ]
      */
     private ArrayList<Object> questionsQrCode = new ArrayList<Object>();
+
+    private String FILENAME = "scenario.xml";
 
     // Le fichier XML va être construit dans un DOM
     private Document doc;
@@ -98,16 +105,37 @@ public class QRCodeScenarioLoader extends QRCode{
     }
 
     public void saveDocumentAsXMLFile(MainActivity mainActivity){
+        // Sauvegarde le fichierxml dans le storage interne de l'appareil
         TransformerFactory tranFactory = TransformerFactory.newInstance();
         Transformer aTransformer = null;
+        FileOutputStream fos = null;
         try {
             aTransformer = tranFactory.newTransformer();
             DOMSource src = new DOMSource(doc);
-            StreamResult dest = new StreamResult(new File(mainActivity.getApplicationContext().getFilesDir(),"scenario.xml"));
-            Log.i("Debug_scenario","Document saved");
+            /*
+            File f = new File(mainActivity.getApplicationContext().getFilesDir(),"scenario.xml");
+
+            Log.i("Debug_scenario","Document saved on storage "+ f.getAbsolutePath());
             aTransformer.transform(src, dest);
-        } catch (TransformerException e) {
+            f = new File("test_scenario.xml");
+            dest = new StreamResult(f);
+            Log.i("Debug_scenario","Document saved ? "+f.getAbsolutePath());
+            aTransformer.transform(src, dest);*/
+            //StreamResult dest = new StreamResult(f);
+
+
+            fos = mainActivity.openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            aTransformer.transform(src,new StreamResult(fos));
+
+
+        } catch (TransformerException | FileNotFoundException e) {
             e.printStackTrace();
+        }finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -569,7 +597,15 @@ public class QRCodeScenarioLoader extends QRCode{
         return nodes;
     }
 
-    public String getXmlScenario() {
-        return xmlScenario;
+    public Document getDoc() {
+        return doc;
+    }
+
+    public String getFILENAME() {
+        return FILENAME;
+    }
+
+    public void setFILENAME(String FILENAME) {
+        this.FILENAME = FILENAME;
     }
 }

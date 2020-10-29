@@ -3,6 +3,7 @@ package fr.angers.univ.qrludo.QR.handling;
 import android.content.ContentProvider;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 
 import java.io.BufferedReader;
@@ -22,32 +23,12 @@ import fr.angers.univ.qrludo.utils.ToneGeneratorSingleton;
 
 public class QRCodeScenarioDetectionModeStrategy extends QRCodeDetectionModeStrategy {
     private QRCodeScenarioLoader m_question;
+
     public QRCodeScenarioDetectionModeStrategy(MainActivity mainActivity, QRCodeScenarioLoader question) {
         super(mainActivity);
         m_question = question;
 
         m_question.saveDocumentAsXMLFile(mainActivity);
-
-        // Lire le fichier scenario.xml
-        StringBuilder stringBuilder = new StringBuilder();
-        try {
-            FileInputStream fis = mainActivity.getApplicationContext().openFileInput("scenario2.xml");
-            InputStreamReader inputStreamReader = new InputStreamReader(fis);
-            BufferedReader reader = new BufferedReader(inputStreamReader);
-            String line = reader.readLine();
-            while (line != null) {
-                stringBuilder.append(line).append('\n');
-                line = reader.readLine();
-            }
-        } catch (IOException e) {
-            // Error occurred when opening raw file for reading.
-        } finally {
-            String contents = stringBuilder.toString();
-           // Log.i("Debug_scenario","Test1" +contents);
-        }
-        for(File f : mainActivity.getApplicationContext().getFilesDir().listFiles()){
-            Log.i("Debug_scenario",f.getName());
-        }
 
 
 
@@ -76,7 +57,7 @@ public class QRCodeScenarioDetectionModeStrategy extends QRCodeDetectionModeStra
 
     @Override
     public void onSwipeTop() {
-
+        Toast.makeText(m_mainActivity, "Saved to " + m_mainActivity.getApplicationContext().getFilesDir()+"/"+m_question.getFILENAME(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -99,7 +80,32 @@ public class QRCodeScenarioDetectionModeStrategy extends QRCodeDetectionModeStra
 
     @Override
     public void onSwipeLeft() {
+        // Lire le fichier scenario.xml
+        FileInputStream fis = null;
+        try {
+            fis = m_mainActivity.openFileInput(m_question.getFILENAME());
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String text;
+            while((text = br.readLine()) != null){
+                sb.append(text).append("\n");
+            }
 
+            Toast.makeText(m_mainActivity, sb.toString(), Toast.LENGTH_SHORT).show();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            if(fis!= null){
+                try {
+                    fis.close();
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override
@@ -116,7 +122,7 @@ public class QRCodeScenarioDetectionModeStrategy extends QRCodeDetectionModeStra
         Log.i("Debug_scenario","Suppresion scenario");
         Log.i("Debug_scenario","Nombre de fichier dans storage interne "+ m_mainActivity.getApplicationContext().getFilesDir().listFiles().length);
         // delete le fichier scenario .xml
-        m_mainActivity.getApplicationContext().deleteFile("scenario.xml");
+        m_mainActivity.getApplicationContext().deleteFile(m_question.getFILENAME());
         // On regarde si bien supprimé
         Log.i("Debug_scenario","Nombre de fichier dans storage interne "+ m_mainActivity.getApplicationContext().getFilesDir().listFiles().length);
         for(File f : m_mainActivity.getApplicationContext().getFilesDir().listFiles()){
