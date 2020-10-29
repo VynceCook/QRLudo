@@ -9,10 +9,9 @@ import fr.angers.univ.qrludo.QR.model.QRCodeAtomique;
 import fr.angers.univ.qrludo.QR.model.QRCodeEnsemble;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestion;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestionQCM;
-import fr.angers.univ.qrludo.QR.model.QRCodeSeriousGame;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestionVocaleOuverte;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestionVocaleQCM;
-import fr.angers.univ.qrludo.QR.model.QRCodeScenarioLoader;
+import fr.angers.univ.qrludo.QR.model.QRCodeSeriousGame;
 import fr.angers.univ.qrludo.activities.MainActivity;
 import fr.angers.univ.qrludo.utils.ToneGeneratorSingleton;
 
@@ -40,8 +39,8 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
     public void onFirstDetectionWithTimeNotNull(QRCode detectedQR) {
         //Applies a family or ensemble related behaviour if necessary or launches the reading of the detected QR Code
         if (!ensembleBehaviour(detectedQR, true) && !questionReponseBehaviour(detectedQR, true) && !qcmBehaviour(detectedQR, true)
-            && !seriousGameBehaviour(detectedQR, true) && !reconnaissanceVocaleBehaviour(detectedQR, true) 
-            && !reconnaissanceVocaleQuestionOuverteBehaviour(detectedQR, true) && !scenarioBehaviour(detectedQR, true)){
+                && !reconnaissanceVocaleBehaviour(detectedQR, true) && !reconnaissanceVocaleQuestionOuverteBehaviour(detectedQR, true)
+                && !seriousGameBehaviour(detectedQR, true)){
 
             if(detectedQR instanceof QRCodeAtomique) {
                 QRCodeAtomique tmpQr = (QRCodeAtomique) detectedQR;
@@ -71,9 +70,8 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
     public void onNextDetectionWithTimeNotNull(QRCode detectedQR) {
         //Applies a family or ensemble related behaviour if necessary or records the detected QR Code
         if (!ensembleBehaviour(detectedQR, false) && !(questionReponseBehaviour(detectedQR, false)) && !qcmBehaviour(detectedQR, false)
-                && !seriousGameBehaviour(detectedQR, false) && !reconnaissanceVocaleBehaviour(detectedQR, false) 
-            && !reconnaissanceVocaleQuestionOuverteBehaviour(detectedQR, false) && !scenarioBehaviour(detectedQR, false)){
-
+                && !reconnaissanceVocaleBehaviour(detectedQR, false) && !reconnaissanceVocaleQuestionOuverteBehaviour(detectedQR, false)
+                && !seriousGameBehaviour(detectedQR, false)){
             //Building QR and adding it to the detected QRCodes
             m_detectedQRCodes.addQR(detectedQR);
 
@@ -383,38 +381,6 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
     }
 
     /**
-     * Starts a Serious game scenario
-     * If no action has been executed, returns false
-     *
-     * @param detectedQR
-     * @param isFirstQRDetected
-     * @return
-     */
-    private boolean scenarioBehaviour(QRCode detectedQR, boolean isFirstQRDetected) {
-        //Checking if the detected QRCode is a QRCodeQuestionVocaleQuestionOuverte
-        if ((detectedQR instanceof QRCodeScenarioLoader)){
-
-            if (isFirstQRDetected){
-                startScenario(detectedQR);
-                return true;
-            }
-            else{
-                //signaling the error and ignoring the QRCode
-                ToneGeneratorSingleton.getInstance().ignoredQRCodeTone();
-                m_detectedQRCodes.addIgnoredQR(detectedQR);
-                return true;
-            }
-
-        }
-        else {
-            Log.v("test", "no Question vocale ouverte behaviour");
-            return false;
-        }
-    }
-
-
-
-    /**
      * Starting a detection of QRCodeEnsemble
      *
      * @param detectedQR
@@ -499,12 +465,26 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
         m_mainActivity.setDetectionStrategy(new QRCodeQCMDetectionModeStrategy(m_mainActivity, question));
     }
 
+    /**
+     * Starting a detection of {@link QRCodeSeriousGameStrategy}
+     *
+     * @param detectedQR
+     */
     private void startSeriousGame(QRCode detectedQR){
         Log.v("Start", "SeriousGame");
+
+        //Adding the QRCode to the detected ones
+        m_detectedQRCodes.addQR(detectedQR);
+
+        ToneGeneratorSingleton.getInstance().QRCodeNormallyDetectedTone();
+
         m_mainActivity.setDetectionProgress(FIRST_QR_DETECTED);
 
-        m_mainActivity.readPrint(((QRCodeSeriousGame) detectedQR).getQuestionText());
+        //Reading what to print at the top of the screen
+        //m_mainActivity.readPrint(((QRCodeSeriousGame) detectedQR).getQuestionText());
+        m_mainActivity.readPrint("Scénario");
 
+        //Launching the MultipleDetectionTimer
         m_mainActivity.startMultipleDetectionTimer();
 
         QRCodeSeriousGame code;
@@ -515,8 +495,11 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
             code = null;
         }
 
+        //Changing detection strategy
         m_mainActivity.setDetectionStrategy(new QRCodeSeriousGameStrategy(m_mainActivity, code));
     }
+
+
     /**
      * Starting a detection of QRCodeQuestionVocaleQCM
      *
@@ -527,6 +510,7 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
         m_detectedQRCodes.addQR(detectedQR);
 
         ToneGeneratorSingleton.getInstance().QRCodeNormallyDetectedTone();
+
         //Changing current detection state
         m_mainActivity.setDetectionProgress(FIRST_QR_DETECTED);
 
@@ -579,38 +563,4 @@ public class QRCodeDefaultDetectionModeStrategy extends QRCodeDetectionModeStrat
         //Changing detection strategy
         m_mainActivity.setDetectionStrategy(new QRCodeExerciceVocaleQuestionOuverteDetectionModeStrategy(m_mainActivity, question));
     }
-
-    /**
-     * Starting a detection of {@link QRCodeScenarioLoader}
-     *
-     * @param detectedQR
-     */
-    private void startScenario(QRCode detectedQR){
-        //Adding the QRCode to the detected ones
-        m_detectedQRCodes.addQR(detectedQR);
-
-        ToneGeneratorSingleton.getInstance().QRCodeNormallyDetectedTone();
-
-        //Changing current detection state
-        m_mainActivity.setDetectionProgress(FIRST_QR_DETECTED);
-
-        //Reading the QR
-        m_mainActivity.readPrint("Scenario");
-
-        //Launching the MultipleDetectionTimer
-        m_mainActivity.startMultipleDetectionTimer();
-
-        QRCodeScenarioLoader question;
-
-        if(detectedQR instanceof QRCodeScenarioLoader){
-            question = (QRCodeScenarioLoader) detectedQR;
-        } else {
-            question = null;
-        }
-
-        //Changing detection strategy
-        m_mainActivity.setDetectionStrategy(new QRCodeScenarioDetectionModeStrategy(m_mainActivity, question));
-    }
-
-
 }

@@ -21,7 +21,6 @@ import fr.angers.univ.qrludo.QR.model.QRCodeReponse;
 import fr.angers.univ.qrludo.QR.model.QRCodeReponseQCM;
 import fr.angers.univ.qrludo.QR.model.QRCodeReponseSeriousGame;
 import fr.angers.univ.qrludo.QR.model.QRCodeSeriousGame;
-import fr.angers.univ.qrludo.QR.model.QRCodeScenarioLoader;
 import fr.angers.univ.qrludo.QR.model.QrCodeJson;
 import fr.angers.univ.qrludo.exceptions.UnhandledQRException;
 import fr.angers.univ.qrludo.exceptions.UnsupportedQRException;
@@ -117,10 +116,7 @@ public class QRCodeBuilder {
             return new QRCodeQuestionQCM(code, dataQR);
         } else if (code.getType().equalsIgnoreCase("reponseQCM")){
             return new QRCodeReponseQCM(code, dataQR);
-        } else if(code.getType().equalsIgnoreCase("SeriousGameScenario")) {
-            return new QRCodeScenarioLoader(code, dataQR);
-        }
-        else if (code.getType().equalsIgnoreCase("SeriousGameScenario")){
+        } else if (code.getType().equalsIgnoreCase("SeriousGameScenario")){
             return new QRCodeSeriousGame(code, dataQR);
         }
         else if(code.getType().equalsIgnoreCase("ReponseSeriousGame")){

@@ -6,8 +6,10 @@ import android.util.Xml;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import fr.angers.univ.qrludo.action.Action;
@@ -41,16 +43,28 @@ public class ScenarioLoader {
 
     // Cette fonction lance le parsing du fichier XML passé dans l'attribut filename dans le constructeur
     private ArrayList<Node> XMLScenario(MainActivity mainActivity) throws XmlPullParserException, IOException {
-        InputStream in = mainActivity.getResources().openRawResource(mainActivity.getResources().getIdentifier(filename, "raw", mainActivity.getPackageName()));
-
+        //InputStream in = mainActivity.getResources().openRawResource(mainActivity.getResources().getIdentifier(filename, "raw", mainActivity.getPackageName()));
+        FileInputStream fis = null;
         try {
+            fis = mainActivity.openFileInput(filename);
+
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            parser.setInput(in, null);
+            //parser.setInput(in, null);
+
+            parser.setInput(fis, null);
+
             parser.nextTag();
             return readList(parser);
         } finally {
-            in.close();
+            //in.close();
+            if(fis!= null){
+                try {
+                    fis.close();
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
         }
 
 

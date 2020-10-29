@@ -64,14 +64,13 @@ import java.util.TimerTask;
 import fr.angers.univ.qrludo.QR.handling.QRCodeBuilder;
 import fr.angers.univ.qrludo.QR.handling.QRCodeDefaultDetectionModeStrategy;
 import fr.angers.univ.qrludo.QR.handling.QRCodeDetectionModeStrategy;
-import fr.angers.univ.qrludo.QR.handling.QRCodeSeriousGameStrategy;
 import fr.angers.univ.qrludo.QR.handling.QRCodeExerciceVocaleDetectionModeStrategy;
 import fr.angers.univ.qrludo.QR.handling.QRCodeExerciceVocaleQuestionOuverteDetectionModeStrategy;
+import fr.angers.univ.qrludo.QR.handling.QRCodeSeriousGameStrategy;
 import fr.angers.univ.qrludo.QR.model.QRCode;
 import fr.angers.univ.qrludo.QR.model.QRCodeCollection;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestionQCM;
 import fr.angers.univ.qrludo.QR.model.QRCodeReponseQCM;
-import fr.angers.univ.qrludo.QR.model.QRCodeQuestion;
 import fr.angers.univ.qrludo.QR.model.QRContent;
 import fr.angers.univ.qrludo.QR.model.QRFile;
 import fr.angers.univ.qrludo.QR.model.QRText;
@@ -206,10 +205,14 @@ public class MainActivity extends AppCompatActivity
     /*
      * ----------------------------------------- SPEECH RECOGNITION -----------------------------------------
      */
+
     // SPEECH_REQUEST est code qui identifie l'intent utilisé pour lancer la reconnaissance vocale du QRCodeExerciceVocaleDetectionModeStrategy
     static public final int SPEECH_REQUEST = 666; // The request code
     // SPEECH_REQUEST est code qui identifie l'intent utilisé pour lancer la reconnaissance vocale du QRCodeExerciceVocaleQuestionOuverteDetectionModeStrategy
     static public final int SPEECH_REQUEST_2 = 667;
+
+    // SPEECH_REQUEST est code qui identifie l'intent utilisé pour lancer la reconnaissance vocale du QRCodeSeriousGameStrategy
+    static public final int SPEECH_REQUEST_3 = 668;
 
     public static final int ONE_PERMISSION = 11;// Code for the onRequestPermissionsResult
 
@@ -1792,7 +1795,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-        if(requestCode == SPEECH_REQUEST){
+        if(requestCode == SPEECH_REQUEST_3){
             if(resultCode == RESULT_OK && data != null){
                 Log.v("result", "OK");
                 ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);

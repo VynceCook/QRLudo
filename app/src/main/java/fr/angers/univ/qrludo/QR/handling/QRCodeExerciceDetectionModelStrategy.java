@@ -188,8 +188,6 @@ public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStr
         }
     }
 
-
-
     //On lance le mode détection de bonne réponse ce qui arrète le mode exploration
     @Override
     public void onSwipeLeft() {
@@ -200,9 +198,7 @@ public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStr
         mode_exploration = false;
     }
 
-
-
-    //Relance le mode éxploration
+    //Relance le mode exploration
     @Override
     public void onSwipeRight() {
         m_mainActivity.readPrint("Mode exploration");

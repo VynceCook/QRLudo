@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +39,9 @@ import fr.angers.univ.qrludo.scenario.Node;
 import fr.angers.univ.qrludo.scenario.ScenarioLoader;
 import fr.angers.univ.qrludo.utils.ToneGeneratorSingleton;
 
+import static fr.angers.univ.qrludo.activities.MainActivity.SPEECH_REQUEST_2;
+import static fr.angers.univ.qrludo.activities.MainActivity.SPEECH_REQUEST_3;
+
 public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
 
     private ScenarioLoader scenario;
@@ -59,7 +63,12 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
         super(mainActivity);
         this.code = code;
         this.mainActivity = mainActivity;
-        this.scenario = new ScenarioLoader(mainActivity,"exemple_scenario_type");
+
+        // On sauvegarde le document XML dans le storage interne de l'appareil
+        code.saveDocumentAsXMLFile(mainActivity);
+
+        //this.scenario = new ScenarioLoader(mainActivity,"exemple_scenario_type");
+        this.scenario = new ScenarioLoader(mainActivity,code.getFILENAME());
         AllNodes = new ArrayList<Node>();
         try {
             this.AllNodes = scenario.getNodes();
@@ -252,6 +261,8 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
                 m_mainActivity.startNewDetection("Nouvelle détection");
                 hand.removeCallbacks(runner);
                 posted = false;
+                // On supprime le fichier xml du stockage interne
+                supprimeFichierStockageInterne();
             }
         }
         else{
@@ -283,7 +294,7 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
             intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Dites votre réponse...");
             try {
-                m_mainActivity.startActivityForResult(intent, 666);
+                m_mainActivity.startActivityForResult(intent, SPEECH_REQUEST_3);
             } catch (ActivityNotFoundException a) {
                 Toast.makeText(m_mainActivity.getApplicationContext(), "Désolé ! La reconnaissance vocale n'est pas supportée sur cet appareil.", Toast.LENGTH_SHORT);
             }
@@ -295,7 +306,7 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
             intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Dites votre réponse...");
             try {
-                m_mainActivity.startActivityForResult(intent, 666);
+                m_mainActivity.startActivityForResult(intent, SPEECH_REQUEST_3);
             } catch (ActivityNotFoundException a) {
                 Toast.makeText(m_mainActivity.getApplicationContext(), "Désolé ! La reconnaissance vocale n'est pas supportée sur cet appareil.", Toast.LENGTH_SHORT);
             }
@@ -353,6 +364,18 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
             int ID_mauvaise_reponse = Integer.parseInt(current_node.ID+"2");
             if(checkNodes(ID_bonne_reponse) && checkNodes(ID_mauvaise_reponse))
                 Enigme(getNode(ID_bonne_reponse), getNode(ID_mauvaise_reponse));
+        }
+    }
+
+    private void supprimeFichierStockageInterne(){
+        Log.i("Debug_scenario","Suppresion scenario");
+        Log.i("Debug_scenario","Nombre de fichier dans storage interne "+ m_mainActivity.getApplicationContext().getFilesDir().listFiles().length);
+        // Supprime le fichier scenario .xml
+        m_mainActivity.getApplicationContext().deleteFile(code.getFILENAME());
+        // On regarde si bien supprimé
+        Log.i("Debug_scenario","Nombre de fichier dans storage interne "+ m_mainActivity.getApplicationContext().getFilesDir().listFiles().length);
+        for(File f : m_mainActivity.getApplicationContext().getFilesDir().listFiles()){
+            Log.i("Debug_scenario",f.getName());
         }
     }
 }
