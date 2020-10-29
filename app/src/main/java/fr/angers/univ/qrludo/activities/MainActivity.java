@@ -47,6 +47,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
+import com.google.android.gms.vision.MultiDetector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
@@ -63,12 +64,14 @@ import java.util.TimerTask;
 import fr.angers.univ.qrludo.QR.handling.QRCodeBuilder;
 import fr.angers.univ.qrludo.QR.handling.QRCodeDefaultDetectionModeStrategy;
 import fr.angers.univ.qrludo.QR.handling.QRCodeDetectionModeStrategy;
+import fr.angers.univ.qrludo.QR.handling.QRCodeSeriousGameStrategy;
 import fr.angers.univ.qrludo.QR.handling.QRCodeExerciceVocaleDetectionModeStrategy;
 import fr.angers.univ.qrludo.QR.handling.QRCodeExerciceVocaleQuestionOuverteDetectionModeStrategy;
 import fr.angers.univ.qrludo.QR.model.QRCode;
 import fr.angers.univ.qrludo.QR.model.QRCodeCollection;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestionQCM;
 import fr.angers.univ.qrludo.QR.model.QRCodeReponseQCM;
+import fr.angers.univ.qrludo.QR.model.QRCodeQuestion;
 import fr.angers.univ.qrludo.QR.model.QRContent;
 import fr.angers.univ.qrludo.QR.model.QRFile;
 import fr.angers.univ.qrludo.QR.model.QRText;
@@ -77,7 +80,7 @@ import fr.angers.univ.qrludo.exceptions.UnhandledQRException;
 import fr.angers.univ.qrludo.exceptions.UnsupportedQRException;
 import fr.angers.univ.qrludo.utils.CompressionString;
 import fr.angers.univ.qrludo.utils.ContentDelayCounter;
-import fr.angers.univ.qrludo.utils.FileDownloader;
+import fr.angers.univ.qrludo.utils.FileDowloader;
 import fr.angers.univ.qrludo.utils.InternetBroadcastReceiver;
 import fr.angers.univ.qrludo.utils.OnSwipeTouchListener;
 import fr.angers.univ.qrludo.utils.QDCResponse;
@@ -1087,13 +1090,13 @@ public class MainActivity extends AppCompatActivity
         //Stopping current text to speech speaking or sound if necessary
         makeSilence();
 
-        Log.i("test", "source : "+ FileDownloader.DOWNLOAD_PATH+textToPrint+".mp3");
+        Log.i("test", "source : "+FileDowloader.DOWNLOAD_PATH+CompressionString.compress(textToPrint)+".mp3");
         //Playing the sound
         try {
             m_mediaPlayer.stop();
             m_mediaPlayer = new MediaPlayer();
             m_mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            m_mediaPlayer.setDataSource(FileDownloader.DOWNLOAD_PATH+textToPrint+".mp3");
+            m_mediaPlayer.setDataSource(FileDowloader.DOWNLOAD_PATH+CompressionString.compress(textToPrint)+".mp3");
             m_mediaPlayer.prepare();
             m_mediaPlayer.start();
 
@@ -1241,12 +1244,12 @@ public class MainActivity extends AppCompatActivity
                     HashMap<String, String> myHashRender = new HashMap<String, String>();
                     myHashRender.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, this.hashCode() + " ");
 
-                    File file = new File(FileDownloader.DOWNLOAD_PATH + m_currentReading.get(m_currentPos).getContent() + ".mp3");
+                    File file = new File(FileDowloader.DOWNLOAD_PATH + CompressionString.compress(m_currentReading.get(m_currentPos).getContent()) + ".mp3");
                     file.setReadable(true, false);
                     if (file.exists()) {
                         playCurrentSoundContent(m_currentReading.get(m_currentPos).getContent());
                     } else {
-                        int r = m_ttobj.synthesizeToFile(m_currentReading.get(m_currentPos).getContent(), myHashRender, FileDownloader.DOWNLOAD_PATH + m_currentReading.get(m_currentPos).getContent() + ".mp3");
+                        int r = m_ttobj.synthesizeToFile(m_currentReading.get(m_currentPos).getContent(), myHashRender, FileDowloader.DOWNLOAD_PATH + CompressionString.compress(m_currentReading.get(m_currentPos).getContent()) + ".mp3");
                     }
                 }
             }
@@ -1445,14 +1448,9 @@ public class MainActivity extends AppCompatActivity
 
         final AppCompatActivity activity = this;
 
-        /*activity.runOnUiThread(new Runnable() {
-            public void run() {
-                toSpeech("Mode Exploration", TextToSpeech.QUEUE_ADD);
-            }
-        });*/
         activity.runOnUiThread(new Runnable() {
             public void run() {
-                toSpeech("Scannez votre réponse ", TextToSpeech.QUEUE_ADD);
+                toSpeech("Mode Exploration", TextToSpeech.QUEUE_ADD);
             }
         });
 
@@ -1791,6 +1789,20 @@ public class MainActivity extends AppCompatActivity
                 ((QRCodeExerciceVocaleQuestionOuverteDetectionModeStrategy) m_currentDetectionModeStrategy).setM_reponse(text);
                 ((QRCodeExerciceVocaleQuestionOuverteDetectionModeStrategy) m_currentDetectionModeStrategy).verifReponse();
 
+            }
+        }
+
+        if(requestCode == SPEECH_REQUEST){
+            if(resultCode == RESULT_OK && data != null){
+                Log.v("result", "OK");
+                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                String text = result.get(0);
+                //m_currentDetectionModeStrategy = (QRCodeExerciceVocaleDetectionModeStrategy) m_currentDetectionModeStrategy;
+
+                // On envoie la réponse à QRCodeExerciceVocaleDetectionModeStrategy
+                //((QRCodeExerciceVocaleDetectionModeStrategy) m_currentDetectionModeStrategy).setM_reponse(text);
+                //((QRCodeExerciceVocaleDetectionModeStrategy) m_currentDetectionModeStrategy).verifReponse();
+                ((QRCodeSeriousGameStrategy) m_currentDetectionModeStrategy).setReponseSpeech(text);
             }
         }
 

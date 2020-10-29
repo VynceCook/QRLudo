@@ -10,4 +10,6 @@ public abstract class Action {
         this.mainActivity = mainActivity;
         this.nodeID = ID;
     }
+
+    public abstract String toString();
 }

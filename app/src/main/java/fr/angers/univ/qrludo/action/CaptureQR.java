@@ -7,4 +7,6 @@ public class CaptureQR extends Action {
     public CaptureQR(MainActivity mainActivity, int nodeID){
         super(mainActivity,nodeID);
     }
+
+    public String toString() {return "CaptureQR";}
 }

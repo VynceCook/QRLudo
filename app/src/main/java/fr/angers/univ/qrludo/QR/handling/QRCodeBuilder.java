@@ -19,6 +19,8 @@ import fr.angers.univ.qrludo.QR.model.QRCodeQuestionVocaleOuverte;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestionVocaleQCM;
 import fr.angers.univ.qrludo.QR.model.QRCodeReponse;
 import fr.angers.univ.qrludo.QR.model.QRCodeReponseQCM;
+import fr.angers.univ.qrludo.QR.model.QRCodeReponseSeriousGame;
+import fr.angers.univ.qrludo.QR.model.QRCodeSeriousGame;
 import fr.angers.univ.qrludo.QR.model.QRCodeScenarioLoader;
 import fr.angers.univ.qrludo.QR.model.QrCodeJson;
 import fr.angers.univ.qrludo.exceptions.UnhandledQRException;
@@ -117,6 +119,12 @@ public class QRCodeBuilder {
             return new QRCodeReponseQCM(code, dataQR);
         } else if(code.getType().equalsIgnoreCase("SeriousGameScenario")) {
             return new QRCodeScenarioLoader(code, dataQR);
+        }
+        else if (code.getType().equalsIgnoreCase("SeriousGameScenario")){
+            return new QRCodeSeriousGame(code, dataQR);
+        }
+        else if(code.getType().equalsIgnoreCase("ReponseSeriousGame")){
+            return new QRCodeReponseSeriousGame(code, dataQR);
         }
 
 

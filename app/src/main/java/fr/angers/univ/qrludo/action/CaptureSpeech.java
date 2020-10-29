@@ -8,4 +8,6 @@ public class CaptureSpeech extends Action {
         super(mainActivity,nodeID);
     }
 
+    @Override
+    public String toString() { return "CaptureSpeech";}
 }

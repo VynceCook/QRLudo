@@ -6,10 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
 
-import java.io.File;
-
 import fr.angers.univ.qrludo.exceptions.UnhandledQRException;
-import fr.angers.univ.qrludo.utils.FileDownloader;
 
 
 /**
@@ -57,11 +54,6 @@ public class QRCodeAtomique extends QRCode {
                 }
             }
             else {
-                // On construit le répertoire "qrludo" si ce dernier n'existe pas
-                File targetDir = new File(FileDownloader.DOWNLOAD_PATH);
-                if (!targetDir.exists()) {
-                    targetDir.mkdirs();
-                }
                 m_content.add(new QRText(data.toString()));
             }
         }

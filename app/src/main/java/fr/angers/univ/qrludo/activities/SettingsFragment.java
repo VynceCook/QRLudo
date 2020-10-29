@@ -3,6 +3,7 @@ package fr.angers.univ.qrludo.activities;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -18,7 +19,7 @@ import android.widget.Toast;
 import java.util.Locale;
 
 import fr.angers.univ.qrludo.R;
-import fr.angers.univ.qrludo.utils.FileDownloader;
+import fr.angers.univ.qrludo.utils.FileDowloader;
 
 public class SettingsFragment extends PreferenceFragment {
 
@@ -206,7 +207,7 @@ public class SettingsFragment extends PreferenceFragment {
         //Suppression des fichiers
         final Preference p_supprimer  = findPreference("pref_supprime");
 
-        if(FileDownloader.isEmpty())
+        if(FileDowloader.isEmpty())
             p_supprimer.setEnabled(false);
         else
             p_supprimer.setEnabled(true);
@@ -222,7 +223,7 @@ public class SettingsFragment extends PreferenceFragment {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if(FileDownloader.viderMemoire()) {
+                                if(FileDowloader.viderMemoire()) {
                                     Toast.makeText(getActivity(), "Les données ont bien été supprimées", Toast.LENGTH_LONG).show();
 
                                     p_supprimer.setEnabled(false);

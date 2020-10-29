@@ -10,4 +10,13 @@ public class RemoveNode extends Action {
         super(mainActivity, nodeID);
         this.nodeToRemoveID = nodeToRemoveID;
     }
+
+    public int getNodeToAddID() {
+        return nodeToRemoveID;
+    }
+
+    @Override
+    public String toString() {
+        return "RemoveNode" + nodeToRemoveID;
+    }
 }
