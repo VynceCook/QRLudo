@@ -31,6 +31,7 @@ import fr.angers.univ.qrludo.activities.MainActivity;
 /**
  *  Created by Simon Mitaty
  *  Implement by Pierre-Yves Delépine (29/10/2020)
+ *  Le json représentant le QRCode scénario est transformé en un document xml
  */
 public class QRCodeSeriousGame extends QRCode {
 

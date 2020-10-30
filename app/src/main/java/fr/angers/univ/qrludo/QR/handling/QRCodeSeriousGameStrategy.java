@@ -128,6 +128,7 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
                         e.printStackTrace();
                     }
                     m_mainActivity.startNewDetection("Nouvelle détection");
+                    supprimeFichierStockageInterne();
                     break;
                 }
             }
@@ -271,7 +272,7 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
             if(!posted) {
                 posted = hand.postDelayed(runner, 1000);
             }else{
-                m_mainActivity.startNewDetection("Nouvelle détection");
+                m_mainActivity.startNewDetection("Scénario annulé, réactivation du mode normal. Nouvelle détection\"");
                 hand.removeCallbacks(runner);
                 posted = false;
                 // On supprime le fichier xml du stockage interne
