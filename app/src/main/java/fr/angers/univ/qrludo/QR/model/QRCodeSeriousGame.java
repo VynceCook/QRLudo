@@ -42,6 +42,8 @@ public class QRCodeSeriousGame extends QRCode {
     // Contient un tableau d'égnimes représentées sous la forme
     // [id énigme,nom énigme,type énigme]
     private ArrayList<Object> enigmes = new ArrayList<Object>();
+    // Tableau contenant les destinations
+    private ArrayList<String> destinations;
     /*
      * Contient un tableau des questions de type RecoVocale sous la forme
      * [id énigme associé à la question, texte de la question, réponse de la question]
@@ -71,6 +73,12 @@ public class QRCodeSeriousGame extends QRCode {
         introduction = codeScenario.getIntroduction();
         fin = codeScenario.getFin();
         enigmes = codeScenario.getEnigmes();
+        destinations = new ArrayList<String>();
+        for(Object enigmeobj : enigmes){
+            ArrayList enigme = new ArrayList();
+            enigme = (ArrayList) enigmeobj;
+            destinations.add(enigme.get(1).toString());
+        }
         questionsRecoVocale = codeScenario.getQuestionsRecoVocale();
         questionsQrCode = codeScenario.getQuestionsQrCode();
 
@@ -435,6 +443,7 @@ public class QRCodeSeriousGame extends QRCode {
                 type.insertBefore(doc.createTextNode("QRAtom"), type.getLastChild());
                 atom.appendChild(type);
                 Element content = doc.createElement("content");
+
                 ArrayList reponse = (ArrayList) reponses.get(i);
                 content.insertBefore(doc.createTextNode(reponse.get(0).toString()), content.getLastChild());
                 atom.appendChild(content);
@@ -601,5 +610,39 @@ public class QRCodeSeriousGame extends QRCode {
 
     public void setFILENAME(String FILENAME) {
         this.FILENAME = FILENAME;
+    }
+
+    public ArrayList<String> getDestinations() {
+        return destinations;
+    }
+
+    /**
+     * Renvoie l'id de la réponse si rep à la questionQrCode d'ID nodeID
+     * sinon renvoie 0
+     * @param nodeID ID de la questionQRCode que l'on cherche
+     * @param rep la réponse à comprarer avec celle de la questionQrCode
+     * @return
+     */
+    public int idReponseQuestionQRCode(int nodeID,String rep){
+        int ID = nodeID - 100;
+        // PAr les questionsQRCode
+        for(Object questionObj : questionsQrCode){
+            ArrayList questionQRCode = (ArrayList) questionObj;
+            // Si c'est le bon id de question
+            Log.i("Debug_scenario","IDQuestion : "+questionQRCode.get(0).toString()+" IDDonne: "+ Integer.toString(ID));
+            if(questionQRCode.get(0).toString().equals(Integer.toString(ID))){
+                // On va chercher la liste de réponses
+                ArrayList reponses = (ArrayList) questionQRCode.get(2);
+                for(int i = 0; i <(int) reponses.size(); i++) {
+                    ArrayList reponse = (ArrayList) reponses.get(i);
+                    Log.i("Debug_scenario","repQuestion : "+reponse.get(0).toString().toLowerCase()+" repDonne: "+ rep.toLowerCase());
+                    if(reponse.get(0).toString().toLowerCase().equals(rep.toLowerCase())){
+                        return i+1;
+                    }
+
+                }
+            }
+        }
+        return 0;
     }
 }
