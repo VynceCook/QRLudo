@@ -1,10 +1,13 @@
 package fr.angers.univ.qrludo.QR.handling;
 
+import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -20,7 +23,10 @@ import fr.angers.univ.qrludo.action.CaptureSpeech;
 import fr.angers.univ.qrludo.activities.MainActivity;
 import fr.angers.univ.qrludo.utils.ToneGeneratorSingleton;
 
+import static fr.angers.univ.qrludo.activities.MainActivity.MULTIPLE_PERMISSIONS;
 import static fr.angers.univ.qrludo.activities.MainActivity.NO_QR_DETECTED;
+import static fr.angers.univ.qrludo.activities.MainActivity.ONE_PERMISSION;
+import static fr.angers.univ.qrludo.activities.MainActivity.SPEECH_REQUEST;
 
 /**
  * Created by Pierre-Yves Delépine
@@ -115,19 +121,7 @@ public class QRCodeExerciceVocaleDetectionModeStrategy extends QRCodeDetectionMo
 
     @Override
     public void onSwipeLeft() {
-        // On crée l'inent de la reconnaissance vocale
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT,"Dites votre réponse...");
-        try{
-            // On lance la reconnaissance vocale en envoyant l'intent au Main
-            m_mainActivity.startActivityForResult(intent, 666);
-        } catch (ActivityNotFoundException a){
-            Toast.makeText(m_mainActivity.getApplicationContext(), "Désolé ! La reconnaissance vocale n'est pas supportée sur cet appareil.", Toast.LENGTH_SHORT);
-        }
-
-
+        lancementReconnaissanceVocale();
     }
 
     @Override
@@ -172,6 +166,7 @@ public class QRCodeExerciceVocaleDetectionModeStrategy extends QRCodeDetectionMo
     public void repeteQuestion(){
         if (m_mainActivity.getDetectionProgress()!=NO_QR_DETECTED){
             if(m_question != null){
+                m_mainActivity.makeSilence();
                 // On répète la question
                 m_mainActivity.readPrint(m_question.getQuestionText());
                 m_mainActivity.read("Les réponses possibles sont :");
@@ -210,6 +205,31 @@ public class QRCodeExerciceVocaleDetectionModeStrategy extends QRCodeDetectionMo
         else{
             //Signaling that the user cannot swipe top
             ToneGeneratorSingleton.getInstance().errorTone();
+        }
+    }
+
+    public void lancementReconnaissanceVocale(){
+        //On regarde si on la permission d'utiliser le micro
+        if(ActivityCompat.checkSelfPermission(m_mainActivity, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            ToneGeneratorSingleton.getInstance().errorTone();
+            // Si non on la demande
+            ActivityCompat.requestPermissions(m_mainActivity, new String[]{Manifest.permission.RECORD_AUDIO},ONE_PERMISSION);
+            ToneGeneratorSingleton.getInstance().errorTone();
+        }else{
+            // On crée l'intent de la reconnaissance vocale
+            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT,"Dites votre réponse...");
+            try{
+                // On lance la reconnaissance vocale en envoyant l'intent au Main avec le code de SPEECH_REQUEST_2 dans le mainActivity
+                m_mainActivity.startActivityForResult(intent, SPEECH_REQUEST);
+                // On notifie l'utilisateur du swipe left
+                ToneGeneratorSingleton.getInstance().lastQRCodeReadTone();
+            } catch (ActivityNotFoundException a){
+                Toast.makeText(m_mainActivity.getApplicationContext(), "Désolé ! La reconnaissance vocale n'est pas supportée sur cet appareil.", Toast.LENGTH_LONG);
+            }
         }
     }
 }
