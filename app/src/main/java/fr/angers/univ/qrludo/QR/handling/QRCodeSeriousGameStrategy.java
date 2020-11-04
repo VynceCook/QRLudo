@@ -158,7 +158,7 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
     }
 
     // Fonction qui sert à gérer la résolution des énigmes
-    public void Enigme(Node bonne_reponse, Node mauvaise_reponse){
+    public void enigme(Node bonne_reponse, Node mauvaise_reponse){
         Log.i("Debug_scenario",Boolean.toString(bonne_reponse.getConditions().get(0) instanceof SpeechAtom));
         Log.i("Debug_scenario",Boolean.toString(bonne_reponse.getConditions().get(0) instanceof QRAtom));
         if(bonne_reponse.getConditions().get(0) instanceof SpeechAtom) {
@@ -239,7 +239,7 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
             int ID_reponse = Integer.parseInt(s);
             Log.i("Debug_scenario","ID_reponse: "+ ID_reponse);
             if(checkNodes(ID_reponse) ) {
-                Enigme(getNode(ID_reponse), getNode(ID_reponse));
+                enigme(getNode(ID_reponse), getNode(ID_reponse));
             }
             mode_reponse = false;
         }
@@ -384,7 +384,7 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
             int ID_mauvaise_reponse = Integer.parseInt(current_node.ID+"2");
             if(checkNodes(ID_bonne_reponse) && checkNodes(ID_mauvaise_reponse)){
                 Log.i("Debug_scenario","Passe vers enigme");
-                Enigme(getNode(ID_bonne_reponse), getNode(ID_mauvaise_reponse));
+                enigme(getNode(ID_bonne_reponse), getNode(ID_mauvaise_reponse));
             }
 
         }

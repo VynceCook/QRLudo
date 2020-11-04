@@ -7,13 +7,13 @@ import android.util.Log;
 import java.io.File;
 
 import fr.angers.univ.qrludo.utils.CompressionString;
-import fr.angers.univ.qrludo.utils.FileDowloader;
+import fr.angers.univ.qrludo.utils.FileDownloader;
 
 /**
  * Created by Jules Leguy on 20/01/18.
  */
 
-public class QRFile extends QRContent implements FileDowloader.FileDownloaderObserverInterface {
+public class QRFile extends QRContent implements FileDownloader.FileDownloaderObserverInterface {
 
     private boolean m_isFileInMemory;
     private String m_download_path;
@@ -22,7 +22,7 @@ public class QRFile extends QRContent implements FileDowloader.FileDownloaderObs
     public QRFile(String fileUrl) {
         super(fileUrl);
 
-        m_download_path = FileDowloader.DOWNLOAD_PATH+(CompressionString.compress(fileUrl))+".mp3";
+        m_download_path = FileDownloader.DOWNLOAD_PATH+(CompressionString.compress(fileUrl))+".mp3";
         m_isFileInMemory =  (new File(m_download_path).exists());
 
         downloadIfNotInMemory();
@@ -48,7 +48,7 @@ public class QRFile extends QRContent implements FileDowloader.FileDownloaderObs
     }
 
     private void fetchFile(){
-        FileDowloader dowloader = new FileDowloader(m_content,this);
+        FileDownloader dowloader = new FileDownloader(m_content,this);
         dowloader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 

@@ -58,7 +58,7 @@ public class QRCodeSeriousGame extends QRCode {
      */
     private ArrayList<Object> questionsQrCode = new ArrayList<Object>();
 
-    private String FILENAME = "scenario.xml";
+    private static final String FILENAME = "scenario.xml";
 
     // Le fichier XML va être construit dans un DOM
     private Document doc;
@@ -75,9 +75,9 @@ public class QRCodeSeriousGame extends QRCode {
         enigmes = codeScenario.getEnigmes();
         destinations = new ArrayList<String>();
         for(Object enigmeobj : enigmes){
-            ArrayList enigme = new ArrayList();
-            enigme = (ArrayList) enigmeobj;
-            destinations.add(enigme.get(1).toString());
+            ArrayList<String> enigme = new ArrayList<String>();
+            enigme = (ArrayList<String>) enigmeobj;
+            destinations.add(enigme.get(1));
         }
         questionsRecoVocale = codeScenario.getQuestionsRecoVocale();
         questionsQrCode = codeScenario.getQuestionsQrCode();
@@ -123,8 +123,6 @@ public class QRCodeSeriousGame extends QRCode {
             fos = mainActivity.openFileOutput(FILENAME, Context.MODE_PRIVATE);
             aTransformer.transform(src,new StreamResult(fos));
             Log.i("Debug_scenario","Document Save");
-
-
         } catch (TransformerException | FileNotFoundException e) {
             e.printStackTrace();
         }finally {
@@ -606,10 +604,6 @@ public class QRCodeSeriousGame extends QRCode {
 
     public String getFILENAME() {
         return FILENAME;
-    }
-
-    public void setFILENAME(String FILENAME) {
-        this.FILENAME = FILENAME;
     }
 
     public ArrayList<String> getDestinations() {
