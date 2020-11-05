@@ -163,7 +163,7 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
         Log.i("Debug_scenario",Boolean.toString(bonne_reponse.getConditions().get(0) instanceof QRAtom));
         if(bonne_reponse.getConditions().get(0) instanceof SpeechAtom) {
             if (!reponseSpeech.equals("vide")) {
-                if (bonne_reponse.getConditions().get(0).getContent().equals(reponseSpeech)) {
+                if (bonne_reponse.getConditions().get(0).getContent().toLowerCase().equals(reponseSpeech.toLowerCase())) {
                     mainActivity.read("Bonne réponse");
                     for(int i=0; i <(int) code.getDestinations().size(); i++){
                         if(current_node.ID == (101+i)){

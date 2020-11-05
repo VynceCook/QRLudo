@@ -232,7 +232,7 @@ public class QRCodeSeriousGame extends QRCode {
         Element tts_node = doc.createElement("TTSReading");
         String tts_text = "Choisis une destination ! Parmi, ";
         String[] ids;
-        ids = new String[3];
+        ids = new String[enigmes.size()];
         int i = 0;
         String destinations = "";
         for(Object enigmeObj : enigmes){
