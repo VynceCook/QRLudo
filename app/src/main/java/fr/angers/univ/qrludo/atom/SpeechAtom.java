@@ -6,4 +6,8 @@ public class SpeechAtom extends Atom {
     public SpeechAtom(String content){
         this.content=content;
     }
+
+    public String toString() {return "SpeechAtom "+ content;}
+
+    public String getContent() {return content;}
 }

@@ -7,4 +7,9 @@ public class ClearAtoms extends Action {
     public ClearAtoms (MainActivity mainActivity, int nodeID){
         super(mainActivity,nodeID);
     }
+
+    @Override
+    public String toString() {
+        return "ClearAtoms";
+    }
 }
