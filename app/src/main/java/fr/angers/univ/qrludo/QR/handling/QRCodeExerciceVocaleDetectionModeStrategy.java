@@ -153,9 +153,14 @@ public class QRCodeExerciceVocaleDetectionModeStrategy extends QRCodeDetectionMo
                     e.printStackTrace();
                 }
                 m_mainActivity.startNewDetection("Nouvelle détection");
-                //On indique que c'est une mauvaise réponse
-            }else{
+            }else{//On indique que c'est une mauvaise réponse
+                Log.i("Debug : ", m_question.getM_text_mauvaise_rep());
                 m_mainActivity.read(m_question.getM_text_mauvaise_rep());
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 repeteQuestion();
 
             }

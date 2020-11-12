@@ -16,6 +16,7 @@ public class QRCodeJsonQuestionVocale extends QrCodeJson {
                 ", id='" + super.getId() + '\'' +
                 ", lettreReponseVocale=" + lettreReponseVocale +
                 ", text_bonne_reponse='" + text_bonne_reponse + '\'' +
+                ", m_text_mauvaise_rep='" + text_mauvaise_reponse + '\''+
                 '}';
     }
     public String getText_bonne_reponse() {
