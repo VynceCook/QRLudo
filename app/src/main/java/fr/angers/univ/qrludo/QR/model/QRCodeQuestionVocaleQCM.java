@@ -1,11 +1,8 @@
 package fr.angers.univ.qrludo.QR.model;
 
-import android.util.Pair;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -29,7 +26,7 @@ public class QRCodeQuestionVocaleQCM extends QRCode{
         liste_rep = codeQuestion.getData();
         id = codeQuestion.getId();
         text_bonne_reponse = codeQuestion.getText_bonne_reponse();
-        m_text_mauvaise_rep = codeQuestion.getText_mauvaise_reponse();
+        m_text_mauvaise_rep = codeQuestion.getM_text_mauvaise_rep();
         lettreReponseVocale = codeQuestion.getLettreReponseVocale();
 
 

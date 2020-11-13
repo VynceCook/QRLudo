@@ -3,11 +3,9 @@ package fr.angers.univ.qrludo.QR.model;
 /**
  * Created by Pierre-Yves Delépine
  */
-
 public class QRCodeJsonQuestionVocale extends QrCodeJson {
     private String text_bonne_reponse = null;
-    private String text_mauvaise_reponse = "Dommage mauvaise réponse";
-
+    private String m_text_mauvaise_rep = null;
     private boolean lettreReponseVocale = false;
 
     @Override
@@ -16,7 +14,7 @@ public class QRCodeJsonQuestionVocale extends QrCodeJson {
                 ", id='" + super.getId() + '\'' +
                 ", lettreReponseVocale=" + lettreReponseVocale +
                 ", text_bonne_reponse='" + text_bonne_reponse + '\'' +
-                ", m_text_mauvaise_rep='" + text_mauvaise_reponse + '\''+
+                ", m_text_mauvaise_rep='" + m_text_mauvaise_rep + '\''+
                 '}';
     }
     public String getText_bonne_reponse() {
@@ -29,11 +27,11 @@ public class QRCodeJsonQuestionVocale extends QrCodeJson {
 
     public boolean getLettreReponseVocale(){return this.lettreReponseVocale;}
 
-    public String getText_mauvaise_reponse() {
-        return text_mauvaise_reponse;
+    public String getM_text_mauvaise_rep() {
+        return m_text_mauvaise_rep;
     }
 
-    public void setText_mauvaise_reponse(String text_mauvaise_reponse) {
-        this.text_mauvaise_reponse = text_mauvaise_reponse;
+    public void setM_text_mauvaise_rep(String m_text_mauvaise_rep) {
+        this.m_text_mauvaise_rep = m_text_mauvaise_rep;
     }
 }

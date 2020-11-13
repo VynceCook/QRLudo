@@ -3,8 +3,6 @@ package fr.angers.univ.qrludo.QR.model;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.ArrayList;
-
 /**
  * Created by Pierre-Yves Delépine
  */
@@ -24,7 +22,7 @@ public class QRCodeQuestionVocaleOuverte extends QRCode{
         bonneReponse = codeQuestion.getData().get(0).toString().toLowerCase();
         id = codeQuestion.getId();
         text_bonne_reponse = codeQuestion.getText_bonne_reponse();
-        text_mauvaise_rep = codeQuestion.getText_mauvaise_reponse();
+        text_mauvaise_rep = codeQuestion.getM_text_mauvaise_rep();
 
         m_content.add(new QRText(m_qrcodeJson.getName()));
     }

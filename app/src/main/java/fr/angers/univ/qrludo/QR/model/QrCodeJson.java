@@ -1,18 +1,15 @@
 package fr.angers.univ.qrludo.QR.model;
 
+import java.util.ArrayList;
+
 /**
  * Created by Florian Lherbeil
  * Classe permettant de récupérer les informations du json contenu dans le qrcode
  */
-
-import java.util.ArrayList;
-
 public class QrCodeJson {
     private String name="";
     private String type="";
     private String id = null;
-
-
 
     // Ce tableau contient toute les données contenu dans la balise data
     // Ces données peuvent être sous la forme d'une chaine de caractère ou d'une nouvelle chaine de type Json

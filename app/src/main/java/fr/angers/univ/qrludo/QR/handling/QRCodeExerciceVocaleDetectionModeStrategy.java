@@ -157,14 +157,12 @@ public class QRCodeExerciceVocaleDetectionModeStrategy extends QRCodeDetectionMo
                 Log.i("Debug : ", m_question.getM_text_mauvaise_rep());
                 m_mainActivity.read(m_question.getM_text_mauvaise_rep());
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(3000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Log.e("Error ", e.getMessage(), e);
                 }
                 repeteQuestion();
-
             }
-
         }
     }
 
