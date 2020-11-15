@@ -94,7 +94,6 @@ public class QRCodeSeriousGame extends QRCode {
             for(Element el : createNodeReponse()){
                 liste.appendChild(el);
             }
-            liste.appendChild(createNodeEnigmeDejaResolue());
             liste.appendChild(createNodeFin());
 
             doc.appendChild(liste);
@@ -304,36 +303,6 @@ public class QRCodeSeriousGame extends QRCode {
         return node;
     }
 
-    private Element createNodeEnigmeDejaResolue(){
-        Element node = doc.createElement("node");
-
-        Element id = doc.createElement("id");
-        id.insertBefore(doc.createTextNode("104"), id.getLastChild());
-        node.appendChild(id);
-
-        node.appendChild(doc.createElement("required_atoms"));
-
-        Element action_list = doc.createElement("action_list");
-
-        Element clearAtom = doc.createElement("ClearAtoms");
-        clearAtom.insertBefore(doc.createTextNode("SpeechAtom"), clearAtom.getLastChild());
-        action_list.appendChild(clearAtom);
-
-        action_list.appendChild(doc.createElement("ClearNodes"));
-
-        Element tts_node = doc.createElement("TTSReading");
-        tts_node.insertBefore(doc.createTextNode("Tu as déjà résolue cette énigme"), tts_node.getLastChild());
-        action_list.appendChild(tts_node);
-
-        Element addNode = doc.createElement("AddNode");
-        addNode.insertBefore(doc.createTextNode("2"), addNode.getLastChild());
-        action_list.appendChild(addNode);
-
-        node.appendChild(action_list);
-
-        return node;
-    }
-
     private ArrayList<Element> createNodeEnigme(){
         ArrayList<Element> nodes = new ArrayList<>();
         for(Object enigmeObj : enigmes){
@@ -365,7 +334,7 @@ public class QRCodeSeriousGame extends QRCode {
             action_list.appendChild(doc.createElement("ClearNodes"));
 
             Element tts_node = doc.createElement("TTSReading");
-            String tts_text = "Bienvenue dans "+enigme.get(1).toString()+" ! Répondez à la question suivante : ";
+            String tts_text = "L'énigme sélectionnée est "+enigme.get(1).toString()+" ! Répondez à la question suivante : ";
 
             // Test le type d'énigme pour aller chercher la question dans l'array correspoondant
             // Énigme type QRCode
