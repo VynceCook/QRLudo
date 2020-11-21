@@ -14,11 +14,9 @@ import fr.angers.univ.qrludo.QR.model.QRCode;
 import fr.angers.univ.qrludo.QR.model.QRCodeAtomique;
 import fr.angers.univ.qrludo.QR.model.QRCodeEnsemble;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestion;
-import fr.angers.univ.qrludo.QR.model.QRCodeQuestionQCM;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestionVocaleOuverte;
 import fr.angers.univ.qrludo.QR.model.QRCodeQuestionVocaleQCM;
 import fr.angers.univ.qrludo.QR.model.QRCodeReponse;
-import fr.angers.univ.qrludo.QR.model.QRCodeReponseQCM;
 import fr.angers.univ.qrludo.QR.model.QRCodeReponseSeriousGame;
 import fr.angers.univ.qrludo.QR.model.QRCodeSeriousGame;
 import fr.angers.univ.qrludo.QR.model.QrCodeJson;
@@ -112,14 +110,9 @@ public class QRCodeBuilder {
             return new QRCodeQuestionVocaleOuverte(code, dataQR);
         } else if(code.getType().equalsIgnoreCase("reponse")){
             return new QRCodeReponse(code, dataQR);
-        } else if(code.getType().equalsIgnoreCase("questionQCM")){
-            return new QRCodeQuestionQCM(code, dataQR);
-        } else if (code.getType().equalsIgnoreCase("reponseQCM")){
-            return new QRCodeReponseQCM(code, dataQR);
         } else if (code.getType().equalsIgnoreCase("SeriousGameScenario")){
             return new QRCodeSeriousGame(code, dataQR);
-        }
-        else if(code.getType().equalsIgnoreCase("ReponseSeriousGame")){
+        } else if(code.getType().equalsIgnoreCase("ReponseSeriousGame")){
             return new QRCodeReponseSeriousGame(code, dataQR);
         }
 
