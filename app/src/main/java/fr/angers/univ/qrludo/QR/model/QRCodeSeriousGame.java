@@ -144,7 +144,7 @@ public class QRCodeSeriousGame extends QRCode {
         tf.setOutputProperty(OutputKeys.INDENT, "yes");
         Writer out = new StringWriter();
         tf.transform(new DOMSource(xml), new StreamResult(out));
-        System.out.println(out.toString());
+        //System.out.println(out.toString());
     }
 
     private Element createNodeIntroduction(){

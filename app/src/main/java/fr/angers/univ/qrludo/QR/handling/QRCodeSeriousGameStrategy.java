@@ -2,6 +2,9 @@ package fr.angers.univ.qrludo.QR.handling;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
@@ -23,6 +26,7 @@ import java.util.Map;
 import fr.angers.univ.qrludo.QR.model.QRCode;
 import fr.angers.univ.qrludo.QR.model.QRCodeReponseSeriousGame;
 import fr.angers.univ.qrludo.QR.model.QRCodeSeriousGame;
+import fr.angers.univ.qrludo.QR.model.QRFile;
 import fr.angers.univ.qrludo.action.Action;
 import fr.angers.univ.qrludo.action.AddNode;
 import fr.angers.univ.qrludo.action.CaptureQR;
@@ -39,7 +43,10 @@ import fr.angers.univ.qrludo.atom.QRAtom;
 import fr.angers.univ.qrludo.atom.SpeechAtom;
 import fr.angers.univ.qrludo.scenario.Node;
 import fr.angers.univ.qrludo.scenario.ScenarioLoader;
+import fr.angers.univ.qrludo.utils.CompressionString;
+import fr.angers.univ.qrludo.utils.FileDownloader;
 import fr.angers.univ.qrludo.utils.ToneGeneratorSingleton;
+import fr.angers.univ.qrludo.utils.UrlContentDownloader;
 
 import static fr.angers.univ.qrludo.activities.MainActivity.SPEECH_REQUEST_2;
 import static fr.angers.univ.qrludo.activities.MainActivity.SPEECH_REQUEST_3;
@@ -231,7 +238,29 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
     // Fonction qui lit un texte
     public void readTTSReader(TTSReading tts){
         Log.v("fonction", "readTTSReader");
-        mainActivity.read(tts.getTextToRead());
+        if(!tts.getTextToRead().equals("")) {
+            if (tts.getTextToRead().substring(0, 5).equals("https")) {
+                String path = FileDownloader.DOWNLOAD_PATH+(CompressionString.compress(tts.getTextToRead()))+".mp3";
+                if(!new File(path).exists()){
+                    FileDownloader downloader = new FileDownloader(tts.getTextToRead(), (FileDownloader.FileDownloaderObserverInterface) this);
+                    downloader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                }
+                MediaPlayer mediaPlayer = new MediaPlayer();
+                try {
+                    mediaPlayer.stop();
+                    mediaPlayer = new MediaPlayer();
+                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    mediaPlayer.setDataSource(path);
+                    mediaPlayer.prepare();
+                    mediaPlayer.start();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                mainActivity.read(tts.getTextToRead());
+            }
+        }
     }
 
     // Fonction qui regarde si le correspondant à l'ID a bien été créé

@@ -1048,6 +1048,7 @@ public class MainActivity extends AppCompatActivity
      * If the current content is a QRFile, tests if it has already been downloaded. If not, waits for it
      */
     public void readCurrentContent(){
+        Log.v("fonction", "readCurrentContent");
         QRContent currentContent = m_currentReading.get(m_currentPos);
 
         //Stops potential current m_mediaPlayer
@@ -1057,6 +1058,7 @@ public class MainActivity extends AppCompatActivity
             sayTextContent();
         }
         else if (currentContent instanceof QRFile){
+            Log.v("QR", "File");
             //If the file is already downloaded, playing the m_mediaPlayer
             if (((QRFile) currentContent).isFileInMemory()){
                 playCurrentSoundFromFile();
@@ -1091,7 +1093,6 @@ public class MainActivity extends AppCompatActivity
 
         //Stopping current text to speech speaking or sound if necessary
         makeSilence();
-
         Log.i("test", "source : "+ FileDownloader.DOWNLOAD_PATH+textToPrint+".mp3");
         //Playing the sound
         try {
@@ -1209,6 +1210,7 @@ public class MainActivity extends AppCompatActivity
                     }
                     //Sinon on le lit par synthèse vocale
                     else{
+                        Log.v("Web", "audio");
                         openWebSite(m_currentReading.get(m_currentPos).getContent());
                         printText(m_currentReading.get(m_currentPos).getContent());
                     }
@@ -1272,8 +1274,7 @@ public class MainActivity extends AppCompatActivity
      * Method from UrlContentCallback called when the asynctask finished
      * @param content is a string which contains all the HTML from the page
      */
-    public void onWebsiteContent(String content)
-    {
+    public void onWebsiteContent(String content) throws IOException {
         Log.i("Web","---------------------");
         Log.i("Web",content);
         Log.i("Web","---------------------");
@@ -2063,6 +2064,7 @@ public class MainActivity extends AppCompatActivity
      * Set that the next QR read is an url
      */
     public void setNextQRIsWeb() {
+        Log.v("Web", "wen");
         m_next_QR_is_web_link = true;
     }
 
