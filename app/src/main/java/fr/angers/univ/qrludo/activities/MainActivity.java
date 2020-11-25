@@ -1882,7 +1882,7 @@ public class MainActivity extends AppCompatActivity
     /**
      * Starts the detection of new QRCodes
      */
-    private void startDetection() {
+    public void startDetection() {
 
         ToneGeneratorSingleton.getInstance().startingDetectionTone();
 

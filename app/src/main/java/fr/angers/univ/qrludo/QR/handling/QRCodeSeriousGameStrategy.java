@@ -2,6 +2,7 @@ package fr.angers.univ.qrludo.QR.handling;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
@@ -51,7 +52,7 @@ import fr.angers.univ.qrludo.utils.UrlContentDownloader;
 import static fr.angers.univ.qrludo.activities.MainActivity.SPEECH_REQUEST_2;
 import static fr.angers.univ.qrludo.activities.MainActivity.SPEECH_REQUEST_3;
 
-public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
+public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy implements FileDownloader.FileDownloaderObserverInterface {
 
     private ScenarioLoader scenario;
     private ArrayList<Node> AllNodes;
@@ -165,6 +166,7 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
             else if(a instanceof CaptureQR){
                 Log.v("action", "CaptureQR");
                 if(current_node.ID > 2 && current_node.ID != 105) {
+                    mainActivity.startDetection();
                     mainActivity.read("Ceci est une énigme à détection de QR code");
                     mode_reponse = true;
                     type_reponse = "qrcode";
@@ -235,26 +237,25 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
         readNode(2);
     }
 
-    // Fonction qui lit un texte
-    public void readTTSReader(TTSReading tts){
+    // Fonction qui lit un texte ou un fichier mp3
+    public void readTTSReader(TTSReading tts) {
         Log.v("fonction", "readTTSReader");
         if(!tts.getTextToRead().equals("")) {
-            if (tts.getTextToRead().substring(0, 5).equals("https")) {
+            if (tts.getTextToRead().indexOf("https") != -1) {
                 String path = FileDownloader.DOWNLOAD_PATH+(CompressionString.compress(tts.getTextToRead()))+".mp3";
-                if(!new File(path).exists()){
-                    FileDownloader downloader = new FileDownloader(tts.getTextToRead(), (FileDownloader.FileDownloaderObserverInterface) this);
-                    downloader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                }
+
                 MediaPlayer mediaPlayer = new MediaPlayer();
                 try {
-                    mediaPlayer.stop();
-                    mediaPlayer = new MediaPlayer();
+                    Log.v("Lecture", "Audio");
                     mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                     mediaPlayer.setDataSource(path);
                     mediaPlayer.prepare();
                     mediaPlayer.start();
+                    Thread.sleep(mediaPlayer.getDuration());
 
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             } else {
@@ -304,11 +305,6 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
 
     @Override
     public void onEndOfMultipleDetectionTimer() {
-
-    }
-
-    @Override
-    public void onQRFileDownloadComplete() {
 
     }
 
@@ -455,5 +451,15 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy {
         for(File f : m_mainActivity.getApplicationContext().getFilesDir().listFiles()){
             Log.i("Debug_scenario",f.getName());
         }
+    }
+
+    @Override
+    public void onDownloadComplete() {
+        Log.v("Download", "Complete");
+    }
+
+    public void onQRFileDownloadComplete() {
+        //plays the newly downloaded sound
+        m_mainActivity.playCurrentSoundFromFile();
     }
 }

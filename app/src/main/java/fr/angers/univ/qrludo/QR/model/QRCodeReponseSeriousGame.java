@@ -1,5 +1,7 @@
 package fr.angers.univ.qrludo.QR.model;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -10,6 +12,7 @@ public class QRCodeReponseSeriousGame extends QRCode {
 
     public QRCodeReponseSeriousGame(QrCodeJson code, String rawValue) {
         super(code, rawValue);
+        Log.v("Réponse", "SeriousGame");
         Gson gson = new GsonBuilder().create();
         QRCodeJsonReponseSeriousGame codeReponse = gson.fromJson(rawValue, QRCodeJsonReponseSeriousGame.class);
 

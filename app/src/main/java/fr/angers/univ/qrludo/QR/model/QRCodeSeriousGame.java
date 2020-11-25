@@ -1,6 +1,8 @@
 package fr.angers.univ.qrludo.QR.model;
 
 import android.content.Context;
+import android.os.AsyncTask;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -27,13 +29,15 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import fr.angers.univ.qrludo.activities.MainActivity;
+import fr.angers.univ.qrludo.utils.CompressionString;
+import fr.angers.univ.qrludo.utils.FileDownloader;
 
 /**
  *  Created by Simon Mitaty
  *  Implement by Pierre-Yves Delépine (29/10/2020)
  *  Le json représentant le QRCode scénario est transformé en un document xml
  */
-public class QRCodeSeriousGame extends QRCode {
+public class QRCodeSeriousGame extends QRCode implements FileDownloader.FileDownloaderObserverInterface {
 
     //Texte d'introduction
     private String introduction = null;
@@ -58,6 +62,8 @@ public class QRCodeSeriousGame extends QRCode {
      */
     private ArrayList<Object> questionsQrCode = new ArrayList<Object>();
 
+    private boolean isDownloading = false;
+
     private static final String FILENAME = "scenario.xml";
 
     // Le fichier XML va être construit dans un DOM
@@ -70,7 +76,9 @@ public class QRCodeSeriousGame extends QRCode {
         Gson gson = new GsonBuilder().create();
         QrCodeJsonSeriousGame codeScenario = gson.fromJson(rawValue, QrCodeJsonSeriousGame.class);
 
+        downloadIfMusicFile(codeScenario.getIntroduction());
         introduction = codeScenario.getIntroduction();
+        downloadIfMusicFile(codeScenario.getFin());
         fin = codeScenario.getFin();
         enigmes = codeScenario.getEnigmes();
         destinations = new ArrayList<String>();
@@ -111,6 +119,24 @@ public class QRCodeSeriousGame extends QRCode {
 
         m_content.add(new QRText(m_qrcodeJson.getName()));
     }
+
+    public void downloadIfMusicFile(String filename){
+        Log.v("fonction", "Download");
+        if(!filename.equals("")) {
+            if (filename.substring(0, 5).equals("https")) {
+                String path = FileDownloader.DOWNLOAD_PATH + (CompressionString.compress(filename)) + ".mp3";
+                if (!new File(path).exists()) {
+                    FileDownloader dowloader = new FileDownloader(filename, this);
+                    dowloader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    isDownloading = true;
+                }
+                while(isDownloading){
+
+                }
+            }
+        }
+    }
+
     public void saveDocumentAsXMLFile(MainActivity mainActivity){
         // Sauvegarde le fichierxml dans le storage interne de l'appareil
         TransformerFactory tranFactory = TransformerFactory.newInstance();
@@ -344,6 +370,7 @@ public class QRCodeSeriousGame extends QRCode {
                     ArrayList questionQRCode = (ArrayList) questionObj;
                     if(questionQRCode.get(0).toString().equals(enigme.get(0).toString())){
                         // Si c'est le bon id on ajoute la question
+                        downloadIfMusicFile(questionQRCode.get(1).toString());
                         tts_text += questionQRCode.get(1).toString();
                         tts_node.insertBefore(doc.createTextNode(tts_text), tts_node.getLastChild());
                         action_list.appendChild(tts_node);
@@ -607,5 +634,11 @@ public class QRCodeSeriousGame extends QRCode {
             }
         }
         return 0;
+    }
+
+    @Override
+    public void onDownloadComplete() {
+        Log.v("Download", "Complete");
+        isDownloading = false;
     }
 }
