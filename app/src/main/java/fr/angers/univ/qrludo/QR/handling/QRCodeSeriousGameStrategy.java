@@ -126,7 +126,6 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy imple
         for(Action a : actions){
             if(a instanceof TTSReading){
                 Log.v("action", "TTSReading");
-                Log.i("Debug_scenario","TTSReading ");
                 readTTSReader((TTSReading) a);
             }
             else if(a instanceof RemoveNode) {
@@ -140,6 +139,11 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy imple
             }
             else if(a instanceof VerificationConditionFinScenario){
                 if(code.getDestinations().size() == 0){
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     readNode(105);
                     // On quitte le mode Scénario
                     try {
