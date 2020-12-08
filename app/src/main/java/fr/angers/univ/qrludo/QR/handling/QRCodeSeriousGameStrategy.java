@@ -188,8 +188,9 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy imple
                 if (bonne_reponse.getConditions().get(0).getContent().toLowerCase().equals(reponseSpeech.toLowerCase())) {
                     mainActivity.read("Bonne réponse");
                     for(int i=0; i <(int) code.getDestinations().size(); i++){
-                        int id = i + enigmeResolues;
-                        if(current_node.ID == (101+id)){
+                        int id = code.idEnigme(code.getDestinations().get(i).toLowerCase());
+                        //int id = i + enigmeResolues;
+                        if(current_node.ID == (100+id)){
                             String tts_text = "Choisis une destination ! Parmi, ";
                             code.getDestinations().remove(i);
                             ++enigmeResolues;
@@ -215,8 +216,9 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy imple
                 if (reponseQR.isGoodAnswer()) {
                     mainActivity.read("Bonne réponse");
                     for(int i=0; i <(int) code.getDestinations().size(); i++){
-                        int id = i + enigmeResolues;
-                        if(current_node.ID == (101+id)){
+                        int id = code.idEnigme(code.getDestinations().get(i).toLowerCase());
+                       // int id = i + enigmeResolues;
+                        if(current_node.ID == (100+id)){
                             String tts_text = "Choisis une destination ! Parmi, ";
                             code.getDestinations().remove(i);
                             ++enigmeResolues;
@@ -406,10 +408,11 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy imple
         for(int i = 0; i < code.getDestinations().size(); i++){
             // Si la réponse est égale à cette destination on lit le node correspondant
             Log.i("Debug_scenario","Comparaison reponse Speech : "+ this.reponseSpeech.toLowerCase()+" desti : "+code.getDestinations().get(i).toLowerCase());
-            int id = i + enigmeResolues;
+
+            int id = code.idEnigme(code.getDestinations().get(i).toLowerCase());
             if(this.reponseSpeech.toLowerCase().equals(code.getDestinations().get(i).toLowerCase())){
                 destinationNonReconnu = false;
-                int newNode = 101+id;
+                int newNode = 100+id;
                 Log.i("Debug_scenario","On passe au node : "+newNode);
                 readNode(newNode);
             }

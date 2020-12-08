@@ -76,7 +76,9 @@ public class QRCodeSeriousGame extends QRCode implements FileDownloader.FileDown
         Gson gson = new GsonBuilder().create();
         QrCodeJsonSeriousGame codeScenario = gson.fromJson(rawValue, QrCodeJsonSeriousGame.class);
 
+
         downloadIfMusicFile(codeScenario.getIntroduction());
+
         introduction = codeScenario.getIntroduction();
         downloadIfMusicFile(codeScenario.getFin());
         fin = codeScenario.getFin();
@@ -631,6 +633,16 @@ public class QRCodeSeriousGame extends QRCode implements FileDownloader.FileDown
                     }
 
                 }
+            }
+        }
+        return 0;
+    }
+
+    public int idEnigme(String text){
+        for(Object enigmeObj : enigmes) {
+            ArrayList enigme = (ArrayList) enigmeObj;
+            if( enigme.get(1).toString().toLowerCase().equals(text.toLowerCase())){
+                return Integer.parseInt(enigme.get(0).toString());
             }
         }
         return 0;
