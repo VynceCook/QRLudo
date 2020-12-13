@@ -83,7 +83,6 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy imple
             enigmeResolu.add(false);
         }
 
-        //this.scenario = new ScenarioLoader(mainActivity,"exemple_scenario_type");
         this.scenario = new ScenarioLoader(mainActivity,code.getFILENAME());
         AllNodes = new ArrayList<Node>();
         try {
@@ -97,12 +96,8 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy imple
         if(code!=null){
             Log.v("Lecture", "Introduction");
             readNode(1);
+            readNode(2);
         }
-
-        /*for(Node n : AllNodes){
-            Log.i("Debug_scenario","AllNode \n"+n.toString());
-        }*/
-
     }
 
     // Fonction qui lit un noeud et ses actions
@@ -189,7 +184,6 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy imple
                     mainActivity.read("Bonne réponse");
                     for(int i=0; i <(int) code.getDestinations().size(); i++){
                         int id = code.idEnigme(code.getDestinations().get(i).toLowerCase());
-                        //int id = i + enigmeResolues;
                         if(current_node.ID == (100+id)){
                             String tts_text = "Choisis une destination ! Parmi, ";
                             code.getDestinations().remove(i);
@@ -363,7 +357,6 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy imple
     public void onSwipeLeft() {
         Log.v("swipe", "left");
         if(current_node.ID == 1) {
-            readNode(2);
             // Pour attendre que le texte d'introduction soit lu en entier
             try {
                 Thread.sleep(8000);
