@@ -12,6 +12,10 @@ public class TTSReading extends Action {
 
     public String getTextToRead() {return TextToRead;}
 
+    public void setTextToRead(String textToRead) {
+        this.TextToRead = textToRead;
+    }
+
     @Override
     public String toString() {
         return "TTsReading" + TextToRead;

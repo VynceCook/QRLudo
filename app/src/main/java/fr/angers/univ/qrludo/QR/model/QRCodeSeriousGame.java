@@ -1,6 +1,8 @@
 package fr.angers.univ.qrludo.QR.model;
 
 import android.content.Context;
+import android.os.AsyncTask;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -27,13 +29,15 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import fr.angers.univ.qrludo.activities.MainActivity;
+import fr.angers.univ.qrludo.utils.CompressionString;
+import fr.angers.univ.qrludo.utils.FileDownloader;
 
 /**
  *  Created by Simon Mitaty
  *  Implement by Pierre-Yves Delépine (29/10/2020)
  *  Le json représentant le QRCode scénario est transformé en un document xml
  */
-public class QRCodeSeriousGame extends QRCode {
+public class QRCodeSeriousGame extends QRCode implements FileDownloader.FileDownloaderObserverInterface {
 
     //Texte d'introduction
     private String introduction = null;
@@ -58,6 +62,8 @@ public class QRCodeSeriousGame extends QRCode {
      */
     private ArrayList<Object> questionsQrCode = new ArrayList<Object>();
 
+    private boolean isDownloading = false;
+
     private static final String FILENAME = "scenario.xml";
 
     // Le fichier XML va être construit dans un DOM
@@ -70,7 +76,11 @@ public class QRCodeSeriousGame extends QRCode {
         Gson gson = new GsonBuilder().create();
         QrCodeJsonSeriousGame codeScenario = gson.fromJson(rawValue, QrCodeJsonSeriousGame.class);
 
+
+        downloadIfMusicFile(codeScenario.getIntroduction());
+
         introduction = codeScenario.getIntroduction();
+        downloadIfMusicFile(codeScenario.getFin());
         fin = codeScenario.getFin();
         enigmes = codeScenario.getEnigmes();
         destinations = new ArrayList<String>();
@@ -94,7 +104,6 @@ public class QRCodeSeriousGame extends QRCode {
             for(Element el : createNodeReponse()){
                 liste.appendChild(el);
             }
-            liste.appendChild(createNodeEnigmeDejaResolue());
             liste.appendChild(createNodeFin());
 
             doc.appendChild(liste);
@@ -112,6 +121,24 @@ public class QRCodeSeriousGame extends QRCode {
 
         m_content.add(new QRText(m_qrcodeJson.getName()));
     }
+
+    public void downloadIfMusicFile(String filename){
+        Log.v("fonction", "Download");
+        if(!filename.equals("")) {
+            if (filename.substring(0, 5).equals("https")) {
+                String path = FileDownloader.DOWNLOAD_PATH + (CompressionString.compress(filename)) + ".mp3";
+                if (!new File(path).exists()) {
+                    FileDownloader dowloader = new FileDownloader(filename, this);
+                    dowloader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    isDownloading = true;
+                }
+                while(isDownloading){
+
+                }
+            }
+        }
+    }
+
     public void saveDocumentAsXMLFile(MainActivity mainActivity){
         // Sauvegarde le fichierxml dans le storage interne de l'appareil
         TransformerFactory tranFactory = TransformerFactory.newInstance();
@@ -145,7 +172,7 @@ public class QRCodeSeriousGame extends QRCode {
         tf.setOutputProperty(OutputKeys.INDENT, "yes");
         Writer out = new StringWriter();
         tf.transform(new DOMSource(xml), new StreamResult(out));
-        System.out.println(out.toString());
+        //System.out.println(out.toString());
     }
 
     private Element createNodeIntroduction(){
@@ -304,36 +331,6 @@ public class QRCodeSeriousGame extends QRCode {
         return node;
     }
 
-    private Element createNodeEnigmeDejaResolue(){
-        Element node = doc.createElement("node");
-
-        Element id = doc.createElement("id");
-        id.insertBefore(doc.createTextNode("104"), id.getLastChild());
-        node.appendChild(id);
-
-        node.appendChild(doc.createElement("required_atoms"));
-
-        Element action_list = doc.createElement("action_list");
-
-        Element clearAtom = doc.createElement("ClearAtoms");
-        clearAtom.insertBefore(doc.createTextNode("SpeechAtom"), clearAtom.getLastChild());
-        action_list.appendChild(clearAtom);
-
-        action_list.appendChild(doc.createElement("ClearNodes"));
-
-        Element tts_node = doc.createElement("TTSReading");
-        tts_node.insertBefore(doc.createTextNode("Tu as déjà résolue cette énigme"), tts_node.getLastChild());
-        action_list.appendChild(tts_node);
-
-        Element addNode = doc.createElement("AddNode");
-        addNode.insertBefore(doc.createTextNode("2"), addNode.getLastChild());
-        action_list.appendChild(addNode);
-
-        node.appendChild(action_list);
-
-        return node;
-    }
-
     private ArrayList<Element> createNodeEnigme(){
         ArrayList<Element> nodes = new ArrayList<>();
         for(Object enigmeObj : enigmes){
@@ -365,7 +362,7 @@ public class QRCodeSeriousGame extends QRCode {
             action_list.appendChild(doc.createElement("ClearNodes"));
 
             Element tts_node = doc.createElement("TTSReading");
-            String tts_text = "Bienvenue dans "+enigme.get(1).toString()+" ! Répondez à la question suivante : ";
+            String tts_text = "L'énigme sélectionnée est "+enigme.get(1).toString()+" ! Répondez à la question suivante : ";
 
             // Test le type d'énigme pour aller chercher la question dans l'array correspoondant
             // Énigme type QRCode
@@ -375,6 +372,7 @@ public class QRCodeSeriousGame extends QRCode {
                     ArrayList questionQRCode = (ArrayList) questionObj;
                     if(questionQRCode.get(0).toString().equals(enigme.get(0).toString())){
                         // Si c'est le bon id on ajoute la question
+                        downloadIfMusicFile(questionQRCode.get(1).toString());
                         tts_text += questionQRCode.get(1).toString();
                         tts_node.insertBefore(doc.createTextNode(tts_text), tts_node.getLastChild());
                         action_list.appendChild(tts_node);
@@ -638,5 +636,21 @@ public class QRCodeSeriousGame extends QRCode {
             }
         }
         return 0;
+    }
+
+    public int idEnigme(String text){
+        for(Object enigmeObj : enigmes) {
+            ArrayList enigme = (ArrayList) enigmeObj;
+            if( enigme.get(1).toString().toLowerCase().equals(text.toLowerCase())){
+                return Integer.parseInt(enigme.get(0).toString());
+            }
+        }
+        return 0;
+    }
+
+    @Override
+    public void onDownloadComplete() {
+        Log.v("Download", "Complete");
+        isDownloading = false;
     }
 }

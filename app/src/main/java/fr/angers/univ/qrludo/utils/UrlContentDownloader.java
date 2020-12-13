@@ -2,11 +2,15 @@ package fr.angers.univ.qrludo.utils;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import fr.angers.univ.qrludo.action.TTSReading;
 
 /**
  * Created by Bastien PIGACHE
@@ -23,6 +27,7 @@ public class UrlContentDownloader extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... urls) {
+        Log.v("Debug_Audio", "background");
         String urlContent = "";
 
         BufferedReader in = null;
@@ -30,10 +35,8 @@ public class UrlContentDownloader extends AsyncTask<String, Void, String> {
         try {
             StringBuilder response = new StringBuilder();
             String USER_AGENT = "Mozilla/5.0", inputLine;
-
             HttpURLConnection connection =
                     (HttpURLConnection) new URL(urls[0]).openConnection();
-
             //Headers
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Accept", "text/html; charset=UTF-8");
@@ -64,12 +67,16 @@ public class UrlContentDownloader extends AsyncTask<String, Void, String> {
         }
 
         return urlContent;
-
     }
 
     @Override
     protected void onPostExecute(String s) {
+        Log.v("Debug_Audio", "execute");
         super.onPostExecute(s);
-        m_activity.onWebsiteContent(s);
+        try {
+            m_activity.onWebsiteContent(s);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
