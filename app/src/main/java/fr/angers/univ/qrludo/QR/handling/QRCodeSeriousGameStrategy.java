@@ -96,6 +96,11 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy imple
         if(code!=null){
             Log.v("Lecture", "Introduction");
             readNode(1);
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             readNode(2);
         }
     }

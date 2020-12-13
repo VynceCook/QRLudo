@@ -13,7 +13,7 @@ public class QRCodeQuestionVocaleQCM extends QRCode{
     private ArrayList<Object> liste_rep = new ArrayList<>();
     private ArrayList<String> liste_bonne_reponse = new ArrayList<String>();
     private String id = null;
-    private String text_bonne_reponse;
+    private String m_text_bonne_rep;
     private String m_text_mauvaise_rep;
     private boolean lettreReponseVocale;
 
@@ -25,8 +25,8 @@ public class QRCodeQuestionVocaleQCM extends QRCode{
 
         liste_rep = codeQuestion.getData();
         id = codeQuestion.getId();
-        text_bonne_reponse = codeQuestion.getText_bonne_reponse();
-        m_text_mauvaise_rep = codeQuestion.getM_text_mauvaise_rep();
+        m_text_bonne_rep = codeQuestion.getText_bonne_reponse();
+        m_text_mauvaise_rep = codeQuestion.getText_mauvaise_reponse();
         lettreReponseVocale = codeQuestion.getLettreReponseVocale();
 
 
@@ -65,11 +65,11 @@ public class QRCodeQuestionVocaleQCM extends QRCode{
     }
 
     public String getM_text_bonne_rep() {
-        return text_bonne_reponse;
+        return m_text_bonne_rep;
     }
 
     public void setM_text_bonne_rep(String m_text_bonne_rep) {
-        this.text_bonne_reponse = m_text_bonne_rep;
+        this.m_text_bonne_rep = m_text_bonne_rep;
     }
 
     public boolean getLettreReponseVocale(){return lettreReponseVocale;}

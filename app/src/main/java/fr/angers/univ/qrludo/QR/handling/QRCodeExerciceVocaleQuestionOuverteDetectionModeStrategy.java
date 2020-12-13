@@ -1,7 +1,6 @@
 package fr.angers.univ.qrludo.QR.handling;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,7 +16,6 @@ import fr.angers.univ.qrludo.QR.model.QRCodeQuestionVocaleOuverte;
 import fr.angers.univ.qrludo.activities.MainActivity;
 import fr.angers.univ.qrludo.utils.ToneGeneratorSingleton;
 
-import static fr.angers.univ.qrludo.activities.MainActivity.MULTIPLE_PERMISSIONS;
 import static fr.angers.univ.qrludo.activities.MainActivity.NO_QR_DETECTED;
 import static fr.angers.univ.qrludo.activities.MainActivity.ONE_PERMISSION;
 import static fr.angers.univ.qrludo.activities.MainActivity.SPEECH_REQUEST_2;
@@ -121,7 +119,7 @@ public class QRCodeExerciceVocaleQuestionOuverteDetectionModeStrategy extends QR
                 m_mainActivity.startNewDetection("Nouvelle détection");
                 //On indique que c'est une mauvaise réponse
             }else{
-                m_mainActivity.read(m_question.getText_mauvaise_rep());
+                m_mainActivity.read(m_question.getM_text_mauvaise_rep());
                 m_mainActivity.read(m_question.getQuestionText());
                 m_mainActivity.read("A vous de répondre");
             }
