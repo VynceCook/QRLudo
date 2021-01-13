@@ -30,11 +30,15 @@ Ces QRCodes ne contiennent que des QRCodes Uniques. Le scan de ces QRCodes entra
 
 #### QRCode Exercice
 
-Un jeu ludique qui permet à l'étudiant d'apprendre tout en lui permettant l'erreur
+Exercice ludique qui permet à l'étudiant d'apprendre tout en lui permettant l'erreur.
 
-#### QRCode QCM
+#### QRCode Reconnaissance Vocale
 
-Un système de QCM sous la forme de QR Codes
+Exercice à répondre grâce à la reconnaissance vocale.
+
+#### QRCode Serious Game
+
+Un jeu sérieux qui permet d'apprendre en s'amusant.
 
 ### Contexte du développement
 Ce projet a eu lieu dans le cadre des modules d'enseignement Management de Projet et Concrétisation Disciplinaire suivis par les étudiants de Master 2 Informatique ACDI (Analyse, Conception et Développement Informatique) et de Master 1 Informatique de l'Université d'Angers de l'année universitaire 2018/2019.
@@ -44,6 +48,8 @@ Ce projet a eu lieu dans le cadre des modules d'enseignement Management de Proje
 Disponibles [ici](https://github.com/univ-angers/QRLudo/blob/master/regles_confidentialite.md).
 
 # Licence
+Copyright (C) 2021 Etienne Choveau, Desnoes Mathis, Kevin Balavoine, ATTAOUI Zakaria, BENDAOUD Youness, 
+CUEGNIET Louis, DELÉPINE Pierre-Yves, MITATY Simon
 Copyright (C) 2020  Bastien Pigache, Anaïs Mohr, Marouwane Bah, Etienne Choveau, Desnoes Mathis,
 Andry Randriamamonjisoa, Kevin Balavoine
 Copyright (C) 2019  Thibault Condemine, Alassane Diop, Hanane Hadji, Abdessabour Harboul, Florian Lherbeil,
