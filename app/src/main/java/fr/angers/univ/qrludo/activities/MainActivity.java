@@ -860,7 +860,14 @@ public class MainActivity extends AppCompatActivity
                             int version = MainActivity.this.getResources().getInteger(R.integer.version_qrludo);
                             QRCode detectedQR = QRCodeBuilder.build(rawValue, version);
 
-
+                            //If first QR detected of the current detection
+                            if (m_detectionProgress == NO_QR_DETECTED) {
+                                m_currentDetectionModeStrategy.onFirstDetectionWithTimeNotNull(detectedQR);
+                            }
+                            //If at least one QR has already been detected during the current detection
+                            else{
+                                m_currentDetectionModeStrategy.onNextDetectionWithTimeNotNull(detectedQR);
+                            }
                         } catch (UnhandledQRException e) {
                             ToneGeneratorSingleton.getInstance().ignoredQRCodeTone();
                         } catch (UnsupportedQRException e) {
