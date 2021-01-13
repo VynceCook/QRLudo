@@ -153,7 +153,8 @@ public class QRCodeExerciceVocaleDetectionModeStrategy extends QRCodeDetectionMo
                     e.printStackTrace();
                 }
                 m_mainActivity.startNewDetection("Nouvelle détection");
-            }else{//On indique que c'est une mauvaise réponse
+            }else{
+                //On indique que c'est une mauvaise réponse
                 Log.i("Debug : ", m_question.getM_text_mauvaise_rep());
                 m_mainActivity.read(m_question.getM_text_mauvaise_rep());
                 try {

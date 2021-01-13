@@ -2,32 +2,24 @@ package fr.angers.univ.qrludo.QR.handling;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.os.AsyncTask;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
-import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
 import android.widget.Toast;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import fr.angers.univ.qrludo.QR.model.QRCode;
 import fr.angers.univ.qrludo.QR.model.QRCodeReponseSeriousGame;
 import fr.angers.univ.qrludo.QR.model.QRCodeSeriousGame;
-import fr.angers.univ.qrludo.QR.model.QRFile;
 import fr.angers.univ.qrludo.action.Action;
 import fr.angers.univ.qrludo.action.AddNode;
 import fr.angers.univ.qrludo.action.CaptureQR;
@@ -38,8 +30,6 @@ import fr.angers.univ.qrludo.action.RemoveNode;
 import fr.angers.univ.qrludo.action.TTSReading;
 import fr.angers.univ.qrludo.action.VerificationConditionFinScenario;
 import fr.angers.univ.qrludo.activities.MainActivity;
-import fr.angers.univ.qrludo.atom.Any;
-import fr.angers.univ.qrludo.atom.Atom;
 import fr.angers.univ.qrludo.atom.QRAtom;
 import fr.angers.univ.qrludo.atom.SpeechAtom;
 import fr.angers.univ.qrludo.scenario.Node;
@@ -47,12 +37,11 @@ import fr.angers.univ.qrludo.scenario.ScenarioLoader;
 import fr.angers.univ.qrludo.utils.CompressionString;
 import fr.angers.univ.qrludo.utils.FileDownloader;
 import fr.angers.univ.qrludo.utils.ToneGeneratorSingleton;
-import fr.angers.univ.qrludo.utils.UrlContentDownloader;
 
-import static fr.angers.univ.qrludo.activities.MainActivity.SPEECH_REQUEST_2;
 import static fr.angers.univ.qrludo.activities.MainActivity.SPEECH_REQUEST_3;
 
 public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy implements FileDownloader.FileDownloaderObserverInterface {
+    static private int NOMBRE_MAX_TENTATIVES=3;
 
     private ScenarioLoader scenario;
     private ArrayList<Node> AllNodes;
@@ -69,6 +58,8 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy imple
     // Tableau de boolean pour savoir si une énigme est résolue
     private ArrayList<Boolean> enigmeResolu;
     private int enigmeResolues = 0;
+    // Tableau de boolean pour savoir le nombre de tentatives par énigmes
+    private ArrayList<Integer> nombreDeTentatives;
 
     public QRCodeSeriousGameStrategy(MainActivity mainActivity, QRCodeSeriousGame code){
         super(mainActivity);
@@ -79,11 +70,12 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy imple
         code.saveDocumentAsXMLFile(mainActivity);
 
         enigmeResolu = new ArrayList<>();
+        nombreDeTentatives = new ArrayList<>();
         for(int i = 0; i<(int)code.getDestinations().size(); i++){
             enigmeResolu.add(false);
+            nombreDeTentatives.add(0);
         }
 
-        //this.scenario = new ScenarioLoader(mainActivity,"exemple_scenario_type");
         this.scenario = new ScenarioLoader(mainActivity,code.getFILENAME());
         AllNodes = new ArrayList<Node>();
         try {
@@ -97,12 +89,13 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy imple
         if(code!=null){
             Log.v("Lecture", "Introduction");
             readNode(1);
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            readNode(2);
         }
-
-        /*for(Node n : AllNodes){
-            Log.i("Debug_scenario","AllNode \n"+n.toString());
-        }*/
-
     }
 
     // Fonction qui lit un noeud et ses actions
@@ -183,64 +176,85 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy imple
     public void enigme(Node bonne_reponse, Node mauvaise_reponse){
         Log.i("Debug_scenario",Boolean.toString(bonne_reponse.getConditions().get(0) instanceof SpeechAtom));
         Log.i("Debug_scenario",Boolean.toString(bonne_reponse.getConditions().get(0) instanceof QRAtom));
+        //ENIGME DE TYPE RECO VOCALE
         if(bonne_reponse.getConditions().get(0) instanceof SpeechAtom) {
             if (!reponseSpeech.equals("vide")) {
+                // Si c'est la bonne réponse qui est donnée
                 if (bonne_reponse.getConditions().get(0).getContent().toLowerCase().equals(reponseSpeech.toLowerCase())) {
-                    mainActivity.read("Bonne réponse");
-                    for(int i=0; i <(int) code.getDestinations().size(); i++){
-                        int id = code.idEnigme(code.getDestinations().get(i).toLowerCase());
-                        //int id = i + enigmeResolues;
-                        if(current_node.ID == (100+id)){
-                            String tts_text = "Choisis une destination ! Parmi, ";
-                            code.getDestinations().remove(i);
-                            ++enigmeResolues;
-                            for(int j = 0; j < code.getDestinations().size(); ++j){
-                                tts_text += code.getDestinations().get(j);
-                                if(j < code.getDestinations().size()-1)
-                                    tts_text += ", ";
-                            }
-                            Node node2 = getNode(2);
-                            TTSReading tts = (TTSReading) node2.getActions().get(3);
-                            tts.setTextToRead(tts_text);
-                        }
-                    }
-                    readNode(bonne_reponse.ID);
-                } else {
-                    mainActivity.read("Mauvaise réponse");
-                    readNode(mauvaise_reponse.ID);
+                    goodAnswer(bonne_reponse);
+                }
+                // Si c'est la mauvaise réponse qui est donnée
+                else {
+                    wrongAnswer(mauvaise_reponse);
                 }
             }
         }
+        //ENIGME DE TYPE DETETION DE QR CODE
         else if(bonne_reponse.getConditions().get(0) instanceof QRAtom){
             if(reponseQR != null) {
+                // Si c'est la bonne réponse qui est donnée
                 if (reponseQR.isGoodAnswer()) {
-                    mainActivity.read("Bonne réponse");
-                    for(int i=0; i <(int) code.getDestinations().size(); i++){
-                        int id = code.idEnigme(code.getDestinations().get(i).toLowerCase());
-                       // int id = i + enigmeResolues;
-                        if(current_node.ID == (100+id)){
-                            String tts_text = "Choisis une destination ! Parmi, ";
-                            code.getDestinations().remove(i);
-                            ++enigmeResolues;
-                            for(int j = 0; j < code.getDestinations().size(); ++j){
-                                tts_text += code.getDestinations().get(j);
-                                if(j < code.getDestinations().size()-1)
-                                    tts_text += ", ";
-                            }
-                            Node node2 = getNode(2);
-                            TTSReading tts = (TTSReading) node2.getActions().get(3);
-                            tts.setTextToRead(tts_text);
-                        }
-                    }
-                    Log.i("Debug_scenario","Bonne reponse : "+bonne_reponse.ID);
-                    readNode(bonne_reponse.ID);
-                } else {
-                    mainActivity.read("Mauvaise réponse");
-                    readNode(mauvaise_reponse.ID);
+                    goodAnswer(bonne_reponse);
+                }
+                // Si c'est la mauvaise réponse qui est donnée
+                else {
+                    wrongAnswer(mauvaise_reponse);
                 }
             }
         }
         readNode(2);
+    }
+
+
+    // Action à faire lorsque l'utilisateur mobile à trouvé la bonne réponse
+    public void goodAnswer(Node bonne_reponse){
+        mainActivity.read("Bonne réponse");
+        deleteEnigmeFromList(getCurrentEnigmePosition());
+        readNode(bonne_reponse.ID);
+    }
+
+    //Action à faire lorsque l'utilisateur mobile à donné une mauvaise réponse
+    public void wrongAnswer(Node mauvaise_reponse){
+        mainActivity.read("Mauvaise réponse");
+        int position = getCurrentEnigmePosition();
+        nombreDeTentatives.set(position,nombreDeTentatives.get(position)+1);
+
+        //Nombre de tentatives depassé
+        if(nombreDeTentatives.get(position)>NOMBRE_MAX_TENTATIVES-1){
+            mainActivity.read("Nombre de tentatives depassées, retrait de l'énigme");
+            deleteEnigmeFromList(position);
+        }
+        //Nombre de tentatives non depassé
+        else
+            mainActivity.read("Nombre de tentatives restantes : "+ (NOMBRE_MAX_TENTATIVES-nombreDeTentatives.get(position))+"\n");
+
+        readNode(mauvaise_reponse.ID);
+    }
+
+    // Cette fonction retourne la position de l'énigme courante dans la liste d'énigme
+    public int getCurrentEnigmePosition(){
+        for(int i=0; i <(int) code.getDestinations().size(); i++){
+            int id = code.idEnigme(code.getDestinations().get(i).toLowerCase());
+            if(current_node.ID == (100+id)){
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    // Fonction permettant de supprimer une énigme de la liste d'énigmes
+    public void deleteEnigmeFromList(int i){
+        String tts_text = "Choisis une destination ! Parmi, ";
+        code.getDestinations().remove(i);
+        ++enigmeResolues;
+        for(int j = 0; j < code.getDestinations().size(); ++j){
+            tts_text += code.getDestinations().get(j);
+            if(j < code.getDestinations().size()-1)
+                tts_text += ", ";
+        }
+        Node node2 = getNode(2);
+        TTSReading tts = (TTSReading) node2.getActions().get(3);
+        tts.setTextToRead(tts_text);
     }
 
     // Fonction qui lit un texte ou un fichier mp3
@@ -363,7 +377,6 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy imple
     public void onSwipeLeft() {
         Log.v("swipe", "left");
         if(current_node.ID == 1) {
-            readNode(2);
             // Pour attendre que le texte d'introduction soit lu en entier
             try {
                 Thread.sleep(8000);

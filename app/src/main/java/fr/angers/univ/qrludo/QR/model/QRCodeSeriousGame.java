@@ -362,7 +362,7 @@ public class QRCodeSeriousGame extends QRCode implements FileDownloader.FileDown
             action_list.appendChild(doc.createElement("ClearNodes"));
 
             Element tts_node = doc.createElement("TTSReading");
-            String tts_text = "L'énigme sélectionnée est "+enigme.get(1).toString()+" ! Répondez à la question suivante : ";
+            String tts_text = "L'énigme sélectionnée est "+enigme.get(1).toString()+"\n";
 
             // Test le type d'énigme pour aller chercher la question dans l'array correspoondant
             // Énigme type QRCode

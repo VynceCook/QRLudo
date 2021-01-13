@@ -10,8 +10,8 @@ import com.google.gson.GsonBuilder;
 public class QRCodeQuestionVocaleOuverte extends QRCode{
     private String bonneReponse;
     private String id = null;
-    private String text_bonne_reponse;
-    private String text_mauvaise_rep;
+    private String m_text_bonne_rep;
+    private String m_text_mauvaise_rep;
 
     public QRCodeQuestionVocaleOuverte(QrCodeJson code, String rawValue) {
         super(code, rawValue);
@@ -21,8 +21,8 @@ public class QRCodeQuestionVocaleOuverte extends QRCode{
 
         bonneReponse = codeQuestion.getData().get(0).toString().toLowerCase();
         id = codeQuestion.getId();
-        text_bonne_reponse = codeQuestion.getText_bonne_reponse();
-        text_mauvaise_rep = codeQuestion.getM_text_mauvaise_rep();
+        m_text_bonne_rep = codeQuestion.getText_bonne_reponse();
+        m_text_mauvaise_rep = codeQuestion.getText_mauvaise_reponse();
 
         m_content.add(new QRText(m_qrcodeJson.getName()));
     }
@@ -42,12 +42,12 @@ public class QRCodeQuestionVocaleOuverte extends QRCode{
     }
 
     public String getText_bonne_rep() {
-        return text_bonne_reponse;
+        return m_text_bonne_rep;
     }
 
 
-    public String getText_mauvaise_rep() {
-        return text_mauvaise_rep;
+    public String getM_text_mauvaise_rep() {
+        return m_text_mauvaise_rep;
     }
 
 }
