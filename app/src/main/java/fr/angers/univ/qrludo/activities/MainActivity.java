@@ -23,6 +23,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.support.annotation.NonNull;
@@ -56,23 +57,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Timer;
 import java.util.TimerTask;
 
 import fr.angers.univ.qrludo.QR.handling.QRCodeBuilder;
 import fr.angers.univ.qrludo.QR.handling.QRCodeDefaultDetectionModeStrategy;
 import fr.angers.univ.qrludo.QR.handling.QRCodeDetectionModeStrategy;
+import fr.angers.univ.qrludo.QR.handling.QRCodeExerciceVocaleDetectionModeStrategy;
+import fr.angers.univ.qrludo.QR.handling.QRCodeExerciceVocaleQuestionOuverteDetectionModeStrategy;
+import fr.angers.univ.qrludo.QR.handling.QRCodeSeriousGameStrategy;
 import fr.angers.univ.qrludo.QR.model.QRCode;
 import fr.angers.univ.qrludo.QR.model.QRCodeCollection;
-import fr.angers.univ.qrludo.QR.model.QRCodeQuestionQCM;
-import fr.angers.univ.qrludo.QR.model.QRCodeReponseQCM;
 import fr.angers.univ.qrludo.QR.model.QRContent;
 import fr.angers.univ.qrludo.QR.model.QRFile;
 import fr.angers.univ.qrludo.QR.model.QRText;
 import fr.angers.univ.qrludo.R;
 import fr.angers.univ.qrludo.exceptions.UnhandledQRException;
 import fr.angers.univ.qrludo.exceptions.UnsupportedQRException;
-import fr.angers.univ.qrludo.utils.CompressionString;
 import fr.angers.univ.qrludo.utils.ContentDelayCounter;
 import fr.angers.univ.qrludo.utils.FileDownloader;
 import fr.angers.univ.qrludo.utils.InternetBroadcastReceiver;
@@ -197,6 +197,19 @@ public class MainActivity extends AppCompatActivity
      */
     private final int CAMERA_DETECTING_STATE = 40;
 
+    /*
+     * ----------------------------------------- SPEECH RECOGNITION -----------------------------------------
+     */
+
+    // SPEECH_REQUEST est code qui identifie l'intent utilisé pour lancer la reconnaissance vocale du QRCodeExerciceVocaleDetectionModeStrategy
+    static public final int SPEECH_REQUEST = 666; // The request code
+    // SPEECH_REQUEST est code qui identifie l'intent utilisé pour lancer la reconnaissance vocale du QRCodeExerciceVocaleQuestionOuverteDetectionModeStrategy
+    static public final int SPEECH_REQUEST_2 = 667;
+
+    // SPEECH_REQUEST est code qui identifie l'intent utilisé pour lancer la reconnaissance vocale du QRCodeSeriousGameStrategy
+    static public final int SPEECH_REQUEST_3 = 668;
+
+    public static final int ONE_PERMISSION = 11;// Code for the onRequestPermissionsResult
 
     /*
      * ----------------------------------------- DETECTION PROGRESS -----------------------------------------
@@ -847,54 +860,13 @@ public class MainActivity extends AppCompatActivity
                             int version = MainActivity.this.getResources().getInteger(R.integer.version_qrludo);
                             QRCode detectedQR = QRCodeBuilder.build(rawValue, version);
 
-                            //Check if the current QR is a QRCodeQuestionQCM or a QRCodeReponseQCM
-                            if(!(detectedQR instanceof QRCodeQuestionQCM) & !(detectedQR instanceof QRCodeReponseQCM)){
-                                listQR.add(detectedQR);
-
-                                //If first QR detected of the current detection
-                                if (m_detectionProgress == NO_QR_DETECTED) {
-                                    m_currentDetectionModeStrategy.onFirstDetectionWithTimeNotNull(detectedQR);
-                                }
-                                //If at least one QR has already been detected during the current detection
-                                else{
-                                    m_currentDetectionModeStrategy.onNextDetectionWithTimeNotNull(detectedQR);
-                                }
+                            //If first QR detected of the current detection
+                            if (m_detectionProgress == NO_QR_DETECTED) {
+                                m_currentDetectionModeStrategy.onFirstDetectionWithTimeNotNull(detectedQR);
                             }
+                            //If at least one QR has already been detected during the current detection
                             else{
-                                //Un nombre de réponses a été fourni, on peut alors récupérer les informations
-                                if (m_next_amount_of_qcm_answer != -1) {
-                                    //If there is more than the <amoount of answers plus the question> elements in the array tabQRCodeQCM, lauching QRCodeQCMDetectionModeStrategy
-                                    if (tabQCM.tabQRCodeQCM.size() >= m_next_amount_of_qcm_answer+1) {
-
-                                        //If first QR detected of the current detection
-                                        if (m_detectionProgress == NO_QR_DETECTED) {
-                                            //Get QCM Question in the tab to start the strategy
-                                            QRCodeQuestionQCM qrQuestionQCM = null;
-                                            for (int j = 0; j < tabQCM.tabQRCodeQCM.size(); ++j) {
-                                                if (tabQCM.tabQRCodeQCM.get(j) instanceof QRCodeQuestionQCM) {
-                                                    QRCodeQuestionQCM temp = (QRCodeQuestionQCM) tabQCM.tabQRCodeQCM.get(j);
-                                                    qrQuestionQCM = temp;
-                                                }
-                                            }
-                                            m_currentDetectionModeStrategy.onFirstDetectionWithTimeNotNull(qrQuestionQCM);
-                                        }
-                                        //If at least one QR has already been detected during the current detection
-                                        else {
-                                            m_currentDetectionModeStrategy.onNextDetectionWithTimeNotNull(detectedQR);
-                                        }
-                                    } else {
-                                        addQRQCMInTab(detectedQR);
-                                    }
-                                }
-                                else
-                                {
-                                    if (detectedQR instanceof QRCodeQuestionQCM)
-                                   {
-                                        QRCodeQuestionQCM question = (QRCodeQuestionQCM) detectedQR;
-                                        m_next_amount_of_qcm_answer = question.getNombreReponses();
-                                        addQRQCMInTab(detectedQR);
-                                    }
-                                }
+                                m_currentDetectionModeStrategy.onNextDetectionWithTimeNotNull(detectedQR);
                             }
                         } catch (UnhandledQRException e) {
                             ToneGeneratorSingleton.getInstance().ignoredQRCodeTone();
@@ -907,62 +879,7 @@ public class MainActivity extends AppCompatActivity
             }
 
 
-            /**
-             * Method called to add Question QCM and Reponse QCM into tabQRCodeQCM (if not already added)
-             * @param detectedQR
-             */
-            public void addQRQCMInTab(QRCode detectedQR){
-                //Check if detectedQR is a QuestionQCM
-                if(detectedQR instanceof QRCodeQuestionQCM){
-                    QRCodeQuestionQCM detectedQRQuestionQCM = (QRCodeQuestionQCM) detectedQR;
 
-                    boolean isAlreadyInTab=false;
-                    for(int j = 0; j<tabQCM.tabQRCodeQCM.size();++j){
-                        if(tabQCM.tabQRCodeQCM.get(j)instanceof QRCodeQuestionQCM){
-                            QRCodeQuestionQCM tempQuestionQCM = (QRCodeQuestionQCM) tabQCM.tabQRCodeQCM.get(j);
-                            if(detectedQRQuestionQCM.getId().equals(tempQuestionQCM.getId())) {
-                                isAlreadyInTab = true;
-                            }
-                        }
-                    }
-                    if(!isAlreadyInTab){
-                        tabQCM.tabQRCodeQCM.add(detectedQRQuestionQCM);
-                        //Launch the reset timer if it's the first in tab
-                        if(tabQCM.tabQRCodeQCM.size()==1){
-                            Timer timer = new Timer();
-                            TimerTask task = new tableauQRCodeQCM();
-                            timer.schedule(task,2000);
-                        }
-                    }
-
-
-
-
-                }
-                //Check if detectedQR is a ReponseQCM
-                if(detectedQR instanceof QRCodeReponseQCM){
-                    QRCodeReponseQCM detectedQRReponseQCM = (QRCodeReponseQCM) detectedQR;
-
-                    boolean isAlreadyInTab=false;
-                    for(int j = 0; j<tabQCM.tabQRCodeQCM.size();++j){
-                        if(tabQCM.tabQRCodeQCM.get(j)instanceof QRCodeReponseQCM){
-                            QRCodeReponseQCM tempQuestionQCM = (QRCodeReponseQCM) tabQCM.tabQRCodeQCM.get(j);
-                            if(detectedQRReponseQCM.getId().equals(tempQuestionQCM.getId())) {
-                                isAlreadyInTab = true;
-                            }
-                        }
-                    }
-                    if(!isAlreadyInTab) {
-                        tabQCM.tabQRCodeQCM.add(detectedQRReponseQCM);
-                        //Launch the reset timer if it's the first in tab
-                        if (tabQCM.tabQRCodeQCM.size() == 1) {
-                            Timer timer = new Timer();
-                            TimerTask task = new tableauQRCodeQCM();
-                            timer.schedule(task, 2000);
-                        }
-                    }
-                }
-            }
         };
 
         detector.setProcessor(detector_processor);
@@ -1031,6 +948,7 @@ public class MainActivity extends AppCompatActivity
      * If the current content is a QRFile, tests if it has already been downloaded. If not, waits for it
      */
     public void readCurrentContent(){
+        Log.v("fonction", "readCurrentContent");
         QRContent currentContent = m_currentReading.get(m_currentPos);
 
         //Stops potential current m_mediaPlayer
@@ -1040,6 +958,7 @@ public class MainActivity extends AppCompatActivity
             sayTextContent();
         }
         else if (currentContent instanceof QRFile){
+            Log.v("QR", "File");
             //If the file is already downloaded, playing the m_mediaPlayer
             if (((QRFile) currentContent).isFileInMemory()){
                 playCurrentSoundFromFile();
@@ -1074,14 +993,13 @@ public class MainActivity extends AppCompatActivity
 
         //Stopping current text to speech speaking or sound if necessary
         makeSilence();
-
-        Log.i("test", "source : "+ FileDownloader.DOWNLOAD_PATH+CompressionString.compress(textToPrint)+".mp3");
+        Log.i("test", "source : "+ FileDownloader.DOWNLOAD_PATH+textToPrint+".mp3");
         //Playing the sound
         try {
             m_mediaPlayer.stop();
             m_mediaPlayer = new MediaPlayer();
             m_mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            m_mediaPlayer.setDataSource(FileDownloader.DOWNLOAD_PATH+CompressionString.compress(textToPrint)+".mp3");
+            m_mediaPlayer.setDataSource(FileDownloader.DOWNLOAD_PATH+textToPrint+".mp3");
             m_mediaPlayer.prepare();
             m_mediaPlayer.start();
 
@@ -1192,6 +1110,7 @@ public class MainActivity extends AppCompatActivity
                     }
                     //Sinon on le lit par synthèse vocale
                     else{
+                        Log.v("Web", "audio");
                         openWebSite(m_currentReading.get(m_currentPos).getContent());
                         printText(m_currentReading.get(m_currentPos).getContent());
                     }
@@ -1229,12 +1148,12 @@ public class MainActivity extends AppCompatActivity
                     HashMap<String, String> myHashRender = new HashMap<String, String>();
                     myHashRender.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, this.hashCode() + " ");
 
-                    File file = new File(FileDownloader.DOWNLOAD_PATH + CompressionString.compress(m_currentReading.get(m_currentPos).getContent()) + ".mp3");
+                    File file = new File(FileDownloader.DOWNLOAD_PATH + m_currentReading.get(m_currentPos).getContent() + ".mp3");
                     file.setReadable(true, false);
                     if (file.exists()) {
                         playCurrentSoundContent(m_currentReading.get(m_currentPos).getContent());
                     } else {
-                        int r = m_ttobj.synthesizeToFile(m_currentReading.get(m_currentPos).getContent(), myHashRender, FileDownloader.DOWNLOAD_PATH + CompressionString.compress(m_currentReading.get(m_currentPos).getContent()) + ".mp3");
+                        int r = m_ttobj.synthesizeToFile(m_currentReading.get(m_currentPos).getContent(), myHashRender, FileDownloader.DOWNLOAD_PATH + m_currentReading.get(m_currentPos).getContent() + ".mp3");
                     }
                 }
             }
@@ -1255,8 +1174,7 @@ public class MainActivity extends AppCompatActivity
      * Method from UrlContentCallback called when the asynctask finished
      * @param content is a string which contains all the HTML from the page
      */
-    public void onWebsiteContent(String content)
-    {
+    public void onWebsiteContent(String content) throws IOException {
         Log.i("Web","---------------------");
         Log.i("Web",content);
         Log.i("Web","---------------------");
@@ -1435,7 +1353,7 @@ public class MainActivity extends AppCompatActivity
 
         activity.runOnUiThread(new Runnable() {
             public void run() {
-                toSpeech("Mode Exploration", TextToSpeech.QUEUE_ADD);
+                toSpeech("Scannez votre réponse ", TextToSpeech.QUEUE_ADD);
             }
         });
 
@@ -1626,10 +1544,26 @@ public class MainActivity extends AppCompatActivity
                         Manifest.permission.READ_EXTERNAL_STORAGE)) {
 
                 } else {
-                    Log.d("PERMISSION_CHECK","---------NoExplanation----------");
+                    Log.d("PERMISSION_CHECK", "---------NoExplanation----------");
                     // No explanation needed, we can request the permission.
 
                     neededPermissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+                }
+            }
+
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.RECORD_AUDIO)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                // Should we show an explanation?
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        Manifest.permission.RECORD_AUDIO)) {
+
+                } else {
+                    Log.d("PERMISSION_CHECK","---------NoExplanation----------");
+                    // No explanation needed, we can request the permission.
+                    neededPermissions.add(Manifest.permission.RECORD_AUDIO);
+
                 }
             }
 
@@ -1655,6 +1589,25 @@ public class MainActivity extends AppCompatActivity
             AlarmManager mgr = (AlarmManager) MainActivity.this.getSystemService(Context.ALARM_SERVICE);
             mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
             System.exit(0);
+        }
+        // Result pour la demande de permission de record audio
+        if(requestCode == ONE_PERMISSION){
+            // Si la permission de RECORD AUDIO est accepté
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                // On remercie l'utilisateur
+                Toast.makeText(this, "Merci d'avoir accepté", Toast.LENGTH_SHORT).show();
+                // On relance la detection vocale
+                if(m_currentDetectionModeStrategy instanceof QRCodeExerciceVocaleDetectionModeStrategy){
+                    ((QRCodeExerciceVocaleDetectionModeStrategy)m_currentDetectionModeStrategy).lancementReconnaissanceVocale();
+                }
+                if(m_currentDetectionModeStrategy instanceof QRCodeExerciceVocaleQuestionOuverteDetectionModeStrategy){
+                    ((QRCodeExerciceVocaleQuestionOuverteDetectionModeStrategy)m_currentDetectionModeStrategy).lancementReconnaissanceVocale();
+                }
+
+            }else{
+                // On affiche à l'utilisateur pourquoi nous avons besoin de l'audio
+                Toast.makeText(this, "Nous en avons besoin de cette permission pour les questions à reconnaissance vocale", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
@@ -1717,6 +1670,44 @@ public class MainActivity extends AppCompatActivity
                 m_web_opening_via_browser = settings.getBoolean("WebOpening", DEFAULT_WEB_OPENING_VIA_BROWSER);
             }
         }
+        // Résultat de la reconnaissance vocale  du QRCodeExerciceVocaleDetectionModeStrategy
+        if(requestCode == SPEECH_REQUEST){
+            if(resultCode == RESULT_OK && data != null){
+                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                String text = result.get(0);
+
+                // On envoie la réponse à QRCodeExerciceVocaleDetectionModeStrategy
+                ((QRCodeExerciceVocaleDetectionModeStrategy) m_currentDetectionModeStrategy).setM_reponse(text);
+                ((QRCodeExerciceVocaleDetectionModeStrategy) m_currentDetectionModeStrategy).verifReponse();
+
+            }
+        }
+
+        if(requestCode == SPEECH_REQUEST_2){
+            if(resultCode == RESULT_OK && data != null){
+                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                String text = result.get(0);
+
+                // On envoie la réponse à QRCodeExerciceVocaleQuestionOuverteDetectionModeStrategy
+                ((QRCodeExerciceVocaleQuestionOuverteDetectionModeStrategy) m_currentDetectionModeStrategy).setM_reponse(text);
+                ((QRCodeExerciceVocaleQuestionOuverteDetectionModeStrategy) m_currentDetectionModeStrategy).verifReponse();
+
+            }
+        }
+
+        if(requestCode == SPEECH_REQUEST_3){
+            if(resultCode == RESULT_OK && data != null){
+                Log.v("result", "OK");
+                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                String text = result.get(0);
+                //m_currentDetectionModeStrategy = (QRCodeExerciceVocaleDetectionModeStrategy) m_currentDetectionModeStrategy;
+
+                // On envoie la réponse à QRCodeExerciceVocaleDetectionModeStrategy
+                //((QRCodeExerciceVocaleDetectionModeStrategy) m_currentDetectionModeStrategy).setM_reponse(text);
+                //((QRCodeExerciceVocaleDetectionModeStrategy) m_currentDetectionModeStrategy).verifReponse();
+                ((QRCodeSeriousGameStrategy) m_currentDetectionModeStrategy).setReponseSpeech(text);
+            }
+        }
 
     }
 
@@ -1752,6 +1743,12 @@ public class MainActivity extends AppCompatActivity
             Log.v("test", "pas le droit de vibrer");
             return false;
         }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED){
+            Log.v("test", "pas le droit micro");
+            return false;
+        }
 
         Log.v("test", "Toutes les permissions sont allouées");
 
@@ -1785,7 +1782,7 @@ public class MainActivity extends AppCompatActivity
     /**
      * Starts the detection of new QRCodes
      */
-    private void startDetection() {
+    public void startDetection() {
 
         ToneGeneratorSingleton.getInstance().startingDetectionTone();
 
@@ -1967,6 +1964,7 @@ public class MainActivity extends AppCompatActivity
      * Set that the next QR read is an url
      */
     public void setNextQRIsWeb() {
+        Log.v("Web", "wen");
         m_next_QR_is_web_link = true;
     }
 
