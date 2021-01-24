@@ -78,6 +78,11 @@ public class QRCodeSeriousGame extends QRCode implements FileDownloader.FileDown
 
 
         downloadIfMusicFile(codeScenario.getIntroduction());
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         introduction = codeScenario.getIntroduction();
         downloadIfMusicFile(codeScenario.getFin());
@@ -132,9 +137,10 @@ public class QRCodeSeriousGame extends QRCode implements FileDownloader.FileDown
                     dowloader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     isDownloading = true;
                 }
+                /*
                 while(isDownloading){
 
-                }
+                }*/
             }
         }
     }
@@ -395,6 +401,7 @@ public class QRCodeSeriousGame extends QRCode implements FileDownloader.FileDown
                     ArrayList questionRecoVocal = (ArrayList) questionObj;
                     if(questionRecoVocal.get(0).toString().equals(enigme.get(0).toString())){
                         // Si c'est le bon id on ajoute la question
+                        downloadIfMusicFile(questionRecoVocal.get(1).toString());
                         tts_text += questionRecoVocal.get(1).toString();
                         tts_node.insertBefore(doc.createTextNode(tts_text), tts_node.getLastChild());
                         action_list.appendChild(tts_node);
