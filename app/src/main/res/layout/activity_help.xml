@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -33,12 +34,24 @@
                 android:layout_marginTop="20dp"
                 android:orientation="vertical">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Balayage vers le haut"
-                    android:textSize="20sp"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Balayage vers le haut"
+                        android:layout_marginTop="20dp"
+                        android:textSize="20sp"
+                        android:textColor="@color/colorPrimaryDark"/>
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="20dp"
+                        app:srcCompat="@drawable/swipeup" />
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -52,13 +65,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:orientation="vertical">
-
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Balayage vers le bas"
-                    android:textSize="20sp"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Balayage vers le bas"
+                        android:textSize="20sp"
+                        android:layout_marginTop="20dp"
+                        android:textColor="@color/colorPrimaryDark"/>
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="20dp"
+                        app:srcCompat="@drawable/swipedown" />
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -72,13 +96,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:orientation="vertical">
-
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Double balayage vers le bas"
-                    android:textSize="20sp"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Double balayage vers le bas"
+                        android:layout_marginTop="20dp"
+                        android:textSize="20sp"
+                        android:textColor="@color/colorPrimaryDark"/>
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="20dp"
+                        app:srcCompat="@drawable/doubleswipedown" />
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -93,13 +128,24 @@
                 android:layout_marginTop="20dp"
                 android:orientation="vertical">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Balayage vers la gauche"
-                    android:textSize="20sp"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Balayage vers la gauche"
+                        android:layout_marginTop="20dp"
+                        android:textSize="20sp"
+                        android:textColor="@color/colorPrimaryDark"/>
 
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="20dp"
+                        app:srcCompat="@drawable/swipeleft" />
+                </LinearLayout>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -113,12 +159,24 @@
                 android:layout_marginTop="20dp"
                 android:orientation="vertical">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Balayage vers la droite"
-                    android:textSize="20sp"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Balayage vers la droite"
+                        android:layout_marginTop="20dp"
+                        android:textSize="20sp"
+                        android:textColor="@color/colorPrimaryDark"/>
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="20dp"
+                        app:srcCompat="@drawable/swiperight" />
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
