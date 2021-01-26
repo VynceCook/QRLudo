@@ -13,6 +13,10 @@
             android:parentActivityName=".activities.MainActivity"
             ></activity>
 
+        <activity android:name=".activities.HelpActivity"
+            android:label="Aide"
+            android:parentActivityName=".activities.MainActivity"
+            ></activity>
         <activity
             android:name=".activities.MainActivity"
             android:screenOrientation="portrait"

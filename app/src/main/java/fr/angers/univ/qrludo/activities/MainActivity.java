@@ -1625,6 +1625,10 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()){
+            case  R.id.action_help :
+                Intent pickHelpOptionIntent = new Intent(this,HelpActivity.class);
+                startActivityForResult(pickHelpOptionIntent, OPTION_REQUEST);
+                return  true;
 
             case  R.id.action_settings :
                 Intent pickOptionIntent = new Intent(this,SettingsActivity.class);
