@@ -57,7 +57,7 @@ public class QRCodeExerciceDetectionModelStrategy extends QRCodeDetectionModeStr
 
                     //Le sleep permet de retarder la prochaine detection en mode exploration
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(3000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
