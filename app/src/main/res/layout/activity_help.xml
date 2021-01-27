@@ -16,7 +16,9 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
                 android:layout_width="match_parent"
@@ -192,6 +194,37 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:text="- Dans le cadre d'un exercice à reconnaissance vocale : il va permettre de lancer la reconnaissance vocale. L'utilisateur pourra alors donner vocalement sa réponse." />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Double tape"
+                        android:layout_marginTop="20dp"
+                        android:textSize="20sp"
+                        android:textColor="@color/colorPrimaryDark"/>
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="20dp"
+                        app:srcCompat="@drawable/doubletap" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Si vous tapez deux fois sur votre écran, cela mettra en pause l'exercice ou le son joué. Pour reprendre, double-taper une nouvelle fois" />
 
             </LinearLayout>
 
