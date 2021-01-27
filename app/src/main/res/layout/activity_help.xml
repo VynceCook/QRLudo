@@ -148,10 +148,21 @@
                         android:layout_marginLeft="20dp"
                         app:srcCompat="@drawable/swipeleft" />
                 </LinearLayout>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Le balayage vers la gauche va seulement servir dans le cadre d'une détection mutliple : il va permettre de passer au son suivant." />
+                    android:text="Le balayage vers la gauche va avoir plusieurs sens : " />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="- Dans le cadre d'une detection multiple : il va permettre de passer au son suivant et de le lire." />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="- Dans le cadre d'un exercice à reconnaissance vocale : il va permettre de lancer la reconnaissance vocale pour soumettre une réponse. Après un balayage vers la gauche, l'utilisateur pourra donner vocalement sa réponse." />
 
             </LinearLayout>
 
@@ -179,21 +190,10 @@
                         android:layout_marginLeft="20dp"
                         app:srcCompat="@drawable/swiperight" />
                 </LinearLayout>
-
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Le balayage vers la droite va avoir plusieurs sens : " />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:text="- Dans le cadre d'une detection multiple : il va permettre de revenir au son précédent et va le lire." />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:text="- Dans le cadre d'un exercice à reconnaissance vocale : il va permettre de lancer la reconnaissance vocale. L'utilisateur pourra alors donner vocalement sa réponse." />
+                    android:text="Le balayage vers la droite va seulement servir dans le cadre d'une détection mutliple : il va permettre de revenir au son précédent et va le lire." />
 
             </LinearLayout>
 
