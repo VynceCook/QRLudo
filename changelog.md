@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 1.2
+- Correction de bugs
+- Modification des gestes utilisateurs des QR Exercices
+- Ajout des questions ouvertes à reconnaissance vocale
+- Nouveau système de QCM à reconnaissance vocale
+- Ajout des Serious Game
+- Ajout du menu aide contenant les mouvements de l'application
+
 ## Version 1.1
 - Correction de bugs
 - Changement des QR Code Ensemble en QR Code Multiple
