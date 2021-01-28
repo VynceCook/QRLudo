@@ -7,14 +7,14 @@ configurations.all {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "fr.angers.univ.qrludo"
         minSdkVersion 15
-        targetSdkVersion 28
-        versionCode 8
-        versionName "1.1"
+        targetSdkVersion 29
+        versionCode 9
+        versionName "1.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
