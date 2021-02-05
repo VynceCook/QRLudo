@@ -108,6 +108,8 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy imple
             List<Action> actions = current_node.getActions();
             if (actions.size() > 0) {
                 doActions(actions);
+            } else if(nodeID == 2){
+
             }
         }
     }
@@ -263,21 +265,8 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy imple
         if(!tts.getTextToRead().equals("")) {
             if (tts.getTextToRead().indexOf("https") != -1) {
                 String path = FileDownloader.DOWNLOAD_PATH+(CompressionString.compress(tts.getTextToRead()))+".mp3";
+                mainActivity.playAudio(path);
 
-                MediaPlayer mediaPlayer = new MediaPlayer();
-                try {
-                    Log.v("Lecture", "Audio");
-                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                    mediaPlayer.setDataSource(path);
-                    mediaPlayer.prepare();
-                    mediaPlayer.start();
-                    Thread.sleep(mediaPlayer.getDuration());
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             } else {
                 mainActivity.read(tts.getTextToRead());
             }
@@ -439,6 +428,7 @@ public class QRCodeSeriousGameStrategy extends QRCodeDetectionModeStrategy imple
 
     @Override
     public void onDoubleClick() {
+        m_mainActivity.pauseCurrentReading();
         ToneGeneratorSingleton.getInstance().errorTone();
     }
 

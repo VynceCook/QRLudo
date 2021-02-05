@@ -137,10 +137,6 @@ public class QRCodeSeriousGame extends QRCode implements FileDownloader.FileDown
                     dowloader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     isDownloading = true;
                 }
-                /*
-                while(isDownloading){
-
-                }*/
             }
         }
     }
@@ -178,7 +174,6 @@ public class QRCodeSeriousGame extends QRCode implements FileDownloader.FileDown
         tf.setOutputProperty(OutputKeys.INDENT, "yes");
         Writer out = new StringWriter();
         tf.transform(new DOMSource(xml), new StreamResult(out));
-        //System.out.println(out.toString());
     }
 
     private Element createNodeIntroduction(){
