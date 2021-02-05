@@ -1363,32 +1363,9 @@ public class MainActivity extends AppCompatActivity
         final AppCompatActivity activity = this;
         activity.runOnUiThread(new Runnable() {
             public void run() {
-               // ifm_mediaPlayer.isPlaying())
+
                 //Using text to speech engine to say the text
                 toSpeech(texte, TextToSpeech.QUEUE_ADD);
-            }
-        });
-    }
-
-    /**
-     * Lit un fichier audio
-     * @param path
-     */
-    public void playAudio(final String path){
-        final AppCompatActivity activity = this;
-        activity.runOnUiThread(new Runnable() {
-            public void run() {
-                try {
-                    m_mediaPlayer.stop();
-                    m_mediaPlayer = new MediaPlayer();
-                    m_mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                    m_mediaPlayer.setDataSource(path);
-                    m_mediaPlayer.prepare();
-                    m_mediaPlayer.start();
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         });
     }
@@ -1850,6 +1827,7 @@ public class MainActivity extends AppCompatActivity
 
     private void toSpeech(String str, int queue) {
 
+        //Log.v("double_question", str);
         AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         if (audioManager !=null){
             if(audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) == 0){
