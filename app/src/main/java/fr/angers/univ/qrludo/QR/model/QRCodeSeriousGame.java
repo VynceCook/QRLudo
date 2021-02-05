@@ -128,9 +128,9 @@ public class QRCodeSeriousGame extends QRCode implements FileDownloader.FileDown
     }
 
     public void downloadIfMusicFile(String filename){
-        Log.v("fonction", "Download");
+        Log.v("fonction", "Download " + filename);
         if(!filename.equals("")) {
-            if (filename.substring(0, 5).equals("https")) {
+            if ((filename.length() >= 5) && filename.substring(0, 5).equals("https")) {
                 String path = FileDownloader.DOWNLOAD_PATH + (CompressionString.compress(filename)) + ".mp3";
                 if (!new File(path).exists()) {
                     FileDownloader dowloader = new FileDownloader(filename, this);

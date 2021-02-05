@@ -13,8 +13,8 @@ android {
         applicationId "fr.angers.univ.qrludo"
         minSdkVersion 15
         targetSdkVersion 29
-        versionCode 9
-        versionName "1.4"
+        versionCode 10
+        versionName "1.4.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
