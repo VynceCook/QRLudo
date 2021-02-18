@@ -1,0 +1,51 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/pref_basic_header">
+        <SwitchPreferenceCompat
+            app:key="pref_expert_mode"
+            app:icon="@drawable/outline_build_24"
+            app:title="@string/pref_expert_mode"
+            app:summaryOn="@string/pref_expert_mode_summary_on"
+            app:summaryOff="@string/pref_expert_mode_summary_off"
+            />
+
+        <Preference
+            app:key="pref_mediaplayer_speed"
+            app:icon="@drawable/ic_fast_forward_black1_24dp"
+            app:title="@string/pref_play_speed"
+            app:summary="@string/pref_summary_play_speed"
+            />
+
+        <SwitchPreferenceCompat
+            app:key="pref_open_external_link"
+            app:icon="@drawable/ic_action_name_black_24dp"
+            app:title="@string/pref_web_page_open"
+            app:summaryOn="@string/pref_link_open_summary_on"
+            app:summaryOff="@string/pref_link_open_summary_off"
+            />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/pref_advanced_header">
+        <SwitchPreferenceCompat
+            app:key="pref_log_to_file"
+            app:icon="@drawable/outline_assessment_24"
+            app:title="@string/pref_log_to_file"
+            />
+
+        <Preference
+            app:key="pref_change_media_files_dir"
+            app:icon="@drawable/outline_perm_media_24"
+            app:title="@string/pref_change_media_files_dir"
+            app:summary="@string/pref_summary_change_media_files_dir"
+            />
+
+        <Preference
+            app:key="pref_clear_media_files_cache"
+            app:icon="@drawable/ic_delete_sweep_black3_24dp"
+            app:title="@string/pref_clear_media_files_cache"
+            app:summary="@string/pref_summary_clear_media_files_cache"
+            />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

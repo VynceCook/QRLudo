@@ -1,0 +1,189 @@
+<resources>
+    <string name="app_name">QRLudo</string>
+    <string name="sound_file_end">musique terminée</string>
+    <string name="qrludo_tag_name">QRLudo</string>
+
+    <!-- FileDownloader -->
+    <string name="filedownload_file_exists">Fichier existant, pas besoin de télécharger : </string>
+    <string name="filedownload_file_downloaded">Fichier téléchargé : </string>
+    <string name="filedownload_file_error">Erreur dans le téléchargement : </string>
+    <string name="filedownload_file_unknown_error">"Erreur inconnue lors du téléchargement : "</string>
+    <string name="filedownload_start_download">"Démarrage du téléchargement : "</string>
+
+    <!-- MediaPlayerEngine -->
+    <string name="sound_file_prepared">musique prête à être jouée</string>
+    <string name="sound_file_prepared_error">état incorrect alors que la musique est prête à être jouée</string>
+    <string name="sound_file_completed_error">état incorrect alors que la musique est terminée</string>
+    <string name="media_player_already_playing">est déjà en train de jouer une musique</string>
+    <string name="media_player_is_preparing">musique en préparation</string>
+    <string name="sound_file_paused">musique en pause</string>
+    <string name="sound_file_playing">musique en train d\'etre jouée</string>
+    <string name="media_player_error">ERREUR</string>
+    <string name="media_player_file_not_found">fichier son inexistant</string>
+    <string name="media_player_something_in_progress">reconnaissance vocale ou son en cours</string>
+
+    <!-- TTSEngine -->
+    <string name="tts_initialized">moteur initialisé</string>
+    <string name="tts_job_done">tache terminée</string>
+    <string name="tts_job_error">tache en erreur</string>
+    <string name="tts_job_start">tache démarrée</string>
+    <string name="tts_job_already_in_progress">tache déjà en cours d\'exécution</string>
+    <string name="tts_not_ready">TTS non initialisé</string>
+    <string name="tts_file_exists">le fichier a déjà été généré</string>
+    <string name="tts_speak">appelle à speak</string>
+    <string name="tts_not_initialised">La synthèse vocale n\'est pas initialisée, QRLudo va quitter !</string>
+
+    <!-- SpeechRecognitionEngine -->
+    <string name="spre_unavailable">Speech recognition unavailable</string>
+    <string name="spre_available">Speech recognition available</string>
+    <string name="spre_ready_for_speech">pret pour enregistrer</string>
+    <string name="spre_beginning">l utilisateur commence à parler</string>
+    <string name="spre_rms_changed">niveau sonore a changé</string>
+    <string name="spre_sound_received">des sons ont été reçus</string>
+    <string name="spre_ending">l utilisateur a fini de parler</string>
+    <string name="spre_error">erreur dans la reconnaissance</string>
+    <string name="spre_success">texte reconnu</string>
+    <string name="spre_partial_success">texte partiellement reconnu</string>
+    <string name="spre_partial_unkown_text">Texte non reconnu.</string>
+    <string name="spre_not_available">reconnaissance vocale non initialisée</string>
+    <string name="spre_already_recording">Reconnaissance vocale déjà en cours</string>
+    <string name="spre_media_player_in_progress">une musique est jouée, on ne peut pas démarrer la reconnaissance vocale</string>
+    <string name="spre_abort">interruption de la reconnaissance vocale</string>
+    <string name="spre_talk_after_tone">Parlez après le bip</string>
+
+    <!-- ToneEngine -->
+    <string name="tone_something_in_progress">musique ou reconnaissance vocale en cours</string>
+    <string name="tone_already_playing">un son est déjà en train d\'être joué</string>
+    <string name="tone_playing">joue son</string>
+    <string name="tone_played">son joué</string>
+
+    <!-- QRDetectorEngine -->
+    <string name="qre_not_available">QR détecteur non initialisé</string>
+    <string name="qre_missing_permission">il manque la permission d\'accès à la caméra</string>
+    <string name="qre_initialized">moteur QR initialisé</string>
+    <string name="qre_destroyed">moteur QR détruit</string>
+    <string name="qre_starting">recherche QR démarrée</string>
+    <string name="qre_stopped">recherche de QR arretée</string>
+    <string name="qre_starting_bef">tente de démarrer la recherche de QR</string>
+    <string name="qre_stopped_bef">tente d\'arreter la recherche QR</string>
+    <string name="qre_qr_found">QR code trouvé</string>
+    <string name="qre_no_view">ne peut trouver une vue valide</string>
+    <string name="qre_no_activity">pas d\'activité ou de surface à connecter</string>
+    <string name="qre_wrong_format_version">Cette version du format de QR code n\'est pas prise en compte.</string>
+
+    <!-- Preferences -->
+    <string name="title_activity_settings">Paramètres</string>
+    <string name="pref_basic_header"></string>
+    <string name="pref_advanced_header">Paramètres avancés</string>
+    <string name="pref_play_speed">Vitesse de la synthèse vocale</string>
+    <string name="pref_summary_play_speed">Vitesse actuelle</string>
+    <string name="pref_web_page_open">Ouverture d\'un lien dans le navigateur</string>
+    <string name="pref_clear_media_files_cache">Supprimer tous les fichiers multimédia en cache</string>
+    <string name="pref_summary_clear_media_files_cache">Tous les fichiers seront supprimés</string>
+    <string name="pref_log_to_file">Écrire les informations de deboggage</string>
+    <string name="pref_change_media_files_dir">Changer l\'emplacement du cache</string>
+    <string name="pref_summary_change_media_files_dir">Emplacement actuel</string>
+    <string name="pref_expert_mode">Mode expert</string>
+    <string name="pref_expert_mode_summary_on">Les aides vocales sont désactivées</string>
+    <string name="pref_expert_mode_summary_off">Les aides vocales sont activées</string>
+    <string name="settings_expert_mode_changed">changement du mode expert</string>
+    <string name="pref_link_open_summary_on">"Les liens internet seront ouverts dans un navigateur externe "</string>
+    <string name="pref_link_open_summary_off">Les liens internet seront lus en synthèse vocale</string>
+
+    <!-- Help activity -->
+    <string name="title_activity_help">Aide</string>
+    <string name="help_title">Aide sur les mouvements</string>
+    <string name="help_double_tap_title">Double tape</string>
+    <string name="help_double_tap_content">Si vous tapez deux fois sur votre écran, cela mettra en pause le son joué. Pour reprendre, double-taper une nouvelle fois</string>
+    <string name="help_swipe_up_title">Balayage vers le haut</string>
+    <string name="help_swipe_up_content">Le mouvement de balayage vers le haut permet de revenir de quelques secondes en arrière sur le son joué.</string>
+    <string name="help_swipe_down_title">Balayage vers le bas</string>
+    <string name="help_swipe_down_content">Le mouvement de balayage vers le bas permet de d\'interrompre le son ou la recherche de QR code en cours de lecture.</string>
+    <string name="help_double_swipe_down_title">Double balayage vers le bas</string>
+    <string name="help_double_swipe_down_content">Si vous faites deux mouvements rapides de balayage vers le bas, cela lancera une nouvelle détection.</string>
+    <string name="help_swipe_left_title">Balayage vers la gauche</string>
+    <string name="help_swipe_left_content">Le balayage vers la gauche permet de revenir à la section précédente et de la lire.</string>
+    <string name="help_swipe_right_title">Balayage vers la droite</string>
+    <string name="help_swipe_right_content">Le balayage vers la droite permet de passer à la section suivante et de la lire.</string>
+    <string name="help_doubleswipe_left_title">Double balayage vers la gauche</string>
+    <string name="help_doubleswipe_left_content">Si vous faites deux mouvements rapides de balayage vers la gauche, cela reviendra à la première section du QR code.</string>
+    <string name="help_doubleswipe_right_title">Double balayage vers la droite</string>
+    <string name="help_doubleswipe_right_content">Si vous faites deux mouvements rapides de balayage vers la droite, cela avancera après la dernière section du QR code.</string>
+    <string name="help_double_swipe_up_title">Double balayage vers le haut</string>
+    <string name="help_double_swipe_up_content">Le double balyage vers le haut ne fonctionne qu\'avec les QR exercices. Si vous faites deux mouvements rapides de balayage vers le haut, vous basculer entre le mode exploration et le mode réponse à la question.</string>
+
+    <!-- Misc -->
+    <string name="swipe_listener">nouvel evenement</string>
+    <string name="permissions_denied_ask_again">Des permissions ont été refusées, voulez-vous les autoriser ?</string>
+    <string name="permissions_granted">Toutes les permissions ont été autorisées.</string>
+    <string name="permissions_denied">Des permissions ont été refusées.</string>
+    <string name="ok">Oui</string>
+    <string name="no">Non</string>
+    <string name="media_diretory_not_found">Le répertoire des fichiers multimédia est introuvable</string>
+    <string name="media_diretory_create">Création du répertoire de stockage des fichiers</string>
+    <string name="media_directory_moved">le répertoire de fichiers multimedia a été déplacé</string>
+    <string name="purge_media_cache_content">les fichiers multimedia du cache ont été supprimés</string>
+    <string name="media_directory_cannot_use">ne peut pas utiliser le répertoire</string>
+    <string name="alert_dialog_purge_media_cache_title">Suppression des fichiers</string>
+    <string name="file_directory_picker_done">Un fichier ou répertoire a été choisi</string>
+    <string name="menu_action_settings">Paramètres</string>
+    <string name="menu_action_help">Aide</string>
+    <string name="menu_action_exit">Quitter</string>
+    <string name="alert_dialog_play_speed_title">Vitesse synthèse vocale</string>
+    <string name="settings_play_speed_pref_changed">préférence sauvegardée</string>
+    <string name="settings_log_to_file_changed">logger les évenements dans un fichier</string>
+    <string name="settings_open_external_link_changed">ouverture des liens dans un navigateur</string>
+    <string name="alert_dialog_purge_media_cache_content">Voulez-vous supprimer tous les fichiers multimédia créés ou téléchargés par QRLudo ?</string>
+    <string name="sound_level_low_alert">"Le volume du haut parleur est bas "</string>
+    <string name="media_playing_start">"Démarrage de "</string>
+    <string name="sound_file_stopped">la musique a été stoppée</string>
+
+    <!-- Beginner help -->
+    <string name="beginner_help_new_detection">Détection en cours</string>
+    <string name="beginner_help_file_download_start">téléchargement en cours</string>
+    <string name="beginner_help_file_download_end">Les téléchargements sont terminés</string>
+
+    <!-- CoreEngine -->
+    <string name="core_busy">insertion impossible, le moteur est déjà occupé</string>
+    <string name="core_busy_enqueue">le moteur est occupée, insertion pour plus tard</string>
+    <string name="core_add_var">ajout d\'une nouvelle variable</string>
+    <string name="core_add_var_end">fin de l\'effet d\'ajout d\'une nouvelle variable</string>
+    <string name="core_rule_head_atom_already_exists">un atome du meme nom existe déjà dans la tete de la règle</string>
+    <string name="core_apply_rule">applique la règle</string>
+    <string name="core_check_rule">test la règle</string>
+    <string name="core_execute_action">effectue l\'action</string>
+    <string name="core_remove_var">suppression de la variable</string>
+    <string name="core_action_link_error">Ne peut pas associer la variable du moteur</string>
+    <string name="core_engine_qrludo_started">QRLudo est lancé</string>
+    <string name="macro_code_load">Chargement du macro code</string>
+    <string name="action_qranalyse_new">analyse du contenu</string>
+    <string name="action_qranalyse_decompress">décompression</string>
+    <string name="action_qranalyse_unique_no_data">pas de data trouvées dans le QR code</string>
+    <string name="action_qranalyse_unique_unkown_section_type">nom de la section du QR Code inconnue</string>
+    <string name="action_qranalyse_unique_unkown_type">Type de QR code inconnu</string>
+    <string name="core_update_var">variable mise à jour</string>
+    <string name="action_new_rules_added">programme</string>
+    <string name="action_multiple_qr_found">QR code multiple détecté</string>
+    <string name="action_multiple_launch_downloads">lancement des téléchargements</string>
+    <string name="action_question_exercice_found">QR code question/exercice détecté</string>
+    <string name="action_qr_code_missing_field">une partie du QR code est manquante</string>
+    <string name="action_question_exercice_closure">Vous avez trouvé toutes les réponses, bravo !!</string>
+    <string name="action_question_exercice_go_exploration_mode">Vous etes en mode exploration</string>
+    <string name="action_question_exercice_go_answer_mode">Vous etes en mode de réponse à la question</string>
+    <string name="action_question_exercice_mode_help">Un double balayage rapide vers le haut vous permet de basculer entre le mode exploration et le mode de réponse à la question</string>
+    <string name="action_question_exercice_answer_already_given">Cette réponse a déjà été validée</string>
+    <string name="action_vocal_beginner_help">C\'est une question à reconnaissance vocale</string>
+    <string name="action_qcm_unknown_answer">Votre réponse ne fait pas partie de la liste des réponses possibles</string>
+    <string name="action_qcm_allowed_answers">Les réponses possibles sont</string>
+    <string name="action_puzzle_unknown">Je n\'ai pas compris votre destination, pouvez-vous répéter ?</string>
+    <string name="action_puzzle_possible_puzzle">Choisissez votre destination parmi la liste suivante </string>
+    <string name="action_puzzle_one_solved">Vous avez résolu cette énigme</string>
+    <string name="action_puzzle_wrong_answer">Mauvaise réponse, essayez encore</string>
+    <string name="action_qcm_found">QR code QCM vocale détecté</string>
+    <string name="action_qo_vocale_found">QR code question vocale ouverte détecté</string>
+    <string name="action_serious_game_found">QR code serious game détecté</string>
+    <string name="action_qcm_dont_understand">Je n\'ai pas reconnu votre réponse</string>
+    <string name="action_qo_dont_understand">Je n\'ai pas reconnu votre réponse</string>
+    <string name="action_puzzle_answer_dont_understand">Je n\'ai pas compris votre réponse</string>
+    <string name="action_puzzle_play_media">Joue un fichier de musique</string>
+</resources>
