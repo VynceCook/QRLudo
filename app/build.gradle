@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "fr.angers.univ.qrludo"
-        minSdkVersion 25
+        minSdkVersion 23
         targetSdkVersion 30
         versionCode 10
         versionName "2.0"
@@ -34,9 +34,9 @@ android {
 dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.2.0'
+    implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.google.android.gms:play-services-vision:20.1.3'
     implementation 'androidx.preference:preference:1.1.1'
@@ -44,7 +44,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'org.jsoup:jsoup:1.13.1'
 
-    testImplementation 'junit:junit:4.+'
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
