@@ -41,7 +41,11 @@ object TTSEngine {
         _tts_engine = TextToSpeech(MainApplication.application_context(),
             TextToSpeech.OnInitListener { status ->
                 logger(context().getString(R.string.tts_initialized) + ", status = " + status, Logger.DEBUG_LEVEL.DEBUG)
-                var locale = Locale.getDefault(Locale.Category.DISPLAY)
+                var locale = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    Locale.getDefault(Locale.Category.DISPLAY)
+                } else {
+                    Locale.getDefault();
+                }
                 _tts_engine?.setLanguage( locale )
                 _state = ENGINE_STATE.IDLE
                 CoreEngine.insert(EngineVarBool("_CORESYS_QR_initialized", true))
