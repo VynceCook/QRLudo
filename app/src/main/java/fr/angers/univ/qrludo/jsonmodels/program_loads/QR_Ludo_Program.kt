@@ -1,7 +1,6 @@
 package fr.angers.univ.qrludo.jsonmodels.program_loads
 
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import fr.angers.univ.qrludo.MainActivity
 import fr.angers.univ.qrludo.R
 import fr.angers.univ.qrludo.engines.CoreEngine
@@ -23,7 +22,7 @@ Example of generated program:
 
   { }
 
- _s_<Start_Speech_recognition @ SR_start --> Remove(SR_start), SpeakBeginnerHelp(Parlez après le bip), SpeechRecognition>
+ _s_<Start_Speech_recognition @ SR_start --> Remove(SR_start), SpeakBeginnerHelp(Parlez après le bip), Tone(START_DETECTION), SpeechRecognition>
  _s_<Start_QR_detection @ QR_start --> Remove(QR_start), SpeakBeginnerHelp(Détection en cours), Tone(START_DETECTION), QRdetect>
  _s_<Analyse_QR_code @ QR_code --> Remove(QR_code), QRAnalyse>
  _s_<Wrong_QR_code_format_version @ Int:QR_code_error(1) --> Remove(QR_code_error), PrettyPrint(Cette version du format de QR code n'est pas prise en compte.), Speak(Cette version du format de QR code n'est pas prise en compte.)>
@@ -53,8 +52,10 @@ object QR_Ludo_Program {
             it.add_head_atom(EngineVarBool("SR_start", true), true)
             it.add_action(
                 ActionRemoveVar("SR_start"),
-                ActionSpeakBeginnerHelp(MainApplication.application_context().getString(R.string.spre_talk_after_tone)),
-                ActionSpeechRecognition() )
+                ActionSpeakBeginnerHelp(MainApplication.application_context().getString(R.string.spre_talk_after_tone)))
+            if (MainApplication.SR_beep_on)
+                it.add_action(ActionTone(ToneEngine.TONE_NAME.START_DETECTION))
+            it.add_action(ActionSpeechRecognition())
             CoreEngine.add_system_rule(it)
         }
 

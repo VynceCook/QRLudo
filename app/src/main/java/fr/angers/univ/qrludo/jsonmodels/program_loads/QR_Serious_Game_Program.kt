@@ -60,24 +60,6 @@ Example of generated program:
  _u_<RePlay_QR @ Int:seek_section(-1000) --> Remove(Play_next_section), Remove(seek_section), Remove(SG_start_listing_available_puzzles), Remove(SG_puzzle_choice), Add(Bool:SG_puzzle_1(true)), Add(Bool:SG_puzzle_2(true)), Add(Int:SG_nb_unsolved_puzzle(2)), Add(Int:QR_section(1)), Go to first()>
  _u_<Stop_mediaPlayer @ Int:seek_section(0) --> Cancel mediaPlayer()>
  _u_<Play_seek @ seek_section, QR_section --> Remove(seek_section), Update QR_section()>
-
-
- _s_<Start_Speech_recognition @ SR_start --> Remove(SR_start), SpeakBeginnerHelp(Parlez après le bip), SpeechRecognition>
- _s_<Start_QR_detection @ QR_start --> Remove(QR_start), SpeakBeginnerHelp(Détection en cours), Tone(START_DETECTION), QRdetect>
- _s_<Analyse_QR_code @ QR_code --> Remove(QR_code), QRAnalyse>
- _s_<Wrong_QR_code_format_version @ Int:QR_code_error(1) --> Remove(QR_code_error), PrettyPrint(Cette version du format de QR code n'est pas prise en compte.), Speak(Cette version du format de QR code n'est pas prise en compte.)>
- _s_<Check_TTS_good @ _CORESYS_QR_initialized --> Speak(QRLudo est lancé)>
- _s_<Check_TTS_good @ _CORESYS_QR_initialized_self_timer, _CORESYS_QR_initialized --> Remove(_CORESYS_QR_initialized_self_timer), Remove(_CORESYS_QR_initialized)>
- _s_<Check_TTS_error @ _CORESYS_QR_initialized_self_timer --> Remove(_CORESYS_QR_initialized_self_timer), PrettyPrint(La synthèse vocale n'est pas initialisée, QRLudo va quitter !), Exit_app()>
- _s_<Clear_asking_for_backup_rules @ ask_for_backup_user_rules --> Remove(ask_for_backup_user_rules)>
- _s_<Clear_ask_for_restore_user_rules @ ask_for_restore_user_rules --> Remove(ask_for_restore_user_rules)>
- _s_<Clear_seek_section @ seek_section --> Remove(seek_section)>
- _s_<Clear_MPE @ MPE_end --> Remove(MPE_end)>
- _s_<Clear_TTS @ TTS_end --> Remove(TTS_end)>
- _s_<Clear_QR_abort @ QR_abort --> Remove(QR_abort)>
- _s_<Clear_SpeechRec_partial @ SR_text_partial --> Remove(SR_text_partial)>
- _s_<Clear_SpeechRec_error @ SR_error --> Remove(SR_error)>
- _s_<Clear_SpeechRec_abort @ SR_abort --> Remove(SR_abort)>
  */
 object QR_Serious_Game_Program {
     private fun context(): Context {
