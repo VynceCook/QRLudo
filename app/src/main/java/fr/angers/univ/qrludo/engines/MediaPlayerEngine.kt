@@ -94,12 +94,14 @@ object MediaPlayerEngine {
 
         val file = File(file_name)
         file.setReadable(true, false)
-        if (!file.exists()) {
+        if (!file.exists() || (file.length() == 0L)) {
             logger(context().getString(R.string.media_player_file_not_found),
                 Logger.DEBUG_LEVEL.DEBUG)
             call_after_complete(file_name)
             return
         }
+
+
 
         init_engine()
         _sound_file_name = file_name
