@@ -1,14 +1,11 @@
 package fr.angers.univ.qrludo.utils
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.view.SurfaceView
-import androidx.appcompat.app.AppCompatActivity
 import fr.angers.univ.qrludo.MainActivity
 import fr.angers.univ.qrludo.R
-import fr.angers.univ.qrludo.engines.QRDetectorEngine
 import java.io.File
 
 /**
@@ -37,6 +34,7 @@ class MainApplication : Application() {
         var Play_Speed : Float = 1.0F /// MediaPlayer default speed playing
         var Expert_Mode : Boolean = false /// True if we want disable all vocal help message
         var Open_Link_In_Browser : Boolean = true /// True if we want to open usual QR code link in browser
+        var SR_beep_on : Boolean = true /// True if we want to play a beep before starting speech recognition
 
         var Log_To_File : Boolean = true /// True if we want to log events to log file
         val Log_File_Name : String = "qrludo_log.txt" /// Log file name
@@ -85,6 +83,7 @@ class MainApplication : Application() {
                 Expert_Mode = settings.getBoolean("expert_mode", false)
                 Log_To_File = settings.getBoolean("log_to_file", true)
                 Open_Link_In_Browser =  settings.getBoolean("open_link_in_browser", true)
+                SR_beep_on =  settings.getBoolean("sr_beep_on", true)
             }
         }
     }

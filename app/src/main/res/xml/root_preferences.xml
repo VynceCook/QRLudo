@@ -23,6 +23,14 @@
             app:summaryOn="@string/pref_link_open_summary_on"
             app:summaryOff="@string/pref_link_open_summary_off"
             />
+
+        <SwitchPreferenceCompat
+            app:key="pref_sr_beep_on"
+            app:icon="@drawable/outline_notification_add_24"
+            app:title="@string/pref_sr_beep_on"
+            app:summaryOn="@string/pref_sr_beep_on_summary_on"
+            app:summaryOff="@string/pref_sr_beep_on_summary_off"
+            />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/pref_advanced_header">

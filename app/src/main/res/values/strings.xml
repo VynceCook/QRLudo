@@ -89,6 +89,9 @@
     <string name="settings_expert_mode_changed">changement du mode expert</string>
     <string name="pref_link_open_summary_on">"Les liens internet seront ouverts dans un navigateur externe "</string>
     <string name="pref_link_open_summary_off">Les liens internet seront lus en synthèse vocale</string>
+    <string name="pref_sr_beep_on">Jouer le \"bip\" avant la reconnaissance vocale</string>
+    <string name="pref_sr_beep_on_summary_on">Un \"bip\" sera joué avant de lancer la reconnaissance vocale. Si deux \"bip\" sont entendus sur votre appareil, vous pouvez désactiver cette option.</string>
+    <string name="pref_sr_beep_on_summary_off">Aucun \"bip\" ne sera ajouté avant de lancer la reconnaissance vocale. Si aucun \"bip\" n\'est entendu sur votre appareil, vous pouvez activer cette option.</string>
 
     <!-- Help activity -->
     <string name="title_activity_help">Aide</string>
@@ -133,6 +136,7 @@
     <string name="settings_play_speed_pref_changed">préférence sauvegardée</string>
     <string name="settings_log_to_file_changed">logger les évenements dans un fichier</string>
     <string name="settings_open_external_link_changed">ouverture des liens dans un navigateur</string>
+    <string name="settings_sr_beep_on_changed">lecture d\'un \"beep\" avant la reconnaissance vocale</string>
     <string name="alert_dialog_purge_media_cache_content">Voulez-vous supprimer tous les fichiers multimédia créés ou téléchargés par QRLudo ?</string>
     <string name="sound_level_low_alert">"Le volume du haut parleur est bas "</string>
     <string name="media_playing_start">"Démarrage de "</string>
