@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "fr.angers.univ.qrludo"
-        minSdkVersion 23
+        minSdkVersion 25
         targetSdkVersion 30
         versionCode 10
         versionName "2.0"

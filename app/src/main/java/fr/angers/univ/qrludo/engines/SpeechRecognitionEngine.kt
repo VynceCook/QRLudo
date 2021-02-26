@@ -97,11 +97,7 @@ object SpeechRecognitionEngine : RecognitionListener {
         _call_after_partial = call_after_partial
         _call_after_cancel = call_after_cancel
         _call_after_error = call_after_error
-        var locale = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            Locale.getDefault(Locale.Category.DISPLAY)
-        } else {
-            Locale.getDefault()
-        }
+        var locale = Locale.getDefault(Locale.Category.DISPLAY)
         var recognizer_intent : Intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         //_recognizer_intent = Intent(RecognizerIntent.ACTION_VOICE_SEARCH_HANDS_FREE)
         recognizer_intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, locale.displayLanguage)
