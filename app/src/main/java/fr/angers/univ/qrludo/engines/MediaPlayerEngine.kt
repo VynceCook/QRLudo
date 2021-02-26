@@ -82,13 +82,13 @@ object MediaPlayerEngine {
         if (!SpeechRecognitionEngine.is_idle() || !ToneEngine.is_idle()) {
             logger(context().getString(R.string.media_player_something_in_progress),
                 Logger.DEBUG_LEVEL.INFO)
-            _call_after_complete(file_name)
+            call_after_complete(file_name)
             return
         }
         if (_state != ENGINE_STATE.IDLE) {
             logger(context().getString(R.string.media_player_already_playing),
                 Logger.DEBUG_LEVEL.INFO)
-            _call_after_complete(file_name)
+            call_after_complete(file_name)
             return
         }
 
@@ -97,7 +97,7 @@ object MediaPlayerEngine {
         if (!file.exists()) {
             logger(context().getString(R.string.media_player_file_not_found),
                 Logger.DEBUG_LEVEL.DEBUG)
-            _call_after_complete(file_name)
+            call_after_complete(file_name)
             return
         }
 
