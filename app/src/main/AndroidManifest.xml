@@ -13,6 +13,13 @@
         android:name="android.hardware.camera"
         android:required="true" />
 
+    <queries>
+        <intent>
+            <action
+                android:name="android.intent.action.TTS_SERVICE" />
+        </intent>
+    </queries>
+
     <application
         android:name=".utils.MainApplication"
         android:allowBackup="true"
