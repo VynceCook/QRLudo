@@ -21,7 +21,6 @@ class ActionTone( tone : ToneEngine.TONE_NAME ) : EngineAction {
     override fun execute(var_list: MutableList<EngineVar>, call_back_on_finish: () -> Unit) {
         ToneEngine.play(
             _tone,
-            { -> })
-        call_back_on_finish() // call_back called here because playing Tone is not blocking
+            { -> call_back_on_finish() })
     }
 }
