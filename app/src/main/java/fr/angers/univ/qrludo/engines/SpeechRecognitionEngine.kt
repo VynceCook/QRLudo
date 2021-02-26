@@ -74,7 +74,7 @@ object SpeechRecognitionEngine : RecognitionListener {
     fun start_listening(call_after_complete: (String) -> Unit, call_after_partial: (String) -> Unit, call_after_cancel: () -> Unit, call_after_error: () -> Unit) {
         if (!MediaPlayerEngine.is_idle() || !ToneEngine.is_idle()) {
             logger(context().getString(R.string.spre_media_player_in_progress),Logger.DEBUG_LEVEL.INFO)
-            _call_after_error()
+            call_after_error()
             return
         }
         // Init the engine first
@@ -83,13 +83,15 @@ object SpeechRecognitionEngine : RecognitionListener {
         if (_state == ENGINE_STATE.IDLE)
         {
             logger(context().getString(R.string.spre_not_available),Logger.DEBUG_LEVEL.ERROR)
-            _call_after_error()
+            _state = ENGINE_STATE.IDLE
+            call_after_error()
             return
         }
         if (_state != ENGINE_STATE.READY)
         {
             logger(context().getString(R.string.spre_already_recording),Logger.DEBUG_LEVEL.VERBOSE)
-            _call_after_error()
+            _state = ENGINE_STATE.IDLE
+            call_after_error()
             return
         }
 
