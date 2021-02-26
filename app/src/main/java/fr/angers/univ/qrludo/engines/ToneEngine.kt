@@ -21,10 +21,10 @@ object ToneEngine {
     /// List of tone names
     enum class TONE_NAME {
         ERROR,
-        IGNORED_QR,
         START_DETECTION,
-        END_DETECTION,
+        START_SR,
 
+        IGNORED_QR,
         FAMILY_QR,
         SET_QR,
         LAST_QR_READ,
@@ -100,7 +100,7 @@ object ToneEngine {
             TONE_NAME.START_DETECTION -> {
                 play_tone(tone_generator, ToneGenerator.TONE_CDMA_PRESSHOLDKEY_LITE, 500, call_after_complete)
             }
-            TONE_NAME.END_DETECTION -> {
+            TONE_NAME.START_SR -> {
                 play_tone(tone_generator, ToneGenerator.TONE_CDMA_ABBR_INTERCEPT, 500, call_after_complete)
             }
 
