@@ -44,7 +44,8 @@ object TTSEngine {
                 var locale = Locale.getDefault(Locale.Category.DISPLAY)
                 _tts_engine?.setLanguage( locale )
                 _state = ENGINE_STATE.IDLE
-                CoreEngine.insert(EngineVarBool("_CORESYS_QR_initialized", true))
+                if (status == TextToSpeech.SUCCESS)
+                    CoreEngine.insert(EngineVarBool("_CORESYS_QR_initialized", true))
             }
         )
 
