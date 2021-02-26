@@ -57,9 +57,9 @@ object Logger {
 
             // Check if the log file exists
             val log_file = File(log_path + MainApplication.Log_File_Name)
-            log_file.setReadable(true, false)
+            log_file.setReadable(true,false)
 
-            if (!log_file.canWrite())
+            if (log_file.exists() && !log_file.canWrite())
                 return
 
             val stream = FileOutputStream(log_file,true)
