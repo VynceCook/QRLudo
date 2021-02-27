@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NavUtils
 import androidx.preference.Preference
@@ -113,6 +114,7 @@ class SettingsActivity : AppCompatActivity() {
                     }  catch (e : Exception) {
                         logger(getString(R.string.media_directory_cannot_use) + " : " + path_str,
                             Logger.DEBUG_LEVEL.INFO);
+                        Toast.makeText(this, getString(R.string.media_directory_cannot_use), Toast.LENGTH_LONG).show()
                     }
 
                     if (dst_dir.exists() && dst_dir.isDirectory && test_file.exists()) {
@@ -123,6 +125,10 @@ class SettingsActivity : AppCompatActivity() {
                                 MODE_PRIVATE)?.edit()
                         settings?.putString("media_files_path", path_str)
                         settings?.apply()
+
+                        val settings_fragment = supportFragmentManager.findFragmentById(R.id.settings) as SettingsFragment
+                        val pref_change_media_files_dir: Preference? = settings_fragment.findPreference("pref_change_media_files_dir")
+                        pref_change_media_files_dir?.setSummary("""${getString(R.string.pref_summary_change_media_files_dir)} : ${MainApplication.Media_Files_Path}""")
 
                         logger(getString(R.string.media_directory_moved) + " : " + path_str,
                             Logger.DEBUG_LEVEL.INFO);
