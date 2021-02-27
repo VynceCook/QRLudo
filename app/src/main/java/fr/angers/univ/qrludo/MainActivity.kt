@@ -8,7 +8,6 @@ import android.Manifest
 import android.content.Intent
 import android.media.AudioManager
 import android.os.*
-import android.util.Log
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
@@ -17,7 +16,6 @@ import androidx.core.view.GestureDetectorCompat
 import fr.angers.univ.qrludo.engines.*
 import fr.angers.univ.qrludo.engines.coreatoms.EngineVarBool
 import fr.angers.univ.qrludo.engines.coreatoms.EngineVarInt
-import fr.angers.univ.qrludo.engines.coreatoms.EngineVarString
 import fr.angers.univ.qrludo.jsonmodels.program_loads.QR_Ludo_Program
 import fr.angers.univ.qrludo.utils.*
 import java.io.File
@@ -86,9 +84,9 @@ class MainActivity : AppCompatActivity() {
         if (media_files_path == null)
         {
             Logger.log("MediaFilesDir",
-                getString(R.string.media_diretory_not_found) + "(empty)",
+                getString(R.string.media_directory_not_found) + "(empty)",
                 Logger.DEBUG_LEVEL.INFO)
-            Toast.makeText(this, getString(R.string.media_diretory_not_found), Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.media_directory_not_found), Toast.LENGTH_LONG).show()
             exit_application(3000)
         } else {
             val media_files_dir = File(media_files_path)
@@ -96,16 +94,16 @@ class MainActivity : AppCompatActivity() {
 
             if (!media_files_dir.exists()) {
                 Logger.log("MediaFilesDir",
-                    getString(R.string.media_diretory_create) + "(" + media_files_dir.absolutePath + ")",
+                    getString(R.string.media_directory_create) + "(" + media_files_dir.absolutePath + ")",
                     Logger.DEBUG_LEVEL.INFO)
                 media_files_dir.mkdir()
             }
             // Exit if no media files directory found
             if (!media_files_dir.exists() || !media_files_dir.isDirectory()) {
                 Logger.log("MediaFilesDir",
-                    getString(R.string.media_diretory_not_found) + "(" + media_files_dir.absolutePath + ")",
+                    getString(R.string.media_directory_not_found) + "(" + media_files_dir.absolutePath + ")",
                     Logger.DEBUG_LEVEL.INFO)
-                Toast.makeText(this, getString(R.string.media_diretory_not_found), Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.media_directory_not_found), Toast.LENGTH_LONG).show()
                 exit_application(3000)
             }
         }
