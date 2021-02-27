@@ -1,5 +1,6 @@
 # Changelog
 ## Version 2.0.1
+- Version minimale d'Android requise : Nougat (7.1)
 - Correction de bugs
 - Compatibilité TTS Android R
 - Ajout d'un bip (paramétrable) avant la reconnaissance vocale
