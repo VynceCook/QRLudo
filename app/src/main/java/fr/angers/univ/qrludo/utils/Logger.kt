@@ -62,7 +62,10 @@ object Logger {
             if (log_file.exists() && !log_file.canWrite())
                 return
 
-            val stream = FileOutputStream(log_file,true)
+            val stream = if (log_file.length() > (5 * 1024 * 1024))
+                FileOutputStream(log_file,false)
+            else
+                FileOutputStream(log_file,true)
             try {
                 val s = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
                 val cur_time: String = s.format(Date())
