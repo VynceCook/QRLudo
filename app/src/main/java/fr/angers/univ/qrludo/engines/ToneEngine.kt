@@ -101,7 +101,7 @@ object ToneEngine {
                 play_tone(tone_generator, ToneGenerator.TONE_CDMA_PRESSHOLDKEY_LITE, 500, call_after_complete)
             }
             TONE_NAME.START_SR -> {
-                play_tone(tone_generator, ToneGenerator.TONE_CDMA_ABBR_INTERCEPT, 500, call_after_complete)
+                play_tone(tone_generator, ToneGenerator.TONE_CDMA_ONE_MIN_BEEP, 500, call_after_complete)
             }
 
             TONE_NAME.FAMILY_QR -> {
