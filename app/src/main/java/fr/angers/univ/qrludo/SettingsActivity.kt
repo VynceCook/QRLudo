@@ -205,14 +205,14 @@ class SettingsActivity : AppCompatActivity() {
 
             // Change open_external_link switch
             val pref_sr_beep_on: TwoStatePreference? = findPreference("pref_sr_beep_on")
-            pref_sr_beep_on?.setChecked(MainApplication.SR_beep_on)
+            pref_sr_beep_on?.setChecked(MainApplication.SR_beep_on.get())
             pref_sr_beep_on?.setOnPreferenceChangeListener(object :
                     Preference.OnPreferenceChangeListener {
                 override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
                     logger(MainApplication.application_context()
                             .getString(R.string.settings_sr_beep_on_changed) + " : " + newValue.toString(),
                             Logger.DEBUG_LEVEL.INFO)
-                    MainApplication.SR_beep_on = newValue as Boolean
+                    MainApplication.SR_beep_on.set(newValue as Boolean)
                     val settings =
                             activity?.getSharedPreferences(MainApplication.Shared_Pref_Name,
                                     MODE_PRIVATE)?.edit()
