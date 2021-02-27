@@ -122,11 +122,11 @@
     <string name="permissions_denied">Des permissions ont été refusées.</string>
     <string name="ok">Oui</string>
     <string name="no">Non</string>
-    <string name="media_diretory_not_found">Le répertoire des fichiers multimédia est introuvable</string>
-    <string name="media_diretory_create">Création du répertoire de stockage des fichiers</string>
+    <string name="media_directory_not_found">Le répertoire des fichiers multimédia est introuvable</string>
+    <string name="media_directory_create">Création du répertoire de stockage des fichiers</string>
     <string name="media_directory_moved">le répertoire de fichiers multimedia a été déplacé</string>
     <string name="purge_media_cache_content">les fichiers multimedia du cache ont été supprimés</string>
-    <string name="media_directory_cannot_use">ne peut pas utiliser le répertoire</string>
+    <string name="media_directory_cannot_use">Impossible d'utiliser le répertoire</string>
     <string name="alert_dialog_purge_media_cache_title">Suppression des fichiers</string>
     <string name="file_directory_picker_done">Un fichier ou répertoire a été choisi</string>
     <string name="menu_action_settings">Paramètres</string>
