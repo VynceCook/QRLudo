@@ -1,4 +1,9 @@
 # Changelog
+## Version 2.0.1
+- Correction de bugs
+- Compatibilité TTS Android R
+- Ajout d'un bip (paramétrable) avant la reconnaissance vocale
+
 ## Version 2.0
 - Redéveloppement complet
 - Correction de bugs
