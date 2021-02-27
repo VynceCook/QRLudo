@@ -62,12 +62,12 @@ class MainApplication : Application() {
         // Returns the path of the QRLudo storage directory (used to store log and media files)
         fun get_media_files_path() : String? {
             if (Media_Files_Path.isNullOrEmpty()) {
-                Logger.log("MediaFilesDir", application_context().getString(R.string.media_diretory_not_found),Logger.DEBUG_LEVEL.CONSOLE_ONLY)
+                Logger.log("MediaFilesDir", application_context().getString(R.string.media_directory_not_found),Logger.DEBUG_LEVEL.CONSOLE_ONLY)
                 return null
             }
             val media_path_file = File(Media_Files_Path!!)
             if (!media_path_file.exists() || !media_path_file.isDirectory()) {
-                Logger.log("MediaFilesDir", application_context().getString(R.string.media_diretory_not_found),Logger.DEBUG_LEVEL.CONSOLE_ONLY)
+                Logger.log("MediaFilesDir", application_context().getString(R.string.media_directory_not_found),Logger.DEBUG_LEVEL.CONSOLE_ONLY)
                 return null
             }
             return Media_Files_Path!!
