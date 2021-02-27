@@ -114,7 +114,7 @@ class SettingsActivity : AppCompatActivity() {
                     }  catch (e : Exception) {
                         logger(getString(R.string.media_directory_cannot_use) + " : " + path_str,
                             Logger.DEBUG_LEVEL.INFO);
-                        Toast.makeText(this, getString(R.string.media_directory_cannot_use), Toast.LENGTH_LONG).show()
+                        Toast.makeText(MainApplication.Main_Activity, getString(R.string.media_directory_cannot_use) + " : " + path_str, Toast.LENGTH_LONG).show()
                     }
 
                     if (dst_dir.exists() && dst_dir.isDirectory && test_file.exists()) {
