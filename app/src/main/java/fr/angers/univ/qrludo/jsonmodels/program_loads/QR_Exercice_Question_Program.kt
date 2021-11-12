@@ -165,17 +165,14 @@ object QR_Exercice_Question_Program {
             CoreEngine.add_user_rule(it)
         }
 
-        if (qe_object.nb_min_reponses!! > 1)
-        {
-            // Add a rule for the final closure (when all right answers have been found)
-            EngineRule("Say_exercice_closure").let {
-                it.add_head_atom(EngineVarInt("Nb_right_answers", qe_object.nb_min_reponses!!), false)
-                it.add_action(
-                    ActionRemoveVar("Nb_right_answers"),
-                    ActionPrettyPrint(context().getString(R.string.action_question_exercice_closure)),
-                    ActionSpeak(context().getString(R.string.action_question_exercice_closure)))
-                CoreEngine.add_user_rule(it)
-            }
+        // Add a rule for the final closure (when all right answers have been found)
+        EngineRule("Say_exercice_closure").let {
+            it.add_head_atom(EngineVarInt("Nb_right_answers", qe_object.nb_min_reponses!!), false)
+            it.add_action(
+                ActionRemoveVar("Nb_right_answers"),
+                ActionPrettyPrint(context().getString(R.string.action_question_exercice_closure)),
+                ActionSpeak(context().getString(R.string.action_question_exercice_closure)))
+            CoreEngine.add_user_rule(it)
         }
 
         // Add a rule to launch analyzing of the answer
