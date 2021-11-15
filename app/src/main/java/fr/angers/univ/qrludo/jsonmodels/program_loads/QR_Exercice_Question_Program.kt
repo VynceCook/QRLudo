@@ -103,9 +103,19 @@ object QR_Exercice_Question_Program {
             it.add_head_atom(EngineVarBool("Play_next_section", true), true)
             it.add_action(
                 ActionRemoveVar("Play_next_section"),
-                ActionAddVar(EngineVarInt("QR_section", num_section + 1)),
-                ActionPrettyPrint(qe_object.name!!),
-                ActionSpeak(qe_object.name!!),
+                ActionAddVar(EngineVarInt("QR_section", num_section + 1))
+            )
+            if(qe_object.name!!.startsWith("http://") || qe_object!!.name!!.startsWith("https://"))
+                it.add_action(
+                    ActionPrettyPrint(context().getString(R.string.action_puzzle_play_media)),
+                    ActionPlayMediaURL(qe_object.name!!, true)
+                )
+            else
+                it.add_action(
+                    ActionPrettyPrint(qe_object.name!!),
+                    ActionSpeak(qe_object.name!!)
+                )
+            it.add_action(
                 ActionSpeakBeginnerHelp(MainApplication.application_context().getString(R.string.action_question_exercice_mode_help)),
                 ActionAddVar(EngineVarBool("QR_start",true)),
                 ActionAddVar(EngineVarBool("Play_next_section", true) ))
@@ -121,9 +131,19 @@ object QR_Exercice_Question_Program {
                 it.add_head_atom(EngineVarBool("Answer_${num_rep}_given", false), false)
                 it.add_action(
                     ActionRemoveVar("QR_answer"),
-                    ActionAddVar(EngineVarBool("Answer_${num_rep}_given", true)),
-                    ActionPrettyPrint(qe_object.text_bonne_reponse!!),
-                    ActionSpeak(qe_object.text_bonne_reponse!!),
+                    ActionAddVar(EngineVarBool("Answer_${num_rep}_given", true))
+                )
+                if(qe_object.text_bonne_reponse!!.startsWith("http://") || qe_object.text_bonne_reponse!!.startsWith("https://"))
+                    it.add_action(
+                        ActionPrettyPrint(QR_Exercice_Question_Program.context().getString(R.string.action_puzzle_play_media)),
+                        ActionPlayMediaURL(qe_object.text_bonne_reponse!!, true)
+                    )
+                else
+                    it.add_action(
+                        ActionPrettyPrint(qe_object.text_bonne_reponse!!),
+                        ActionSpeak(qe_object.text_bonne_reponse!! )
+                    )
+                it.add_action(
                     ActionLambda(
                         "Update Number of right answers",
                         { head_var_list: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
@@ -137,7 +157,8 @@ object QR_Exercice_Question_Program {
                             else
                                 call_back_on_finish()
                         }
-                    ))
+                    )
+                )
                 CoreEngine.add_user_rule(it)
             }
             EngineRule("Check_qr_answer_already_givent").let {
@@ -158,10 +179,21 @@ object QR_Exercice_Question_Program {
         EngineRule("Say_wrong_answer").let {
             it.add_head_atom(EngineVarString("QR_answer", ""), true)
             it.add_action(
-                ActionRemoveVar("QR_answer"),
-                ActionPrettyPrint(qe_object.text_mauvaise_reponse!!),
-                ActionSpeak(qe_object.text_mauvaise_reponse!!),
-                ActionAddVar(EngineVarBool("QR_start",true)))
+                ActionRemoveVar("QR_answer")
+            )
+            if (qe_object.text_mauvaise_reponse!!.startsWith("http://") || qe_object.text_mauvaise_reponse!!.startsWith("https://"))
+                it.add_action(
+                    ActionPrettyPrint(QR_Exercice_Question_Program.context().getString(R.string.action_puzzle_play_media)),
+                    ActionPlayMediaURL(qe_object.text_mauvaise_reponse!!, true)
+                )
+            else
+                it.add_action(
+                    ActionPrettyPrint(qe_object.text_mauvaise_reponse!!),
+                    ActionSpeak(qe_object.text_mauvaise_reponse!!)
+                )
+            it.add_action(
+                ActionAddVar(EngineVarBool("QR_start",true))
+            )
             CoreEngine.add_user_rule(it)
         }
 
