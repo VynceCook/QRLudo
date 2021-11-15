@@ -90,7 +90,7 @@ class ActionAnalyseQRCode : EngineAction {
                 {
                     "unique", "xl", "atomique" -> QR_Unique_Program.load_from_json(data) // xl and atomique seem deprecated, but still exist in old QR Codes
                     "ensemble" -> QR_Multiple_Program.load_from_json(data)
-                    "question" -> QR_Exercice_Question_Program.load_from_json(data)
+                    "question" -> QR_Exercise_Question_Program.load_from_json(data)
                     "ExerciceReconnaissanceVocaleQCM" -> QR_Vocal_QCM_Program.load_from_json(data)
                     "ExerciceReconnaissanceVocaleQuestionOuverte" -> QR_Vocal_OQ_Program.load_from_json(data)
                     "reponse" -> logger(context().getString(R.string.action_qranalyse_unique_unkown_type) + " : $data", Logger.DEBUG_LEVEL.VERBOSE)

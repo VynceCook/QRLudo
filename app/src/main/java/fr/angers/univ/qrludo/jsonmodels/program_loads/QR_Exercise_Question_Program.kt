@@ -1,5 +1,3 @@
-@file:Suppress("LocalVariableName", "ClassName", "FunctionName")
-
 package fr.angers.univ.qrludo.jsonmodels.program_loads
 
 import android.content.Context
@@ -54,13 +52,13 @@ Example of generated program:
  _u_<Stop_mediaPlayer @ Int:seek_section(0) --> Cancel mediaPlayer()>
  _u_<Play_seek @ seek_section, QR_section --> Remove(seek_section), Update QR_section()>
  */
-object QR_Exercice_Question_Program {
+object QR_Exercise_Question_Program {
     private fun context(): Context {
         return MainApplication.application_context()
     }
 
     private fun logger(msg: String, level: Logger.DEBUG_LEVEL) {
-        Logger.log("LoadRules_QRQuestionExercice", msg, level)
+        Logger.log("LoadRules_QRQuestionExercise", msg, level)
     }
 
     // Decompress zip encoded string
@@ -161,7 +159,7 @@ object QR_Exercice_Question_Program {
                 )
                 CoreEngine.add_user_rule(it)
             }
-            EngineRule("Check_qr_answer_already_givent").let {
+            EngineRule("Check_qr_answer_already_given").let {
                 it.add_head_atom(EngineVarString("QR_answer", br), false)
                 it.add_head_atom(EngineVarBool("Answer_${num_rep}_given", true), false)
                 it.add_action(
@@ -175,7 +173,7 @@ object QR_Exercice_Question_Program {
             ++num_rep
         }
 
-        // Add failthrough rule for wrong answer
+        // Add fallthrough rule for wrong answer
         EngineRule("Say_wrong_answer").let {
             it.add_head_atom(EngineVarString("QR_answer", ""), true)
             it.add_action(
@@ -198,7 +196,7 @@ object QR_Exercice_Question_Program {
         }
 
         // Add a rule for the final closure (when all right answers have been found)
-        EngineRule("Say_exercice_closure").let {
+        EngineRule("Say_exercise_closure").let {
             it.add_head_atom(EngineVarInt("Nb_right_answers", qe_object.nb_min_reponses!!), false)
             it.add_action(
                 ActionRemoveVar("Nb_right_answers"),
@@ -217,7 +215,7 @@ object QR_Exercice_Question_Program {
                     var data_qr_code = (head_var_list.first() as EngineVarString)._value
                     // Check is the data_qr_code are base64 encoded
                     if (data_qr_code.matches(Regex("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$"))) {
-                        // Début de la décompression
+                        // Start decompress
                         try {
                             data_qr_code = decompress(data_qr_code)
                             logger(
