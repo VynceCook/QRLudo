@@ -1,3 +1,5 @@
+@file:Suppress("LocalVariableName", "ClassName", "FunctionName")
+
 package fr.angers.univ.qrludo.jsonmodels.program_loads
 
 import android.content.Context
@@ -144,19 +146,18 @@ object QR_Exercice_Question_Program {
                     )
                 it.add_action(
                     ActionLambda(
-                        "Update Number of right answers",
-                        { head_var_list: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
-                            var nb_good_answers = 0
-                            for (v in head_var_list)
-                                if (v._name == "Nb_right_answers") nb_good_answers =
-                                    (v as EngineVarInt)._value
-                            CoreEngine.insert(EngineVarInt("Nb_right_answers", nb_good_answers + 1))
-                            if ((nb_good_answers + 1) < qe_object.nb_min_reponses!!)
-                                CoreEngine.insert(EngineVarBool("QR_start", true), call_back_on_finish)
-                            else
-                                call_back_on_finish()
-                        }
-                    )
+                        "Update Number of right answers"
+                    ) { head_var_list: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
+                        var nb_good_answers = 0
+                        for (v in head_var_list)
+                            if (v._name == "Nb_right_answers") nb_good_answers =
+                                (v as EngineVarInt)._value
+                        CoreEngine.insert(EngineVarInt("Nb_right_answers", nb_good_answers + 1))
+                        if ((nb_good_answers + 1) < qe_object.nb_min_reponses!!)
+                            CoreEngine.insert(EngineVarBool("QR_start", true), call_back_on_finish)
+                        else
+                            call_back_on_finish()
+                    }
                 )
                 CoreEngine.add_user_rule(it)
             }
@@ -211,16 +212,18 @@ object QR_Exercice_Question_Program {
             it.add_head_atom(EngineVarString("QR_code", ""), true)
             it.add_action(ActionRemoveVar("QR_code"),
                 ActionLambda(
-                "Extract QR ID",
-                { head_var_list: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
+                "Extract QR ID"
+                ) { head_var_list: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
                     var data_qr_code = (head_var_list.first() as EngineVarString)._value
                     // Check is the data_qr_code are base64 encoded
-                    if (data_qr_code.matches(Regex("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$")) ) {
+                    if (data_qr_code.matches(Regex("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$"))) {
                         // Début de la décompression
                         try {
                             data_qr_code = decompress(data_qr_code)
-                            logger(context().getString(R.string.action_qranalyse_decompress) + " : $data_qr_code",
-                                Logger.DEBUG_LEVEL.VERBOSE)
+                            logger(
+                                context().getString(R.string.action_qranalyse_decompress) + " : $data_qr_code",
+                                Logger.DEBUG_LEVEL.VERBOSE
+                            )
                         } catch (e: IOException) {
                             e.printStackTrace()
                         }
@@ -228,13 +231,18 @@ object QR_Exercice_Question_Program {
 
                     if (data_qr_code.startsWith("{")) {
                         val gson2: Gson = GsonBuilder().create()
-                        val converted_json_object: JSON_QR = gson2.fromJson(data_qr_code, JSON_QR::class.java)
+                        val converted_json_object: JSON_QR =
+                            gson2.fromJson(data_qr_code, JSON_QR::class.java)
 
-                        CoreEngine.insert(EngineVarString("QR_answer", converted_json_object.id.toString()), call_back_on_finish)
+                        CoreEngine.insert(
+                            EngineVarString(
+                                "QR_answer",
+                                converted_json_object.id.toString()
+                            ), call_back_on_finish
+                        )
                     } else
                         call_back_on_finish()
-                }
-            ))
+                })
             CoreEngine.add_user_rule(it)
         }
 
@@ -247,14 +255,13 @@ object QR_Exercice_Question_Program {
                 ActionSpeak(context().getString(R.string.action_question_exercice_go_exploration_mode)),
                 ActionSpeakBeginnerHelp(MainApplication.application_context().getString(R.string.action_question_exercice_mode_help)),
                 ActionLambda(
-                    "Backup user rules and variables",
-                    { _: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
-                        CoreEngine.backup_user_rules()
-                        CoreEngine.clear_user_rules()
-                        CoreEngine.clear_user_var_store()
-                        call_back_on_finish()
-                    }
-                ),
+                    "Backup user rules and variables"
+                ) { _: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
+                    CoreEngine.backup_user_rules()
+                    CoreEngine.clear_user_rules()
+                    CoreEngine.clear_user_var_store()
+                    call_back_on_finish()
+                },
                 ActionAddVar(EngineVarBool("QR_start",true))
             )
             CoreEngine.add_user_rule(it)
@@ -307,17 +314,19 @@ object QR_Exercice_Question_Program {
                 ActionAddVar(EngineVarInt("Nb_right_answers", 0)),
                 ActionAddVar(EngineVarInt("QR_section", 1)),
                 ActionLambda(
-                    "Go to first",
-                    { _: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
-                        // Action is handled only when QR detector is scanning
-                        if (QRDetectorEngine.is_scanning()) {
-                            QRDetectorEngine.cancel()
-                            call_back_on_finish()
-                        } else {
-                            CoreEngine.insert(EngineVarBool("Play_next_section", true), call_back_on_finish)
-                        }
+                    "Go to first"
+                ) { _: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
+                    // Action is handled only when QR detector is scanning
+                    if (QRDetectorEngine.is_scanning()) {
+                        QRDetectorEngine.cancel()
+                        call_back_on_finish()
+                    } else {
+                        CoreEngine.insert(
+                            EngineVarBool("Play_next_section", true),
+                            call_back_on_finish
+                        )
                     }
-                ))
+                })
             CoreEngine.add_user_rule(it)
         }
 
@@ -326,14 +335,13 @@ object QR_Exercice_Question_Program {
             it.add_head_atom(EngineVarInt("seek_section", 0), false )
             it.add_action(
                 ActionLambda(
-                    "Cancel mediaPlayer",
-                    { _: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
-                        // Action is handled only when MediaPlayer is running
-                        if (MediaPlayerEngine.is_playing())
-                            MediaPlayerEngine.stop()
-                        call_back_on_finish()
-                    }
-                ))
+                    "Cancel mediaPlayer"
+                ) { _: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
+                    // Action is handled only when MediaPlayer is running
+                    if (MediaPlayerEngine.is_playing())
+                        MediaPlayerEngine.stop()
+                    call_back_on_finish()
+                })
             CoreEngine.add_user_rule(it)
         }
 
@@ -343,26 +351,26 @@ object QR_Exercice_Question_Program {
             it.add_head_atom(EngineVarInt("QR_section", 0), true)
             it.add_action(ActionRemoveVar("seek_section"),
                 ActionLambda(
-                    "Update QR_section",
-                    { head_var_list: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
-                        var seek_section_value = 0
-                        for (v in head_var_list) {
-                            if (v._name == "seek_section") seek_section_value =
-                                (v as EngineVarInt)._value
-                        }
-                        // We skip to another section
-                        // We manage only seek to previous and seek to current and
-                        // action is handled only when QR detector is scanning
-                        if ((QRDetectorEngine.is_scanning())
-                            && (seek_section_value == -1) || (seek_section_value == -2))
-                            CoreEngine.insert(EngineVarInt("QR_section", 1), {
-                                QRDetectorEngine.cancel()
-                                call_back_on_finish()
-                            })
-                        else
-                            call_back_on_finish()
+                    "Update QR_section"
+                ) { head_var_list: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
+                    var seek_section_value = 0
+                    for (v in head_var_list) {
+                        if (v._name == "seek_section") seek_section_value =
+                            (v as EngineVarInt)._value
                     }
-                ))
+                    // We skip to another section
+                    // We manage only seek to previous and seek to current and
+                    // action is handled only when QR detector is scanning
+                    if ((QRDetectorEngine.is_scanning())
+                        && (seek_section_value == -1) || (seek_section_value == -2)
+                    )
+                        CoreEngine.insert(EngineVarInt("QR_section", 1)) {
+                            QRDetectorEngine.cancel()
+                            call_back_on_finish()
+                        }
+                    else
+                        call_back_on_finish()
+                })
             CoreEngine.add_user_rule(it)
         }
 
