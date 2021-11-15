@@ -8,7 +8,6 @@ import fr.angers.univ.qrludo.R
 import fr.angers.univ.qrludo.engines.CoreEngine
 import fr.angers.univ.qrludo.engines.MediaPlayerEngine
 import fr.angers.univ.qrludo.engines.QRDetectorEngine
-import fr.angers.univ.qrludo.engines.SpeechRecognitionEngine
 import fr.angers.univ.qrludo.engines.coreatoms.*
 import fr.angers.univ.qrludo.engines.coreatoms.actions.*
 import fr.angers.univ.qrludo.jsonmodels.JSON_QR
@@ -105,7 +104,7 @@ object QR_Exercice_Question_Program {
                 ActionRemoveVar("Play_next_section"),
                 ActionAddVar(EngineVarInt("QR_section", num_section + 1))
             )
-            if(qe_object.name!!.startsWith("http://") || qe_object!!.name!!.startsWith("https://"))
+            if(qe_object.name!!.startsWith("http://") || qe_object.name!!.startsWith("https://"))
                 it.add_action(
                     ActionPrettyPrint(context().getString(R.string.action_puzzle_play_media)),
                     ActionPlayMediaURL(qe_object.name!!, true)
@@ -135,7 +134,7 @@ object QR_Exercice_Question_Program {
                 )
                 if(qe_object.text_bonne_reponse!!.startsWith("http://") || qe_object.text_bonne_reponse!!.startsWith("https://"))
                     it.add_action(
-                        ActionPrettyPrint(QR_Exercice_Question_Program.context().getString(R.string.action_puzzle_play_media)),
+                        ActionPrettyPrint(context().getString(R.string.action_puzzle_play_media)),
                         ActionPlayMediaURL(qe_object.text_bonne_reponse!!, true)
                     )
                 else
@@ -183,7 +182,7 @@ object QR_Exercice_Question_Program {
             )
             if (qe_object.text_mauvaise_reponse!!.startsWith("http://") || qe_object.text_mauvaise_reponse!!.startsWith("https://"))
                 it.add_action(
-                    ActionPrettyPrint(QR_Exercice_Question_Program.context().getString(R.string.action_puzzle_play_media)),
+                    ActionPrettyPrint(context().getString(R.string.action_puzzle_play_media)),
                     ActionPlayMediaURL(qe_object.text_mauvaise_reponse!!, true)
                 )
             else
@@ -302,7 +301,7 @@ object QR_Exercice_Question_Program {
         EngineRule("RePlay_QR").let {
             it.add_head_atom(EngineVarInt("seek_section", -1000), false )
             it.add_action(ActionRemoveVar("seek_section"))
-            for (i in 0..num_rep-1)
+            for (i in 0 until num_rep)
                 it.add_action(ActionAddVar(EngineVarBool("Answer_${i}_given", false)))
             it.add_action(
                 ActionAddVar(EngineVarInt("Nb_right_answers", 0)),
@@ -356,7 +355,7 @@ object QR_Exercice_Question_Program {
                         // action is handled only when QR detector is scanning
                         if ((QRDetectorEngine.is_scanning())
                             && (seek_section_value == -1) || (seek_section_value == -2))
-                            CoreEngine.insert(EngineVarInt("QR_section", 1), { ->
+                            CoreEngine.insert(EngineVarInt("QR_section", 1), {
                                 QRDetectorEngine.cancel()
                                 call_back_on_finish()
                             })
