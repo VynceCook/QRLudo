@@ -90,6 +90,10 @@ object QR_Exercise_Question_Program {
             logger(context().getString(R.string.action_qr_code_missing_field), Logger.DEBUG_LEVEL.ERROR)
             return
         }
+        val name: String = qe_object.name!!
+        val good_answer: String = qe_object.text_bonne_reponse!!
+        val wrong_answer: String = qe_object.text_mauvaise_reponse!!
+        val nb_min_answer: Int = qe_object.nb_min_reponses!!
 
         // Clear all previous user rules
         CoreEngine.clear_user_rules()
@@ -104,15 +108,15 @@ object QR_Exercise_Question_Program {
                 ActionRemoveVar("Play_next_section"),
                 ActionAddVar(EngineVarInt("QR_section", num_section + 1))
             )
-            if(qe_object.name!!.startsWith("http://") || qe_object.name!!.startsWith("https://"))
+            if(name.startsWith("http://") || name.startsWith("https://"))
                 it.add_action(
                     ActionPrettyPrint(context().getString(R.string.action_puzzle_play_media)),
-                    ActionPlayMediaURL(qe_object.name!!, true)
+                    ActionPlayMediaURL(name, true)
                 )
             else
                 it.add_action(
-                    ActionPrettyPrint(qe_object.name!!),
-                    ActionSpeak(qe_object.name!!)
+                    ActionPrettyPrint(name),
+                    ActionSpeak(name)
                 )
             it.add_action(
                 ActionSpeakBeginnerHelp(MainApplication.application_context().getString(R.string.action_question_exercice_mode_help)),
@@ -132,15 +136,15 @@ object QR_Exercise_Question_Program {
                     ActionRemoveVar("QR_answer"),
                     ActionAddVar(EngineVarBool("Answer_${num_rep}_given", true))
                 )
-                if(qe_object.text_bonne_reponse!!.startsWith("http://") || qe_object.text_bonne_reponse!!.startsWith("https://"))
+                if(good_answer.startsWith("http://") || good_answer.startsWith("https://"))
                     it.add_action(
                         ActionPrettyPrint(context().getString(R.string.action_puzzle_play_media)),
-                        ActionPlayMediaURL(qe_object.text_bonne_reponse!!, true)
+                        ActionPlayMediaURL(good_answer, true)
                     )
                 else
                     it.add_action(
-                        ActionPrettyPrint(qe_object.text_bonne_reponse!!),
-                        ActionSpeak(qe_object.text_bonne_reponse!! )
+                        ActionPrettyPrint(good_answer),
+                        ActionSpeak(good_answer)
                     )
                 it.add_action(
                     ActionLambda(
@@ -151,7 +155,7 @@ object QR_Exercise_Question_Program {
                             if (v._name == "Nb_right_answers") nb_good_answers =
                                 (v as EngineVarInt)._value
                         CoreEngine.insert(EngineVarInt("Nb_right_answers", nb_good_answers + 1))
-                        if ((nb_good_answers + 1) < qe_object.nb_min_reponses!!)
+                        if ((nb_good_answers + 1) < nb_min_answer)
                             CoreEngine.insert(EngineVarBool("QR_start", true), call_back_on_finish)
                         else
                             call_back_on_finish()
@@ -179,15 +183,15 @@ object QR_Exercise_Question_Program {
             it.add_action(
                 ActionRemoveVar("QR_answer")
             )
-            if (qe_object.text_mauvaise_reponse!!.startsWith("http://") || qe_object.text_mauvaise_reponse!!.startsWith("https://"))
+            if (wrong_answer.startsWith("http://") || wrong_answer.startsWith("https://"))
                 it.add_action(
                     ActionPrettyPrint(context().getString(R.string.action_puzzle_play_media)),
-                    ActionPlayMediaURL(qe_object.text_mauvaise_reponse!!, true)
+                    ActionPlayMediaURL(wrong_answer, true)
                 )
             else
                 it.add_action(
-                    ActionPrettyPrint(qe_object.text_mauvaise_reponse!!),
-                    ActionSpeak(qe_object.text_mauvaise_reponse!!)
+                    ActionPrettyPrint(wrong_answer),
+                    ActionSpeak(wrong_answer)
                 )
             it.add_action(
                 ActionAddVar(EngineVarBool("QR_start",true))
@@ -197,7 +201,7 @@ object QR_Exercise_Question_Program {
 
         // Add a rule for the final closure (when all right answers have been found)
         EngineRule("Say_exercise_closure").let {
-            it.add_head_atom(EngineVarInt("Nb_right_answers", qe_object.nb_min_reponses!!), false)
+            it.add_head_atom(EngineVarInt("Nb_right_answers", nb_min_answer), false)
             it.add_action(
                 ActionRemoveVar("Nb_right_answers"),
                 ActionPrettyPrint(context().getString(R.string.action_question_exercice_closure)),
