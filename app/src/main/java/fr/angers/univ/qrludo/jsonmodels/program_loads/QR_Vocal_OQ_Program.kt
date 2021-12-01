@@ -58,6 +58,10 @@ object QR_Vocal_OQ_Program {
             return
         }
 
+        val name : String = qe_object.name!!
+        val good_answer : String = qe_object.text_bonne_reponse!!
+        val wrong_answer : String = qe_object.text_mauvaise_reponse!!
+
         // Clear all previous user rules
         CoreEngine.clear_user_rules()
         CoreEngine.clear_user_var_store()
@@ -70,14 +74,14 @@ object QR_Vocal_OQ_Program {
             it.add_action(
                 ActionRemoveVar("Play_next_section"),
                 ActionAddVar(EngineVarInt("QR_section", num_section + 1)))
-            if (qe_object.name!!.startsWith("http://") || qe_object.name!!.startsWith("https://"))
+            if (name.startsWith("http://") || name.startsWith("https://"))
                 it.add_action(
                     ActionPrettyPrint(context().getString(R.string.action_puzzle_play_media)),
-                    ActionPlayMediaURL(qe_object.name!!, true))
+                    ActionPlayMediaURL(name, true))
             else
                 it.add_action(
-                    ActionPrettyPrint(qe_object.name!!),
-                    ActionSpeak(qe_object.name!!))
+                    ActionPrettyPrint(name),
+                    ActionSpeak(name))
             it.add_action(
                 ActionSpeakBeginnerHelp(MainApplication.application_context().getString(R.string.action_vocal_beginner_help)),
                 ActionAddVar(EngineVarBool("SR_start",true)),
@@ -90,8 +94,18 @@ object QR_Vocal_OQ_Program {
             EngineRule("Check_right_answer").let {
                 it.add_head_atom(EngineVarRegex("SR_text", br), false)
                 it.add_action(
-                    ActionRemoveVar("SR_text"),
-                    ActionSpeak(qe_object.text_bonne_reponse!!))
+                    ActionRemoveVar("SR_text")
+                )
+                if(good_answer.startsWith("https//") || good_answer.startsWith("https://"))
+                    it.add_action(
+                        ActionPrettyPrint(context().getString(R.string.action_puzzle_play_media)),
+                        ActionPlayMediaURL(good_answer, true)
+                    )
+                else
+                    it.add_action(
+                        ActionPrettyPrint(good_answer),
+                        ActionSpeak(good_answer)
+                    )
                 CoreEngine.add_user_rule(it)
             }
         }
@@ -100,9 +114,21 @@ object QR_Vocal_OQ_Program {
         EngineRule("Say_wrong_answer").let {
             it.add_head_atom(EngineVarString("SR_text", ""), true)
             it.add_action(
-                ActionRemoveVar("SR_text"),
-                ActionSpeak(qe_object.text_mauvaise_reponse!!),
-                ActionAddVar(EngineVarBool("SR_start",true)))
+                ActionRemoveVar("SR_text")
+            )
+            if(wrong_answer.startsWith("http://") || wrong_answer.startsWith("https://"))
+                it.add_action(
+                    ActionPrettyPrint(context().getString(R.string.action_puzzle_play_media)),
+                    ActionPlayMediaURL(wrong_answer, true)
+                )
+            else
+                it.add_action(
+                    ActionPrettyPrint(wrong_answer),
+                    ActionSpeak(wrong_answer)
+                )
+            it.add_action(
+                ActionAddVar(EngineVarBool("SR_start",true))
+            )
             CoreEngine.add_user_rule(it)
         }
 
