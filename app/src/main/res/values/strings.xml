@@ -187,6 +187,7 @@
     <string name="action_qo_vocale_found">QR code question vocale ouverte détecté</string>
     <string name="action_serious_game_found">QR code serious game détecté</string>
     <string name="action_qcm_dont_understand">Je n\'ai pas reconnu votre réponse</string>
+    <string name="action_qcm_answer_vocal_prefix">question numéro </string>
     <string name="action_qo_dont_understand">Je n\'ai pas reconnu votre réponse</string>
     <string name="action_puzzle_answer_dont_understand">Je n\'ai pas compris votre réponse</string>
     <string name="action_puzzle_play_media">Joue un fichier de musique</string>
