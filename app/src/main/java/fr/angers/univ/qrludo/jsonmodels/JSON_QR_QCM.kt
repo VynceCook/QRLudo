@@ -1,5 +1,6 @@
 package fr.angers.univ.qrludo.jsonmodels
 
+import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -7,11 +8,8 @@ import com.google.gson.annotations.SerializedName
  */
 class JSON_QR_QCM : JSON_QR() {
     @SerializedName("text_bonne_reponse")
-    var text_bonne_reponse : String? = null
+    var text_bonne_reponse : JsonObject? = null
 
     @SerializedName("text_mauvaise_reponse")
-    var text_mauvaise_reponse : String? = null
-
-    @SerializedName("lettreReponseVocale")
-    var lettreReponseVocale : Boolean? = null
+    var text_mauvaise_reponse : JsonObject? = null
 }

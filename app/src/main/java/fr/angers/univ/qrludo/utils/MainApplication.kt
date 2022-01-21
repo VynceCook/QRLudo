@@ -25,7 +25,7 @@ class MainApplication : Application() {
         private var instance : MainApplication? = null
 
         // Global values
-        var QRCode_Format : Int = 4 // To update each time we change the format the app recognize
+        var QRCode_Format : Int = 5 // To update each time we change the format the app recognize
         var Main_Activity : MainActivity? = null
         var Camera_View : SurfaceView? = null
 
