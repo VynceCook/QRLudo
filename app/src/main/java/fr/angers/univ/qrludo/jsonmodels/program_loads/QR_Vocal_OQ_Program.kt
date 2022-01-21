@@ -162,8 +162,8 @@ object QR_Vocal_OQ_Program {
             it.add_action(
                 ActionRemoveVar("Play_next_section"),
                 ActionRemoveVar("QR_section"),
-                ActionPrettyPrint(context().getString(R.string.fin_QO)),
-                ActionSpeak(context().getString(R.string.fin_QO)),
+                ActionPrettyPrint(context().getString(R.string.end_QO)),
+                ActionSpeak(context().getString(R.string.end_QO)),
                 ActionAddVar(EngineVarInt("QR_section",num_section+1)),
                 ActionAddVar(EngineVarBool("Play_next_section",true))
             )
