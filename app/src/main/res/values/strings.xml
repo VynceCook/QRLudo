@@ -190,4 +190,5 @@
     <string name="action_qo_dont_understand">Je n\'ai pas reconnu votre réponse</string>
     <string name="action_puzzle_answer_dont_understand">Je n\'ai pas compris votre réponse</string>
     <string name="action_puzzle_play_media">Joue un fichier de musique</string>
+    <string name="fin_QO">Vous avez fini cet exercice</string>
 </resources>

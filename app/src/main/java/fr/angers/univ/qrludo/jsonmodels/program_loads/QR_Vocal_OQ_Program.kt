@@ -32,7 +32,8 @@ Example of generated program:
  _u_<Say_wrong_answer @ SR_text --> Remove(SR_text), Speak(Vous ferez mieux la prochaine fois), Add(Bool:SR_start(true))>
  _u_<Say_unrecognize_text @ SR_error --> Remove(SR_error), Speak(Je n'ai pas reconnu votre réponse), Add(Bool:SR_start(true))>
  _u_<Replay_on_QR_abort @ SR_abort --> Remove(SR_abort), Add(Int:QR_section(1)), Add(Bool:Play_next_section(true))>
- _u_<Play_section_clear @ Int:QR_section(2), Play_next_section --> Remove(Play_next_section), Remove(QR_section)>
+ _u_<Play_section_end @ Int:QR_section(2), Play_next_section --> Remove(Play_next_section), Remove(QR_section), PrettyPrint(Vous avez fini cet exercice), Speak(Vous avez fini cet exercice), Add(Int:QR_section(3)), Add(Bool:Play_next_section(true))>
+ _u_<Play_section_clear @ Int:QR_section(3), Play_next_section --> Remove(Play_next_section), Remove(QR_section)>
  _u_<RePlay_QR @ Int:seek_section(-1000) --> Remove(seek_section), Add(Int:QR_section(1)), Go to first()>
  _u_<Stop_mediaPlayer @ Int:seek_section(0) --> Cancel mediaPlayer()>
  _u_<Play_seek @ seek_section, QR_section --> Remove(seek_section), Update QR_section()>
@@ -149,6 +150,22 @@ object QR_Vocal_OQ_Program {
                 ActionRemoveVar("SR_abort"),
                 ActionAddVar(EngineVarInt("QR_section", 1)),
                 ActionAddVar(EngineVarBool("Play_next_section", true))
+            )
+            CoreEngine.add_user_rule(it)
+        }
+
+        ++num_section
+        // Add a rule to speak the end of the exercice
+        EngineRule("Play_section_end").let{
+            it.add_head_atom(EngineVarInt("QR_section",num_section),false)
+            it.add_head_atom(EngineVarBool("Play_next_section",true),false)
+            it.add_action(
+                ActionRemoveVar("Play_next_section"),
+                ActionRemoveVar("QR_section"),
+                ActionPrettyPrint(context().getString(R.string.fin_QO)),
+                ActionSpeak(context().getString(R.string.fin_QO)),
+                ActionAddVar(EngineVarInt("QR_section",num_section+1)),
+                ActionAddVar(EngineVarBool("Play_next_section",true))
             )
             CoreEngine.add_user_rule(it)
         }
