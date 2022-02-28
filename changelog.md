@@ -1,4 +1,9 @@
 # Changelog
+## Version 3.0.0
+- Correction de bugs
+- Possibilité de lire des fichiers audio dans les questions ouvertes
+- Mise en place de la nouvelle structure des Serious Game
+
 ## Version 2.0.1
 - Version minimale d'Android requise : Nougat (7.1)
 - Correction de bugs
