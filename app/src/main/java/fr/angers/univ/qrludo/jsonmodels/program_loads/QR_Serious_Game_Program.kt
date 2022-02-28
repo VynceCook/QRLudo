@@ -32,34 +32,42 @@ import java.util.zip.GZIPInputStream
 Example of generated program:
 ------------------------------
 
-{ Bool:SG_puzzle_1(true), Bool:SG_puzzle_2(true), Int:SG_nb_unsolved_puzzle(2), Int:QR_section(1), Bool:Play_next_section(true) }
+{ Int:QR_section(1), Bool:Play_next_section(true) }
 
- _u_<Play_section_1 @ Int:QR_section(1), Play_next_section --> Remove(Play_next_section), Add(Int:QR_section(2)), PrettyPrint(c'est l'introduction du jeu), Speak(c'est l'introduction du jeu), Add(Bool:Play_next_section(true))>
- _u_<Play_section_2 @ Int:QR_section(2), Play_next_section --> Remove(Play_next_section), Remove(SG_puzzle_choice), Add(Int:QR_section(3)), Speak(Choisissez votre destination parmi la liste suivante), Add(Int:SG_start_listing_available_puzzles(1)), SpeakBeginnerHelp(C'est une question à reconnaissance vocale), Add(Bool:SR_start(true)), Add(Bool:Play_next_section(true))>
- _u_<Say_puzzle_name_if_available @ Int:SG_start_listing_available_puzzles(1), SG_puzzle_1 --> Speak(première énigme qr), Add(Int:SG_start_listing_available_puzzles(2))>
- _u_<Dont_say_puzzle_name_if_not_available @ Int:SG_start_listing_available_puzzles(1) --> Add(Int:SG_start_listing_available_puzzles(2))>
- _u_<Check_puzzle_choice @ SG_puzzle_1, Int:QR_section(3), Regex:SR_text[(première énigme qr)] --> Remove(SR_text), Add(Int:SG_puzzle_choice(1))>
- _u_<Say_puzzle_name_if_available @ Int:SG_start_listing_available_puzzles(2), SG_puzzle_2 --> Speak(ma deuxième énigme), Add(Int:SG_start_listing_available_puzzles(3))>
- _u_<Dont_say_puzzle_name_if_not_available @ Int:SG_start_listing_available_puzzles(2) --> Add(Int:SG_start_listing_available_puzzles(3))>
- _u_<Check_puzzle_choice @ SG_puzzle_2, Int:QR_section(3), Regex:SR_text[(ma deuxième énigme)] --> Remove(SR_text), Add(Int:SG_puzzle_choice(2))>
- _u_<End_of_listing_puzzle @ Int:SG_start_listing_available_puzzles(3) --> Remove(SG_start_listing_available_puzzles)>
- _u_<Say_unkown_puzzle @ Int:QR_section(3), SR_text --> Remove(SR_text), Speak(Je n'ai pas compris votre destination, pouvez-vous répéter ?), Add(Bool:SR_start(true))>
- _u_<Say_unkown_puzzle_on_error @ Int:QR_section(3), SR_error --> Remove(SR_error), Speak(Je n'ai pas compris votre destination, pouvez-vous répéter ?), Add(Bool:SR_start(true))>
- _u_<Play_section_3 @ Int:SG_puzzle_choice(1), Int:QR_section(3), Play_next_section --> Remove(Play_next_section), Add(Int:QR_section(4)), Speak(Quel outil prendre ), Add(Bool:QR_start(true)), Add(Bool:Play_next_section(true))>
- _u_<Check_puzzle_1_answer @ Int:SG_puzzle_choice(1), Int:QR_section(4), String:QR_answer(marteau), SG_nb_unsolved_puzzle --> Remove(QR_answer), Remove(SG_puzzle_choice), Remove(SG_puzzle_1), Speak(Vous avez résolu cette énigme), Update Number of unsolved puzzles()>
- _u_<Check_puzzle_1_wrong_answer @ Int:SG_puzzle_choice(1), Int:QR_section(4), String:QR_answer(tournevis) --> Remove(QR_answer), Speak(Mauvaise réponse, essayez encore), Add(Bool:QR_start(true))>
- _u_<Check_puzzle_wrong_qr_code_type @ Int:QR_section(4), QR_answer --> Remove(QR_answer), Speak(Mauvaise réponse, essayez encore), Add(Bool:QR_start(true))>
- _u_<Analyse_QR_answer @ QR_code --> Remove(QR_code), Extract QR Name()>
- _u_<Play_section_3 @ Int:SG_puzzle_choice(2), Int:QR_section(3), Play_next_section --> Remove(Play_next_section), Add(Int:QR_section(4)), Speak(Combien font 5 fois 5), SpeakBeginnerHelp(C'est une question à reconnaissance vocale), Add(Bool:SR_start(true)), Add(Bool:Play_next_section(true))>
- _u_<Check_puzzle_2_answer @ Int:SG_puzzle_choice(2), Int:QR_section(4), Regex:SR_text[25], SG_nb_unsolved_puzzle --> Remove(SR_text), Remove(SG_puzzle_choice), Remove(SG_puzzle_2), Speak(Vous avez résolu cette énigme), Update Number of unsolved puzzles()>
- _u_<Say_wrong_puzzle_answer @ Int:SG_puzzle_choice(2), Int:QR_section(4), SR_text --> Remove(SR_text), Speak(Mauvaise réponse, essayez encore), Add(Bool:SR_start(true))>
- _u_<Say_puzzle_answer_not_undestand @ Int:SG_puzzle_choice(2), Int:QR_section(4), SR_error --> Remove(SR_error), Speak(Je n'ai pas compris votre réponse), Add(Bool:SR_start(true))>
- _u_<Play_section_4 @ Int:SG_nb_unsolved_puzzle(0), Int:QR_section(4), Play_next_section --> Remove(Play_next_section), Remove(SG_nb_unsolved_puzzle), Add(Int:QR_section(5)), PrettyPrint(C'est la fin du jeu), Speak(C'est la fin du jeu), Add(Bool:Play_next_section(true))>
- _u_<Play_section_4 @ Int:QR_section(4), Play_next_section --> Remove(Play_next_section), Add(Int:QR_section(2)), Add(Bool:Play_next_section(true))>
- _u_<Play_section_clear @ Int:QR_section(5), Play_next_section --> Remove(Play_next_section), Remove(QR_section)>
- _u_<RePlay_QR @ Int:seek_section(-1000) --> Remove(Play_next_section), Remove(seek_section), Remove(SG_start_listing_available_puzzles), Remove(SG_puzzle_choice), Add(Bool:SG_puzzle_1(true)), Add(Bool:SG_puzzle_2(true)), Add(Int:SG_nb_unsolved_puzzle(2)), Add(Int:QR_section(1)), Go to first()>
- _u_<Stop_mediaPlayer @ Int:seek_section(0) --> Cancel mediaPlayer()>
- _u_<Play_seek @ seek_section, QR_section --> Remove(seek_section), Update QR_section()>
+_u_<Play_section_1 @ Int:QR_section(1), Play_next_section --> Remove(Play_next_section), Remove(QR_question), PrettyPrint(Bienvenue dans le Serious Game. Voici la première question.), Speak(Bienvenue dans le Serious Game. Voici la première question.), Add(Int:QR_section(6)), Add(Bool:Play_next_section(true))>
+_u_<Play_seek_1 @ seek_section, Int:QR_section(1) --> Remove(seek_section), Update QR_section(), Add(Bool:Play_next_section(true))>
+_u_<Play_section_2 @ Int:QR_section(2), Play_next_section --> Remove(Play_next_section), Remove(QR_question), PrettyPrint(Mauvaise réponse, essaie encore), Speak(Mauvaise réponse, essaie encore), Add(Int:QR_section(7)), Add(Bool:Play_next_section(true))>
+_u_<Play_seek_2 @ seek_section, Int:QR_section(2) --> Remove(seek_section), Update QR_section(), Add(Bool:Play_next_section(true))>
+_u_<Play_section_3 @ Int:QR_section(3), Play_next_section --> Remove(Play_next_section), Remove(QR_question), PrettyPrint(Mauvaise réponse, essaie encore), Speak(Mauvaise réponse, essaie encore), Add(Int:QR_section(6)), Add(Bool:Play_next_section(true))>
+_u_<Play_seek_3 @ seek_section, Int:QR_section(3) --> Remove(seek_section), Update QR_section(), Add(Bool:Play_next_section(true))>
+_u_<Play_section_4 @ Int:QR_section(4), Play_next_section --> Remove(Play_next_section), Remove(QR_question), PrettyPrint(Bravo, vous avez fini l'exercice), Speak(Bravo, vous avez fini l'exercice), Add(Int:QR_section(9)), Add(Bool:Play_next_section(true))>
+_u_<Play_seek_4 @ seek_section, Int:QR_section(4) --> Remove(seek_section), Update QR_section(), Add(Bool:Play_next_section(true))>
+_u_<Play_section_5 @ Int:QR_section(5), Play_next_section --> Remove(Play_next_section), Remove(QR_question), PrettyPrint(Mauvaise réponse, essaie encore), Speak(Mauvaise réponse, essaie encore), Add(Int:QR_section(8)), Add(Bool:Play_next_section(true))>
+_u_<Play_seek_5 @ seek_section, Int:QR_section(5) --> Remove(seek_section), Update QR_section(), Add(Bool:Play_next_section(true))>
+_u_<Check_right_answer @ Regex:SR_text[Angers], Int:QR_question(6) --> Remove(SR_text), Add(Int:QR_section(3)), Add(Bool:Play_next_section(true))>
+_u_<Check_right_answer @ Regex:SR_text[Paris], Int:QR_question(6) --> Remove(SR_text), Add(Int:QR_section(7)), Add(Bool:Play_next_section(true))>
+_u_<Check_right_answer @ Regex:SR_text[Marseille], Int:QR_question(6) --> Remove(SR_text), Add(Int:QR_section(3)), Add(Bool:Play_next_section(true))>
+_u_<Play_section_6 @ Int:QR_section(6), Play_next_section --> Remove(Play_next_section), Remove(QR_question), PrettyPrint(Quelle est la capitale de la France ?), Speak(Quelle est la capitale de la France ?), Speak(Les réponses possibles sont), Speak(Angers), Speak(Paris), Speak(Marseille), SpeakBeginnerHelp(C'est une question à reconnaissance vocale), Add(Int:QR_question(6)), Add(Bool:SR_start(true))>
+_u_<Play_seek_6 @ seek_section, Int:QR_section(6) --> Remove(seek_section), Update QR_section(), Add(Bool:Play_next_section(true))>
+_u_<Check_wrong_answer @ Regex:SR_text[(^((?!Mémoire sémantique).)*$((?!Mémoire des connaissances).)*$)], Int:QR_question(7) --> Remove(SR_text), Add(Int:QR_section(2)), Add(Bool:Play_next_section(true))>
+_u_<Check_right_answer @ Regex:SR_text[Mémoire sémantique], Int:QR_question(7) --> Remove(SR_text), Add(Int:QR_section(8)), Add(Bool:Play_next_section(true))>
+_u_<Check_right_answer @ Regex:SR_text[Mémoire des connaissances], Int:QR_question(7) --> Remove(SR_text), Add(Int:QR_section(8)), Add(Bool:Play_next_section(true))>
+_u_<Play_section_7 @ Int:QR_section(7), Play_next_section --> Remove(Play_next_section), Remove(QR_question), PrettyPrint(Comment s'appelle la mémoire dans laquelle sont stockés des éléments qui nous sont propres, nos événements vécus, etc), Speak(Comment s'appelle la mémoire dans laquelle sont stockés des éléments qui nous sont propres, nos événements vécus, etc), SpeakBeginnerHelp(C'est une question à reconnaissance vocale), Add(Int:QR_question(7)), Add(Bool:SR_start(true))>
+_u_<Play_seek_7 @ seek_section, Int:QR_section(7) --> Remove(seek_section), Update QR_section(), Add(Bool:Play_next_section(true))>
+_u_<Check_qr_answer @ String:QR_answer(88b07d8ec79bc9b192ffb0dd765b4721) --> Remove(QR_answer), Add(Int:QR_section(5)), Add(Bool:Play_next_section(true))>
+_u_<Check_qr_answer @ String:QR_answer(f21d85d0a0e4e7f18e3bd3a195573289) --> Remove(QR_answer), Add(Int:QR_section(4)), Add(Bool:Play_next_section(true))>
+_u_<Check_qr_answer @ String:QR_answer(4bf416a6b928925f3b0a0db30813f861) --> Remove(QR_answer), Add(Int:QR_section(4)), Add(Bool:Play_next_section(true))>
+_u_<Play_section_8 @ Int:QR_section(8), Play_next_section --> Remove(Play_next_section), PrettyPrint(Comment s'appelle la mémoire dans laquelle sont stockés des éléments qui nous sont propres, nos événements vécus, etc), Speak(Comment s'appelle la mémoire dans laquelle sont stockés des éléments qui nous sont propres, nos événements vécus, etc), SpeakBeginnerHelp(Un double balayage rapide vers le haut vous permet de basculer entre le mode exploration et le mode de réponse à la question), Add(Bool:QR_start(true)), Add(Bool:Play_next_section(true))>
+_u_<Play_seek_8 @ seek_section, Int:QR_section(8) --> Remove(seek_section), Update QR_section(), Add(Bool:Play_next_section(true))>
+_u_<Say_unkown_answer @ SR_text --> Remove(SR_text), Speak(Votre réponse ne fait pas partie de la liste des réponses possibles), Add(Bool:SR_start(true))>
+_u_<Say_unrecognize_answer @ SR_error --> Remove(SR_error), Speak(Je n'ai pas reconnu votre réponse), Add(Bool:SR_start(true))>
+_u_<Analyse_QR_answer @ QR_code --> Remove(QR_code), Extract QR ID()>
+_u_<Go_to_exploration_mode @ ask_for_backup_user_rules --> Remove(ask_for_backup_user_rules), PrettyPrint(Vous etes en mode exploration), Speak(Vous etes en mode exploration), SpeakBeginnerHelp(Un double balayage rapide vers le haut vous permet de basculer entre le mode exploration et le mode de réponse à la question), Backup user rules and variables(), Add(Bool:QR_start(true))>
+_u_<Go_to_answer_mode @ ask_for_restore_user_rules --> Remove(ask_for_restore_user_rules), PrettyPrint(Vous etes en mode de réponse à la question), Speak(Vous etes en mode de réponse à la question), SpeakBeginnerHelp(Un double balayage rapide vers le haut vous permet de basculer entre le mode exploration et le mode de réponse à la question), Add(Bool:QR_start(true))>
+_u_<Replay_on_QR_abort @ QR_abort --> Remove(QR_abort), Add(Int:QR_section(1)), Add(Bool:Play_next_section(true))>
+_u_<Play_section_clear @ Int:QR_section(9), Bool:Play_next_section(true) --> Remove(Play_next_section), Remove(QR_section)>
+_u_<Stop_mediaPlayer @ Int:seek_section(0) --> Cancel mediaPlayer()>
+
  */
 object QR_Serious_Game_Program {
     private fun context(): Context {
@@ -88,217 +96,363 @@ object QR_Serious_Game_Program {
         return sb.toString()
     }
 
+    // Class to save answers
+    class Answer(var answer: String?, var next: String?)
+
+    // Class to save all labels and questions
+    class Section_label_question(var id:Int, var name:String, var text:String?, var answers: ArrayList<Answer>, var read_type:String, var question_type:String?, var type_node:String)
+
     fun load_from_json(data: String) {
         logger(context().getString(R.string.action_serious_game_found), Logger.DEBUG_LEVEL.INFO)
 
         val gson: Gson = GsonBuilder().create()
-        val sg_object : JSON_QR_Serious_Game = gson.fromJson(data, JSON_QR_Serious_Game::class.java)
-
-        val puzzles_json_object = gson.fromJson(data, JsonObject::class.java)
-        val puzzles_json_array = puzzles_json_object.getAsJsonArray("enigmes")
-        val puzzles_qr_json_array = puzzles_json_object.getAsJsonArray("questionsQrCode")
-        val puzzles_sr_json_array = puzzles_json_object.getAsJsonArray("questionsRecoVocale")
-        val list_of_puzzle_name_id : MutableList<String> = mutableListOf()
-
-        if ((sg_object.name == null) || (puzzles_json_object == null)
-            || (sg_object.introduction == null) || (sg_object.fin == null)) {
-            logger(context().getString(R.string.action_qr_code_missing_field), Logger.DEBUG_LEVEL.ERROR)
-            return
-        }
+        val tree_json_object = gson.fromJson(data, JSON_QR_Serious_Game::class.java)
+        val list_label_questions = mutableListOf<Section_label_question>()
+        val list_label_json = tree_json_object.label_nodes!!
+        val list_question_json = tree_json_object.question_nodes!!
+        var id_section = 1
 
         // Clear all previous user rules
         CoreEngine.clear_user_rules()
         CoreEngine.clear_user_var_store()
 
-        // ------------------------------------------------
-        // ---------- INTRODUCTION
-        // ------------------------------------------------
-        var num_section : Int = 1
-        // Add a rule to say the text of the introduction
-        EngineRule("Play_section_$num_section").let {
-            it.add_head_atom(EngineVarInt("QR_section", num_section), false)
-            it.add_head_atom(EngineVarBool("Play_next_section", true), true)
-            it.add_action(
-                ActionRemoveVar("Play_next_section"),
-                ActionAddVar(EngineVarInt("QR_section", num_section + 1)))
-            if (sg_object.introduction!!.startsWith("http://") || sg_object.introduction!!.startsWith("https://"))
-                it.add_action(
-                    ActionPrettyPrint(context().getString(R.string.action_puzzle_play_media)),
-                    ActionPlayMediaURL(sg_object.introduction!!, true)
-                )
+        // Add on data list all labels
+        for(label in list_label_json){
+            val label_object = label.asJsonObject
+            val name_label_node = gson.fromJson(label_object.getAsJsonPrimitive("name"), String::class.java)
+            val label_question_object = gson.fromJson(label_object.getAsJsonObject("txt"),JsonObject::class.java)
+            val label_type = gson.fromJson(label_question_object.getAsJsonPrimitive("type"),String::class.java)
+            var label_text:String
+            val label_next = gson.fromJson(label_object.getAsJsonPrimitive("ext"),String::class.java)
+            val type_node = "LabelNode"
+
+            // if label is a type music
+            if(label_type == "M")
+                label_text = gson.fromJson(label_question_object.getAsJsonPrimitive("url"),String::class.java)
+            // type text
             else
-                it.add_action(
-                    ActionPrettyPrint(sg_object.introduction!!),
-                    ActionSpeak(sg_object.introduction!!))
-            it.add_action(
-                ActionAddVar(EngineVarBool("Play_next_section", true)))
-            CoreEngine.add_user_rule(it)
+                label_text = gson.fromJson(label_question_object.getAsJsonPrimitive("txt"),String::class.java)
+
+            val answers = ArrayList<Answer>()
+            if(label_next == "")
+                answers.add(Answer(null, null))
+            else
+                answers.add(Answer(null, label_next))
+            val textObject = Section_label_question(id_section, name_label_node, label_text, answers, label_type,null, type_node)
+            list_label_questions.add(textObject)
+
+            id_section++
         }
 
-        // ------------------------------------------------
-        // ---------- LIST OF PUZZLES
-        // ------------------------------------------------
-        ++num_section
-        // Add a rule to say the list of puzzle
-        EngineRule("Play_section_$num_section").let {
-            it.add_head_atom(EngineVarInt("QR_section", num_section), false)
-            it.add_head_atom(EngineVarBool("Play_next_section", true), true)
-            it.add_action(
-                ActionRemoveVar("Play_next_section"),
-                ActionRemoveVar("SG_puzzle_choice"),
-                ActionAddVar(EngineVarInt("QR_section", num_section + 1)),
-                ActionSpeak(context().getString(R.string.action_puzzle_possible_puzzle)),
-                ActionAddVar(EngineVarInt("SG_start_listing_available_puzzles",1)),
-                ActionSpeakBeginnerHelp(MainApplication.application_context().getString(R.string.action_vocal_beginner_help)),
-                ActionAddVar(EngineVarBool("SR_start",true)),
-                ActionAddVar(EngineVarBool("Play_next_section", true)))
-            CoreEngine.add_user_rule(it)
-        }
+        // Add on data list all questions
+        for(question in list_question_json){
+            val question_object = question.asJsonObject
+            val name_question_node = gson.fromJson(question_object.getAsJsonPrimitive("name"), String::class.java)
+            val text_question_object = gson.fromJson(question_object.getAsJsonObject("txt"), JsonObject::class.java)
+            val text_question_type = gson.fromJson(text_question_object.getAsJsonPrimitive("type"), String::class.java)
+            val question_type = gson.fromJson(question_object.getAsJsonPrimitive("type"), String::class.java)
+            var text_question:String
+            val answer_array=question_object.getAsJsonArray("rep")
+            val type_node = "QuestionNode"
 
-        // We add rules for chosing which puzzle to solve
-        for (puz in puzzles_json_array) {
-            val puz_array = puz.asJsonArray
-            val t_puz_id: Int = gson.fromJson(puz_array[0], String::class.java).toInt()
-            val t_puz_name: String = gson.fromJson(puz_array[1], String::class.java)
+            if(text_question_type.equals("M"))
+                text_question = gson.fromJson(text_question_object.getAsJsonPrimitive("url"),String::class.java)
+            else
+                text_question = gson.fromJson(text_question_object.getAsJsonPrimitive("txt"),String::class.java)
 
-            // Create a var (which will be added at the end) to say that puzzle is still there (not already solved)
-            list_of_puzzle_name_id.add("SG_puzzle_$t_puz_id")
-            // Add two rules to recusively list (and speak) the available puzzles
-            EngineRule("Say_puzzle_name_if_available").let {
-                it.add_head_atom(EngineVarInt("SG_start_listing_available_puzzles", t_puz_id), false)
-                it.add_head_atom(EngineVarBool("SG_puzzle_$t_puz_id", true), true)
-                it.add_action(
-                    ActionSpeak(t_puz_name),
-                    ActionAddVar(EngineVarInt("SG_start_listing_available_puzzles", t_puz_id+1)))
-                CoreEngine.add_user_rule(it)
+            val answers = ArrayList<Answer>()
+            for(answer in answer_array){
+                val answer_object = answer.asJsonObject
+                val answer_text = gson.fromJson(answer_object.getAsJsonPrimitive("txt"),String::class.java)
+                val answer_next = gson.fromJson(answer_object.getAsJsonPrimitive("ext"),String::class.java)
+                answers.add(Answer(answer_text, answer_next))
             }
-            EngineRule("Dont_say_puzzle_name_if_not_available").let {
-                it.add_head_atom(EngineVarInt("SG_start_listing_available_puzzles", t_puz_id), false)
-                it.add_action(ActionAddVar(EngineVarInt("SG_start_listing_available_puzzles", t_puz_id+1)))
-                CoreEngine.add_user_rule(it)
+            val textObject = Section_label_question(id_section,name_question_node,text_question,answers,text_question_type, question_type, type_node)
+            list_label_questions.add(textObject)
+            id_section++
+        }
+
+        // Add all rules to read the tree
+        for(text_question_obj in list_label_questions){
+            val section_id = text_question_obj.id
+            val section_name = text_question_obj.name
+            val section_text = text_question_obj.text
+            val answers = text_question_obj.answers
+            val read_type = text_question_obj.read_type
+            val question_type = text_question_obj.question_type
+            val type_node = text_question_obj.type_node
+
+            var str = section_name
+            for (answer in answers){
+                str += " ${answer.answer}"
             }
 
-            // Add a rule to post the puzzle choice
-            EngineRule("Check_puzzle_choice").let {
-                it.add_head_atom(EngineVarBool("SG_puzzle_$t_puz_id", true), true)
-                it.add_head_atom(EngineVarInt("QR_section", num_section+1), false)
-                it.add_head_atom(EngineVarRegex("SR_text", "($t_puz_name)"), false)
-                it.add_action(
-                    ActionRemoveVar("SR_text"),
-                    ActionAddVar(EngineVarInt("SG_puzzle_choice", t_puz_id)))
-                CoreEngine.add_user_rule(it)
-            }
-        }
-        EngineRule("End_of_listing_puzzle").let {
-            it.add_head_atom(EngineVarInt("SG_start_listing_available_puzzles", puzzles_json_array.size()+1), false)
-            it.add_action(ActionRemoveVar("SG_start_listing_available_puzzles"))
-            CoreEngine.add_user_rule(it)
-        }
+            // Add rules for question nodes
+            if(type_node == "QuestionNode"){
+                when(question_type){
+                    // Type QCM
+                    "M" -> {
+                        for(answer in answers){
+                            val next = next_section(answer.next!!,list_label_questions)
 
-        // Add failthrough rule for unknown puzzle choice
-        EngineRule("Say_unkown_puzzle").let {
-            it.add_head_atom(EngineVarInt("QR_section", num_section+1), false)
-            it.add_head_atom(EngineVarString("SR_text", ""), true)
-            it.add_action(
-                ActionRemoveVar("SR_text"),
-                ActionSpeak(context().getString(R.string.action_puzzle_unknown)),
-                ActionAddVar(EngineVarBool("SR_start",true)))
-            CoreEngine.add_user_rule(it)
-        }
-        EngineRule("Say_unkown_puzzle_on_error").let {
-            it.add_head_atom(EngineVarInt("QR_section", num_section+1), false)
-            it.add_head_atom(EngineVarString("SR_error", ""), true)
-            it.add_action(
-                ActionRemoveVar("SR_error"),
-                ActionSpeak(context().getString(R.string.action_puzzle_unknown)),
-                ActionAddVar(EngineVarBool("SR_start",true)))
-            CoreEngine.add_user_rule(it)
-        }
+                            // Add rule to play next section if it's an answer for this question
+                            EngineRule("Check_right_answer").let {
+                                it.add_head_atom(EngineVarRegex("SR_text", answer.answer!!), false)
+                                it.add_head_atom(EngineVarInt("QR_question", section_id), false)
+                                it.add_action(ActionRemoveVar("SR_text"))
+                                it.add_action(
+                                    ActionAddVar(EngineVarInt("QR_section", next)),
+                                    ActionAddVar(EngineVarBool("Play_next_section", true))
+                                )
+                                CoreEngine.add_user_rule(it)
+                            }
+                        }
 
-        // ------------------------------------------------
-        // ---------- LIST OF PUZZLES
-        // ------------------------------------------------
-        ++num_section
-        // We add rules for each qr code puzzle
-        for (puz in puzzles_qr_json_array) {
-            val puz_array = puz.asJsonArray
-            val t_puz_id: Int = gson.fromJson(puz_array[0], String::class.java).toInt()
-            val t_puz_name: String = gson.fromJson(puz_array[1], String::class.java)
-            val t_puz_answers = puz_array[2].asJsonArray
+                        // Add rule to speak question and start vocal recognition
+                        EngineRule("Play_section_$section_id").let {
+                            it.add_head_atom(EngineVarInt("QR_section", section_id), false)
+                            it.add_head_atom(EngineVarBool("Play_next_section", true), true)
+                            it.add_action(
+                                ActionRemoveVar("Play_next_section"),
+                                ActionRemoveVar("QR_question")
+                            )
+                            if (read_type == "M")
+                                it.add_action(
+                                    ActionPrettyPrint(context().getString(R.string.action_puzzle_play_media)),
+                                    ActionPlayMediaURL(section_text!!, true)
+                                )
+                            else
+                                it.add_action(
+                                    ActionPrettyPrint(section_text!!),
+                                    ActionSpeak(section_text)
+                                )
+                            it.add_action(ActionSpeak(context().getString(R.string.action_qcm_allowed_answers)))
+                            for (answer in answers) {
+                                it.add_action(ActionSpeak(answer.answer!!))
+                            }
+                            it.add_action(
+                                ActionSpeakBeginnerHelp(
+                                    MainApplication.application_context()
+                                        .getString(R.string.action_vocal_beginner_help)
+                                ),
+                                ActionAddVar(EngineVarInt("QR_question", section_id)),
+                                ActionAddVar(EngineVarBool("SR_start", true))
+                            )
+                            CoreEngine.add_user_rule(it)
+                        }
 
-            // Add a rule to say the text of the puzzle
-            EngineRule("Play_section_$num_section").let {
-                it.add_head_atom(EngineVarInt("SG_puzzle_choice", t_puz_id), false)
-                it.add_head_atom(EngineVarInt("QR_section", num_section), false)
-                it.add_head_atom(EngineVarBool("Play_next_section", true), true)
-                it.add_action(
-                    ActionRemoveVar("Play_next_section"),
-                    ActionAddVar(EngineVarInt("QR_section", num_section + 1)))
-                if (t_puz_name.startsWith("http://") || t_puz_name.startsWith("https://"))
+                    }
+                    // Type open question
+                    "O" -> {
+                        for(answer in answers) {
+                            val next = next_section(answer.next!!,list_label_questions)
+
+                            if (answer.answer != "Autre*") {
+                                EngineRule("Check_right_answer").let {
+                                    it.add_head_atom(EngineVarRegex("SR_text", answer.answer!!), false)
+                                    it.add_head_atom(EngineVarInt("QR_question", section_id), false)
+                                    it.add_action(ActionRemoveVar("SR_text"))
+                                    it.add_action(
+                                        ActionAddVar(EngineVarInt("QR_section", next)),
+                                        ActionAddVar(EngineVarBool("Play_next_section", true))
+                                    )
+                                    CoreEngine.add_user_rule(it)
+                                }
+                            } else {
+                                // We make a regex to match with any answer not containing good answer of the question
+                                val regex = get_regex_QO(section_name, list_label_questions)
+                                EngineRule("Check_wrong_answer").let {
+                                    it.add_head_atom(EngineVarRegex("SR_text", regex), false)
+                                    it.add_head_atom(EngineVarInt("QR_question", section_id), false)
+                                    it.add_action(ActionRemoveVar("SR_text"))
+                                    it.add_action(
+                                        ActionAddVar(EngineVarInt("QR_section", next)),
+                                        ActionAddVar(EngineVarBool("Play_next_section", true))
+                                    )
+                                    CoreEngine.add_user_rule(it)
+                                }
+                            }
+                        }
+
+                        // Add rule to speak question and start vocal recognition
+                        EngineRule("Play_section_$section_id").let {
+                            it.add_head_atom(EngineVarInt("QR_section", section_id), false)
+                            it.add_head_atom(EngineVarBool("Play_next_section", true), true)
+                            it.add_action(
+                                ActionRemoveVar("Play_next_section"),
+                                ActionRemoveVar("QR_question")
+                            )
+                            if (read_type == "M")
+                                it.add_action(
+                                    ActionPrettyPrint(context().getString(R.string.action_puzzle_play_media)),
+                                    ActionPlayMediaURL(section_text!!, true)
+                                )
+                            else
+                                it.add_action(
+                                    ActionPrettyPrint(section_text!!),
+                                    ActionSpeak(section_text)
+                                )
+                            it.add_action(
+                                ActionSpeakBeginnerHelp(
+                                    MainApplication.application_context()
+                                        .getString(R.string.action_vocal_beginner_help)
+                                ),
+                                ActionAddVar(EngineVarInt("QR_question", section_id)),
+                                ActionAddVar(EngineVarBool("SR_start", true))
+                            )
+                            CoreEngine.add_user_rule(it)
+                        }
+                    }
+                    // Type QR Code question
+                    "Q" -> {
+                        for(answer in answers) {
+                            val next = next_section(answer.next!!,list_label_questions)
+
+                            // Add rule to play next section if it's an answer for this question
+                            EngineRule("Check_qr_answer").let {
+                                it.add_head_atom(EngineVarString("QR_answer", answer.answer!!), false)
+                                it.add_action(ActionRemoveVar("QR_answer"))
+                                it.add_action(
+                                    ActionAddVar(EngineVarInt("QR_section", next)),
+                                    ActionAddVar(EngineVarBool("Play_next_section", true))
+                                )
+                                CoreEngine.add_user_rule(it)
+                            }
+                        }
+
+                        // Add rule to speak question
+                        EngineRule("Play_section_$section_id").let {
+                            it.add_head_atom(EngineVarInt("QR_section", section_id), false)
+                            it.add_head_atom(EngineVarBool("Play_next_section", true), true)
+                            it.add_action(ActionRemoveVar("Play_next_section"))
+
+                            if (read_type == "M")
+                                it.add_action(
+                                    ActionPrettyPrint(context().getString(R.string.action_puzzle_play_media)),
+                                    ActionPlayMediaURL(section_text!!, true)
+                                )
+                            else
+                                it.add_action(
+                                    ActionPrettyPrint(section_text!!),
+                                    ActionSpeak(section_text)
+                                )
+                            it.add_action(
+                                ActionSpeakBeginnerHelp(
+                                    MainApplication.application_context()
+                                        .getString(R.string.action_question_exercice_mode_help)
+                                ),
+                                ActionAddVar(EngineVarBool("QR_start", true)),
+                                ActionAddVar(EngineVarBool("Play_next_section", true))
+                            )
+                            CoreEngine.add_user_rule(it)
+                        }
+                    }
+                }
+            } else { // Add rules for label nodes
+                // Add rule to speak text and go to the the next section
+                EngineRule("Play_section_$section_id").let {
+                    it.add_head_atom(EngineVarInt("QR_section", section_id), false)
+                    it.add_head_atom(EngineVarBool("Play_next_section", true), true)
                     it.add_action(
-                        ActionPlayMediaURL(t_puz_name, true)
+                        ActionRemoveVar("Play_next_section"),
+                        ActionRemoveVar("QR_question")
                     )
-                else
-                    it.add_action(
-                        ActionSpeak(t_puz_name))
-                it.add_action(
-                    ActionAddVar(EngineVarBool("QR_start",true)),
+                    if (read_type == "M")
+                        it.add_action(
+                            ActionPrettyPrint(context().getString(R.string.action_puzzle_play_media)),
+                            ActionPlayMediaURL(section_text!!, true)
+                        )
+                    else
+                        it.add_action(
+                            ActionPrettyPrint(section_text!!),
+                            ActionSpeak(section_text )
+                        )
+                    if(search_end(list_label_questions) == section_id){
+                        it.add_action(
+                            ActionAddVar(EngineVarInt("QR_section", list_label_questions.size+1)),
+                            ActionAddVar(EngineVarBool("Play_next_section", true))
+                        )
+                    }
+                    else {
+                        it.add_action(
+                            ActionAddVar(EngineVarInt("QR_section", next_section(answers[0].next!!, list_label_questions))),
+                            ActionAddVar(EngineVarBool("Play_next_section", true))
+                        )
+                    }
+                    CoreEngine.add_user_rule(it)
+                }
+            }
+
+            // Seek to a section left swipe to replay question and double left swipe to go to first question
+            EngineRule("Play_seek_${section_id}").let {
+                it.add_head_atom(EngineVarInt("seek_section", 0), true)
+                it.add_head_atom(EngineVarInt("QR_section", section_id), false)
+                it.add_action(ActionRemoveVar("seek_section"),
+                    ActionLambda(
+                        "Update QR_section",
+                        { head_var_list: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
+                            var seek_section_value = 0
+                            var qr_section_value = 0
+                            for (v in head_var_list) {
+                                if (v._name == "seek_section") seek_section_value =
+                                    (v as EngineVarInt)._value
+                                if (v._name == "QR_section") qr_section_value =
+                                    (v as EngineVarInt)._value
+                            }
+                            // We skip to another section
+                            // We manage only seek to previous and seek to current and
+                            // action is handled only when in a Speech Recognition or a QR code scanning
+                            if ((SpeechRecognitionEngine.is_recording() || QRDetectorEngine.is_scanning())
+                                && (seek_section_value == -1000)) //double swipe left
+                                CoreEngine.insert(EngineVarInt("QR_section", search_first(list_label_questions)), {
+                                    SpeechRecognitionEngine.cancel()
+                                    QRDetectorEngine.cancel()
+                                    call_back_on_finish()
+                                })
+                            else
+                                if ((SpeechRecognitionEngine.is_recording() || QRDetectorEngine.is_scanning())
+                                    &&  (seek_section_value == -2)) //simple swipe left
+                                    CoreEngine.insert(EngineVarInt("QR_section",  qr_section_value), {
+                                        SpeechRecognitionEngine.cancel()
+                                        QRDetectorEngine.cancel()
+                                        call_back_on_finish()
+                                    })
+                                else
+                                    if ((SpeechRecognitionEngine.is_recording() || QRDetectorEngine.is_scanning())
+                                        &&  (seek_section_value == 1000)) //double swipe right
+                                        CoreEngine.insert(EngineVarInt("QR_section", search_end(list_label_questions)), {
+                                            SpeechRecognitionEngine.cancel()
+                                            QRDetectorEngine.cancel()
+                                            call_back_on_finish()
+                                        })
+                                    else
+                                        call_back_on_finish()
+                        }
+                    ),
                     ActionAddVar(EngineVarBool("Play_next_section", true)))
                 CoreEngine.add_user_rule(it)
             }
-
-            // For each answer
-            for (a in t_puz_answers) {
-                val puz_answer_array = a.asJsonArray
-                val t_puz_anwser_name: String = gson.fromJson(puz_answer_array[0], String::class.java)
-                val t_puz_answer_good: Boolean = gson.fromJson(puz_answer_array[1], String::class.java).toBoolean()
-
-                if (t_puz_answer_good)
-                    // Add a rule when the puzzle is solved
-                    EngineRule("Check_puzzle_${t_puz_id}_answer").let {
-                        it.add_head_atom(EngineVarInt("SG_puzzle_choice", t_puz_id), false)
-                        it.add_head_atom(EngineVarInt("QR_section", num_section+1), false)
-                        it.add_head_atom(EngineVarString("QR_answer", t_puz_anwser_name), false)
-                        it.add_head_atom(EngineVarInt("SG_nb_unsolved_puzzle", 0), true)
-                        it.add_action(
-                            ActionRemoveVar("QR_answer"),
-                            ActionRemoveVar("SG_puzzle_choice"),
-                            ActionRemoveVar("SG_puzzle_$t_puz_id"),
-                            ActionSpeak(context().getString(R.string.action_puzzle_one_solved)),
-                            ActionLambda(
-                                "Update Number of unsolved puzzles",
-                                { head_var_list: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
-                                    var nb_unsolved_puzzles = 0
-                                    for (v in head_var_list)
-                                        if (v._name == "SG_nb_unsolved_puzzle") nb_unsolved_puzzles = (v as EngineVarInt)._value
-                                    CoreEngine.insert(EngineVarInt("SG_nb_unsolved_puzzle", nb_unsolved_puzzles - 1), call_back_on_finish)
-                                }
-                            ))
-                        CoreEngine.add_user_rule(it)
-                    }
-                else
-                    // Add a rule when a wrong answer has been given
-                    EngineRule("Check_puzzle_${t_puz_id}_wrong_answer").let {
-                        it.add_head_atom(EngineVarInt("SG_puzzle_choice", t_puz_id), false)
-                        it.add_head_atom(EngineVarInt("QR_section", num_section+1), false)
-                        it.add_head_atom(EngineVarString("QR_answer", t_puz_anwser_name), false)
-                        it.add_action(
-                            ActionRemoveVar("QR_answer"),
-                            ActionSpeak(context().getString(R.string.action_puzzle_wrong_answer)),
-                            ActionAddVar(EngineVarBool("QR_start",true)))
-                        CoreEngine.add_user_rule(it)
-                    }
-            }
         }
 
-        // Add a failtrough rule when a wrong QR code type is scanned
-        EngineRule("Check_puzzle_wrong_qr_code_type").let {
-            it.add_head_atom(EngineVarInt("QR_section", num_section+1), false)
-            it.add_head_atom(EngineVarString("QR_answer", ""), true)
+        // Add failthrough rule for unknown answer
+        EngineRule("Say_unkown_answer").let {
+            it.add_head_atom(EngineVarString("SR_text", ""), true)
             it.add_action(
-                ActionRemoveVar("QR_answer"),
-                ActionSpeak(context().getString(R.string.action_puzzle_wrong_answer)),
-                ActionAddVar(EngineVarBool("QR_start",true)))
+                ActionRemoveVar("SR_text"),
+                ActionSpeak(context().getString(R.string.action_qcm_unknown_answer)),
+                ActionAddVar(EngineVarBool("SR_start", true))
+            )
+            CoreEngine.add_user_rule(it)
+        }
+
+        // Add failthrough rule not understanding answer
+        EngineRule("Say_unrecognize_answer").let {
+            it.add_head_atom(EngineVarString("SR_error", ""), true)
+            it.add_action(
+                ActionRemoveVar("SR_error"),
+                ActionSpeak(context().getString(R.string.action_qcm_dont_understand)),
+                ActionAddVar(EngineVarBool("SR_start", true))
+            )
             CoreEngine.add_user_rule(it)
         }
 
@@ -307,198 +461,112 @@ object QR_Serious_Game_Program {
             it.add_head_atom(EngineVarString("QR_code", ""), true)
             it.add_action(ActionRemoveVar("QR_code"),
                 ActionLambda(
-                    "Extract QR Name",
-                    { head_var_list: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
-                        var data_qr_code = (head_var_list.first() as EngineVarString)._value
-                        // Check is the data_qr_code are base64 encoded
-                        if (data_qr_code.matches(Regex("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$")) ) {
-                            // Début de la décompression
-                            try {
-                                data_qr_code = decompress(data_qr_code)
-                                logger(context().getString(R.string.action_qranalyse_decompress) + " : $data_qr_code",
-                                    Logger.DEBUG_LEVEL.VERBOSE)
-                            } catch (e: IOException) {
-                                e.printStackTrace()
-                            }
+                    "Extract QR ID"
+                ) { head_var_list: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
+                    var data_qr_code = (head_var_list.first() as EngineVarString)._value
+                    // Check is the data_qr_code are base64 encoded
+                    if (data_qr_code.matches(Regex("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$"))) {
+                        // Start decompress
+                        try {
+                            data_qr_code = decompress(data_qr_code)
+                            logger(context().getString(R.string.action_qranalyse_decompress) + " : $data_qr_code",Logger.DEBUG_LEVEL.VERBOSE)
+                        } catch (e: IOException) {
+                            e.printStackTrace()
                         }
-
-                        if (data_qr_code.startsWith("{")) {
-                            val gson2: Gson = GsonBuilder().create()
-                            val converted_json_object: JSON_QR = gson2.fromJson(data_qr_code, JSON_QR::class.java)
-                            if (converted_json_object.name != null) {
-                                CoreEngine.insert(EngineVarString("QR_answer", converted_json_object.name!!), call_back_on_finish)
-                                return@ActionLambda
-                            }
-                        }
-                        CoreEngine.insert(EngineVarBool("QR_start", true), call_back_on_finish)
                     }
-                ))
+
+                    if (data_qr_code.startsWith("{")) {
+                        val gson2: Gson = GsonBuilder().create()
+                        val converted_json_object: JSON_QR =
+                            gson2.fromJson(data_qr_code, JSON_QR::class.java)
+
+                        CoreEngine.insert(EngineVarString("QR_answer",converted_json_object.id.toString()), call_back_on_finish)
+                    } else
+                        call_back_on_finish()
+                })
             CoreEngine.add_user_rule(it)
         }
 
-        // We add rules for each speech recognition puzzle
-        for (puz in puzzles_sr_json_array) {
-            val puz_array = puz.asJsonArray
-            val t_puz_id: Int = gson.fromJson(puz_array[0], String::class.java).toInt()
-            val t_puz_name: String = gson.fromJson(puz_array[1], String::class.java)
-            val t_puz_answer : String = gson.fromJson(puz_array[2], String::class.java)
-
-            // Add a rule to say the text of the puzzle
-            EngineRule("Play_section_$num_section").let {
-                it.add_head_atom(EngineVarInt("SG_puzzle_choice", t_puz_id), false)
-                it.add_head_atom(EngineVarInt("QR_section", num_section), false)
-                it.add_head_atom(EngineVarBool("Play_next_section", true), true)
-                it.add_action(
-                    ActionRemoveVar("Play_next_section"),
-                    ActionAddVar(EngineVarInt("QR_section", num_section + 1)))
-                if (t_puz_name.startsWith("http://") || t_puz_name.startsWith("https://"))
-                    it.add_action(
-                        ActionPlayMediaURL(t_puz_name, true)
-                    )
-                else
-                    it.add_action(
-                        ActionSpeak(t_puz_name))
-                it.add_action(
-                    ActionSpeakBeginnerHelp(MainApplication.application_context().getString(R.string.action_vocal_beginner_help)),
-                    ActionAddVar(EngineVarBool("SR_start",true)),
-                    ActionAddVar(EngineVarBool("Play_next_section", true)))
-                CoreEngine.add_user_rule(it)
-            }
-
-            // Add a rule when the puzzle is solved
-            EngineRule("Check_puzzle_${t_puz_id}_answer").let {
-                it.add_head_atom(EngineVarInt("SG_puzzle_choice", t_puz_id), false)
-                it.add_head_atom(EngineVarInt("QR_section", num_section+1), false)
-                it.add_head_atom(EngineVarRegex("SR_text", t_puz_answer), false)
-                it.add_head_atom(EngineVarInt("SG_nb_unsolved_puzzle", 0), true)
-                it.add_action(
-                    ActionRemoveVar("SR_text"),
-                    ActionRemoveVar("SG_puzzle_choice"),
-                    ActionRemoveVar("SG_puzzle_$t_puz_id"),
-                    ActionSpeak(context().getString(R.string.action_puzzle_one_solved)),
-                    ActionLambda(
-                        "Update Number of unsolved puzzles",
-                        { head_var_list: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
-                            var nb_unsolved_puzzles = 0
-                            for (v in head_var_list)
-                                if (v._name == "SG_nb_unsolved_puzzle") nb_unsolved_puzzles = (v as EngineVarInt)._value
-                            CoreEngine.insert(EngineVarInt("SG_nb_unsolved_puzzle", nb_unsolved_puzzles - 1), call_back_on_finish)
-                        }
-                    ))
-                CoreEngine.add_user_rule(it)
-            }
-
-            // Add a rule for wrong puzzle answer
-            EngineRule("Say_wrong_puzzle_answer").let {
-                it.add_head_atom(EngineVarInt("SG_puzzle_choice", t_puz_id), false)
-                it.add_head_atom(EngineVarInt("QR_section", num_section+1), false)
-                it.add_head_atom(EngineVarRegex("SR_text", ""), true)
-                it.add_action(
-                    ActionRemoveVar("SR_text"),
-                    ActionSpeak(context().getString(R.string.action_puzzle_wrong_answer)),
-                    ActionAddVar(EngineVarBool("SR_start",true)))
-                CoreEngine.add_user_rule(it)
-            }
-
-            // Add a rule for text not understood
-            EngineRule("Say_puzzle_answer_not_undestand").let {
-                it.add_head_atom(EngineVarInt("SG_puzzle_choice", t_puz_id), false)
-                it.add_head_atom(EngineVarInt("QR_section", num_section+1), false)
-                it.add_head_atom(EngineVarRegex("SR_error", ""), true)
-                it.add_action(
-                    ActionRemoveVar("SR_error"),
-                    ActionSpeak(context().getString(R.string.action_puzzle_answer_dont_understand)),
-                    ActionAddVar(EngineVarBool("SR_start",true)))
-                CoreEngine.add_user_rule(it)
-            }
-        }
-
-        // ------------------------------------------------
-        // ---------- CONCLUSION
-        // ------------------------------------------------
-        ++num_section
-        // Add a rule to say the text of the conclusion
-        EngineRule("Play_section_$num_section").let {
-            it.add_head_atom(EngineVarInt("SG_nb_unsolved_puzzle", 0), false)
-            it.add_head_atom(EngineVarInt("QR_section", num_section), false)
-            it.add_head_atom(EngineVarBool("Play_next_section", true), true)
+        // Add a rule to go to exploration mode
+        EngineRule("Go_to_exploration_mode").let {
+            it.add_head_atom(EngineVarBool("ask_for_backup_user_rules", true), true)
             it.add_action(
-                ActionRemoveVar("Play_next_section"),
-                ActionRemoveVar("SG_nb_unsolved_puzzle"),
-                ActionAddVar(EngineVarInt("QR_section", num_section + 1)))
-            if (sg_object.fin!!.startsWith("http://") || sg_object.fin!!.startsWith("https://"))
-                it.add_action(
-                    ActionPrettyPrint(context().getString(R.string.action_puzzle_play_media)),
-                    ActionPlayMediaURL(sg_object.fin!!, true)
-                )
-            else
-                it.add_action(
-                    ActionPrettyPrint(sg_object.fin!!),
-                    ActionSpeak(sg_object.fin!!))
-            it.add_action(ActionAddVar(EngineVarBool("Play_next_section", true)))
-            CoreEngine.add_user_rule(it)
-        }
-
-        // If we don't go to the conclusion, then some puzzle still need to be solved
-        EngineRule("Play_section_$num_section").let {
-            it.add_head_atom(EngineVarInt("QR_section", num_section), false)
-            it.add_head_atom(EngineVarBool("Play_next_section", true), true)
-            it.add_action(
-                ActionRemoveVar("Play_next_section"),
-                ActionAddVar(EngineVarInt("QR_section", num_section - 2)),
-                ActionAddVar(EngineVarBool("Play_next_section", true) ))
-            CoreEngine.add_user_rule(it)
-        }
-
-        // ------------------------------------------------
-        // ---------- PROGRAM NEEDED RULES
-        // ------------------------------------------------
-        ++num_section
-        // Add a rule to clear QR code variables when we are at the end of the serious game
-        EngineRule("Play_section_clear").let {
-            it.add_head_atom(EngineVarInt("QR_section", num_section), false )
-            it.add_head_atom(EngineVarBool("Play_next_section", true), true )
-            it.add_action(
-                ActionRemoveVar("Play_next_section"),
-                ActionRemoveVar("QR_section"))
-            CoreEngine.add_user_rule(it)
-        }
-
-        // Add some rules to manage seek actions
-        // Add a rule to replay QR code if it is already done
-        EngineRule("RePlay_QR").let {
-            it.add_head_atom(EngineVarInt("seek_section", -1000), false )
-            it.add_action(
-                ActionRemoveVar("Play_next_section"),
-                ActionRemoveVar("seek_section"),
-                ActionRemoveVar("SG_start_listing_available_puzzles"),
-                ActionRemoveVar("SG_puzzle_choice"))
-            // Add initial variables
-            for (puz_id in list_of_puzzle_name_id)
-            // Add a var to say that puzzle is still there (not already solved)
-                it.add_action(ActionAddVar(EngineVarBool(puz_id,true)))
-            it.add_action(
-                ActionAddVar(EngineVarInt("SG_nb_unsolved_puzzle", puzzles_json_array.size())),
-                ActionAddVar(EngineVarInt("QR_section", 1)),
                 ActionLambda(
-                    "Go to first",
+                    "Cancel QRDetector and SpeechRecognition",
                     { _: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
-                        // Action is handled only when in a Speech Recognition or a QR code scanning
-                        if (SpeechRecognitionEngine.is_recording() || QRDetectorEngine.is_scanning()) {
-                            SpeechRecognitionEngine.cancel()
+                        if(QRDetectorEngine.is_scanning())
                             QRDetectorEngine.cancel()
-                            call_back_on_finish()
-                        } else {
-                            CoreEngine.insert(EngineVarBool("Play_next_section", true), call_back_on_finish)
-                        }
+                        if(SpeechRecognitionEngine.is_recording())
+                            SpeechRecognitionEngine.cancel()
+                        call_back_on_finish()
                     }
-                ))
+                ),
+                ActionRemoveVar("ask_for_backup_user_rules"),
+                ActionPrettyPrint(context().getString(R.string.action_question_exercice_go_exploration_mode)),
+                ActionSpeak(context().getString(R.string.action_question_exercice_go_exploration_mode)),
+                ActionSpeakBeginnerHelp(MainApplication.application_context().getString(R.string.action_question_exercice_mode_help)),
+                ActionLambda(
+                    "Backup user rules and variables"
+                ) { _: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
+                    CoreEngine.backup_user_rules()
+                    CoreEngine.clear_user_rules()
+                    CoreEngine.clear_user_var_store()
+                    call_back_on_finish()
+                },
+                ActionAddVar(EngineVarBool("QR_start",true))
+            )
+            CoreEngine.add_user_rule(it)
+        }
+
+        // Add a rule to go to answer mode
+        EngineRule("Go_to_answer_mode").let {
+            it.add_head_atom(EngineVarBool("ask_for_restore_user_rules", true), true)
+            it.add_action(
+                ActionLambda(
+                    "Cancel QRDetector and SpeechRecognition",
+                    { _: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
+                        if(QRDetectorEngine.is_scanning())
+                            QRDetectorEngine.cancel()
+                        if(SpeechRecognitionEngine.is_recording())
+                            SpeechRecognitionEngine.cancel()
+                        call_back_on_finish()
+                    }
+                ),
+                ActionRemoveVar("ask_for_restore_user_rules"),
+                ActionPrettyPrint(context().getString(R.string.action_question_exercice_go_answer_mode)),
+                ActionSpeak(context().getString(R.string.action_question_exercice_go_answer_mode)),
+                ActionSpeakBeginnerHelp(MainApplication.application_context().getString(R.string.action_question_exercice_mode_help)),
+                ActionAddVar(EngineVarBool("QR_start",true))
+            )
+            CoreEngine.add_user_rule(it)
+        }
+
+        // Add a rule to replay question if we abort QR detection
+        EngineRule("Replay_on_QR_abort").let {
+            it.add_head_atom(EngineVarString("QR_abort", ""), true)
+            it.add_action(
+                ActionRemoveVar("QR_abort"),
+                ActionAddVar(EngineVarInt("QR_section", search_first(list_label_questions))),
+                ActionAddVar(EngineVarBool("Play_next_section", true))
+            )
+            CoreEngine.add_user_rule(it)
+        }
+
+        // Add a rule to clear QR code variables
+        // and start QR detection
+        EngineRule("Play_section_clear").let {
+            it.add_head_atom(EngineVarInt("QR_section", list_label_questions.size+1), false)
+            it.add_head_atom(EngineVarBool("Play_next_section", true), false)
+            it.add_action(
+                ActionRemoveVar("Play_next_section"),
+                ActionRemoveVar("QR_section")
+            )
             CoreEngine.add_user_rule(it)
         }
 
         // Add a rule to stop the media player if running
         EngineRule("Stop_mediaPlayer").let {
-            it.add_head_atom(EngineVarInt("seek_section", 0), false )
+            it.add_head_atom(EngineVarInt("seek_section", 0), false)
             it.add_action(
                 ActionLambda(
                     "Cancel mediaPlayer",
@@ -512,49 +580,65 @@ object QR_Serious_Game_Program {
             CoreEngine.add_user_rule(it)
         }
 
-        // Seek to a section
-        EngineRule("Play_seek").let {
-            it.add_head_atom(EngineVarInt("seek_section", 0), true)
-            it.add_head_atom(EngineVarInt("QR_section", 0), true)
-            it.add_action(ActionRemoveVar("seek_section"),
-                ActionLambda(
-                    "Update QR_section",
-                    { head_var_list: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
-                        var seek_section_value = 0
-                        var qr_section_value = 0
-                        for (v in head_var_list) {
-                            if (v._name == "seek_section") seek_section_value =
-                                (v as EngineVarInt)._value
-                            if (v._name == "QR_section") qr_section_value =
-                                (v as EngineVarInt)._value
-                        }
-                        // We skip to another section
-                        // We manage only seek to previous and seek to current and
-                        // action is handled only when in a Speech Recognition or a QR code scanning
-                        if ((SpeechRecognitionEngine.is_recording() || QRDetectorEngine.is_scanning())
-                            && (seek_section_value == -1) || (seek_section_value == -2))
-                            CoreEngine.insert(EngineVarInt("QR_section", maxOf(1, qr_section_value + seek_section_value)), { ->
-                                SpeechRecognitionEngine.cancel()
-                                QRDetectorEngine.cancel()
-                                call_back_on_finish()
-                            })
-                        else
-                            call_back_on_finish()
-                    }
-                ))
-            CoreEngine.add_user_rule(it)
-        }
-
-        logger(context().getString(R.string.action_new_rules_added) + " : " + CoreEngine.rules_to_string(),
-            Logger.DEBUG_LEVEL.INFO)
+        logger(context().getString(R.string.action_new_rules_added) + " : " + CoreEngine.rules_to_string_pretty_print(),
+            Logger.DEBUG_LEVEL.INFO
+        )
 
         // Add initial variables
-        for (puz_id in list_of_puzzle_name_id)
-            // Add a var to say that puzzle is still there (not already solved)
-            CoreEngine.insert(EngineVarBool(puz_id,true))
-
-        CoreEngine.insert(EngineVarInt("SG_nb_unsolved_puzzle", puzzles_json_array.size()))
-        CoreEngine.insert(EngineVarInt("QR_section", 1))
+        CoreEngine.insert(EngineVarInt("QR_section", search_first(list_label_questions)))
         CoreEngine.insert(EngineVarBool("Play_next_section", true))
+
+    }
+
+    // Return the name of the first node of the tree
+    private fun search_first(listS:MutableList<Section_label_question>):Int{
+        var res=0
+        for(sect in listS){
+            var notTo=false
+            for(sect2 in listS){
+                for(answer in sect2.answers){
+                    if(sect.name == answer.next)
+                        notTo=true
+                }
+            }
+            if(!notTo)
+                res=sect.id
+        }
+        return res
+    }
+
+    // Return the last node of the tree
+    private fun search_end(listS:MutableList<Section_label_question>):Int{
+        for(sect in listS){
+            for(answer in sect.answers){
+                if(answer.next == null)
+                    return sect.id
+            }
+        }
+        return 0
+    }
+
+    // Return the id of the next section of that pass in parameter or 0 if doesn't exist
+    private fun next_section(next:String, listS:MutableList<Section_label_question>):Int{
+        for(sect in listS){
+            if (sect.name == next)
+                return sect.id
+        }
+        return 0
+    }
+
+    // Return a regex for wrong answer in open question
+    private fun get_regex_QO(name: String, listS: MutableList<Section_label_question>):String {
+        var regex = "(^"
+        for(sect in listS){
+            if(sect.name == name) {
+                for(answer in sect.answers){
+                    if(!answer.answer.equals("Autre*"))
+                        regex += "((?!${answer.answer}).)*$"
+                }
+            }
+        }
+        regex += ")"
+        return regex
     }
 }

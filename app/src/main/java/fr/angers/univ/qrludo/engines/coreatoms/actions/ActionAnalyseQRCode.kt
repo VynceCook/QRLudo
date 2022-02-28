@@ -94,7 +94,7 @@ class ActionAnalyseQRCode : EngineAction {
                     "ExerciceReconnaissanceVocaleQCM" -> QR_Vocal_QCM_Program.load_from_json(data)
                     "ExerciceReconnaissanceVocaleQuestionOuverte" -> QR_Vocal_OQ_Program.load_from_json(data)
                     "reponse" -> logger(context().getString(R.string.action_qranalyse_unique_unkown_type) + " : $data", Logger.DEBUG_LEVEL.VERBOSE)
-                    "SeriousGameScenario" -> QR_Serious_Game_Program.load_from_json(data)
+                    "SeriousGame" -> QR_Serious_Game_Program.load_from_json(data)
                     "ReponseSeriousGame" -> {
                         // Outside from a SeriousGame, we convert it to a QR Code Unique
                         val qrcode_object : JSONObject = JSONObject()
