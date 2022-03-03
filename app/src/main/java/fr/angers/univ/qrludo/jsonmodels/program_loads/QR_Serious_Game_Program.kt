@@ -37,38 +37,39 @@ Example of generated program:
 
 { Int:QR_section(1), Bool:Play_next_section(true) }
 
-_u_<Play_section_1 @ Int:QR_section(1), Play_next_section --> Remove(Play_next_section), Remove(QR_question), PrettyPrint(Bienvenue dans le Serious Game. Voici la première question.), Speak(Bienvenue dans le Serious Game. Voici la première question.), Add(Int:QR_section(6)), Add(Bool:Play_next_section(true))>
-_u_<Play_seek_1 @ seek_section, Int:QR_section(1) --> Remove(seek_section), Update QR_section(), Add(Bool:Play_next_section(true))>
-_u_<Play_section_2 @ Int:QR_section(2), Play_next_section --> Remove(Play_next_section), Remove(QR_question), PrettyPrint(Mauvaise réponse, essaie encore), Speak(Mauvaise réponse, essaie encore), Add(Int:QR_section(7)), Add(Bool:Play_next_section(true))>
-_u_<Play_seek_2 @ seek_section, Int:QR_section(2) --> Remove(seek_section), Update QR_section(), Add(Bool:Play_next_section(true))>
-_u_<Play_section_3 @ Int:QR_section(3), Play_next_section --> Remove(Play_next_section), Remove(QR_question), PrettyPrint(Mauvaise réponse, essaie encore), Speak(Mauvaise réponse, essaie encore), Add(Int:QR_section(6)), Add(Bool:Play_next_section(true))>
-_u_<Play_seek_3 @ seek_section, Int:QR_section(3) --> Remove(seek_section), Update QR_section(), Add(Bool:Play_next_section(true))>
-_u_<Play_section_4 @ Int:QR_section(4), Play_next_section --> Remove(Play_next_section), Remove(QR_question), PrettyPrint(Bravo, vous avez fini l'exercice), Speak(Bravo, vous avez fini l'exercice), Add(Int:QR_section(9)), Add(Bool:Play_next_section(true))>
-_u_<Play_seek_4 @ seek_section, Int:QR_section(4) --> Remove(seek_section), Update QR_section(), Add(Bool:Play_next_section(true))>
-_u_<Play_section_5 @ Int:QR_section(5), Play_next_section --> Remove(Play_next_section), Remove(QR_question), PrettyPrint(Mauvaise réponse, essaie encore), Speak(Mauvaise réponse, essaie encore), Add(Int:QR_section(8)), Add(Bool:Play_next_section(true))>
-_u_<Play_seek_5 @ seek_section, Int:QR_section(5) --> Remove(seek_section), Update QR_section(), Add(Bool:Play_next_section(true))>
-_u_<Check_right_answer @ Regex:SR_text[Angers], Int:QR_question(6) --> Remove(SR_text), Add(Int:QR_section(3)), Add(Bool:Play_next_section(true))>
-_u_<Check_right_answer @ Regex:SR_text[Paris], Int:QR_question(6) --> Remove(SR_text), Add(Int:QR_section(7)), Add(Bool:Play_next_section(true))>
-_u_<Check_right_answer @ Regex:SR_text[Marseille], Int:QR_question(6) --> Remove(SR_text), Add(Int:QR_section(3)), Add(Bool:Play_next_section(true))>
+_u_<Play_section_1 @ Int:QR_section(1), Play_next_section --> Remove(Play_next_section), PrettyPrint(Bienvenue dans le Serious Game. Voici la première question.), Speak(Bienvenue dans le Serious Game. Voici la première question.), Add(Int:QR_section(6)), Add(Bool:Play_next_section(true))>
+_u_<Play_seek_1 @ seek_section, Int:QR_section(1) --> Remove(seek_section), Remove(QR_launched), Update QR_section()>
+_u_<Play_section_2 @ Int:QR_section(2), Play_next_section --> Remove(Play_next_section), PrettyPrint(Mauvaise réponse, essaie encore), Speak(Mauvaise réponse, essaie encore), Add(Int:QR_section(7)), Add(Bool:Play_next_section(true))>
+_u_<Play_seek_2 @ seek_section, Int:QR_section(2) --> Remove(seek_section), Remove(QR_launched), Update QR_section()>
+_u_<Play_section_3 @ Int:QR_section(3), Play_next_section --> Remove(Play_next_section), PrettyPrint(Mauvaise réponse, essaie encore), Speak(Mauvaise réponse, essaie encore), Add(Int:QR_section(6)), Add(Bool:Play_next_section(true))>
+_u_<Play_seek_3 @ seek_section, Int:QR_section(3) --> Remove(seek_section), Remove(QR_launched), Update QR_section()>
+_u_<Play_section_4 @ Int:QR_section(4), Play_next_section --> Remove(Play_next_section), PrettyPrint(Bravo, vous avez fini l'exercice), Speak(Bravo, vous avez fini l'exercice), Add(Int:QR_section(9)), Add(Bool:Play_next_section(true))>
+_u_<Play_seek_4 @ seek_section, Int:QR_section(4) --> Remove(seek_section), Remove(QR_launched), Update QR_section()>
+_u_<Play_section_5 @ Int:QR_section(5), Play_next_section --> Remove(Play_next_section), PrettyPrint(Mauvaise réponse, essaie encore), Speak(Mauvaise réponse, essaie encore), Add(Int:QR_section(8)), Add(Bool:Play_next_section(true))>
+_u_<Play_seek_5 @ seek_section, Int:QR_section(5) --> Remove(seek_section), Remove(QR_launched), Update QR_section()>
+_u_<Check_sr_answer @ Regex:SR_text[Angers], Int:QR_question(6) --> Remove(SR_text), Add(Int:QR_section(3)), Add(Bool:Play_next_section(true))>
+_u_<Check_sr_answer @ Regex:SR_text[Paris], Int:QR_question(6) --> Remove(SR_text), Add(Int:QR_section(7)), Add(Bool:Play_next_section(true))>
+_u_<Check_sr_answer @ Regex:SR_text[Marseille], Int:QR_question(6) --> Remove(SR_text), Add(Int:QR_section(3)), Add(Bool:Play_next_section(true))>
 _u_<Play_section_6 @ Int:QR_section(6), Play_next_section --> Remove(Play_next_section), Remove(QR_question), PrettyPrint(Quelle est la capitale de la France ?), Speak(Quelle est la capitale de la France ?), Speak(Les réponses possibles sont), Speak(Angers), Speak(Paris), Speak(Marseille), SpeakBeginnerHelp(C'est une question à reconnaissance vocale), Add(Int:QR_question(6)), Add(Bool:SR_start(true))>
-_u_<Play_seek_6 @ seek_section, Int:QR_section(6) --> Remove(seek_section), Update QR_section(), Add(Bool:Play_next_section(true))>
+_u_<Play_seek_6 @ seek_section, Int:QR_section(6) --> Remove(seek_section), Remove(QR_launched), Update QR_section()>
 _u_<Check_wrong_answer @ Regex:SR_text[(^((?!Mémoire sémantique).)*$((?!Mémoire des connaissances).)*$)], Int:QR_question(7) --> Remove(SR_text), Add(Int:QR_section(2)), Add(Bool:Play_next_section(true))>
 _u_<Check_right_answer @ Regex:SR_text[Mémoire sémantique], Int:QR_question(7) --> Remove(SR_text), Add(Int:QR_section(8)), Add(Bool:Play_next_section(true))>
 _u_<Check_right_answer @ Regex:SR_text[Mémoire des connaissances], Int:QR_question(7) --> Remove(SR_text), Add(Int:QR_section(8)), Add(Bool:Play_next_section(true))>
 _u_<Play_section_7 @ Int:QR_section(7), Play_next_section --> Remove(Play_next_section), Remove(QR_question), PrettyPrint(Comment s'appelle la mémoire dans laquelle sont stockés des éléments qui nous sont propres, nos événements vécus, etc), Speak(Comment s'appelle la mémoire dans laquelle sont stockés des éléments qui nous sont propres, nos événements vécus, etc), SpeakBeginnerHelp(C'est une question à reconnaissance vocale), Add(Int:QR_question(7)), Add(Bool:SR_start(true))>
-_u_<Play_seek_7 @ seek_section, Int:QR_section(7) --> Remove(seek_section), Update QR_section(), Add(Bool:Play_next_section(true))>
-_u_<Check_qr_answer @ String:QR_answer(88b07d8ec79bc9b192ffb0dd765b4721) --> Remove(QR_answer), Add(Int:QR_section(5)), Add(Bool:Play_next_section(true))>
-_u_<Check_qr_answer @ String:QR_answer(f21d85d0a0e4e7f18e3bd3a195573289) --> Remove(QR_answer), Add(Int:QR_section(4)), Add(Bool:Play_next_section(true))>
-_u_<Check_qr_answer @ String:QR_answer(4bf416a6b928925f3b0a0db30813f861) --> Remove(QR_answer), Add(Int:QR_section(4)), Add(Bool:Play_next_section(true))>
-_u_<Play_section_8 @ Int:QR_section(8), Play_next_section --> Remove(Play_next_section), PrettyPrint(Comment s'appelle la mémoire dans laquelle sont stockés des éléments qui nous sont propres, nos événements vécus, etc), Speak(Comment s'appelle la mémoire dans laquelle sont stockés des éléments qui nous sont propres, nos événements vécus, etc), SpeakBeginnerHelp(Un double balayage rapide vers le haut vous permet de basculer entre le mode exploration et le mode de réponse à la question), Add(Bool:QR_start(true)), Add(Bool:Play_next_section(true))>
-_u_<Play_seek_8 @ seek_section, Int:QR_section(8) --> Remove(seek_section), Update QR_section(), Add(Bool:Play_next_section(true))>
+_u_<Play_seek_7 @ seek_section, Int:QR_section(7) --> Remove(seek_section), Remove(QR_launched), Update QR_section()>
+_u_<Check_qr_answer @ String:QR_answer(88b07d8ec79bc9b192ffb0dd765b4721), Int:QR_question(8) --> Remove(QR_answer), Add(Int:QR_section(5)), Add(Bool:Play_next_section(true))>
+_u_<Check_qr_answer @ String:QR_answer(f21d85d0a0e4e7f18e3bd3a195573289), Int:QR_question(8) --> Remove(QR_answer), Add(Int:QR_section(4)), Add(Bool:Play_next_section(true))>
+_u_<Check_qr_answer @ String:QR_answer(4bf416a6b928925f3b0a0db30813f861), Int:QR_question(8) --> Remove(QR_answer), Add(Int:QR_section(4)), Add(Bool:Play_next_section(true))>
+_u_<Play_section_8 @ Int:QR_section(8), Play_next_section --> Remove(Play_next_section), Remove(QR_question), PrettyPrint(Comment s'appelle la mémoire dans laquelle sont stockés des éléments qui nous sont propres, nos événements vécus, etc), Speak(Comment s'appelle la mémoire dans laquelle sont stockés des éléments qui nous sont propres, nos événements vécus, etc), SpeakBeginnerHelp(Un double balayage rapide vers le haut vous permet de basculer entre le mode exploration et le mode de réponse à la question), Add(Int:QR_question(8)), Add(Bool:QR_launched(true)), Add(Bool:QR_start(true))>
+_u_<Play_seek_8 @ seek_section, Int:QR_section(8) --> Remove(seek_section), Remove(QR_launched), Update QR_section()>
 _u_<Say_unkown_answer @ SR_text --> Remove(SR_text), Speak(Votre réponse ne fait pas partie de la liste des réponses possibles), Add(Bool:SR_start(true))>
 _u_<Say_unrecognize_answer @ SR_error --> Remove(SR_error), Speak(Je n'ai pas reconnu votre réponse), Add(Bool:SR_start(true))>
-_u_<Analyse_QR_answer @ QR_code --> Remove(QR_code), Extract QR ID()>
-_u_<Go_to_exploration_mode @ ask_for_backup_user_rules --> Remove(ask_for_backup_user_rules), PrettyPrint(Vous etes en mode exploration), Speak(Vous etes en mode exploration), SpeakBeginnerHelp(Un double balayage rapide vers le haut vous permet de basculer entre le mode exploration et le mode de réponse à la question), Backup user rules and variables(), Add(Bool:QR_start(true))>
-_u_<Go_to_answer_mode @ ask_for_restore_user_rules --> Remove(ask_for_restore_user_rules), PrettyPrint(Vous etes en mode de réponse à la question), Speak(Vous etes en mode de réponse à la question), SpeakBeginnerHelp(Un double balayage rapide vers le haut vous permet de basculer entre le mode exploration et le mode de réponse à la question), Add(Bool:QR_start(true))>
-_u_<Replay_on_QR_abort @ QR_abort --> Remove(QR_abort), Add(Int:QR_section(1)), Add(Bool:Play_next_section(true))>
-_u_<Play_section_clear @ Int:QR_section(9), Bool:Play_next_section(true) --> Remove(Play_next_section), Remove(QR_section)>
+_u_<Analyse_QR_answer @ QR_code --> Remove(QR_launched), Remove(QR_code), Extract QR ID()>
+_u_<Go_to_exploration_mode @ ask_for_backup_user_rules, QR_launched --> Remove(ask_for_backup_user_rules), PrettyPrint(Vous etes en mode exploration), Speak(Vous etes en mode exploration), SpeakBeginnerHelp(Un double balayage rapide vers le haut vous permet de basculer entre le mode exploration et le mode de réponse à la question), Backup user rules and variables(), Add(Bool:QR_start(true))>
+_u_<Go_to_answer_mode @ ask_for_restore_user_rules, QR_launched --> Remove(ask_for_restore_user_rules), PrettyPrint(Vous etes en mode de réponse à la question), Speak(Vous etes en mode de réponse à la question), SpeakBeginnerHelp(Un double balayage rapide vers le haut vous permet de basculer entre le mode exploration et le mode de réponse à la question), Add(Bool:QR_start(true))>
+_u_<Check_qr_answer_failthrough @ QR_answer --> Remove(QR_answer), Add(Bool:Play_next_section(true))>
+_u_<Replay_on_QR_abort @ QR_abort --> Remove(QR_launched), Remove(QR_abort), Add(Bool:Play_next_section(true))>
+_u_<Play_section_clear @ Int:QR_section(9), Bool:Play_next_section(true) --> Remove(Play_next_section), Remove(QR_question), Remove(QR_section)>
 _u_<Stop_mediaPlayer @ Int:seek_section(0) --> Cancel mediaPlayer()>
 
  */
@@ -197,7 +198,7 @@ object QR_Serious_Game_Program {
                     "M" -> {
                         for(answer in answers){
                             val next = next_section(answer.next!!,list_label_questions)
-//ICI
+
                             // Add rule to play next section if it's an answer for this question
                             EngineRule("Check_sr_answer").let {
                                 it.add_head_atom(EngineVarRegex("SR_text", answer.answer!!), false)
