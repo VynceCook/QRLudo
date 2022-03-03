@@ -28,6 +28,9 @@ import java.util.zip.GZIPInputStream
  * recognition or QR detection) to a QR code type "Serious_game".
  */
 /*
+TODO : Il faudrait une règle par défaut pour les QR codes qui sont inconnus ou en erreur. Cette règle devrait relire la dernière question.
+Pour cela, il faudrait mettre une sortie "erreur" dans QRLudo Generator pour chaque question
+
 ------------------------------
 Example of generated program:
 ------------------------------
@@ -194,13 +197,13 @@ object QR_Serious_Game_Program {
                     "M" -> {
                         for(answer in answers){
                             val next = next_section(answer.next!!,list_label_questions)
-
+//ICI
                             // Add rule to play next section if it's an answer for this question
-                            EngineRule("Check_right_answer").let {
+                            EngineRule("Check_sr_answer").let {
                                 it.add_head_atom(EngineVarRegex("SR_text", answer.answer!!), false)
                                 it.add_head_atom(EngineVarInt("QR_question", section_id), false)
-                                it.add_action(ActionRemoveVar("SR_text"))
                                 it.add_action(
+                                    ActionRemoveVar("SR_text"),
                                     ActionAddVar(EngineVarInt("QR_section", next)),
                                     ActionAddVar(EngineVarBool("Play_next_section", true))
                                 )
@@ -251,8 +254,8 @@ object QR_Serious_Game_Program {
                                 EngineRule("Check_right_answer").let {
                                     it.add_head_atom(EngineVarRegex("SR_text", answer.answer!!), false)
                                     it.add_head_atom(EngineVarInt("QR_question", section_id), false)
-                                    it.add_action(ActionRemoveVar("SR_text"))
                                     it.add_action(
+                                        ActionRemoveVar("SR_text"),
                                         ActionAddVar(EngineVarInt("QR_section", next)),
                                         ActionAddVar(EngineVarBool("Play_next_section", true))
                                     )
@@ -264,8 +267,8 @@ object QR_Serious_Game_Program {
                                 EngineRule("Check_wrong_answer").let {
                                     it.add_head_atom(EngineVarRegex("SR_text", regex), false)
                                     it.add_head_atom(EngineVarInt("QR_question", section_id), false)
-                                    it.add_action(ActionRemoveVar("SR_text"))
                                     it.add_action(
+                                        ActionRemoveVar("SR_text"),
                                         ActionAddVar(EngineVarInt("QR_section", next)),
                                         ActionAddVar(EngineVarBool("Play_next_section", true))
                                     )
@@ -311,8 +314,9 @@ object QR_Serious_Game_Program {
                             // Add rule to play next section if it's an answer for this question
                             EngineRule("Check_qr_answer").let {
                                 it.add_head_atom(EngineVarString("QR_answer", answer.answer!!), false)
-                                it.add_action(ActionRemoveVar("QR_answer"))
+                                it.add_head_atom(EngineVarInt("QR_question", section_id), false)
                                 it.add_action(
+                                    ActionRemoveVar("QR_answer"),
                                     ActionAddVar(EngineVarInt("QR_section", next)),
                                     ActionAddVar(EngineVarBool("Play_next_section", true))
                                 )
@@ -324,7 +328,10 @@ object QR_Serious_Game_Program {
                         EngineRule("Play_section_$section_id").let {
                             it.add_head_atom(EngineVarInt("QR_section", section_id), false)
                             it.add_head_atom(EngineVarBool("Play_next_section", true), true)
-                            it.add_action(ActionRemoveVar("Play_next_section"))
+                            it.add_action(
+                                ActionRemoveVar("Play_next_section"),
+                                ActionRemoveVar("QR_question")
+                            )
 
                             if (read_type == "M")
                                 it.add_action(
@@ -341,8 +348,9 @@ object QR_Serious_Game_Program {
                                     MainApplication.application_context()
                                         .getString(R.string.action_question_exercice_mode_help)
                                 ),
-                                ActionAddVar(EngineVarBool("QR_start", true)),
-                                ActionAddVar(EngineVarBool("Play_next_section", true))
+                                ActionAddVar(EngineVarInt("QR_question", section_id)),
+                                ActionAddVar(EngineVarBool("QR_launched", true)),
+                                ActionAddVar(EngineVarBool("QR_start", true))
                             )
                             CoreEngine.add_user_rule(it)
                         }
@@ -353,10 +361,7 @@ object QR_Serious_Game_Program {
                 EngineRule("Play_section_$section_id").let {
                     it.add_head_atom(EngineVarInt("QR_section", section_id), false)
                     it.add_head_atom(EngineVarBool("Play_next_section", true), true)
-                    it.add_action(
-                        ActionRemoveVar("Play_next_section"),
-                        ActionRemoveVar("QR_question")
-                    )
+                    it.add_action(ActionRemoveVar("Play_next_section"))
                     if (read_type == "M")
                         it.add_action(
                             ActionPrettyPrint(context().getString(R.string.action_puzzle_play_media)),
@@ -387,7 +392,9 @@ object QR_Serious_Game_Program {
             EngineRule("Play_seek_${section_id}").let {
                 it.add_head_atom(EngineVarInt("seek_section", 0), true)
                 it.add_head_atom(EngineVarInt("QR_section", section_id), false)
-                it.add_action(ActionRemoveVar("seek_section"),
+                it.add_action(
+                    ActionRemoveVar("seek_section"),
+                    ActionRemoveVar("QR_launched"),
                     ActionLambda(
                         "Update QR_section",
                         { head_var_list: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
@@ -407,7 +414,7 @@ object QR_Serious_Game_Program {
                                 CoreEngine.insert(EngineVarInt("QR_section", search_first(list_label_questions)), {
                                     SpeechRecognitionEngine.cancel()
                                     QRDetectorEngine.cancel()
-                                    call_back_on_finish()
+                                    CoreEngine.insert(EngineVarBool("Play_next_section", true), call_back_on_finish)
                                 })
                             else
                                 if ((SpeechRecognitionEngine.is_recording() || QRDetectorEngine.is_scanning())
@@ -415,7 +422,7 @@ object QR_Serious_Game_Program {
                                     CoreEngine.insert(EngineVarInt("QR_section",  qr_section_value), {
                                         SpeechRecognitionEngine.cancel()
                                         QRDetectorEngine.cancel()
-                                        call_back_on_finish()
+                                        CoreEngine.insert(EngineVarBool("Play_next_section", true), call_back_on_finish)
                                     })
                                 else
                                     if ((SpeechRecognitionEngine.is_recording() || QRDetectorEngine.is_scanning())
@@ -423,13 +430,20 @@ object QR_Serious_Game_Program {
                                         CoreEngine.insert(EngineVarInt("QR_section", search_end(list_label_questions)), {
                                             SpeechRecognitionEngine.cancel()
                                             QRDetectorEngine.cancel()
-                                            call_back_on_finish()
+                                            CoreEngine.insert(EngineVarBool("Play_next_section", true), call_back_on_finish)
                                         })
                                     else
-                                        call_back_on_finish()
+                                        if ((!SpeechRecognitionEngine.is_recording() && !QRDetectorEngine.is_scanning() && MediaPlayerEngine.is_playing())
+                                            &&  (seek_section_value == -1)) //swipe down
+                                        {
+                                            MediaPlayerEngine.stop()
+                                            call_back_on_finish()
+                                        }
+                                        else
+                                            call_back_on_finish()
                         }
                     ),
-                    ActionAddVar(EngineVarBool("Play_next_section", true)))
+                )
                 CoreEngine.add_user_rule(it)
             }
         }
@@ -459,7 +473,9 @@ object QR_Serious_Game_Program {
         // Add a rule to launch analyzing of the answer
         EngineRule("Analyse_QR_answer").let {
             it.add_head_atom(EngineVarString("QR_code", ""), true)
-            it.add_action(ActionRemoveVar("QR_code"),
+            it.add_action(
+                ActionRemoveVar("QR_launched"),
+                ActionRemoveVar("QR_code"),
                 ActionLambda(
                     "Extract QR ID"
                 ) { head_var_list: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
@@ -490,17 +506,8 @@ object QR_Serious_Game_Program {
         // Add a rule to go to exploration mode
         EngineRule("Go_to_exploration_mode").let {
             it.add_head_atom(EngineVarBool("ask_for_backup_user_rules", true), true)
+            it.add_head_atom(EngineVarBool("QR_launched", true), true)
             it.add_action(
-                ActionLambda(
-                    "Cancel QRDetector and SpeechRecognition",
-                    { _: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
-                        if(QRDetectorEngine.is_scanning())
-                            QRDetectorEngine.cancel()
-                        if(SpeechRecognitionEngine.is_recording())
-                            SpeechRecognitionEngine.cancel()
-                        call_back_on_finish()
-                    }
-                ),
                 ActionRemoveVar("ask_for_backup_user_rules"),
                 ActionPrettyPrint(context().getString(R.string.action_question_exercice_go_exploration_mode)),
                 ActionSpeak(context().getString(R.string.action_question_exercice_go_exploration_mode)),
@@ -521,17 +528,8 @@ object QR_Serious_Game_Program {
         // Add a rule to go to answer mode
         EngineRule("Go_to_answer_mode").let {
             it.add_head_atom(EngineVarBool("ask_for_restore_user_rules", true), true)
+            it.add_head_atom(EngineVarBool("QR_launched", true), true)
             it.add_action(
-                ActionLambda(
-                    "Cancel QRDetector and SpeechRecognition",
-                    { _: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
-                        if(QRDetectorEngine.is_scanning())
-                            QRDetectorEngine.cancel()
-                        if(SpeechRecognitionEngine.is_recording())
-                            SpeechRecognitionEngine.cancel()
-                        call_back_on_finish()
-                    }
-                ),
                 ActionRemoveVar("ask_for_restore_user_rules"),
                 ActionPrettyPrint(context().getString(R.string.action_question_exercice_go_answer_mode)),
                 ActionSpeak(context().getString(R.string.action_question_exercice_go_answer_mode)),
@@ -541,24 +539,32 @@ object QR_Serious_Game_Program {
             CoreEngine.add_user_rule(it)
         }
 
+        // Add rule to play next section if it's an answer for this question
+        EngineRule("Check_qr_answer_failthrough").let {
+            it.add_head_atom(EngineVarString("QR_answer", ""), true)
+            it.add_action(ActionRemoveVar("QR_answer"))
+            it.add_action(ActionAddVar(EngineVarBool("Play_next_section", true)))
+            CoreEngine.add_user_rule(it)
+        }
+
         // Add a rule to replay question if we abort QR detection
         EngineRule("Replay_on_QR_abort").let {
             it.add_head_atom(EngineVarString("QR_abort", ""), true)
             it.add_action(
+                ActionRemoveVar("QR_launched"),
                 ActionRemoveVar("QR_abort"),
-                ActionAddVar(EngineVarInt("QR_section", search_first(list_label_questions))),
                 ActionAddVar(EngineVarBool("Play_next_section", true))
             )
             CoreEngine.add_user_rule(it)
         }
 
-        // Add a rule to clear QR code variables
-        // and start QR detection
+        // Add a rule to clear variables
         EngineRule("Play_section_clear").let {
             it.add_head_atom(EngineVarInt("QR_section", list_label_questions.size+1), false)
             it.add_head_atom(EngineVarBool("Play_next_section", true), false)
             it.add_action(
                 ActionRemoveVar("Play_next_section"),
+                ActionRemoveVar("QR_question"),
                 ActionRemoveVar("QR_section")
             )
             CoreEngine.add_user_rule(it)
