@@ -153,7 +153,7 @@ object QR_Unique_Program {
                     ActionRemoveVar("seek_section"),
                     ActionAddVar(EngineVarInt("QR_section", num_section)),
                     ActionLambda(
-                        "Go to first",
+                        "Go to end",
                         { _: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
                             // Action is handled only when MediaPlayer is playing
                             if (MediaPlayerEngine.is_playing()) {
