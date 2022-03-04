@@ -11,8 +11,8 @@ android {
         applicationId "fr.angers.univ.qrludo"
         minSdkVersion 25
         targetSdkVersion 30
-        versionCode 11
-        versionName '2.0.1'
+        versionCode 13
+        versionName '3.0.0'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
