@@ -19,3 +19,8 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 -renamesourcefileattribute SourceFile
+
+# To avoid obfuscated GSON class
+-keepclassmembers,allowobfuscation class * {
+@com.google.gson.annotations.SerializedName <fields>;
+}

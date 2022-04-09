@@ -106,7 +106,7 @@ class ActionAnalyseQRCode : EngineAction {
                         QR_Unique_Program.load_from_json(qrcode_object.toString())
                     }
                     else -> {
-                        logger(context().getString(R.string.action_qranalyse_unique_unkown_type) + " : $converted_json_object.type", Logger.DEBUG_LEVEL.VERBOSE)
+                        logger(context().getString(R.string.action_qranalyse_unique_unkown_type) + " : ${converted_json_object.type}", Logger.DEBUG_LEVEL.VERBOSE)
                         CoreEngine.insert(EngineVarInt("QR_code_error", 1), call_back_on_finish)
                     }
                 }
