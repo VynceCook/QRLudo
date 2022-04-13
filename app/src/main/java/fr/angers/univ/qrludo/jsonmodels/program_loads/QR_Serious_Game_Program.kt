@@ -196,12 +196,14 @@ object QR_Serious_Game_Program {
                 when(question_type){
                     // Type QCM
                     "M" -> {
+                        var i = 1;
                         for(answer in answers){
                             val next = next_section(answer.next!!,list_label_questions)
 
                             // Add rule to play next section if it's an answer for this question
                             EngineRule("Check_sr_answer").let {
-                                it.add_head_atom(EngineVarRegex("SR_text", answer.answer!!), false)
+                                val regex_answer="réponse $i|réponse numéro $i|" + answer.answer!! // For enhance french speech recognition
+                                it.add_head_atom(EngineVarRegex("SR_text", regex_answer, true), false)
                                 it.add_head_atom(EngineVarInt("QR_question", section_id), false)
                                 it.add_action(
                                     ActionRemoveVar("SR_text"),
@@ -210,6 +212,7 @@ object QR_Serious_Game_Program {
                                 )
                                 CoreEngine.add_user_rule(it)
                             }
+                            ++i
                         }
 
                         // Add rule to speak question and start vocal recognition
@@ -231,8 +234,10 @@ object QR_Serious_Game_Program {
                                     ActionSpeak(section_text)
                                 )
                             it.add_action(ActionSpeak(context().getString(R.string.action_qcm_allowed_answers)))
+                            i = 1
                             for (answer in answers) {
-                                it.add_action(ActionSpeak(answer.answer!!))
+                                it.add_action(ActionSpeak("réponse numéro $i, " + answer.answer!!))
+                                ++i
                             }
                             it.add_action(
                                 ActionSpeakBeginnerHelp(
@@ -253,7 +258,7 @@ object QR_Serious_Game_Program {
 
                             if (answer.answer != "Autre*") {
                                 EngineRule("Check_right_answer").let {
-                                    it.add_head_atom(EngineVarRegex("SR_text", answer.answer!!), false)
+                                    it.add_head_atom(EngineVarRegex("SR_text", answer.answer!!, true), false)
                                     it.add_head_atom(EngineVarInt("QR_question", section_id), false)
                                     it.add_action(
                                         ActionRemoveVar("SR_text"),
@@ -266,7 +271,7 @@ object QR_Serious_Game_Program {
                                 // We make a regex to match with any answer not containing good answer of the question
                                 val regex = get_regex_QO(section_name, list_label_questions)
                                 EngineRule("Check_wrong_answer").let {
-                                    it.add_head_atom(EngineVarRegex("SR_text", regex), false)
+                                    it.add_head_atom(EngineVarRegex("SR_text", regex, true), false)
                                     it.add_head_atom(EngineVarInt("QR_question", section_id), false)
                                     it.add_action(
                                         ActionRemoveVar("SR_text"),
