@@ -93,7 +93,7 @@ object QR_Vocal_OQ_Program {
         // We add rules for each good answer
         for (br in qe_object.data!!) {
             EngineRule("Check_right_answer").let {
-                it.add_head_atom(EngineVarRegex("SR_text", br), false)
+                it.add_head_atom(EngineVarRegex("SR_text", br, true), false)
                 it.add_action(
                     ActionRemoveVar("SR_text")
                 )

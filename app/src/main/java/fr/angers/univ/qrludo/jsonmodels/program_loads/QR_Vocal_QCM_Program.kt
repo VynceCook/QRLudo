@@ -114,7 +114,7 @@ object QR_Vocal_QCM_Program {
                 if (t_3)
                 //add rule if it's good answer
                     EngineRule("Check_right_answer").let {
-                        it.add_head_atom(EngineVarRegex("SR_text", regex), false)
+                        it.add_head_atom(EngineVarRegex("SR_text", regex, true), false)
                         it.add_head_atom(EngineVarInt("QR_question", num_section), false)
                         it.add_action(
                             ActionRemoveVar("SR_text"),
@@ -138,7 +138,7 @@ object QR_Vocal_QCM_Program {
                 else
                 //add rule if it's wrong answer
                     EngineRule("Check_wrong_answer").let {
-                        it.add_head_atom(EngineVarRegex("SR_text", regex), false)
+                        it.add_head_atom(EngineVarRegex("SR_text", regex, true), false)
                         it.add_head_atom(EngineVarInt("QR_question", num_section), false)
                         it.add_action(
                             ActionRemoveVar("SR_text")
