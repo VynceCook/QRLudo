@@ -12,15 +12,6 @@ class EngineVarRegex(name : String, value : String, with_phoneme : Boolean = fal
     var _value : String = value
     val _with_phoneme : Boolean = with_phoneme
 
-    init {
-        // TODO: Fix for bug in QRLudo Generator about Regex
-        if (_value.startsWith("(^((?!")) {
-            _value = _value.replace(").)*$((?!",")|.*(")
-            _value = _value.replace("(^((?!","^(?!.*(")
-            _value = _value.replace(").)*$)",")).*$")
-        }
-    }
-
     override fun to_string(): String {
         return "Regex:$_name[$_value]"
     }

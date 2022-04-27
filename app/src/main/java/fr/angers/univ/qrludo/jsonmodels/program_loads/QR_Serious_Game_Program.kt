@@ -52,9 +52,9 @@ _u_<Check_sr_answer @ Regex:SR_text[Paris], Int:QR_question(6) --> Remove(SR_tex
 _u_<Check_sr_answer @ Regex:SR_text[Marseille], Int:QR_question(6) --> Remove(SR_text), Add(Int:QR_section(3)), Add(Bool:Play_next_section(true))>
 _u_<Play_section_6 @ Int:QR_section(6), Play_next_section --> Remove(Play_next_section), Remove(QR_question), PrettyPrint(Quelle est la capitale de la France ?), Speak(Quelle est la capitale de la France ?), Speak(Les réponses possibles sont), Speak(Angers), Speak(Paris), Speak(Marseille), SpeakBeginnerHelp(C'est une question à reconnaissance vocale), Add(Int:QR_question(6)), Add(Bool:SR_start(true))>
 _u_<Play_seek_6 @ seek_section, Int:QR_section(6) --> Remove(seek_section), Remove(QR_launched), Update QR_section()>
-_u_<Check_wrong_answer @ Regex:SR_text[(^((?!Mémoire sémantique).)*$((?!Mémoire des connaissances).)*$)], Int:QR_question(7) --> Remove(SR_text), Add(Int:QR_section(2)), Add(Bool:Play_next_section(true))>
 _u_<Check_right_answer @ Regex:SR_text[Mémoire sémantique], Int:QR_question(7) --> Remove(SR_text), Add(Int:QR_section(8)), Add(Bool:Play_next_section(true))>
 _u_<Check_right_answer @ Regex:SR_text[Mémoire des connaissances], Int:QR_question(7) --> Remove(SR_text), Add(Int:QR_section(8)), Add(Bool:Play_next_section(true))>
+_u_<Check_wrong_answer @ Regex:SR_text[], Int:QR_question(7) --> Remove(SR_text), Add(Int:QR_section(2)), Add(Bool:Play_next_section(true))>
 _u_<Play_section_7 @ Int:QR_section(7), Play_next_section --> Remove(Play_next_section), Remove(QR_question), PrettyPrint(Comment s'appelle la mémoire dans laquelle sont stockés des éléments qui nous sont propres, nos événements vécus, etc), Speak(Comment s'appelle la mémoire dans laquelle sont stockés des éléments qui nous sont propres, nos événements vécus, etc), SpeakBeginnerHelp(C'est une question à reconnaissance vocale), Add(Int:QR_question(7)), Add(Bool:SR_start(true))>
 _u_<Play_seek_7 @ seek_section, Int:QR_section(7) --> Remove(seek_section), Remove(QR_launched), Update QR_section()>
 _u_<Check_qr_answer @ String:QR_answer(88b07d8ec79bc9b192ffb0dd765b4721), Int:QR_question(8) --> Remove(QR_answer), Add(Int:QR_section(5)), Add(Bool:Play_next_section(true))>
@@ -254,11 +254,17 @@ object QR_Serious_Game_Program {
                     // Type open question
                     "O" -> {
                         for(answer in answers) {
-                            val next = next_section(answer.next!!,list_label_questions)
+                            val next = next_section(answer.next!!, list_label_questions)
 
                             if (answer.answer != "Autre*") {
                                 EngineRule("Check_right_answer").let {
-                                    it.add_head_atom(EngineVarRegex("SR_text", answer.answer!!, true), false)
+                                    it.add_head_atom(
+                                        EngineVarRegex(
+                                            "SR_text",
+                                            answer.answer!!,
+                                            true
+                                        ), false
+                                    )
                                     it.add_head_atom(EngineVarInt("QR_question", section_id), false)
                                     it.add_action(
                                         ActionRemoveVar("SR_text"),
@@ -267,11 +273,15 @@ object QR_Serious_Game_Program {
                                     )
                                     CoreEngine.add_user_rule(it)
                                 }
-                            } else {
-                                // We make a regex to match with any answer not containing good answer of the question
-                                val regex = get_regex_QO(section_name, list_label_questions)
+                            }
+                        }
+                        for(answer in answers) {
+                            val next = next_section(answer.next!!,list_label_questions)
+
+                            if (answer.answer == "Autre*") {
+                                // We make a regex to match with any other answer
                                 EngineRule("Check_wrong_answer").let {
-                                    it.add_head_atom(EngineVarRegex("SR_text", regex, true), false)
+                                    it.add_head_atom(EngineVarRegex("SR_text", "", false), true)
                                     it.add_head_atom(EngineVarInt("QR_question", section_id), false)
                                     it.add_action(
                                         ActionRemoveVar("SR_text"),
@@ -637,20 +647,5 @@ object QR_Serious_Game_Program {
                 return sect.id
         }
         return 0
-    }
-
-    // Return a regex for wrong answer in open question
-    private fun get_regex_QO(name: String, listS: MutableList<Section_label_question>):String {
-        var regex = "(^"
-        for(sect in listS){
-            if(sect.name == name) {
-                for(answer in sect.answers){
-                    if(!answer.answer.equals("Autre*"))
-                        regex += "((?!${answer.answer}).)*$"
-                }
-            }
-        }
-        regex += ")"
-        return regex
     }
 }
