@@ -1,4 +1,14 @@
 # Changelog
+## Version 3.0.3
+- Correction de bugs
+- Amélioration de la reconnaissance vocale par ajout de phonèmes
+
+## Version 3.0.2
+- Correction de bugs
+
+## Version 3.0.1
+- Correction de bugs
+
 ## Version 3.0.0
 - Correction de bugs
 - Possibilité de lire des fichiers audio dans les questions ouvertes
