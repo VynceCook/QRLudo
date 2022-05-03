@@ -25,6 +25,7 @@ object Phoneme {
         "1" to "<1>",
         "un" to "<1>",
         "2" to "<2>",
+        "de" to "<2>",
         "deux" to "<2>",
         "3" to "<3>",
         "trois" to "<3>",
