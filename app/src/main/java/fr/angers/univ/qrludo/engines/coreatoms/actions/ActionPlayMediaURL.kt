@@ -5,8 +5,8 @@ import fr.angers.univ.qrludo.engines.CoreEngine
 import fr.angers.univ.qrludo.engines.MediaPlayerEngine
 import fr.angers.univ.qrludo.engines.TTSEngine
 import fr.angers.univ.qrludo.engines.coreatoms.EngineVar
+import fr.angers.univ.qrludo.engines.coreatoms.EngineVarInt
 import fr.angers.univ.qrludo.engines.coreatoms.EngineVarString
-import fr.angers.univ.qrludo.jsonmodels.program_loads.QR_URL_Program
 import fr.angers.univ.qrludo.utils.FileDownloader
 import fr.angers.univ.qrludo.utils.Logger
 import fr.angers.univ.qrludo.utils.MainApplication
@@ -58,6 +58,13 @@ class ActionPlayMediaURL( url : String, interrupt_media_player : Boolean = true,
                 call_back_on_finish()
                 return
             }
+        }
+
+        if (real_url.isEmpty()) {
+            Logger.log("ActionPlay", MainApplication.application_context().getString(R.string.core_action_link_empty_error),
+                Logger.DEBUG_LEVEL.INFO)
+            CoreEngine.insert(EngineVarInt("QR_code_error", 2), call_back_on_finish)
+            return
         }
 
         val dst_full_file_name = _dst_file_name ?: FileDownloader().encode_url(real_url)

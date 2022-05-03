@@ -84,6 +84,14 @@ object QR_Ludo_Program {
                 ActionSpeak(MainApplication.application_context().getString(R.string.qre_wrong_format_version)))
             CoreEngine.add_system_rule(it)
         }
+        EngineRule("Wrong_QR_code_field").let {
+            it.add_head_atom(EngineVarInt("QR_code_error", 2), false)
+            it.add_action(
+                ActionRemoveVar("QR_code_error"),
+                ActionPrettyPrint(MainApplication.application_context().getString(R.string.qre_wrong_field)),
+                ActionSpeak(MainApplication.application_context().getString(R.string.qre_wrong_field)))
+            CoreEngine.add_system_rule(it)
+        }
 
         /**
          * TEST TTS IS FUNCTIONAL

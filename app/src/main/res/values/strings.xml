@@ -70,6 +70,7 @@
     <string name="qre_no_view">ne peut trouver une vue valide</string>
     <string name="qre_no_activity">pas d\'activité ou de surface à connecter</string>
     <string name="qre_wrong_format_version">Cette version du format de QR code n\'est pas prise en compte.</string>
+    <string name="qre_wrong_field">Le QR code est incomplet</string>
 
     <!-- Preferences -->
     <string name="title_activity_settings">Paramètres</string>
@@ -157,6 +158,7 @@
     <string name="core_check_rule">test la règle</string>
     <string name="core_execute_action">effectue l\'action</string>
     <string name="core_remove_var">suppression de la variable</string>
+    <string name="core_action_link_empty_error">L\'URL à télécharger est vide</string>
     <string name="core_action_link_error">Ne peut pas associer la variable du moteur</string>
     <string name="core_engine_qrludo_started">QRLudo est lancé</string>
     <string name="macro_code_load">Chargement du macro code</string>
