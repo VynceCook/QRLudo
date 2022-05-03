@@ -23,6 +23,7 @@ object ToneEngine {
         ERROR,
         START_DETECTION,
         START_SR,
+        PAUSE_SR,
 
         IGNORED_QR,
         FAMILY_QR,
@@ -65,7 +66,7 @@ object ToneEngine {
     // Used to link to the next action.
     fun play(tone_name: TONE_NAME, user_call_after_complete: () -> Unit = { -> }) {
         // Return if a speech recognition engine is recording or if a sound file is playing
-        if (!SpeechRecognitionEngine.is_idle() || !MediaPlayerEngine.is_idle()) {
+        if (!(SpeechRecognitionEngine.is_idle() || SpeechRecognitionEngine.is_paused()) || !MediaPlayerEngine.is_idle()) {
             logger(context().getString(R.string.tone_something_in_progress), Logger.DEBUG_LEVEL.INFO)
             return
         }
@@ -102,6 +103,9 @@ object ToneEngine {
             }
             TONE_NAME.START_SR -> {
                 play_tone(tone_generator, ToneGenerator.TONE_CDMA_ONE_MIN_BEEP, 500, call_after_complete)
+            }
+            TONE_NAME.PAUSE_SR -> {
+                play_tone(tone_generator, ToneGenerator.TONE_PROP_BEEP, 50, call_after_complete)
             }
 
             TONE_NAME.FAMILY_QR -> {

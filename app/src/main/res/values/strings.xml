@@ -50,6 +50,7 @@
     <string name="spre_media_player_in_progress">une musique est jouée, on ne peut pas démarrer la reconnaissance vocale</string>
     <string name="spre_abort">interruption de la reconnaissance vocale</string>
     <string name="spre_talk_after_tone">Parlez après le bip</string>
+    <string name="spre_pause">reconnaissance vocale en pause</string>
 
     <!-- ToneEngine -->
     <string name="tone_something_in_progress">musique ou reconnaissance vocale en cours</string>
@@ -98,7 +99,7 @@
     <string name="title_activity_help">Aide</string>
     <string name="help_title">Aide sur les mouvements</string>
     <string name="help_double_tap_title">Double tape</string>
-    <string name="help_double_tap_content">Si vous tapez deux fois sur votre écran, cela mettra en pause le son joué. Pour reprendre, double-taper une nouvelle fois</string>
+    <string name="help_double_tap_content">Si vous tapez deux fois sur votre écran, cela mettra en pause le son joué ou la reconnaissance vocale en cours. Pour reprendre, double-taper une nouvelle fois</string>
     <string name="help_swipe_up_title">Balayage vers le haut</string>
     <string name="help_swipe_up_content">Le mouvement de balayage vers le haut permet de revenir de quelques secondes en arrière sur le son joué.</string>
     <string name="help_swipe_down_title">Balayage vers le bas</string>

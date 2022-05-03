@@ -24,9 +24,10 @@ import java.util.*
 object SpeechRecognitionEngine : RecognitionListener {
     // The states of the Engine
     enum class ENGINE_STATE {
-        IDLE,         /// Not yet ready
-        READY,        /// Ready to handle new event
-        IS_RECORDING  /// Recording any sound in order to detect some sentences
+        IDLE,               /// Not yet ready
+        READY,              /// Ready to handle new event
+        IS_RECORDING,       /// Recording any sound in order to detect some sentences
+        IS_PAUSE_RECORDING  /// Recording any sound in order to detect some sentences, but is in pause state
     }
 
     private var _state = ENGINE_STATE.IDLE;
@@ -66,7 +67,11 @@ object SpeechRecognitionEngine : RecognitionListener {
     }
 
     fun is_recording() : Boolean {
-        return (_state == ENGINE_STATE.IS_RECORDING)
+        return (_state == ENGINE_STATE.IS_RECORDING) || ((_state == ENGINE_STATE.IS_PAUSE_RECORDING))
+    }
+
+    fun is_paused() : Boolean {
+        return (_state == ENGINE_STATE.IS_PAUSE_RECORDING)
     }
 
     // Start the speech recognition step. The callback functions are given as input in order
@@ -118,6 +123,22 @@ object SpeechRecognitionEngine : RecognitionListener {
         _speech_recognizer.destroy()
         _state = ENGINE_STATE.IDLE
         _call_after_cancel()
+    }
+
+
+    // Pause (stop) the current speech recognition step, in order to be restart later and resume it if it was paused before
+    fun pause_or_resume() {
+        if (_state == ENGINE_STATE.IDLE)
+            return
+        if (_state == ENGINE_STATE.IS_PAUSE_RECORDING) {
+            ToneEngine.play(ToneEngine.TONE_NAME.START_SR, { -> start_listening(_call_after_complete, _call_after_partial, _call_after_cancel, _call_after_error) })
+            return
+        }
+        _state = ENGINE_STATE.IS_PAUSE_RECORDING
+        ToneEngine.play(ToneEngine.TONE_NAME.PAUSE_SR, {})
+        logger(context().getString(R.string.spre_pause), Logger.DEBUG_LEVEL.INFO)
+        _speech_recognizer.cancel()
+        _speech_recognizer.destroy()
     }
 
     // Listener triggered when a new sentence has been recognized

@@ -142,6 +142,7 @@ class MainActivity : AppCompatActivity() {
                 override fun on_double_tap() {
                     Logger.log("SwipeGesture", "Double tap", Logger.DEBUG_LEVEL.VERBOSE)
                     MediaPlayerEngine.pause_or_resume()
+                    SpeechRecognitionEngine.pause_or_resume()
                 }
 
                 override fun on_swipe_left() {
