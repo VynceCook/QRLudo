@@ -131,7 +131,10 @@ object SpeechRecognitionEngine : RecognitionListener {
         if (_state == ENGINE_STATE.IDLE)
             return
         if (_state == ENGINE_STATE.IS_PAUSE_RECORDING) {
-            ToneEngine.play(ToneEngine.TONE_NAME.START_SR, { -> start_listening(_call_after_complete, _call_after_partial, _call_after_cancel, _call_after_error) })
+            if (MainApplication.SR_beep_on.get())
+                ToneEngine.play(ToneEngine.TONE_NAME.START_SR, { -> start_listening(_call_after_complete, _call_after_partial, _call_after_cancel, _call_after_error) })
+            else
+                start_listening(_call_after_complete, _call_after_partial, _call_after_cancel, _call_after_error)
             return
         }
         _state = ENGINE_STATE.IS_PAUSE_RECORDING
