@@ -2,6 +2,7 @@
 ## Version 3.0.3
 - Correction de bugs
 - Amélioration de la reconnaissance vocale par ajout de phonèmes
+- Ajout de la possibilité de mettre la reconnaissance vocale en pause
 
 ## Version 3.0.2
 - Correction de bugs
