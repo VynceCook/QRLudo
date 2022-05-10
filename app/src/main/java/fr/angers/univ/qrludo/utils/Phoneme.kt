@@ -42,7 +42,8 @@ object Phoneme {
         "9" to "<9>",
         "neuf" to "<9>",
         "10" to "<10>",
-        "dix" to "<10>"
+        "dix" to "<10>",
+        "€" to "euros"
     )
 
     /// Max length of a phoneme key
