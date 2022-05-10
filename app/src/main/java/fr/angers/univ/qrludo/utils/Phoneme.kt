@@ -16,6 +16,14 @@ object Phoneme {
         "a" to "<a>",
         "à" to "<a>",
         "ah" to "<a>",
+        "é" to "<e>",
+        "ée" to "<e>",
+        "ées" to "<e>",
+        "és" to "<e>",
+        "et" to "<e>",
+        "est" to "<e>",
+        "hé" to "<e>",
+        "é" to "<e>",
         "c" to "<c>",
         "c'est" to "<c>",
         "ces" to "<c>",
@@ -43,7 +51,9 @@ object Phoneme {
         "neuf" to "<9>",
         "10" to "<10>",
         "dix" to "<10>",
-        "€" to "euros"
+        "euros" to "<euro>",
+        "euro" to "<euro>",
+        "€" to "<euro>"
     )
 
     /// Max length of a phoneme key
