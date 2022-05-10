@@ -165,7 +165,7 @@ class SettingsActivity : AppCompatActivity() {
                     val settings =
                         activity?.getSharedPreferences(MainApplication.Shared_Pref_Name,
                             MODE_PRIVATE)?.edit()
-                    settings?.putBoolean("exper_mode", newValue)
+                    settings?.putBoolean("expert_mode", newValue)
                     settings?.apply()
                     return true
                 }
