@@ -70,7 +70,6 @@ _u_<Go_to_answer_mode @ ask_for_restore_user_rules, QR_launched --> Remove(ask_f
 _u_<Check_qr_answer_failthrough @ QR_answer --> Remove(QR_answer), Add(Bool:Play_next_section(true))>
 _u_<Replay_on_QR_abort @ QR_abort --> Remove(QR_launched), Remove(QR_abort), Add(Bool:Play_next_section(true))>
 _u_<Play_section_clear @ Int:QR_section(9), Bool:Play_next_section(true) --> Remove(Play_next_section), Remove(QR_question), Remove(QR_section)>
-_u_<Stop_mediaPlayer @ Int:seek_section(0) --> Cancel mediaPlayer()>
 
  */
 object QR_Serious_Game_Program {
@@ -422,41 +421,39 @@ object QR_Serious_Game_Program {
                                 if (v._name == "QR_section") qr_section_value =
                                     (v as EngineVarInt)._value
                             }
-                            // We skip to another section
-                            // We manage only seek to previous and seek to current and
-                            // action is handled only when in a Speech Recognition or a QR code scanning
-                            if ((SpeechRecognitionEngine.is_recording() || QRDetectorEngine.is_scanning())
+                            // Return to the first section
+                            if ((SpeechRecognitionEngine.is_recording() || QRDetectorEngine.is_scanning() || MediaPlayerEngine.is_playing())
                                 && (seek_section_value == -1000)) //double swipe left
+                            {
+                                SpeechRecognitionEngine.cancel()
+                                QRDetectorEngine.cancel()
+                                MediaPlayerEngine.stop()
                                 CoreEngine.insert(EngineVarInt("QR_section", search_first(list_label_questions)), {
-                                    SpeechRecognitionEngine.cancel()
-                                    QRDetectorEngine.cancel()
                                     CoreEngine.insert(EngineVarBool("Play_next_section", true), call_back_on_finish)
                                 })
+                            }
                             else
-                                if ((SpeechRecognitionEngine.is_recording() || QRDetectorEngine.is_scanning())
+                                // Return to start of section
+                                if ((SpeechRecognitionEngine.is_recording() || QRDetectorEngine.is_scanning() || MediaPlayerEngine.is_playing())
                                     &&  (seek_section_value == -2)) //simple swipe left
+                                {
+                                    SpeechRecognitionEngine.cancel()
+                                    QRDetectorEngine.cancel()
+                                    MediaPlayerEngine.stop()
                                     CoreEngine.insert(EngineVarInt("QR_section",  qr_section_value), {
-                                        SpeechRecognitionEngine.cancel()
-                                        QRDetectorEngine.cancel()
                                         CoreEngine.insert(EngineVarBool("Play_next_section", true), call_back_on_finish)
                                     })
+                                }
                                 else
-                                    if ((SpeechRecognitionEngine.is_recording() || QRDetectorEngine.is_scanning())
-                                        &&  (seek_section_value == 1000)) //double swipe right
-                                        CoreEngine.insert(EngineVarInt("QR_section", search_end(list_label_questions)), {
-                                            SpeechRecognitionEngine.cancel()
-                                            QRDetectorEngine.cancel()
-                                            CoreEngine.insert(EngineVarBool("Play_next_section", true), call_back_on_finish)
-                                        })
+                                    // Stop the media player if running
+                                    if ((!SpeechRecognitionEngine.is_recording() && !QRDetectorEngine.is_scanning() && MediaPlayerEngine.is_playing())
+                                        &&  (seek_section_value == -1)) //swipe down
+                                    {
+                                        MediaPlayerEngine.stop()
+                                        call_back_on_finish()
+                                    }
                                     else
-                                        if ((!SpeechRecognitionEngine.is_recording() && !QRDetectorEngine.is_scanning() && MediaPlayerEngine.is_playing())
-                                            &&  (seek_section_value == -1)) //swipe down
-                                        {
-                                            MediaPlayerEngine.stop()
-                                            call_back_on_finish()
-                                        }
-                                        else
-                                            call_back_on_finish()
+                                        call_back_on_finish()
                         }
                     ),
                 )
@@ -583,22 +580,6 @@ object QR_Serious_Game_Program {
                 ActionRemoveVar("QR_question"),
                 ActionRemoveVar("QR_section")
             )
-            CoreEngine.add_user_rule(it)
-        }
-
-        // Add a rule to stop the media player if running
-        EngineRule("Stop_mediaPlayer").let {
-            it.add_head_atom(EngineVarInt("seek_section", 0), false)
-            it.add_action(
-                ActionLambda(
-                    "Cancel mediaPlayer",
-                    { _: MutableList<EngineVar>, call_back_on_finish: () -> Unit ->
-                        // Action is handled only when MediaPlayer is running
-                        if (MediaPlayerEngine.is_playing())
-                            MediaPlayerEngine.stop()
-                        call_back_on_finish()
-                    }
-                ))
             CoreEngine.add_user_rule(it)
         }
 
