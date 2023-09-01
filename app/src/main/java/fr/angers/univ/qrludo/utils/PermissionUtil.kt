@@ -30,13 +30,16 @@ object PermissionUtil {
      * @param permissions one or more permissions, such as {@link android.Manifest.permission#CAMERA}.
      * @return true if all permissions are granted, false if at least one is not granted yet.
      */
-    @RequiresApi(api = Build.VERSION_CODES.M)
     fun check_and_request_permissions(activity: Activity, vararg permissions: String) : Boolean {
         val permissions_list = mutableListOf<String>()
         for (p in permissions) {
             val permission_state = activity.checkSelfPermission(p)
-            if (permission_state == PackageManager.PERMISSION_DENIED)
+            if (permission_state == PackageManager.PERMISSION_DENIED) {
                 permissions_list.add(p)
+                Logger.log("PermissionCheck",
+                    "TOTO " + p,
+                    Logger.DEBUG_LEVEL.INFO)
+            }
         }
 
         if (!permissions_list.isEmpty()) {
@@ -58,7 +61,6 @@ object PermissionUtil {
      * @param permissions_callback_granted callback function called when all permissions have been granted
      * @param permissions_callback_denied callback function called when at least one permission has been denied
      */
-    @RequiresApi(api = Build.VERSION_CODES.M)
     fun on_request_permissions_result(
         activity: Activity,
         request_code: Int,
@@ -89,7 +91,6 @@ object PermissionUtil {
                     show_alert_dialog(
                         activity,
                         object : DialogInterface.OnClickListener {
-                            @TargetApi(Build.VERSION_CODES.M)
                             override fun onClick(dialog: DialogInterface?, which: Int) {
                                 check_and_request_permissions(activity, *permissions_list.toTypedArray());
                             }

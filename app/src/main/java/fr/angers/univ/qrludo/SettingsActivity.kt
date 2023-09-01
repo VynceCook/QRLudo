@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NavUtils
 import androidx.preference.Preference
@@ -44,6 +45,17 @@ class SettingsActivity : AppCompatActivity() {
                 .commit()
         }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        onBackPressedDispatcher.addCallback(this /* lifecycle owner */, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent()
+                if (parent == null) {
+                    setResult(RESULT_OK, intent)
+                } else {
+                    parent.setResult(RESULT_OK, intent)
+                }
+                finish()
+            }
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -52,16 +64,6 @@ class SettingsActivity : AppCompatActivity() {
             NavUtils.navigateUpFromSameTask(this)
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onBackPressed() {
-        val intent = Intent()
-        if (parent == null) {
-            setResult(RESULT_OK, intent)
-        } else {
-            parent.setResult(RESULT_OK, intent)
-        }
-        super.onBackPressed()
     }
 
     // Find the full path of the given p_path. It replaces some parts by
@@ -105,7 +107,7 @@ class SettingsActivity : AppCompatActivity() {
                 if (tree_uri != null) {
                     var path_str : String = find_full_path(tree_uri.path.toString()) + "/"
                     logger(getString(R.string.file_directory_picker_done) + " : " + path_str,
-                        Logger.DEBUG_LEVEL.INFO);
+                        Logger.DEBUG_LEVEL.INFO)
                     val dst_dir = File(path_str)
                     val test_file = File(path_str + "test_create.txt")
                     test_file.setReadable(true, false)
@@ -113,7 +115,7 @@ class SettingsActivity : AppCompatActivity() {
                         test_file.createNewFile()
                     }  catch (e : Exception) {
                         logger(getString(R.string.media_directory_cannot_use) + " : " + path_str,
-                            Logger.DEBUG_LEVEL.INFO);
+                            Logger.DEBUG_LEVEL.INFO)
                         Toast.makeText(MainApplication.Main_Activity, getString(R.string.media_directory_cannot_use) + " : " + path_str, Toast.LENGTH_LONG).show()
                     }
 
@@ -131,7 +133,7 @@ class SettingsActivity : AppCompatActivity() {
                         pref_change_media_files_dir?.setSummary("""${getString(R.string.pref_summary_change_media_files_dir)} : ${MainApplication.Media_Files_Path}""")
 
                         logger(getString(R.string.media_directory_moved) + " : " + path_str,
-                            Logger.DEBUG_LEVEL.INFO);
+                            Logger.DEBUG_LEVEL.INFO)
                     }
                 }
             }
@@ -299,7 +301,7 @@ class SettingsActivity : AppCompatActivity() {
                 Preference.OnPreferenceClickListener {
                 override fun onPreferenceClick(preference: Preference?): Boolean {
                     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-                    intent.addCategory(Intent.CATEGORY_DEFAULT);
+                    intent.addCategory(Intent.CATEGORY_DEFAULT)
                     activity?.startActivityForResult(intent, PICK_REQUEST_CODE)
                     return true
                 }

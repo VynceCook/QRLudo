@@ -2,7 +2,7 @@ package fr.angers.univ.qrludo
 
 // TODO : Because serious game answers don't have a QR Code format, we have to leave it that way, but it must be fix as soon as possible
 // TODO : ReponseSeriousGame should be QR code unique et not specific QR
-// TODO : Music in SeriousGameScenario, QR_Vocal_QCM and QCM_Vocal_OQ are hard coded and can be tested only beacause of starting with http:// or https://
+// TODO : Music in SeriousGameScenario, QR_Vocal_QCM and QCM_Vocal_OQ are hard coded and can be tested only because of starting with http:// or https://
 
 import android.Manifest
 import android.content.Intent
@@ -47,20 +47,27 @@ class MainActivity : AppCompatActivity() {
 
 
         // Check all needed permissions
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (PermissionUtil.check_and_request_permissions(this,
-                    Manifest.permission.VIBRATE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.INTERNET,
-                    Manifest.permission.RECORD_AUDIO,
-                    Manifest.permission.CAMERA)
-            ) {
-                Logger.log("PermissionCheck",
-                    getString(R.string.permissions_granted),
-                    Logger.DEBUG_LEVEL.INFO)
-                init_application()
-            }
+        if (PermissionUtil.check_and_request_permissions(this,
+                Manifest.permission.VIBRATE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.INTERNET,
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.CAMERA)
+        ) {
+            Logger.log("PermissionCheck",
+                getString(R.string.permissions_granted),
+                Logger.DEBUG_LEVEL.INFO)
+            init_application()
+        } else {
+            Logger.log(
+                "PermissionCheck",
+                getString(R.string.permissions_denied),
+                Logger.DEBUG_LEVEL.INFO
+            )
+            Toast.makeText(this, getString(R.string.permissions_denied), Toast.LENGTH_LONG)
+                .show()
+            exit_application(3000)
         }
     }
 
@@ -126,7 +133,14 @@ class MainActivity : AppCompatActivity() {
         // Check sound level
         val audioManager : AudioManager = getSystemService(AUDIO_SERVICE) as AudioManager
         if (audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) <= 4) {
-            val vibrator : Vibrator = applicationContext.getSystemService(VIBRATOR_SERVICE) as Vibrator
+            val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                val vibratorManager =
+                    getSystemService(VIBRATOR_MANAGER_SERVICE) as VibratorManager
+                vibratorManager.defaultVibrator
+            } else {
+                @Suppress("DEPRECATION")
+                getSystemService(VIBRATOR_SERVICE) as Vibrator
+            }
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 vibrator.vibrate(VibrationEffect.createOneShot(3000,10))
             } else {
@@ -136,7 +150,7 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, getString(R.string.sound_level_low_alert), Toast.LENGTH_LONG).show()
         }
 
-        // Init Gesture dectector with all listener triggered on events
+        // Init Gesture detector with all listener triggered on events
         _gesture_detector = GestureDetectorCompat(this,
             object : OnSwipeTouchListener() {
                 override fun on_double_tap() {
@@ -176,7 +190,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun on_double_swipe_right() {
-                    Logger.log("SwipeGesture", "Souble swipe right", Logger.DEBUG_LEVEL.VERBOSE)
+                    Logger.log("SwipeGesture", "Double swipe right", Logger.DEBUG_LEVEL.VERBOSE)
                     clear_pretty_print()
                     CoreEngine.insert(EngineVarInt("seek_section", 1000))
                 }
@@ -308,10 +322,10 @@ class MainActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed(object : Runnable {
             override fun run() {
                 if(Build.VERSION.SDK_INT>=16 && Build.VERSION.SDK_INT<21){
-                    finishAffinity();
+                    finishAffinity()
                     exitProcess(0)
                 } else if(Build.VERSION.SDK_INT>=21){
-                    finishAndRemoveTask();
+                    finishAndRemoveTask()
                     exitProcess(0)
                 }
             }

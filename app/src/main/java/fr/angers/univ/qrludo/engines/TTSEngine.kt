@@ -1,13 +1,8 @@
 package fr.angers.univ.qrludo.engines
-
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
-import android.util.Log
-import android.widget.MultiAutoCompleteTextView
 import fr.angers.univ.qrludo.utils.MainApplication
 import fr.angers.univ.qrludo.R
 import fr.angers.univ.qrludo.engines.coreatoms.EngineVarBool
@@ -57,7 +52,10 @@ object TTSEngine {
                     on_job_done(utteranceId!!)
                 }
                 override fun onError(utteranceId: String?) {
-                    logger(context().getString(R.string.tts_job_error) + " (" + utteranceId+ ")", Logger.DEBUG_LEVEL.ERROR)
+                    logger( context().getString(R.string.tts_job_error) + " (" + utteranceId+ ")", Logger.DEBUG_LEVEL.ERROR)
+                }
+                override fun onError(utteranceId: String?, errorCode: Int) {
+                    logger( context().getString(R.string.tts_job_error) + " (" + utteranceId+ ") code: " + errorCode, Logger.DEBUG_LEVEL.ERROR)
                 }
                 override fun onStart(utteranceId: String?) {
                     logger(context().getString(R.string.tts_job_start) + " (" + utteranceId+ ")", Logger.DEBUG_LEVEL.INFO)

@@ -1,5 +1,7 @@
 package fr.angers.univ.qrludo.utils
 
+import java.util.*
+import kotlin.collections.HashMap
 import kotlin.math.min
 
 
@@ -12,7 +14,7 @@ import kotlin.math.min
  */
 object Phoneme {
     /// List of phonemes and their keys
-    var phoneme_map : HashMap<String, String> = hashMapOf(
+    private var phoneme_map : HashMap<String, String> = hashMapOf(
         "a" to "<a>",
         "à" to "<a>",
         "ah" to "<a>",
@@ -57,7 +59,7 @@ object Phoneme {
     )
 
     /// Max length of a phoneme key
-    var phoneme_max_key_length = 0
+    private var phoneme_max_key_length = 0
 
     init {
         phoneme_map.forEach { (key, _) -> if (key.length > phoneme_max_key_length) phoneme_max_key_length = key.length }
@@ -70,7 +72,7 @@ object Phoneme {
 
         // Analyse the str_in string and replace some sequence of character by the corresponding phoneme
     fun convert(str_in : String) : String {
-        var str = str_in.toLowerCase()
+        var str = str_in.lowercase(Locale.getDefault())
         var i = 0
         while (i < str.length)
         {
@@ -89,7 +91,7 @@ object Phoneme {
             }
             var key = ""
             var is_phoneme = false
-            var j = min(phoneme_max_key_length,str.length-i);
+            var j = min(phoneme_max_key_length,str.length-i)
             // Search for largest phoneme
             while (!(is_phoneme) and (j != 0))
             {

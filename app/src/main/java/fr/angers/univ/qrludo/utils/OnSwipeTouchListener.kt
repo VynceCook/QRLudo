@@ -53,12 +53,12 @@ open class OnSwipeTouchListener : GestureDetector.SimpleOnGestureListener() {
         // To override
     }
 
-    override fun onDown(e: MotionEvent?): Boolean {
+    override fun onDown(e: MotionEvent): Boolean {
         return true
     }
 
     // Double tap is already handle by the base class
-    override fun onDoubleTap(e: MotionEvent?): Boolean {
+    override fun onDoubleTap(e: MotionEvent): Boolean {
         on_double_tap()
         return true
     }
@@ -101,14 +101,14 @@ open class OnSwipeTouchListener : GestureDetector.SimpleOnGestureListener() {
 
     // Called each time a finger movement is detected
     override fun onFling(
-        e1: MotionEvent?,
-        e2: MotionEvent?,
+        e1: MotionEvent,
+        e2: MotionEvent,
         velocityX: Float,
-        velocityY: Float,
+        velocityY: Float
     ): Boolean {
         var result = false;
         try {
-            val diffY : Float = e2!!.y - e1!!.y
+            val diffY : Float = e2.y - e1.y
             val diffX : Float = e2.x - e1.x
             if (Math.abs(diffX) > Math.abs(diffY)) {
                 if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
