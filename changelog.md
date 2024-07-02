@@ -1,4 +1,7 @@
 # Changelog
+## Version 3.0.5
+- Supprime la possibilité de déplacer le répertoire de médias pour se conformer à la nouvelle politique de sécurité.
+
 ## Version 3.0.3
 - Correction de bugs
 - Amélioration de la reconnaissance vocale par ajout de phonèmes
