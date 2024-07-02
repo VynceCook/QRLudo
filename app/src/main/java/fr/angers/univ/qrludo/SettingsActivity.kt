@@ -28,7 +28,6 @@ import java.lang.Exception
  * on setting changes
  */
 class SettingsActivity : AppCompatActivity() {
-    val PICK_REQUEST_CODE : Int = 80
 
     private fun logger(msg: String, level: Logger.DEBUG_LEVEL)
     {
@@ -96,56 +95,10 @@ class SettingsActivity : AppCompatActivity() {
         return actualResult
     }
 
-    // The onActivityResult is triggered when the user picked up an newer directory to
-    // store the QRLudo media files.
-    // It checks the directory and stores it in the shared preferences.
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PICK_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                var tree_uri: Uri? = data?.getData()
-                if (tree_uri != null) {
-                    var path_str : String = find_full_path(tree_uri.path.toString()) + "/"
-                    logger(getString(R.string.file_directory_picker_done) + " : " + path_str,
-                        Logger.DEBUG_LEVEL.INFO)
-                    val dst_dir = File(path_str)
-                    val test_file = File(path_str + "test_create.txt")
-                    test_file.setReadable(true, false)
-                    try {
-                        test_file.createNewFile()
-                    }  catch (e : Exception) {
-                        logger(getString(R.string.media_directory_cannot_use) + " : " + path_str,
-                            Logger.DEBUG_LEVEL.INFO)
-                        Toast.makeText(MainApplication.Main_Activity, getString(R.string.media_directory_cannot_use) + " : " + path_str, Toast.LENGTH_LONG).show()
-                    }
-
-                    if (dst_dir.exists() && dst_dir.isDirectory && test_file.exists()) {
-                        test_file.delete()
-                        MainApplication.Media_Files_Path = path_str
-                        val settings =
-                            getSharedPreferences(MainApplication.Shared_Pref_Name,
-                                MODE_PRIVATE)?.edit()
-                        settings?.putString("media_files_path", path_str)
-                        settings?.apply()
-
-                        val settings_fragment = supportFragmentManager.findFragmentById(R.id.settings) as SettingsFragment
-                        val pref_change_media_files_dir: Preference? = settings_fragment.findPreference("pref_change_media_files_dir")
-                        pref_change_media_files_dir?.setSummary("""${getString(R.string.pref_summary_change_media_files_dir)} : ${MainApplication.Media_Files_Path}""")
-
-                        logger(getString(R.string.media_directory_moved) + " : " + path_str,
-                            Logger.DEBUG_LEVEL.INFO)
-                    }
-                }
-            }
-        }
-    }
-
     /**
      * The Fragment that implement all settings
      */
     class SettingsFragment : PreferenceFragmentCompat() {
-        val PICK_REQUEST_CODE : Int = 80
-
         private fun logger(msg: String, level: Logger.DEBUG_LEVEL)
         {
             Logger.log("Settings", msg, level)
@@ -290,19 +243,6 @@ class SettingsActivity : AppCompatActivity() {
                             })
                         .create()
                         .show()
-                    return true
-                }
-            })
-
-            // Change media files directory
-            val pref_change_media_files_dir: Preference? = findPreference("pref_change_media_files_dir")
-            pref_change_media_files_dir?.setSummary("""${getString(R.string.pref_summary_change_media_files_dir)} : ${MainApplication.Media_Files_Path}""")
-            pref_change_media_files_dir?.setOnPreferenceClickListener(object :
-                Preference.OnPreferenceClickListener {
-                override fun onPreferenceClick(preference: Preference?): Boolean {
-                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-                    intent.addCategory(Intent.CATEGORY_DEFAULT)
-                    activity?.startActivityForResult(intent, PICK_REQUEST_CODE)
                     return true
                 }
             })

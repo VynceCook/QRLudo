@@ -49,8 +49,6 @@ class MainActivity : AppCompatActivity() {
         // Check all needed permissions
         if (PermissionUtil.check_and_request_permissions(this,
                 Manifest.permission.VIBRATE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.INTERNET,
                 Manifest.permission.RECORD_AUDIO,
                 Manifest.permission.CAMERA)
