@@ -4,15 +4,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 33
-    buildToolsVersion "30.0.3"
-
+    compileSdk 34
     defaultConfig {
         applicationId "fr.angers.univ.qrludo"
-        minSdkVersion 25
-        targetSdk 33
-        versionCode 19
-        versionName '3.0.5'
+        minSdk 28
+        targetSdk 34
+        versionCode 20
+        versionName '3.0.6'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

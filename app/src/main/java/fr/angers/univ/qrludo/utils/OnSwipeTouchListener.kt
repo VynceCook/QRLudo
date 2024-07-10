@@ -101,15 +101,15 @@ open class OnSwipeTouchListener : GestureDetector.SimpleOnGestureListener() {
 
     // Called each time a finger movement is detected
     override fun onFling(
-        e1: MotionEvent,
+        e1: MotionEvent?,
         e2: MotionEvent,
         velocityX: Float,
         velocityY: Float
     ): Boolean {
         var result = false;
         try {
-            val diffY : Float = e2.y - e1.y
-            val diffX : Float = e2.x - e1.x
+            val diffY : Float = e2.y - e1!!.y
+            val diffX : Float = e2.x - e1!!.x
             if (Math.abs(diffX) > Math.abs(diffY)) {
                 if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
                     if (diffX > 0) {

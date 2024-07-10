@@ -123,18 +123,18 @@ object QRDetectorEngine {
             }
 
             // Callback called when a new QR code has been detected
-            override fun receiveDetections(detections: Detector.Detections<Barcode>?) {
+            override fun receiveDetections(detections: Detector.Detections<Barcode>) {
                 // Be carefull, not called on UI Thread
-                val barcode = detections?.detectedItems
-                if (barcode?.size() ?: 0 > 0) {
+                val barcode = detections.detectedItems
+                if (barcode.size() > 0) {
                     activity.runOnUiThread() {
                         if (_state == ENGINE_STATE.IS_SCANNING) {
                             val back_call_on_qr_found = _call_on_qr_found
                              stop()
 
                             // use barcode content value
-                            logger(context().getString(R.string.qre_qr_found) + " : " + barcode?.valueAt(0)?.displayValue, Logger.DEBUG_LEVEL.INFO)
-                            back_call_on_qr_found?.invoke(barcode?.valueAt(0)?.displayValue ?: "")
+                            logger(context().getString(R.string.qre_qr_found) + " : " + barcode.valueAt(0)?.displayValue, Logger.DEBUG_LEVEL.INFO)
+                            back_call_on_qr_found?.invoke(barcode.valueAt(0)?.displayValue ?: "")
                         }
                     }
                 }

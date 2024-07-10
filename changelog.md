@@ -1,4 +1,7 @@
 # Changelog
+## Version 3.0.6
+- Mise à jour pour SDK cible 34
+
 ## Version 3.0.5
 - Supprime la possibilité de déplacer le répertoire de médias pour se conformer à la nouvelle politique de sécurité.
 
